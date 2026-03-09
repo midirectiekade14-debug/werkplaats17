@@ -373,12 +373,25 @@
   .fp-tab:hover { color: var(--cream); }
   .fp-tab.active { color: var(--amber); background: var(--amber-glow); border-color: var(--amber); }
   .fp-canvas {
-    position: relative; overflow-x: auto; overflow-y: hidden;
+    position: relative; overflow: hidden; cursor: grab;
     background: var(--bg); border: 1px solid var(--line);
+    touch-action: none; user-select: none;
   }
-  .fp-canvas::-webkit-scrollbar { height: 4px; }
-  .fp-canvas::-webkit-scrollbar-thumb { background: var(--line); }
-  #fp { position: relative; }
+  .fp-canvas.grabbing { cursor: grabbing; }
+  .fp-canvas::-webkit-scrollbar { display: none; }
+  #fp { position: relative; transform-origin: 0 0; }
+  .fp-controls {
+    display: flex; align-items: center; gap: 8px; margin-top: 10px;
+  }
+  .fp-zbtn {
+    width: 28px; height: 28px; border: 1px solid var(--line); background: var(--bg);
+    color: var(--muted); font-size: 14px; cursor: pointer; display: flex;
+    align-items: center; justify-content: center; font-family: 'DM Mono', monospace;
+    transition: all 0.15s;
+  }
+  .fp-zbtn:hover { border-color: var(--amber); color: var(--amber); }
+  .fp-zlbl { font-size: 10px; color: var(--muted); min-width: 36px; text-align: center; letter-spacing: 0.08em; }
+  .fp-hint { font-size: 9px; color: var(--muted); margin-left: auto; letter-spacing: 0.06em; opacity: 0.6; }
   .fp-legend {
     display: flex; flex-wrap: wrap; gap: 16px; margin-top: 16px;
   }
@@ -887,11 +900,16 @@
       <div class="fp-tab" onclick="fpShow(1)">Entresol</div>
     </div>
     <div class="fp-canvas"><div id="fp"></div></div>
-    <div class="fp-legend">
+    <div class="fp-controls">
       <div class="fp-legend-item"><div class="fp-legend-swatch" style="background:rgba(224,154,47,.13);border-color:rgba(224,154,47,.5)"></div>Hal</div>
       <div class="fp-legend-item"><div class="fp-legend-swatch" style="background:rgba(110,150,220,.13);border-color:rgba(110,150,220,.5)"></div>Kantoor</div>
       <div class="fp-legend-item"><div class="fp-legend-swatch" style="background:rgba(180,140,80,.13);border-color:rgba(180,140,80,.45)"></div>Trap</div>
       <div class="fp-legend-item"><div class="fp-legend-swatch" style="background:rgba(180,100,220,.13);border-color:rgba(180,100,220,.5)"></div>Entresol</div>
+      <span class="fp-hint">Sleep om te pannen · Scroll om te zoomen</span>
+      <button class="fp-zbtn" onclick="fpZoom(-0.15)">−</button>
+      <span class="fp-zlbl" id="fp-zlbl">100%</span>
+      <button class="fp-zbtn" onclick="fpZoom(0.15)">+</button>
+      <button class="fp-zbtn" onclick="fpReset()" style="font-size:9px;width:auto;padding:0 8px">Reset</button>
     </div>
   </div>
   <script src="placed-objects.js"></script>
@@ -1246,6 +1264,80 @@
     draw();
     renderPlacedObjects();
   };
+
+  // ── ZOOM & PAN ──
+  var fpZoomLevel=1, panX=0, panY=0;
+  var canvas=document.querySelector('.fp-canvas');
+
+  function applyTransform(){
+    fp.style.transform='translate('+panX+'px,'+panY+'px) scale('+fpZoomLevel+')';
+    document.getElementById('fp-zlbl').textContent=Math.round(fpZoomLevel*100)+'%';
+  }
+
+  window.fpZoom=function(delta){
+    fpZoomLevel=Math.min(3,Math.max(0.3,fpZoomLevel+delta));
+    applyTransform();
+  };
+  window.fpReset=function(){
+    fpZoomLevel=1;panX=0;panY=0;applyTransform();
+  };
+
+  // Scroll zoom
+  canvas.addEventListener('wheel',function(e){
+    e.preventDefault();
+    var rect=canvas.getBoundingClientRect();
+    var mx=e.clientX-rect.left, my=e.clientY-rect.top;
+    var oldZ=fpZoomLevel;
+    fpZoomLevel=Math.min(3,Math.max(0.3,fpZoomLevel-e.deltaY*0.002));
+    var ratio=fpZoomLevel/oldZ;
+    panX=mx-(mx-panX)*ratio;
+    panY=my-(my-panY)*ratio;
+    applyTransform();
+  },{passive:false});
+
+  // Mouse drag pan
+  var dragging=false, dragSX=0, dragSY=0, dragPX=0, dragPY=0;
+  canvas.addEventListener('mousedown',function(e){
+    if(e.button!==0)return;
+    dragging=true;dragSX=e.clientX;dragSY=e.clientY;dragPX=panX;dragPY=panY;
+    canvas.classList.add('grabbing');
+  });
+  document.addEventListener('mousemove',function(e){
+    if(!dragging)return;
+    panX=dragPX+(e.clientX-dragSX);panY=dragPY+(e.clientY-dragSY);
+    applyTransform();
+  });
+  document.addEventListener('mouseup',function(){
+    if(dragging){dragging=false;canvas.classList.remove('grabbing');}
+  });
+
+  // Touch pan & pinch zoom
+  var touches={},lastDist=0;
+  canvas.addEventListener('touchstart',function(e){
+    e.preventDefault();
+    for(var i=0;i<e.changedTouches.length;i++) touches[e.changedTouches[i].identifier]={x:e.changedTouches[i].clientX,y:e.changedTouches[i].clientY};
+    var ids=Object.keys(touches);
+    if(ids.length===1){dragPX=panX;dragPY=panY;dragSX=touches[ids[0]].x;dragSY=touches[ids[0]].y;}
+    if(ids.length===2){var t0=touches[ids[0]],t1=touches[ids[1]];lastDist=Math.hypot(t1.x-t0.x,t1.y-t0.y);}
+  },{passive:false});
+  canvas.addEventListener('touchmove',function(e){
+    e.preventDefault();
+    for(var i=0;i<e.changedTouches.length;i++) touches[e.changedTouches[i].identifier]={x:e.changedTouches[i].clientX,y:e.changedTouches[i].clientY};
+    var ids=Object.keys(touches);
+    if(ids.length===1){panX=dragPX+(touches[ids[0]].x-dragSX);panY=dragPY+(touches[ids[0]].y-dragSY);applyTransform();}
+    if(ids.length>=2){
+      var t0=touches[ids[0]],t1=touches[ids[1]];
+      var dist=Math.hypot(t1.x-t0.x,t1.y-t0.y);
+      if(lastDist>0){var scale=dist/lastDist;fpZoomLevel=Math.min(3,Math.max(0.3,fpZoomLevel*scale));}
+      lastDist=dist;applyTransform();
+    }
+  },{passive:false});
+  canvas.addEventListener('touchend',function(e){
+    for(var i=0;i<e.changedTouches.length;i++) delete touches[e.changedTouches[i].identifier];
+    var ids=Object.keys(touches);
+    if(ids.length===1){dragPX=panX;dragPY=panY;dragSX=touches[ids[0]].x;dragSY=touches[ids[0]].y;}
+    if(ids.length<2) lastDist=0;
+  });
 
   draw();
   renderPlacedObjects();
