@@ -782,21 +782,38 @@ function generateJS(objs){
 }
 
 // ── GitHub publish helper ──
+var saveBtn=document.getElementById('btn-save');
 async function publishToGitHub(){
   var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats17';
   var token=localStorage.getItem('w17-gh-token');
   if(!token){showTokenModal();return;}
-  toast('Publiceren...','');
+  saveBtn.textContent='Publiceren...';saveBtn.disabled=true;
   try{
     var content=generateJS(serializeObjects());
     var b64=btoa(unescape(encodeURIComponent(content)));
     var sha=null;
-    try{var gr=await fetch('https://api.github.com/repos/'+repo+'/contents/placed-objects.js',{headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github.v3+json'}});if(gr.ok){sha=(await gr.json()).sha;}}catch(e){}
+    try{var gr=await fetch('https://api.github.com/repos/'+repo+'/contents/placed-objects.js',{headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github.v3+json'}});if(gr.ok){sha=(await gr.json()).sha;}}catch(e){console.warn('SHA ophalen mislukt:',e);}
     var body={message:'Plattegrond bijgewerkt via admin ('+new Date().toLocaleString('nl-NL')+')',content:b64};if(sha)body.sha=sha;
     var r=await fetch('https://api.github.com/repos/'+repo+'/contents/placed-objects.js',{method:'PUT',headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
-    if(r.ok){toast('Opgeslagen & gepubliceerd!','ok');}
-    else{var err=await r.json();toast('Fout: '+(err.message||r.status),'err');}
-  }catch(e){toast('Fout: '+e.message,'err');}
+    if(r.ok){
+      saveBtn.textContent='Gepubliceerd!';saveBtn.style.background='var(--green)';
+      toast('Opgeslagen & gepubliceerd!','ok');
+      setTimeout(function(){saveBtn.textContent='Opslaan & Publiceer';saveBtn.style.background='';},3000);
+    }else{
+      var err=await r.json();
+      var msg='Fout: '+(err.message||r.status);
+      saveBtn.textContent=msg;saveBtn.style.background='var(--red)';
+      toast(msg,'err');
+      console.error('Publish fout:',r.status,err);
+      setTimeout(function(){saveBtn.textContent='Opslaan & Publiceer';saveBtn.style.background='';},5000);
+    }
+  }catch(e){
+    saveBtn.textContent='Fout: '+e.message;saveBtn.style.background='var(--red)';
+    toast('Fout: '+e.message,'err');
+    console.error('Publish error:',e);
+    setTimeout(function(){saveBtn.textContent='Opslaan & Publiceer';saveBtn.style.background='';},5000);
+  }
+  saveBtn.disabled=false;
 }
 
 // Save = localStorage + direct publish
