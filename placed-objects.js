@@ -1,5 +1,5 @@
 // Werkplaats17 — Geplaatste objecten
-// Laatst gewijzigd: 2026-03-09T14:13:47.447Z
+// Laatst gewijzigd: 2026-03-09T14:19:14.048Z
 // Gegenereerd via admin.html
 
 const PLACED_OBJECTS = [
