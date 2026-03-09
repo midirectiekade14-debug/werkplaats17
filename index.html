@@ -1052,7 +1052,7 @@
   C.pricing.forEach(p => {
     pricingEl.innerHTML += `<div class="pricing-row"><div><div class="label">${p.label}</div><div class="sub">${p.sub}</div></div><div class="price">${p.price}<small>${p.unit}</small></div></div>`;
   });
-  document.getElementById('c-pricing-note').textContent = C.pricingNote;
+  document.getElementById('c-pricing-note').innerHTML = C.pricingNote;
 
   // Target audience
   const audienceEl = document.getElementById('c-audience');

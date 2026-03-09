@@ -1135,8 +1135,9 @@ function ceRenderField(f){
     wrap.appendChild(inp);
   }else if(f.type==='textarea'){
     wrap.innerHTML='<div class="ce-label">'+f.label+'</div>';
-    var ta=document.createElement('textarea');ta.className='ce-input';ta.value=val||'';ta.dataset.key=f.key;
-    ta.oninput=function(){ceData[f.key]=this.value;};
+    var ta=document.createElement('textarea');ta.className='ce-input';ta.dataset.key=f.key;
+    ta.value=(val||'').replace(/<br\s*\/?>/gi,'\n');
+    ta.oninput=function(){ceData[f.key]=this.value.replace(/\n/g,'<br>');};
     wrap.appendChild(ta);
   }else if(f.type==='html'){
     var lbl=document.createElement('div');lbl.className='ce-label';
@@ -1144,8 +1145,10 @@ function ceRenderField(f){
     var toggle=document.createElement('span');toggle.className='ce-preview-toggle';toggle.textContent='Preview';
     lbl.appendChild(toggle);
     wrap.appendChild(lbl);
-    var ta=document.createElement('textarea');ta.className='ce-input';ta.value=val||'';ta.dataset.key=f.key;
-    ta.oninput=function(){ceData[f.key]=this.value;prev.innerHTML=this.value;};
+    var ta=document.createElement('textarea');ta.className='ce-input';ta.dataset.key=f.key;
+    // <br> → newline voor textarea, newline → <br> bij opslaan
+    ta.value=(val||'').replace(/<br\s*\/?>/gi,'\n');
+    ta.oninput=function(){ceData[f.key]=this.value.replace(/\n/g,'<br>');prev.innerHTML=ceData[f.key];};
     wrap.appendChild(ta);
     var prev=document.createElement('div');prev.className='ce-preview';prev.innerHTML=val||'';
     toggle.onclick=function(){prev.classList.toggle('show');this.textContent=prev.classList.contains('show')?'Verberg':'Preview';};
