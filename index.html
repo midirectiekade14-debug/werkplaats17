@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="siteTitle">Werkplaats17</title>
+<meta name="description" id="metaDesc" content="">
+<meta property="og:title" id="ogTitle" content="">
+<meta property="og:description" id="ogDesc" content="">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="nl_NL">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #161412;
+    --surface: #1e1b17;
+    --surface2: #252118;
+    --amber: #E09A2F;
+    --amber-light: #F5B040;
+    --amber-glow: rgba(224, 154, 47, 0.08);
+    --cream: #F0EAE0;
+    --muted: #7a7060;
+    --line: #2e2920;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--cream);
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── GRAIN ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.6;
+  }
+
+  /* ── STICKY NAV ── */
+  .sticky-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(22, 20, 18, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+    padding: 0 24px;
+    transform: translateY(-100%);
+    transition: transform 0.3s ease;
+  }
+  .sticky-nav.visible { transform: translateY(0); }
+  .sticky-nav-inner {
+    max-width: 640px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 48px;
+  }
+  .sticky-nav .nav-brand {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: var(--cream);
+    text-decoration: none;
+  }
+  .sticky-nav .nav-brand span { color: var(--amber); }
+  .sticky-nav .nav-links {
+    display: flex;
+    gap: 24px;
+    list-style: none;
+  }
+  .sticky-nav .nav-links a {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .sticky-nav .nav-links a:hover { color: var(--amber); }
+
+  .page {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 0 0;
+    position: relative;
+    z-index: 0;
+  }
+
+  /* ── HEADER ── */
+  header {
+    padding: 52px 40px 40px;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.8s ease both;
+  }
+  header::after {
+    content: '17';
+    position: absolute;
+    right: -10px;
+    top: -30px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: min(260px, 42vw);
+    line-height: 1;
+    color: var(--surface2);
+    letter-spacing: -8px;
+    pointer-events: none;
+    user-select: none;
+  }
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .eyebrow::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--amber);
+    animation: pulse 2.5s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 15vw, 112px);
+    line-height: 0.9;
+    letter-spacing: 2px;
+    color: var(--cream);
+    position: relative;
+    z-index: 1;
+  }
+  h1 span { color: var(--amber); }
+  .tagline {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 20px;
+    line-height: 1.5;
+    max-width: 300px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── HERO IMAGE ── */
+  .hero-image {
+    width: 100%;
+    aspect-ratio: 2 / 1;
+    background: var(--surface);
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+    animation: fadeUp 0.8s 0.05s ease both;
+  }
+  .hero-image svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* ── LOCATION ── */
+  .location-bar {
+    margin: 28px 40px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+  .location-bar .pin {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--amber);
+    flex-shrink: 0;
+  }
+  .location-bar span {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ── INTRO ── */
+  .intro {
+    padding: 40px 40px 36px;
+    border-bottom: 1px solid var(--line);
+    animation: fadeUp 0.8s 0.15s ease both;
+  }
+  .intro p {
+    font-size: 13px;
+    line-height: 1.85;
+    color: var(--cream);
+    font-weight: 300;
+    max-width: 540px;
+  }
+  .intro strong {
+    color: var(--amber-light);
+    font-weight: 500;
+  }
+  .access-detail {
+    margin-top: 20px;
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .access-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+  .access-item .ico {
+    color: var(--amber);
+    font-size: 14px;
+    flex-shrink: 0;
+    opacity: 0.8;
+  }
+
+  /* ── PHOTO STRIP ── */
+  .photo-strip {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    background: var(--line);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .photo-placeholder {
+    aspect-ratio: 4 / 3;
+    background: var(--surface);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s;
+  }
+  .photo-placeholder:hover { background: var(--surface2); }
+  .photo-placeholder .ph-icon {
+    color: var(--line);
+    transition: color 0.3s;
+  }
+  .photo-placeholder:hover .ph-icon { color: var(--muted); }
+  .photo-placeholder .ph-label {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .photo-placeholder:hover .ph-label { opacity: 1; }
+
+  /* ── SECTION LABELS ── */
+  .section-label {
+    padding: 32px 40px 16px;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--amber);
+    font-weight: 500;
+  }
+
+  /* ── OFFER GRID ── */
+  .offer-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--line);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .offer-card {
+    background: var(--surface);
+    padding: 28px 28px 24px;
+    transition: background 0.25s;
+  }
+  .offer-card:hover { background: var(--surface2); }
+  .offer-card .icon {
+    font-size: 22px;
+    margin-bottom: 14px;
+    display: block;
+    color: var(--amber);
+    opacity: 0.9;
+  }
+  .offer-card h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 1px;
+    color: var(--cream);
+    margin-bottom: 8px;
+  }
+  .offer-card p {
+    font-size: 11px;
+    line-height: 1.7;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  /* ── MACHINES ── */
+  .machines-block { padding: 0 40px; }
+  .machine-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-bottom: 36px;
+    border-bottom: 1px solid var(--line);
+  }
+  .machine-tag {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border: 1px solid var(--line);
+    color: var(--muted);
+    font-weight: 400;
+    transition: all 0.25s;
+    cursor: default;
+  }
+  .machine-tag:hover {
+    border-color: var(--amber);
+    color: var(--amber);
+  }
+  .machine-tag.highlight {
+    border-color: var(--amber);
+    color: var(--amber);
+    background: var(--amber-glow);
+  }
+
+  /* ── FLOORPLAN ── */
+  .floorplan-block {
+    padding: 0 40px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 36px;
+  }
+  .floorplan-svg {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    display: block;
+  }
+  .floorplan-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+  .legend-swatch {
+    width: 12px; height: 12px;
+    border: 1px solid var(--line);
+  }
+
+  /* ── PRICING ── */
+  .pricing-block { padding: 0 40px; }
+  .pricing-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .pricing-row:last-child { border-bottom: none; }
+  .pricing-row .label {
+    font-size: 11px;
+    color: var(--cream);
+    font-weight: 400;
+    letter-spacing: 0.05em;
+  }
+  .pricing-row .sub {
+    font-size: 9px;
+    color: var(--muted);
+    margin-top: 3px;
+    letter-spacing: 0.1em;
+  }
+  .pricing-row .price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 1px;
+    color: var(--amber);
+    white-space: nowrap;
+  }
+  .pricing-row .price small {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    margin-left: 4px;
+    letter-spacing: 0.1em;
+  }
+  .pricing-note {
+    font-size: 10px;
+    color: var(--muted);
+    padding: 10px 40px 0;
+    letter-spacing: 0.04em;
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  /* ── VOOR WIE ── */
+  .for-who {
+    margin: 0 40px;
+    padding: 32px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .criteria-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .criteria-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    font-size: 11px;
+    color: var(--cream);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+  .criteria-list li .check {
+    color: var(--amber);
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-size: 12px;
+  }
+  .not-for {
+    margin-top: 16px;
+    padding: 14px 16px;
+    border-left: 2px solid var(--line);
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.7;
+    letter-spacing: 0.04em;
+  }
+  .not-for strong {
+    color: var(--cream);
+    font-weight: 500;
+  }
+
+  /* ── CTA ── */
+  .cta-block {
+    padding: 40px 40px 0;
+  }
+  .cta-block h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    line-height: 1;
+    letter-spacing: 1px;
+    margin-bottom: 24px;
+  }
+  .cta-block h2 em {
+    font-style: normal;
+    color: var(--amber);
+  }
+  .cta-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--bg);
+    background: var(--amber);
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  .btn-primary:hover {
+    background: var(--amber-light);
+    transform: translateY(-1px);
+  }
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--cream);
+    background: transparent;
+    border: 1px solid var(--line);
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  .btn-secondary:hover {
+    border-color: var(--amber);
+    color: var(--amber);
+  }
+  .cta-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .cta-line {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 300;
+  }
+  .cta-line .dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--amber);
+    flex-shrink: 0;
+  }
+  .cta-line a {
+    color: var(--cream);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    transition: border-color 0.2s;
+  }
+  .cta-line a:hover { border-color: var(--amber); }
+
+  /* ── INSTAGRAM ── */
+  .insta-section {
+    margin: 0 40px;
+    padding: 32px 0 40px;
+    border-bottom: 1px solid var(--line);
+  }
+  .insta-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3px;
+  }
+  .insta-tile {
+    aspect-ratio: 1;
+    background: var(--surface);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s;
+  }
+  .insta-tile:hover { background: var(--surface2); }
+  .insta-tile .insta-icon {
+    color: var(--line);
+    transition: color 0.3s;
+  }
+  .insta-tile:hover .insta-icon { color: var(--muted); }
+  .insta-handle {
+    margin-top: 14px;
+    text-align: center;
+  }
+  .insta-handle a {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .insta-handle a:hover { color: var(--amber); }
+
+  /* ── FOOTER ── */
+  footer {
+    margin: 0 40px;
+    padding: 28px 0 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  footer .brand {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: var(--muted);
+  }
+  footer .brand span { color: var(--amber); }
+  footer .footer-right {
+    text-align: right;
+  }
+  footer .hashtags {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+  footer .copy {
+    font-size: 9px;
+    color: var(--line);
+    margin-top: 8px;
+    letter-spacing: 0.1em;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    header { padding: 40px 24px 32px; }
+    .location-bar { margin: 20px 24px 0; }
+    .intro { padding: 32px 24px 28px; }
+    .section-label { padding: 28px 24px 14px; }
+    .machines-block { padding: 0 24px; }
+    .pricing-block { padding: 0 24px; }
+    .pricing-note { padding: 10px 24px 0; }
+    .for-who { margin: 0 24px; }
+    .cta-block { padding: 32px 24px 0; }
+    .insta-section { margin: 0 24px; }
+    footer { margin: 0 24px; }
+    .floorplan-block { padding: 0 24px; padding-bottom: 36px; }
+    .offer-grid { grid-template-columns: 1fr; }
+    .photo-strip { grid-template-columns: 1fr; }
+    .insta-grid { grid-template-columns: repeat(2, 1fr); }
+    .cta-actions { flex-direction: column; }
+    .btn-primary, .btn-secondary { justify-content: center; }
+    .sticky-nav .nav-links { gap: 14px; }
+    .sticky-nav .nav-links a { font-size: 9px; letter-spacing: 0.12em; }
+    .access-detail { gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- STICKY NAV -->
+<nav class="sticky-nav" id="stickyNav">
+  <div class="sticky-nav-inner">
+    <a href="#top" class="nav-brand">Werk<span>plaats</span>17</a>
+    <ul class="nav-links">
+      <li><a href="#aanbod">Aanbod</a></li>
+      <li><a href="#indeling">Indeling</a></li>
+      <li><a href="#tarieven">Tarieven</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page" id="top">
+
+  <!-- HEADER -->
+  <header>
+    <p class="eyebrow" id="c-eyebrow"></p>
+    <h1>Werk<span>plaats</span></h1>
+    <p class="tagline" id="c-tagline"></p>
+  </header>
+
+  <!-- HERO -->
+  <div class="hero-image">
+    <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1e1b17"/>
+      <stop offset="100%" stop-color="#1a1714"/>
+    </linearGradient>
+    <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#211e18"/>
+      <stop offset="100%" stop-color="#161412"/>
+    </linearGradient>
+    <linearGradient id="doorBeige" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E09A2F" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#E09A2F" stop-opacity="0.06"/>
+    </linearGradient>
+    <linearGradient id="glassG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E09A2F" stop-opacity="0.04"/>
+      <stop offset="50%" stop-color="#161412" stop-opacity="0.02"/>
+      <stop offset="100%" stop-color="#E09A2F" stop-opacity="0.03"/>
+    </linearGradient>
+    <linearGradient id="orangeG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E09A2F" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#E09A2F" stop-opacity="0.10"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="400" fill="#161412"/>
+  <rect width="800" height="40" fill="url(#skyG)"/>
+  <rect x="10" y="52" width="230" height="5" fill="#1e1b17" stroke="#3a3425" stroke-width="0.5"/>
+  <line x1="8" y1="51" x2="242" y2="51" stroke="#3a3425" stroke-width="0.8"/>
+  <rect x="560" y="52" width="230" height="5" fill="#1e1b17" stroke="#3a3425" stroke-width="0.5"/>
+  <line x1="558" y1="51" x2="792" y2="51" stroke="#3a3425" stroke-width="0.8"/>
+  <rect x="238" y="36" width="324" height="5" fill="#1e1b17" stroke="#3a3425" stroke-width="0.5"/>
+  <line x1="236" y1="35" x2="564" y2="35" stroke="#3a3425" stroke-width="0.8"/>
+  <line x1="240" y1="36" x2="240" y2="52" stroke="#3a3425" stroke-width="0.6"/>
+  <line x1="560" y1="36" x2="560" y2="52" stroke="#3a3425" stroke-width="0.6"/>
+  <rect x="10" y="57" width="230" height="30" fill="#1a1714" stroke="#2e2920" stroke-width="0.4"/>
+  <line x1="10" y1="72" x2="240" y2="72" stroke="#252118" stroke-width="0.35"/>
+  <line x1="80" y1="57" x2="80" y2="87" stroke="#252118" stroke-width="0.25"/>
+  <line x1="155" y1="57" x2="155" y2="87" stroke="#252118" stroke-width="0.25"/>
+  <rect x="560" y="57" width="230" height="30" fill="#1a1714" stroke="#2e2920" stroke-width="0.4"/>
+  <line x1="560" y1="72" x2="790" y2="72" stroke="#252118" stroke-width="0.35"/>
+  <line x1="640" y1="57" x2="640" y2="87" stroke="#252118" stroke-width="0.25"/>
+  <line x1="720" y1="57" x2="720" y2="87" stroke="#252118" stroke-width="0.25"/>
+  <rect x="238" y="41" width="324" height="22" fill="#1a1714" stroke="#2e2920" stroke-width="0.4"/>
+  <line x1="238" y1="52" x2="562" y2="52" stroke="#252118" stroke-width="0.3"/>
+  <rect x="10" y="87" width="68" height="185" fill="#1a1714" stroke="#2e2920" stroke-width="0.3"/>
+  <line x1="10" y1="112" x2="78" y2="112" stroke="#252118" stroke-width="0.3"/>
+  <line x1="10" y1="137" x2="78" y2="137" stroke="#252118" stroke-width="0.3"/>
+  <line x1="10" y1="162" x2="78" y2="162" stroke="#252118" stroke-width="0.3"/>
+  <line x1="10" y1="187" x2="78" y2="187" stroke="#252118" stroke-width="0.3"/>
+  <line x1="10" y1="212" x2="78" y2="212" stroke="#252118" stroke-width="0.3"/>
+  <line x1="10" y1="237" x2="78" y2="237" stroke="#252118" stroke-width="0.3"/>
+  <line x1="10" y1="255" x2="78" y2="255" stroke="#252118" stroke-width="0.3"/>
+  <line x1="44" y1="87" x2="44" y2="272" stroke="#252118" stroke-width="0.2"/>
+  <rect x="78" y="87" width="162" height="21" fill="#1a1714" stroke="#2e2920" stroke-width="0.3"/>
+  <line x1="78" y1="98" x2="240" y2="98" stroke="#252118" stroke-width="0.25"/>
+  <line x1="140" y1="87" x2="140" y2="108" stroke="#252118" stroke-width="0.25"/>
+  <rect x="80" y="110" width="100" height="162" fill="url(#doorBeige)" stroke="#3a3425" stroke-width="0.6" rx="1"/>
+  <line x1="80" y1="133" x2="180" y2="133" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.25"/>
+  <line x1="80" y1="156" x2="180" y2="156" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.25"/>
+  <line x1="80" y1="179" x2="180" y2="179" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.25"/>
+  <line x1="80" y1="202" x2="180" y2="202" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.25"/>
+  <line x1="80" y1="225" x2="180" y2="225" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.25"/>
+  <line x1="80" y1="248" x2="180" y2="248" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.25"/>
+  <rect x="76" y="107" width="108" height="168" fill="none" stroke="#3a3425" stroke-width="0.7"/>
+  <rect x="182" y="110" width="58" height="162" fill="url(#glassG)" stroke="#3a3425" stroke-width="0.5"/>
+  <line x1="211" y1="110" x2="211" y2="272" stroke="#F0EAE0" stroke-width="0.8" stroke-opacity="0.3"/>
+  <line x1="182" y1="164" x2="240" y2="164" stroke="#F0EAE0" stroke-width="0.8" stroke-opacity="0.3"/>
+  <line x1="182" y1="218" x2="240" y2="218" stroke="#F0EAE0" stroke-width="0.8" stroke-opacity="0.3"/>
+  <line x1="187" y1="115" x2="187" y2="158" stroke="#F0EAE0" stroke-width="0.3" stroke-opacity="0.05"/>
+  <rect x="560" y="110" width="58" height="162" fill="url(#glassG)" stroke="#3a3425" stroke-width="0.5"/>
+  <line x1="589" y1="110" x2="589" y2="272" stroke="#F0EAE0" stroke-width="0.8" stroke-opacity="0.3"/>
+  <line x1="560" y1="164" x2="618" y2="164" stroke="#F0EAE0" stroke-width="0.8" stroke-opacity="0.3"/>
+  <line x1="560" y1="218" x2="618" y2="218" stroke="#F0EAE0" stroke-width="0.8" stroke-opacity="0.3"/>
+  <line x1="613" y1="115" x2="613" y2="158" stroke="#F0EAE0" stroke-width="0.3" stroke-opacity="0.05"/>
+  <rect x="560" y="87" width="162" height="21" fill="#1a1714" stroke="#2e2920" stroke-width="0.3"/>
+  <line x1="560" y1="98" x2="722" y2="98" stroke="#252118" stroke-width="0.25"/>
+  <line x1="660" y1="87" x2="660" y2="108" stroke="#252118" stroke-width="0.25"/>
+  <rect x="620" y="110" width="100" height="162" fill="url(#doorBeige)" stroke="#3a3425" stroke-width="0.6" rx="1"/>
+  <line x1="620" y1="133" x2="720" y2="133" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.25"/>
+  <line x1="620" y1="156" x2="720" y2="156" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.25"/>
+  <line x1="620" y1="179" x2="720" y2="179" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.25"/>
+  <line x1="620" y1="202" x2="720" y2="202" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.25"/>
+  <line x1="620" y1="225" x2="720" y2="225" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.25"/>
+  <line x1="620" y1="248" x2="720" y2="248" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.25"/>
+  <rect x="616" y="107" width="108" height="168" fill="none" stroke="#3a3425" stroke-width="0.7"/>
+  <rect x="722" y="87" width="68" height="185" fill="#1a1714" stroke="#2e2920" stroke-width="0.3"/>
+  <line x1="722" y1="112" x2="790" y2="112" stroke="#252118" stroke-width="0.3"/>
+  <line x1="722" y1="137" x2="790" y2="137" stroke="#252118" stroke-width="0.3"/>
+  <line x1="722" y1="162" x2="790" y2="162" stroke="#252118" stroke-width="0.3"/>
+  <line x1="722" y1="187" x2="790" y2="187" stroke="#252118" stroke-width="0.3"/>
+  <line x1="722" y1="212" x2="790" y2="212" stroke="#252118" stroke-width="0.3"/>
+  <line x1="722" y1="237" x2="790" y2="237" stroke="#252118" stroke-width="0.3"/>
+  <line x1="722" y1="255" x2="790" y2="255" stroke="#252118" stroke-width="0.3"/>
+  <line x1="756" y1="87" x2="756" y2="272" stroke="#252118" stroke-width="0.2"/>
+  <rect x="240" y="63" width="320" height="211" fill="#1e1b17" stroke="#3a3425" stroke-width="1.2" rx="1"/>
+  <rect x="242" y="65" width="316" height="207" fill="none" stroke="#F0EAE0" stroke-width="0.3" stroke-opacity="0.06"/>
+  <rect x="248" y="70" width="114" height="198" fill="url(#glassG)" stroke="#3a3425" stroke-width="0.5"/>
+  <line x1="305" y1="70" x2="305" y2="268" stroke="#F0EAE0" stroke-width="1" stroke-opacity="0.35"/>
+  <line x1="248" y1="136" x2="362" y2="136" stroke="#F0EAE0" stroke-width="1" stroke-opacity="0.35"/>
+  <line x1="248" y1="202" x2="362" y2="202" stroke="#F0EAE0" stroke-width="1" stroke-opacity="0.35"/>
+  <line x1="254" y1="76" x2="254" y2="130" stroke="#F0EAE0" stroke-width="0.4" stroke-opacity="0.05"/>
+  <line x1="311" y1="142" x2="311" y2="196" stroke="#F0EAE0" stroke-width="0.3" stroke-opacity="0.04"/>
+  <rect x="368" y="70" width="64" height="198" fill="url(#orangeG)" stroke="#E09A2F" stroke-width="0.6" stroke-opacity="0.5" rx="0.5"/>
+  <line x1="368" y1="84" x2="432" y2="84" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.3"/>
+  <line x1="368" y1="98" x2="432" y2="98" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.3"/>
+  <line x1="368" y1="112" x2="432" y2="112" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.3"/>
+  <line x1="368" y1="126" x2="432" y2="126" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.3"/>
+  <line x1="368" y1="140" x2="432" y2="140" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.3"/>
+  <line x1="368" y1="154" x2="432" y2="154" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.3"/>
+  <line x1="368" y1="168" x2="432" y2="168" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.3"/>
+  <line x1="368" y1="182" x2="432" y2="182" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.3"/>
+  <line x1="368" y1="196" x2="432" y2="196" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.3"/>
+  <line x1="368" y1="210" x2="432" y2="210" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.3"/>
+  <line x1="368" y1="224" x2="432" y2="224" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.3"/>
+  <line x1="368" y1="238" x2="432" y2="238" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.3"/>
+  <line x1="368" y1="252" x2="432" y2="252" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.3"/>
+  <rect x="438" y="70" width="114" height="198" fill="url(#glassG)" stroke="#3a3425" stroke-width="0.5"/>
+  <line x1="495" y1="70" x2="495" y2="268" stroke="#F0EAE0" stroke-width="1" stroke-opacity="0.35"/>
+  <line x1="438" y1="136" x2="552" y2="136" stroke="#F0EAE0" stroke-width="1" stroke-opacity="0.35"/>
+  <line x1="438" y1="202" x2="552" y2="202" stroke="#F0EAE0" stroke-width="1" stroke-opacity="0.35"/>
+  <line x1="444" y1="76" x2="444" y2="130" stroke="#F0EAE0" stroke-width="0.4" stroke-opacity="0.05"/>
+  <line x1="501" y1="142" x2="501" y2="196" stroke="#F0EAE0" stroke-width="0.3" stroke-opacity="0.04"/>
+  <circle cx="243" cy="106" r="3" fill="none" stroke="#3a3425" stroke-width="0.5"/>
+  <circle cx="243" cy="106" r="1" fill="#E09A2F" fill-opacity="0.2"/>
+  <circle cx="557" cy="106" r="3" fill="none" stroke="#3a3425" stroke-width="0.5"/>
+  <circle cx="557" cy="106" r="1" fill="#E09A2F" fill-opacity="0.2"/>
+  <line x1="0" y1="274" x2="800" y2="274" stroke="#3a3425" stroke-width="1.2"/>
+  <rect x="0" y="274" width="800" height="126" fill="url(#floorG)"/>
+  <line x1="0" y1="290" x2="800" y2="290" stroke="#252118" stroke-width="0.35" opacity="0.5"/>
+  <line x1="0" y1="306" x2="800" y2="306" stroke="#252118" stroke-width="0.3" opacity="0.4"/>
+  <line x1="0" y1="322" x2="800" y2="322" stroke="#252118" stroke-width="0.3" opacity="0.35"/>
+  <line x1="0" y1="338" x2="800" y2="338" stroke="#252118" stroke-width="0.25" opacity="0.3"/>
+  <line x1="0" y1="354" x2="800" y2="354" stroke="#252118" stroke-width="0.25" opacity="0.25"/>
+  <line x1="70" y1="274" x2="70" y2="290" stroke="#252118" stroke-width="0.2" opacity="0.4"/>
+  <line x1="170" y1="274" x2="170" y2="290" stroke="#252118" stroke-width="0.2" opacity="0.4"/>
+  <line x1="270" y1="274" x2="270" y2="290" stroke="#252118" stroke-width="0.2" opacity="0.4"/>
+  <line x1="370" y1="274" x2="370" y2="290" stroke="#252118" stroke-width="0.2" opacity="0.4"/>
+  <line x1="470" y1="274" x2="470" y2="290" stroke="#252118" stroke-width="0.2" opacity="0.4"/>
+  <line x1="570" y1="274" x2="570" y2="290" stroke="#252118" stroke-width="0.2" opacity="0.4"/>
+  <line x1="670" y1="274" x2="670" y2="290" stroke="#252118" stroke-width="0.2" opacity="0.4"/>
+  <line x1="120" y1="290" x2="120" y2="306" stroke="#252118" stroke-width="0.2" opacity="0.35"/>
+  <line x1="220" y1="290" x2="220" y2="306" stroke="#252118" stroke-width="0.2" opacity="0.35"/>
+  <line x1="320" y1="290" x2="320" y2="306" stroke="#252118" stroke-width="0.2" opacity="0.35"/>
+  <line x1="420" y1="290" x2="420" y2="306" stroke="#252118" stroke-width="0.2" opacity="0.35"/>
+  <line x1="520" y1="290" x2="520" y2="306" stroke="#252118" stroke-width="0.2" opacity="0.35"/>
+  <line x1="620" y1="290" x2="620" y2="306" stroke="#252118" stroke-width="0.2" opacity="0.35"/>
+  <line x1="720" y1="290" x2="720" y2="306" stroke="#252118" stroke-width="0.2" opacity="0.35"/>
+  <line x1="50" y1="306" x2="50" y2="322" stroke="#252118" stroke-width="0.2" opacity="0.3"/>
+  <line x1="150" y1="306" x2="150" y2="322" stroke="#252118" stroke-width="0.2" opacity="0.3"/>
+  <line x1="250" y1="306" x2="250" y2="322" stroke="#252118" stroke-width="0.2" opacity="0.3"/>
+  <line x1="350" y1="306" x2="350" y2="322" stroke="#252118" stroke-width="0.2" opacity="0.3"/>
+  <line x1="450" y1="306" x2="450" y2="322" stroke="#252118" stroke-width="0.2" opacity="0.3"/>
+  <line x1="550" y1="306" x2="550" y2="322" stroke="#252118" stroke-width="0.2" opacity="0.3"/>
+  <line x1="650" y1="306" x2="650" y2="322" stroke="#252118" stroke-width="0.2" opacity="0.3"/>
+  <line x1="750" y1="306" x2="750" y2="322" stroke="#252118" stroke-width="0.2" opacity="0.3"/>
+  <rect x="0" y="360" width="800" height="2" fill="#2e2920" opacity="0.4"/>
+</svg>
+  </div>
+
+  <!-- LOCATIE -->
+  <div class="location-bar">
+    <div class="pin"></div>
+    <span id="c-location"></span>
+  </div>
+
+  <!-- INTRO -->
+  <div class="intro">
+    <p id="c-intro"></p>
+    <div class="access-detail" id="c-access"></div>
+  </div>
+
+  <!-- SFEERBEELDEN -->
+  <p class="section-label">De werkplaats</p>
+  <div class="photo-strip" id="c-photos"></div>
+
+  <!-- AANBOD -->
+  <p class="section-label" id="aanbod">Wat je krijgt</p>
+  <div class="offer-grid" id="c-offers"></div>
+
+  <!-- MACHINES -->
+  <p class="section-label">Machines & gereedschap</p>
+  <div class="machines-block">
+    <div class="machine-list" id="c-machines"></div>
+  </div>
+
+  <!-- PLATTEGROND -->
+  <p class="section-label" id="indeling">Indeling werkplaats</p>
+  <div class="floorplan-block">
+    <svg class="floorplan-svg" viewBox="0 0 500 320" xmlns="http://www.w3.org/2000/svg">
+      <rect x="20" y="20" width="460" height="260" fill="none" stroke="#3a3425" stroke-width="2" rx="2"/>
+      <rect x="20" y="20" width="460" height="80" fill="rgba(224,154,47,0.04)" stroke="#3a3425" stroke-width="1"/>
+      <text x="250" y="48" font-family="'Bebas Neue', sans-serif" font-size="14" fill="#E09A2F" text-anchor="middle" letter-spacing="2">ENTRESOL</text>
+      <line x1="135" y1="20" x2="135" y2="100" stroke="#2e2920" stroke-width="0.5" stroke-dasharray="4,4"/>
+      <line x1="250" y1="20" x2="250" y2="100" stroke="#2e2920" stroke-width="0.5" stroke-dasharray="4,4"/>
+      <line x1="365" y1="20" x2="365" y2="100" stroke="#2e2920" stroke-width="0.5" stroke-dasharray="4,4"/>
+      <text x="77" y="72" font-family="'DM Mono', monospace" font-size="7" fill="#7a7060" text-anchor="middle">Unit A</text>
+      <text x="192" y="72" font-family="'DM Mono', monospace" font-size="7" fill="#7a7060" text-anchor="middle">Unit B</text>
+      <text x="307" y="72" font-family="'DM Mono', monospace" font-size="7" fill="#7a7060" text-anchor="middle">Unit C</text>
+      <text x="422" y="72" font-family="'DM Mono', monospace" font-size="7" fill="#7a7060" text-anchor="middle">Unit D</text>
+      <text x="77" y="82" font-family="'DM Mono', monospace" font-size="5.5" fill="#2e2920" text-anchor="middle">~25 m²</text>
+      <text x="192" y="82" font-family="'DM Mono', monospace" font-size="5.5" fill="#2e2920" text-anchor="middle">~25 m²</text>
+      <text x="307" y="82" font-family="'DM Mono', monospace" font-size="5.5" fill="#2e2920" text-anchor="middle">~25 m²</text>
+      <text x="422" y="82" font-family="'DM Mono', monospace" font-size="5.5" fill="#2e2920" text-anchor="middle">~25 m²</text>
+      <line x1="20" y1="100" x2="480" y2="100" stroke="#3a3425" stroke-width="1.5"/>
+      <text x="250" y="96" font-family="'DM Mono', monospace" font-size="5" fill="#3a3425" text-anchor="middle" letter-spacing="0.3em">VLOERRAND ENTRESOL</text>
+      <text x="250" y="130" font-family="'Bebas Neue', sans-serif" font-size="14" fill="#F0EAE0" text-anchor="middle" letter-spacing="2" opacity="0.5">WERKVLOER</text>
+      <rect x="40" y="145" width="180" height="80" fill="rgba(224,154,47,0.03)" stroke="#2e2920" stroke-width="0.5" stroke-dasharray="3,3" rx="2"/>
+      <text x="130" y="162" font-family="'DM Mono', monospace" font-size="7" fill="#E09A2F" text-anchor="middle" letter-spacing="0.1em">MACHINEZONE</text>
+      <rect x="55" y="172" width="30" height="18" fill="none" stroke="#2e2920" stroke-width="0.5" rx="1"/>
+      <text x="70" y="184" font-family="'DM Mono', monospace" font-size="4.5" fill="#7a7060" text-anchor="middle">FZ</text>
+      <rect x="95" y="172" width="30" height="18" fill="none" stroke="#2e2920" stroke-width="0.5" rx="1"/>
+      <text x="110" y="184" font-family="'DM Mono', monospace" font-size="4.5" fill="#7a7060" text-anchor="middle">VD</text>
+      <rect x="135" y="172" width="30" height="18" fill="none" stroke="#2e2920" stroke-width="0.5" rx="1"/>
+      <text x="150" y="184" font-family="'DM Mono', monospace" font-size="4.5" fill="#7a7060" text-anchor="middle">LZ</text>
+      <rect x="175" y="172" width="30" height="18" fill="none" stroke="#2e2920" stroke-width="0.5" rx="1"/>
+      <text x="190" y="184" font-family="'DM Mono', monospace" font-size="4.5" fill="#7a7060" text-anchor="middle">MZ</text>
+      <text x="130" y="215" font-family="'DM Mono', monospace" font-size="4.5" fill="#2e2920" text-anchor="middle">FZ=Formaatzaag VD=Vandiktebank</text>
+      <text x="130" y="222" font-family="'DM Mono', monospace" font-size="4.5" fill="#2e2920" text-anchor="middle">LZ=Lintzaag MZ=Metaalzaag</text>
+      <rect x="240" y="145" width="220" height="80" fill="rgba(240,234,224,0.02)" stroke="#2e2920" stroke-width="0.5" stroke-dasharray="3,3" rx="2"/>
+      <text x="350" y="162" font-family="'DM Mono', monospace" font-size="7" fill="#7a7060" text-anchor="middle" letter-spacing="0.1em">FLEXSPACE</text>
+      <text x="350" y="195" font-family="'DM Mono', monospace" font-size="6" fill="#2e2920" text-anchor="middle">Grote projecten</text>
+      <text x="350" y="205" font-family="'DM Mono', monospace" font-size="6" fill="#2e2920" text-anchor="middle">op aanvraag</text>
+      <rect x="20" y="240" width="140" height="40" fill="rgba(224,154,47,0.03)" stroke="#2e2920" stroke-width="0.5" rx="1"/>
+      <text x="90" y="264" font-family="'DM Mono', monospace" font-size="7" fill="#7a7060" text-anchor="middle">OPSLAG</text>
+      <rect x="170" y="240" width="100" height="40" fill="rgba(240,234,224,0.02)" stroke="#2e2920" stroke-width="0.5" rx="1"/>
+      <text x="220" y="264" font-family="'DM Mono', monospace" font-size="7" fill="#7a7060" text-anchor="middle">KANTOOR</text>
+      <rect x="280" y="240" width="100" height="40" fill="rgba(240,234,224,0.02)" stroke="#2e2920" stroke-width="0.5" rx="1"/>
+      <text x="330" y="264" font-family="'DM Mono', monospace" font-size="7" fill="#7a7060" text-anchor="middle">BUREAU</text>
+      <rect x="400" y="272" width="40" height="8" fill="rgba(224,154,47,0.12)" stroke="#E09A2F" stroke-width="0.5" stroke-opacity="0.4" rx="1"/>
+      <text x="420" y="268" font-family="'DM Mono', monospace" font-size="5" fill="#E09A2F" text-anchor="middle" opacity="0.6">DEUR 1</text>
+      <rect x="450" y="272" width="30" height="8" fill="rgba(224,154,47,0.12)" stroke="#E09A2F" stroke-width="0.5" stroke-opacity="0.4" rx="1"/>
+      <text x="465" y="268" font-family="'DM Mono', monospace" font-size="5" fill="#E09A2F" text-anchor="middle" opacity="0.6">DEUR 2</text>
+      <text x="470" y="38" font-family="'DM Mono', monospace" font-size="8" fill="#3a3425">N ↑</text>
+    </svg>
+    <div class="floorplan-legend">
+      <div class="legend-item"><div class="legend-swatch" style="background: rgba(224,154,47,0.08);"></div> Werkplekken entresol</div>
+      <div class="legend-item"><div class="legend-swatch" style="background: rgba(224,154,47,0.05); border-color: #E09A2F;"></div> Machinezone</div>
+      <div class="legend-item"><div class="legend-swatch" style="background: rgba(240,234,224,0.04);"></div> Flexspace / gedeeld</div>
+      <div class="legend-item"><div class="legend-swatch" style="background: rgba(224,154,47,0.15);"></div> Overheaddeuren</div>
+    </div>
+  </div>
+
+  <!-- PRICING -->
+  <p class="section-label" id="tarieven">Units & tarieven</p>
+  <div class="pricing-block" id="c-pricing"></div>
+  <p class="pricing-note" id="c-pricing-note"></p>
+
+  <!-- VOOR WIE -->
+  <p class="section-label">Voor wie</p>
+  <div class="for-who">
+    <ul class="criteria-list" id="c-audience"></ul>
+    <div class="not-for" id="c-not-for"></div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-block" id="contact">
+    <h2 id="c-cta-heading"></h2>
+    <div class="cta-actions" id="c-cta-actions"></div>
+    <div class="cta-info" id="c-cta-info"></div>
+  </div>
+
+  <!-- INSTAGRAM -->
+  <p class="section-label">Volg ons</p>
+  <div class="insta-section">
+    <div class="insta-grid">
+      <div class="insta-tile"><svg class="insta-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg></div>
+      <div class="insta-tile"><svg class="insta-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg></div>
+      <div class="insta-tile"><svg class="insta-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg></div>
+      <div class="insta-tile"><svg class="insta-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg></div>
+    </div>
+    <div class="insta-handle" id="c-insta"></div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="brand">Werk<span>plaats</span>17</div>
+    <div class="footer-right">
+      <div class="hashtags" id="c-hashtags"></div>
+      <div class="copy" id="c-copyright"></div>
+    </div>
+  </footer>
+
+</div>
+
+<!-- CONTENT ENGINE: laadt content.js en vult de pagina -->
+<script src="content.js"></script>
+<script>
+(function() {
+  const C = CONTENT;
+
+  // Meta
+  document.getElementById('siteTitle').textContent = C.siteTitle;
+  document.getElementById('metaDesc').setAttribute('content', C.metaDescription);
+  document.getElementById('ogTitle').setAttribute('content', C.siteTitle);
+  document.getElementById('ogDesc').setAttribute('content', C.ogDescription);
+
+  // Header
+  document.getElementById('c-eyebrow').textContent = C.eyebrow;
+  document.getElementById('c-tagline').innerHTML = C.tagline;
+
+  // Location
+  document.getElementById('c-location').textContent = C.locationText;
+
+  // Intro
+  document.getElementById('c-intro').innerHTML = C.introText;
+
+  // Access items
+  const accessIcons = [
+    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
+    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>',
+  ];
+  const accessEl = document.getElementById('c-access');
+  C.accessItems.forEach((text, i) => {
+    accessEl.innerHTML += `<div class="access-item"><span class="ico">${accessIcons[i] || accessIcons[0]}</span>${text}</div>`;
+  });
+
+  // Photos
+  const photosEl = document.getElementById('c-photos');
+  const photoSvg = '<svg class="ph-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>';
+  C.photoLabels.forEach(label => {
+    photosEl.innerHTML += `<div class="photo-placeholder">${photoSvg}<span class="ph-label">${label}</span></div>`;
+  });
+
+  // Offers
+  const offerIcons = [
+    '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="1"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>',
+    '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 9 2 12 5 15"/><polyline points="19 9 22 12 19 15"/><line x1="2" y1="12" x2="22" y2="12"/></svg>',
+    '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8V21H3V8"/><path d="M23 3H1v5h22V3z"/><line x1="10" y1="12" x2="14" y2="12"/></svg>',
+    '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
+  ];
+  const offersEl = document.getElementById('c-offers');
+  C.offers.forEach((o, i) => {
+    offersEl.innerHTML += `<div class="offer-card"><span class="icon">${offerIcons[i] || ''}</span><h3>${o.title}</h3><p>${o.text}</p></div>`;
+  });
+
+  // Machines
+  const machinesEl = document.getElementById('c-machines');
+  C.machines.forEach(m => {
+    machinesEl.innerHTML += `<span class="machine-tag${m.highlight ? ' highlight' : ''}">${m.name}</span>`;
+  });
+
+  // Pricing
+  const pricingEl = document.getElementById('c-pricing');
+  C.pricing.forEach(p => {
+    pricingEl.innerHTML += `<div class="pricing-row"><div><div class="label">${p.label}</div><div class="sub">${p.sub}</div></div><div class="price">${p.price}<small>${p.unit}</small></div></div>`;
+  });
+  document.getElementById('c-pricing-note').textContent = C.pricingNote;
+
+  // Target audience
+  const audienceEl = document.getElementById('c-audience');
+  C.targetAudience.forEach(item => {
+    audienceEl.innerHTML += `<li><span class="check">✦</span> ${item}</li>`;
+  });
+  document.getElementById('c-not-for').innerHTML = C.notForText;
+
+  // CTA
+  document.getElementById('c-cta-heading').innerHTML = C.ctaHeading;
+  const ctaActions = document.getElementById('c-cta-actions');
+  ctaActions.innerHTML = `
+    <a href="mailto:${C.email}" class="btn-primary">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Mail ons
+    </a>
+    <a href="https://wa.me/${C.whatsappNumber}?text=${encodeURIComponent(C.whatsappText)}" class="btn-secondary" target="_blank" rel="noopener">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+      WhatsApp
+    </a>`;
+
+  const ctaInfo = document.getElementById('c-cta-info');
+  C.contactLines.forEach(line => {
+    ctaInfo.innerHTML += `<div class="cta-line"><div class="dot"></div><span>${line}</span></div>`;
+  });
+  ctaInfo.innerHTML += `<div class="cta-line"><div class="dot"></div><span>Rondleiding op afspraak — <a href="mailto:${C.email}">${C.email}</a></span></div>`;
+
+  // Instagram
+  document.getElementById('c-insta').innerHTML = `<a href="${C.instagramUrl}" target="_blank" rel="noopener">${C.instagramHandle}</a>`;
+
+  // Footer
+  document.getElementById('c-hashtags').innerHTML = C.hashtags;
+  document.getElementById('c-copyright').textContent = C.copyright;
+
+  // Sticky nav
+  const nav = document.getElementById('stickyNav');
+  const header = document.querySelector('header');
+  const observer = new IntersectionObserver(([e]) => {
+    nav.classList.toggle('visible', !e.isIntersecting);
+  }, { threshold: 0 });
+  observer.observe(header);
+})();
+</script>
+</body>
+</html>
