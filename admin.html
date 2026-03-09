@@ -171,6 +171,13 @@ textarea.ce-input{min-height:60px;resize:vertical}
 .ce-preview strong{color:var(--amber)}
 .ce-preview em{color:var(--amber);font-style:italic}
 
+/* toolbar */
+.ce-toolbar{display:flex;gap:2px;margin-bottom:2px}
+.ce-tb-btn{padding:3px 8px;font-size:10px;font-family:inherit;background:var(--bg);border:1px solid var(--border);color:var(--muted);cursor:pointer;line-height:1}
+.ce-tb-btn:hover{border-color:var(--amber);color:var(--amber)}
+.ce-tb-btn b{font-weight:bold}
+.ce-tb-btn i{font-style:italic}
+
 /* array items */
 .ce-array-item{display:flex;gap:6px;align-items:flex-start;margin-bottom:6px;padding:8px;background:var(--bg);border:1px solid var(--border)}
 .ce-array-item .ce-input{border:none;padding:4px 6px;background:transparent}
@@ -1125,6 +1132,21 @@ function ceBuild(){
   });
 }
 
+function ceWrapSelection(ta,tag){
+  var s=ta.selectionStart,e=ta.selectionEnd;
+  var txt=ta.value,sel=txt.substring(s,e);
+  var open='<'+tag+'>',close='</'+tag+'>';
+  // Toggle: als selectie al gewrapt is, verwijder tags
+  if(txt.substring(s-open.length,s)===open&&txt.substring(e,e+close.length)===close){
+    ta.value=txt.substring(0,s-open.length)+sel+txt.substring(e+close.length);
+    ta.selectionStart=s-open.length;ta.selectionEnd=e-open.length;
+  }else{
+    ta.value=txt.substring(0,s)+open+sel+close+txt.substring(e);
+    ta.selectionStart=s+open.length;ta.selectionEnd=e+open.length;
+  }
+  ta.focus();
+}
+
 function ceRenderField(f){
   var wrap=document.createElement('div');wrap.className='ce-field';
   var val=ceData[f.key];
@@ -1145,12 +1167,21 @@ function ceRenderField(f){
     var toggle=document.createElement('span');toggle.className='ce-preview-toggle';toggle.textContent='Preview';
     lbl.appendChild(toggle);
     wrap.appendChild(lbl);
+    // Toolbar
+    var tb=document.createElement('div');tb.className='ce-toolbar';
     var ta=document.createElement('textarea');ta.className='ce-input';ta.dataset.key=f.key;
+    var prev=document.createElement('div');prev.className='ce-preview';prev.innerHTML=val||'';
+    function syncTa(){ceData[f.key]=ta.value.replace(/\n/g,'<br>');prev.innerHTML=ceData[f.key];}
+    [['<b>B</b>','strong'],['<i>I</i>','em']].forEach(function(pair){
+      var btn=document.createElement('button');btn.className='ce-tb-btn';btn.type='button';btn.innerHTML=pair[0];
+      btn.onclick=function(){ceWrapSelection(ta,pair[1]);syncTa();};
+      tb.appendChild(btn);
+    });
+    wrap.appendChild(tb);
     // <br> → newline voor textarea, newline → <br> bij opslaan
     ta.value=(val||'').replace(/<br\s*\/?>/gi,'\n');
-    ta.oninput=function(){ceData[f.key]=this.value.replace(/\n/g,'<br>');prev.innerHTML=ceData[f.key];};
+    ta.oninput=syncTa;
     wrap.appendChild(ta);
-    var prev=document.createElement('div');prev.className='ce-preview';prev.innerHTML=val||'';
     toggle.onclick=function(){prev.classList.toggle('show');this.textContent=prev.classList.contains('show')?'Verberg':'Preview';};
     wrap.appendChild(prev);
   }else if(f.type==='array-text'){
