@@ -43,7 +43,7 @@ body{background:var(--bg);color:var(--cream);font-family:'Courier New',monospace
 
 /* layout */
 .wrap{display:flex;flex:1;overflow:hidden}
-/* sidebar */
+/* left sidebar */
 .sb{width:166px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden}
 .sb-h{font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);padding:8px 10px 5px;border-bottom:1px solid var(--border)}
 .sb-s{overflow-y:auto;flex:1;padding:5px}
@@ -53,31 +53,47 @@ body{background:var(--bg);color:var(--cream);font-family:'Courier New',monospace
 .item:hover{border-color:var(--amber)}
 .sw{width:7px;height:7px;border-radius:1px;flex-shrink:0}
 /* canvas */
-.cv{flex:1;overflow:auto;background:var(--bg)}
-.cv::-webkit-scrollbar{width:6px;height:6px}.cv::-webkit-scrollbar-thumb{background:var(--border)}
-#zoom-wrap{transform-origin:0 0;transition:transform .1s ease}
-#fp{position:relative}
+.cv{flex:1;overflow:hidden;background:var(--bg);cursor:grab;touch-action:none;user-select:none;position:relative}
+.cv.grabbing{cursor:grabbing}
+#fp{position:relative;transform-origin:0 0}
 /* placed items */
 .pl{position:absolute;cursor:move;user-select:none;z-index:10}
+.pl.sel{z-index:15}
 .pl.sel .ib{border-color:#fff!important;box-shadow:0 0 0 1px rgba(255,255,255,.3)}
 .ib{width:100%;height:100%;border:1.5px solid;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
 .il{font-size:7px;letter-spacing:.05em;text-align:center;padding:1px;line-height:1.3;text-transform:uppercase;pointer-events:none}
 .id{font-size:5.5px;color:rgba(255,255,255,.28);pointer-events:none}
-.db,.rb,.cpb,.eb{position:absolute;width:13px;height:13px;border:none;cursor:pointer;display:none;align-items:center;justify-content:center;font-size:8px;z-index:20;top:-14px}
-.pl.sel .db,.pl.sel .rb,.pl.sel .eb{display:flex}
+.db,.rb,.cpb{position:absolute;width:13px;height:13px;border:none;cursor:pointer;display:none;align-items:center;justify-content:center;font-size:8px;z-index:20;top:-14px}
+.pl.sel .db,.pl.sel .rb{display:flex}
 .pl:hover .cpb{display:flex}
 .db{left:0;background:#a03030;color:#fff}
 .rb{right:0;background:var(--amber);color:var(--bg)}
 .cpb{left:14px;background:#306090;color:#fff}
-.eb{left:28px;background:#508050;color:#fff}
-/* edit popup */
-.epop{position:absolute;top:-70px;left:0;background:var(--surface);border:1px solid var(--border);padding:5px;z-index:30;display:none;flex-direction:column;gap:3px;min-width:110px}
-.epop.on{display:flex}
-.epop input{padding:2px 4px;font-size:8px;font-family:inherit;background:var(--bg);border:1px solid var(--border);color:var(--cream);width:100%}
-.epop input:focus{border-color:var(--amber);outline:none}
-.epop .erow{display:flex;gap:3px;align-items:center}
-.epop .erow span{font-size:7px;color:var(--muted)}
-.epop button{padding:2px 6px;font-size:7px;font-family:inherit;background:var(--amber);color:var(--bg);border:none;cursor:pointer;text-transform:uppercase;letter-spacing:.08em}
+
+/* right sidebar — properties panel */
+.props{width:220px;background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden}
+.props-h{font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);padding:8px 10px 5px;border-bottom:1px solid var(--border)}
+.props-empty{padding:20px 10px;font-size:9px;color:var(--muted);text-align:center;line-height:1.6}
+.props-scroll{overflow-y:auto;flex:1;padding:8px}
+.props-scroll::-webkit-scrollbar{width:3px}.props-scroll::-webkit-scrollbar-thumb{background:var(--border)}
+.pf{margin-bottom:8px}
+.pf-label{font-size:7px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.pf-input{width:100%;padding:4px 6px;font-size:9px;font-family:inherit;background:var(--bg);border:1px solid var(--border);color:var(--cream);outline:none}
+.pf-input:focus{border-color:var(--amber)}
+.pf-row{display:flex;gap:4px;align-items:center}
+.pf-row .pf-input{flex:1;min-width:0}
+.pf-row span{font-size:8px;color:var(--muted)}
+.pf-select{width:100%;padding:4px 6px;font-size:9px;font-family:inherit;background:var(--bg);border:1px solid var(--border);color:var(--cream);outline:none;-webkit-appearance:none}
+.pf-select:focus{border-color:var(--amber)}
+.pf-color{width:100%;height:24px;padding:1px;background:var(--bg);border:1px solid var(--border);cursor:pointer}
+.pf-color:focus{border-color:var(--amber)}
+.pf-btn{width:100%;padding:5px;font-size:8px;font-family:inherit;letter-spacing:.1em;text-transform:uppercase;border:none;cursor:pointer;margin-top:4px}
+.pf-btn-del{background:#a03030;color:#fff}
+.pf-btn-del:hover{filter:brightness(1.2)}
+.pf-btn-dup{background:#306090;color:#fff}
+.pf-btn-dup:hover{filter:brightness(1.2)}
+.pf-divider{border-top:1px solid var(--border);margin:10px 0}
+
 /* legend */
 .leg{border-top:1px solid var(--border);background:var(--surface);padding:5px 14px;display:flex;gap:12px;align-items:center;flex-shrink:0;flex-wrap:wrap}
 .li{display:flex;align-items:center;gap:5px;font-size:8px;color:var(--muted)}
@@ -135,7 +151,7 @@ body{background:var(--bg);color:var(--cream);font-family:'Courier New',monospace
     <div class="tab on" id="t0" onclick="show(0)">Begane grond</div>
     <div class="tab" id="t1" onclick="show(1)">Verdieping — Entresol</div>
   </div>
-  <div class="hint">Sleep · Klik → ↻ · Delete · Ctrl+scroll = zoom · Spatie+sleep = pan</div>
+  <div class="hint">Sleep = pan · Scroll = zoom · Klik object = bewerken · Delete = verwijder</div>
   <div class="hdr-btns">
     <button class="hbtn" id="btn-save">Opslaan</button>
     <button class="hbtn" id="btn-export">Export</button>
@@ -172,7 +188,7 @@ body{background:var(--bg);color:var(--cream);font-family:'Courier New',monospace
     <div class="item" draggable="true" data-w="72" data-h="39" data-l="Afzuiging 240x130" data-c="#607080" data-bg="rgba(96,112,128,.15)"><div class="sw" style="background:#607080"></div>Afzuiging 240x130</div>
     <div class="item" draggable="true" data-w="15" data-h="15" data-l="Compressor" data-c="#607080" data-bg="rgba(96,112,128,.15)"><div class="sw" style="background:#607080"></div>Compressor</div>
     <div class="cat">Huurunits</div>
-    <div class="item" draggable="true" data-w="150" data-h="150" data-l="Huurunit ~25m²" data-c="#50b478" data-bg="rgba(80,180,120,.1)"><div class="sw" style="background:#50b478"></div>Huurunit ~25m²</div>
+    <div class="item" draggable="true" data-w="150" data-h="150" data-l="Huurunit ~25m²" data-c="#50b478" data-bg="rgba(80,180,120,.1)" data-type="huurunit"><div class="sw" style="background:#50b478"></div>Huurunit ~25m²</div>
   </div>
   <div class="sb-add">
     <div class="cat">+ Eigen object</div>
@@ -185,8 +201,92 @@ body{background:var(--bg);color:var(--cream);font-family:'Courier New',monospace
     <button id="addBtn">Toevoegen</button>
   </div>
 </div>
-<div class="cv"><div id="zoom-wrap"><div id="fp"></div></div></div>
+
+<!-- CANVAS -->
+<div class="cv" id="canvas"><div id="fp"></div></div>
+
+<!-- PROPERTIES PANEL -->
+<div class="props" id="props-panel">
+  <div class="props-h">Eigenschappen</div>
+  <div class="props-empty" id="props-empty">Selecteer een object<br>of sleep er een naar het canvas</div>
+  <div class="props-scroll" id="props-form" style="display:none">
+    <div class="pf">
+      <div class="pf-label">Naam</div>
+      <input class="pf-input" id="pf-name" type="text" spellcheck="false">
+    </div>
+    <div class="pf">
+      <div class="pf-label">Type</div>
+      <select class="pf-select" id="pf-type">
+        <option value="">Overig</option>
+        <option value="machine">Machine</option>
+        <option value="werkplek">Werkplek</option>
+        <option value="opslag">Opslag</option>
+        <option value="infra">Infra</option>
+        <option value="huurunit">Huurunit</option>
+        <option value="overhead">Overheaddeur</option>
+        <option value="door">Toegangsdeur</option>
+      </select>
+    </div>
+    <div class="pf" id="pf-status-wrap">
+      <div class="pf-label">Status</div>
+      <select class="pf-select" id="pf-status">
+        <option value="">N.v.t.</option>
+        <option value="beschikbaar">Beschikbaar</option>
+        <option value="bezet">Bezet</option>
+        <option value="gereserveerd">Gereserveerd</option>
+      </select>
+    </div>
+    <div class="pf">
+      <div class="pf-label">Verdieping</div>
+      <select class="pf-select" id="pf-floor">
+        <option value="0">Begane grond</option>
+        <option value="1">Entresol</option>
+      </select>
+    </div>
+    <div class="pf-divider"></div>
+    <div class="pf">
+      <div class="pf-label">Afmetingen (cm)</div>
+      <div class="pf-row">
+        <input class="pf-input" id="pf-w" type="number" min="1" placeholder="Breedte">
+        <span>×</span>
+        <input class="pf-input" id="pf-h" type="number" min="1" placeholder="Diepte">
+      </div>
+    </div>
+    <div class="pf">
+      <div class="pf-label">Positie (px)</div>
+      <div class="pf-row">
+        <input class="pf-input" id="pf-x" type="number" placeholder="X">
+        <span>,</span>
+        <input class="pf-input" id="pf-y" type="number" placeholder="Y">
+      </div>
+    </div>
+    <div class="pf">
+      <div class="pf-label">Rotatie (°)</div>
+      <input class="pf-input" id="pf-rot" type="number" min="0" max="359" step="90" value="0">
+    </div>
+    <div class="pf-divider"></div>
+    <div class="pf">
+      <div class="pf-label">Randkleur</div>
+      <input class="pf-color" id="pf-color" type="color" value="#E09A2F">
+    </div>
+    <div class="pf">
+      <div class="pf-label">Achtergrondkleur</div>
+      <input class="pf-color" id="pf-bgcolor" type="color" value="#2e2920">
+    </div>
+    <div class="pf">
+      <div class="pf-label">Achtergrond opacity</div>
+      <div class="pf-row">
+        <input class="pf-input" id="pf-bgopacity" type="range" min="0" max="100" value="13" style="flex:1">
+        <span id="pf-bgopacity-val" style="min-width:24px;text-align:right">13%</span>
+      </div>
+    </div>
+    <div class="pf-divider"></div>
+    <button class="pf-btn pf-btn-dup" id="pf-dup">Dupliceren</button>
+    <button class="pf-btn pf-btn-del" id="pf-del">Verwijderen</button>
+  </div>
 </div>
+</div>
+
 <div class="leg">
   <div class="li"><div class="ld" style="border-color:var(--b-hal);background:var(--c-hal)"></div>Hal</div>
   <div class="li"><div class="ld" style="border-color:var(--b-kan);background:var(--c-kan)"></div>Kantoor</div>
@@ -194,10 +294,10 @@ body{background:var(--bg);color:var(--cream);font-family:'Courier New',monospace
   <div class="li"><div class="ld" style="border-color:var(--b-ep);background:var(--c-ep)"></div>Entresol</div>
   <div class="sbr"><span>0</span><div class="sbl"></div><span>2m</span></div>
   <div class="zoom">
-    <button class="zbtn" onclick="setZoom(zoom-0.15)">−</button>
+    <button class="zbtn" onclick="doZoom(-0.15)">−</button>
     <span class="zlbl" id="zlbl">100%</span>
-    <button class="zbtn" onclick="setZoom(zoom+0.15)">+</button>
-    <button class="zbtn" onclick="setZoom(1)" style="font-size:7px;width:auto;padding:0 5px">Reset</button>
+    <button class="zbtn" onclick="doZoom(0.15)">+</button>
+    <button class="zbtn" onclick="resetView()" style="font-size:7px;width:auto;padding:0 5px">Reset</button>
   </div>
 </div>
 </div>
@@ -235,7 +335,7 @@ document.getElementById('auth-pw').addEventListener('keydown',async e=>{
 });
 
 // ╔════════════════════════════════════════════╗
-// ║  PLATTEGROND ENGINE (uit werkplaats17_plattegrond.html)
+// ║  PLATTEGROND ENGINE                        ║
 // ╚════════════════════════════════════════════╝
 const S=0.03, SNAP=5;
 const UW=11500, UH=21550;
@@ -244,10 +344,10 @@ const Yb=100,Ytb=1300,Ytt=1400,Ykat=7870,Ysb=7970,Yst=8970,Yt=21450;
 const GAP=0;
 let floor=0, sel=null, drag=null;
 const fp=document.getElementById('fp');
+const cv=document.getElementById('canvas');
 
 function px(mm){return mm*S;}
 function mx(x,w){return UW-x-w;}
-
 function makeDiv(style){const d=document.createElement('div');d.style.cssText='position:absolute;';Object.assign(d.style,style);return d;}
 function wall(x,y,w,h,ox,oy){fp.appendChild(makeDiv({left:px(x)+ox+'px',top:px(y)+oy+'px',width:px(w)+'px',height:px(h)+'px',background:'var(--wall)'}));}
 function room(x,y,w,h,ox,oy,bg,bc,lbl,area){
@@ -283,7 +383,7 @@ function draw(){
   Array.from(fp.children).filter(d=>!d.classList.contains('pl')).forEach(d=>d.remove());
   fp.querySelectorAll('.pl').forEach(d=>{d.style.display=(+d.dataset.floor===floor)?'':'none';});
   var TW=px(UW)*2+GAP+80,TH=px(UH)+70;
-  fp.style.cssText=`position:relative;width:${TW}px;height:${TH}px;min-width:${TW}px;min-height:${TH}px;`;
+  fp.style.width=TW+'px';fp.style.height=TH+'px';fp.style.minWidth=TW+'px';fp.style.minHeight=TH+'px';
   var g=makeDiv({inset:'0',pointerEvents:'none',zIndex:'0',backgroundImage:'linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px)',backgroundSize:`${px(1000)}px ${px(1000)}px`});
   fp.insertBefore(g,fp.firstChild);
   var ox0=30,ox1=30+px(UW)+GAP,oy=28;
@@ -326,96 +426,265 @@ function draw(){
 // ╔════════════════════════════════════════════╗
 // ║  TABS                                      ║
 // ╚════════════════════════════════════════════╝
-function drawAndZoom(){draw();if(typeof setZoom==='function')setZoom(zoom);}
-window.show=function(f){floor=f;document.getElementById('t0').classList.toggle('on',f===0);document.getElementById('t1').classList.toggle('on',f===1);drawAndZoom();};
+window.show=function(f){floor=f;document.getElementById('t0').classList.toggle('on',f===0);document.getElementById('t1').classList.toggle('on',f===1);draw();applyTransform();};
 
 // ╔════════════════════════════════════════════╗
-// ║  DRAG & DROP                               ║
+// ║  ZOOM & PAN (scroll + drag)                ║
+// ╚════════════════════════════════════════════╝
+var zoom=1,panX=0,panY=0;
+function applyTransform(){
+  fp.style.transform='translate('+panX+'px,'+panY+'px) scale('+zoom+')';
+  document.getElementById('zlbl').textContent=Math.round(zoom*100)+'%';
+}
+window.doZoom=function(delta){zoom=Math.min(3,Math.max(0.3,zoom+delta));applyTransform();};
+window.resetView=function(){zoom=1;panX=0;panY=0;applyTransform();};
+
+// Scroll = zoom naar muispositie
+cv.addEventListener('wheel',function(e){
+  e.preventDefault();
+  var rect=cv.getBoundingClientRect();
+  var mx=e.clientX-rect.left, my=e.clientY-rect.top;
+  var oldZ=zoom;
+  zoom=Math.min(3,Math.max(0.3,zoom-e.deltaY*0.002));
+  var ratio=zoom/oldZ;
+  panX=mx-(mx-panX)*ratio;
+  panY=my-(my-panY)*ratio;
+  applyTransform();
+},{passive:false});
+
+// Canvas drag = pan (alleen als niet op een object)
+var panning=false,panSX=0,panSY=0,panPX=0,panPY=0;
+cv.addEventListener('mousedown',function(e){
+  if(e.target.closest('.pl'))return; // object drag, niet pan
+  if(e.button!==0)return;
+  panning=true;panSX=e.clientX;panSY=e.clientY;panPX=panX;panPY=panY;
+  cv.classList.add('grabbing');
+});
+document.addEventListener('mousemove',function(e){
+  if(!panning)return;
+  panX=panPX+(e.clientX-panSX);panY=panPY+(e.clientY-panSY);
+  applyTransform();
+});
+document.addEventListener('mouseup',function(){if(panning){panning=false;cv.classList.remove('grabbing');}});
+
+// Touch: 1-vinger pan, 2-vinger pinch zoom
+var touches={},lastDist=0;
+cv.addEventListener('touchstart',function(e){
+  if(e.target.closest('.pl'))return;
+  e.preventDefault();
+  for(var i=0;i<e.changedTouches.length;i++)touches[e.changedTouches[i].identifier]={x:e.changedTouches[i].clientX,y:e.changedTouches[i].clientY};
+  var ids=Object.keys(touches);
+  if(ids.length===1){panPX=panX;panPY=panY;panSX=touches[ids[0]].x;panSY=touches[ids[0]].y;}
+  if(ids.length===2){var t0=touches[ids[0]],t1=touches[ids[1]];lastDist=Math.hypot(t1.x-t0.x,t1.y-t0.y);}
+},{passive:false});
+cv.addEventListener('touchmove',function(e){
+  e.preventDefault();
+  for(var i=0;i<e.changedTouches.length;i++)touches[e.changedTouches[i].identifier]={x:e.changedTouches[i].clientX,y:e.changedTouches[i].clientY};
+  var ids=Object.keys(touches);
+  if(ids.length===1){panX=panPX+(touches[ids[0]].x-panSX);panY=panPY+(touches[ids[0]].y-panSY);applyTransform();}
+  if(ids.length>=2){var t0=touches[ids[0]],t1=touches[ids[1]],dist=Math.hypot(t1.x-t0.x,t1.y-t0.y);if(lastDist>0){var sc=dist/lastDist;zoom=Math.min(3,Math.max(0.3,zoom*sc));}lastDist=dist;applyTransform();}
+},{passive:false});
+cv.addEventListener('touchend',function(e){
+  for(var i=0;i<e.changedTouches.length;i++)delete touches[e.changedTouches[i].identifier];
+  var ids=Object.keys(touches);
+  if(ids.length===1){panPX=panX;panPY=panY;panSX=touches[ids[0]].x;panSY=touches[ids[0]].y;}
+  if(ids.length<2)lastDist=0;
+});
+
+// ╔════════════════════════════════════════════╗
+// ║  DRAG & DROP uit sidebar                   ║
 // ╚════════════════════════════════════════════╝
 document.querySelectorAll('.item').forEach(item=>{
-  item.addEventListener('dragstart',e=>{drag={w:+item.dataset.w,h:+item.dataset.h,l:item.dataset.l,c:item.dataset.c,bg:item.dataset.bg,type:item.dataset.type||''};e.dataTransfer.effectAllowed='copy';});
+  item.addEventListener('dragstart',e=>{
+    drag={w:+item.dataset.w,h:+item.dataset.h,l:item.dataset.l,c:item.dataset.c,bg:item.dataset.bg,type:item.dataset.type||''};
+    e.dataTransfer.effectAllowed='copy';
+  });
 });
-fp.addEventListener('dragover',e=>e.preventDefault());
-fp.addEventListener('drop',e=>{
+cv.addEventListener('dragover',e=>e.preventDefault());
+cv.addEventListener('drop',e=>{
   e.preventDefault();if(!drag)return;
-  var r=fp.getBoundingClientRect();
-  var x=Math.round((e.clientX-r.left-drag.w/2)/SNAP)*SNAP;
-  var y=Math.round((e.clientY-r.top-drag.h/2)/SNAP)*SNAP;
+  var rect=cv.getBoundingClientRect();
+  var x=Math.round(((e.clientX-rect.left-panX)/zoom-drag.w/2)/SNAP)*SNAP;
+  var y=Math.round(((e.clientY-rect.top-panY)/zoom-drag.h/2)/SNAP)*SNAP;
   place(x,y,drag);drag=null;
 });
 
+// ╔════════════════════════════════════════════╗
+// ║  PLACE OBJECT                              ║
+// ╚════════════════════════════════════════════╝
 function place(x,y,data){
   var d=document.createElement('div');d.className='pl';d.dataset.floor=floor;
   d.style.cssText=`position:absolute;left:${x}px;top:${y}px;width:${data.w}px;height:${data.h}px;`;
   var isDoor=data.type==='overhead'||data.type==='door';
   if(isDoor){
-    d.innerHTML=`<button class="db">✕</button><button class="cpb">⧉</button><button class="eb">✎</button><button class="rb">↻</button>
-      <div class="epop"><input class="en" placeholder="Naam"><div class="erow"><input class="ew" type="number" placeholder="B cm"><span>×</span><input class="eh" type="number" placeholder="D cm"></div><button class="eok">OK</button></div>
+    d.innerHTML=`<button class="db">✕</button><button class="cpb">⧉</button><button class="rb">↻</button>
       <div style="width:100%;height:100%;position:relative;overflow:hidden">
         <div style="position:absolute;left:0;right:0;top:0;height:4px;background:${data.c};opacity:.9"></div>
         ${data.type==='overhead'?`<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:3px">${Array(5).fill(`<div style="width:1px;height:55%;background:${data.c};opacity:.4"></div>`).join('')}</div>`:`<div style="position:absolute;bottom:1px;left:2px;right:2px;border-bottom:1px solid ${data.c};border-right:1px solid ${data.c};border-radius:0 0 80% 0;opacity:.5;height:80%"></div>`}
         <div class="il" style="position:absolute;bottom:2px;left:0;right:0;text-align:center;font-size:6px;color:${data.c};letter-spacing:.08em;text-transform:uppercase">${data.l}</div>
       </div>`;
   }else{
-    d.innerHTML=`<button class="db">✕</button><button class="cpb">⧉</button><button class="eb">✎</button><button class="rb">↻</button>
-      <div class="epop"><input class="en" placeholder="Naam"><div class="erow"><input class="ew" type="number" placeholder="B cm"><span>×</span><input class="eh" type="number" placeholder="D cm"></div><button class="eok">OK</button></div>
+    d.innerHTML=`<button class="db">✕</button><button class="cpb">⧉</button><button class="rb">↻</button>
       <div class="ib" style="border-color:${data.c};background:${data.bg}">
         <div class="il" style="color:${data.c}">${data.l}</div>
         <div class="id">${Math.round(data.w/S/10)}×${Math.round(data.h/S/10)}cm</div>
       </div>`;
   }
-  d.dataset.c=data.c;d.dataset.bg=data.bg||'';d.dataset.type=data.type||'';d.dataset.l=data.l;
-  d.querySelector('.db').addEventListener('click',e=>{e.stopPropagation();d.remove();sel=null;});
-  d.dataset.rot='0';
+  d.dataset.c=data.c;d.dataset.bg=data.bg||'';d.dataset.type=data.type||'';d.dataset.l=data.l;d.dataset.rot='0';d.dataset.status=data.status||'';
+  // Delete
+  d.querySelector('.db').addEventListener('click',e=>{e.stopPropagation();d.remove();if(sel===d){sel=null;hideProps();}});
+  // Rotate
   d.querySelector('.rb').addEventListener('click',e=>{
     e.stopPropagation();
     if(isDoor){var r=(parseInt(d.dataset.rot||'0')+90)%360;d.dataset.rot=r.toString();var inner=d.lastElementChild;if(inner)inner.style.transform=`rotate(${r}deg)`;}
-    else{var ow=d.style.width,oh=d.style.height;d.style.width=oh;d.style.height=ow;}
+    else{var ow=d.style.width,oh=d.style.height;d.style.width=oh;d.style.height=ow;updateDimLabel(d);}
+    if(sel===d)populateProps(d);
   });
-  var epop=d.querySelector('.epop');
-  d.querySelector('.eb').addEventListener('click',e=>{e.stopPropagation();if(epop.classList.contains('on')){epop.classList.remove('on');return;}epop.querySelector('.en').value=d.dataset.l;epop.querySelector('.ew').value=Math.round(parseFloat(d.style.width)/S/10);epop.querySelector('.eh').value=Math.round(parseFloat(d.style.height)/S/10);epop.classList.add('on');epop.querySelector('.en').focus();});
-  epop.addEventListener('mousedown',e=>e.stopPropagation());
-  epop.querySelector('.eok').addEventListener('click',e=>{
-    e.stopPropagation();var nn=epop.querySelector('.en').value.trim(),nw=parseInt(epop.querySelector('.ew').value),nh=parseInt(epop.querySelector('.eh').value);
-    if(nn)d.dataset.l=nn;if(nw>0)d.style.width=Math.max(3,Math.round(nw*10*S))+'px';if(nh>0)d.style.height=Math.max(3,Math.round(nh*10*S))+'px';
-    var il=d.querySelector('.il');if(il)il.textContent=d.dataset.l;var id=d.querySelector('.id');if(id)id.textContent=Math.round(parseFloat(d.style.width)/S/10)+'×'+Math.round(parseFloat(d.style.height)/S/10)+'cm';
-    epop.classList.remove('on');
+  // Clone
+  d.querySelector('.cpb').addEventListener('click',e=>{
+    e.stopPropagation();
+    place(parseInt(d.style.left)+16,parseInt(d.style.top)+16,{w:parseInt(d.style.width),h:parseInt(d.style.height),l:d.dataset.l,c:d.dataset.c,bg:d.dataset.bg,type:d.dataset.type,status:d.dataset.status||''});
   });
-  d.querySelector('.cpb').addEventListener('click',e=>{e.stopPropagation();place(parseInt(d.style.left)+16,parseInt(d.style.top)+16,{w:parseInt(d.style.width),h:parseInt(d.style.height),l:d.dataset.l,c:d.dataset.c,bg:d.dataset.bg,type:d.dataset.type});});
+  // Select + drag
   d.addEventListener('mousedown',e=>{
     if(e.target.tagName==='BUTTON')return;e.stopPropagation();
-    if(sel)sel.classList.remove('sel');sel=d;d.classList.add('sel');
-    var sx=e.clientX-parseInt(d.style.left),sy=e.clientY-parseInt(d.style.top);
-    var mv=e=>{d.style.left=Math.round((e.clientX-sx)/SNAP)*SNAP+'px';d.style.top=Math.round((e.clientY-sy)/SNAP)*SNAP+'px';};
-    var up=()=>{document.removeEventListener('mousemove',mv);document.removeEventListener('mouseup',up);};
+    selectObj(d);
+    var startL=parseInt(d.style.left),startT=parseInt(d.style.top),sx=e.clientX,sy=e.clientY,moved=false;
+    var mv=e=>{
+      moved=true;
+      d.style.left=Math.round((startL+(e.clientX-sx)/zoom)/SNAP)*SNAP+'px';
+      d.style.top=Math.round((startT+(e.clientY-sy)/zoom)/SNAP)*SNAP+'px';
+    };
+    var up=()=>{document.removeEventListener('mousemove',mv);document.removeEventListener('mouseup',up);if(moved&&sel===d)populateProps(d);};
     document.addEventListener('mousemove',mv);document.addEventListener('mouseup',up);
   });
   fp.appendChild(d);
+  selectObj(d);
 }
-fp.addEventListener('mousedown',e=>{if(!e.target.closest('.pl')&&sel){sel.classList.remove('sel');sel=null;}});
+
+// Deselect on canvas click
+cv.addEventListener('mousedown',function(e){
+  if(!e.target.closest('.pl')&&!e.target.closest('.props')){
+    if(sel){sel.classList.remove('sel');sel=null;hideProps();}
+  }
+});
+
+function updateDimLabel(d){
+  var il=d.querySelector('.il');if(il)il.textContent=d.dataset.l;
+  var id=d.querySelector('.id');if(id)id.textContent=Math.round(parseFloat(d.style.width)/S/10)+'×'+Math.round(parseFloat(d.style.height)/S/10)+'cm';
+}
 
 // ╔════════════════════════════════════════════╗
-// ║  ZOOM & PAN                                ║
+// ║  PROPERTIES PANEL                          ║
 // ╚════════════════════════════════════════════╝
-var zoom=1;
-const cv=document.querySelector('.cv'),zw=document.getElementById('zoom-wrap');
-function setZoom(z){
-  zoom=Math.min(3,Math.max(0.3,z));fp.style.transform=`scale(${zoom})`;fp.style.transformOrigin='0 0';
-  var fpW=parseFloat(fp.style.width)||fp.offsetWidth,fpH=parseFloat(fp.style.height)||fp.offsetHeight;
-  zw.style.width=Math.ceil(fpW*zoom)+'px';zw.style.height=Math.ceil(fpH*zoom)+'px';
-  document.getElementById('zlbl').textContent=Math.round(zoom*100)+'%';
-}
-cv.addEventListener('wheel',e=>{if(e.ctrlKey||e.metaKey){e.preventDefault();setZoom(zoom-e.deltaY*0.002);}},{passive:false});
+var propsForm=document.getElementById('props-form'),propsEmpty=document.getElementById('props-empty');
+var pfName=document.getElementById('pf-name'),pfType=document.getElementById('pf-type'),pfStatus=document.getElementById('pf-status');
+var pfFloor=document.getElementById('pf-floor'),pfW=document.getElementById('pf-w'),pfH=document.getElementById('pf-h');
+var pfX=document.getElementById('pf-x'),pfY=document.getElementById('pf-y'),pfRot=document.getElementById('pf-rot');
+var pfColor=document.getElementById('pf-color'),pfBgColor=document.getElementById('pf-bgcolor'),pfBgOpacity=document.getElementById('pf-bgopacity');
 
-var panning=false,panSX=0,panSY=0,panSL=0,panST=0,spaceDown=false;
-document.addEventListener('keydown',e=>{
-  if(e.code==='Space'&&!e.target.matches('input')){e.preventDefault();spaceDown=true;cv.style.cursor='grab';}
-  if((e.key==='Delete'||e.key==='Backspace')&&sel&&!e.target.matches('input')){sel.remove();sel=null;}
+function selectObj(d){
+  if(sel)sel.classList.remove('sel');
+  sel=d;d.classList.add('sel');
+  populateProps(d);
+}
+function hideProps(){propsForm.style.display='none';propsEmpty.style.display='';}
+
+function hexFromAny(c){
+  // Parse color string to hex for color picker
+  if(!c||c==='none'||c==='transparent')return '#1e1b17';
+  if(c.startsWith('#'))return c.length===4?'#'+c[1]+c[1]+c[2]+c[2]+c[3]+c[3]:c;
+  var m=c.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+  if(m)return '#'+[m[1],m[2],m[3]].map(x=>(+x).toString(16).padStart(2,'0')).join('');
+  return '#7a7060';
+}
+function opacityFromBg(bg){
+  if(!bg)return 13;
+  var m=bg.match(/[\d.]+\)$/);
+  return m?Math.round(parseFloat(m[0])*100):13;
+}
+function rgbaFromHexOpacity(hex,op){
+  var r=parseInt(hex.substr(1,2),16),g=parseInt(hex.substr(3,2),16),b=parseInt(hex.substr(5,2),16);
+  return 'rgba('+r+','+g+','+b+','+(op/100).toFixed(2)+')';
+}
+
+function populateProps(d){
+  propsForm.style.display='';propsEmpty.style.display='none';
+  pfName.value=d.dataset.l||'';
+  pfType.value=d.dataset.type||'';
+  pfStatus.value=d.dataset.status||'';
+  pfFloor.value=d.dataset.floor||'0';
+  pfW.value=Math.round(parseFloat(d.style.width)/S/10);
+  pfH.value=Math.round(parseFloat(d.style.height)/S/10);
+  pfX.value=parseInt(d.style.left);
+  pfY.value=parseInt(d.style.top);
+  pfRot.value=d.dataset.rot||'0';
+  pfColor.value=hexFromAny(d.dataset.c);
+  pfBgColor.value=hexFromAny(d.dataset.bg);
+  pfBgOpacity.value=opacityFromBg(d.dataset.bg);
+  document.getElementById('pf-bgopacity-val').textContent=pfBgOpacity.value+'%';
+  // Show status only for huurunits
+  document.getElementById('pf-status-wrap').style.display=(d.dataset.type==='huurunit')?'':'none';
+}
+
+// Live property updates
+function applyProp(){
+  if(!sel)return;var d=sel;
+  // Name
+  d.dataset.l=pfName.value;
+  var il=d.querySelector('.il');if(il)il.textContent=pfName.value;
+  // Type + status
+  d.dataset.type=pfType.value;
+  d.dataset.status=pfStatus.value;
+  document.getElementById('pf-status-wrap').style.display=(pfType.value==='huurunit')?'':'none';
+  // Floor
+  d.dataset.floor=pfFloor.value;
+  d.style.display=(+pfFloor.value===floor)?'':'none';
+  // Dimensions
+  var nw=parseInt(pfW.value),nh=parseInt(pfH.value);
+  if(nw>0)d.style.width=Math.max(3,Math.round(nw*10*S))+'px';
+  if(nh>0)d.style.height=Math.max(3,Math.round(nh*10*S))+'px';
+  // Position
+  var nx=parseInt(pfX.value),ny=parseInt(pfY.value);
+  if(!isNaN(nx))d.style.left=nx+'px';
+  if(!isNaN(ny))d.style.top=ny+'px';
+  // Rotation
+  d.dataset.rot=pfRot.value||'0';
+  var isDoor=d.dataset.type==='overhead'||d.dataset.type==='door';
+  if(isDoor){var inner=d.lastElementChild;if(inner)inner.style.transform='rotate('+d.dataset.rot+'deg)';}
+  // Colors
+  d.dataset.c=pfColor.value;
+  var op=parseInt(pfBgOpacity.value)||0;
+  d.dataset.bg=rgbaFromHexOpacity(pfBgColor.value,op);
+  document.getElementById('pf-bgopacity-val').textContent=op+'%';
+  // Update visual
+  var ib=d.querySelector('.ib');
+  if(ib){ib.style.borderColor=d.dataset.c;ib.style.background=d.dataset.bg;}
+  if(il)il.style.color=d.dataset.c;
+  var idEl=d.querySelector('.id');
+  if(idEl)idEl.textContent=Math.round(parseFloat(d.style.width)/S/10)+'×'+Math.round(parseFloat(d.style.height)/S/10)+'cm';
+}
+
+// Bind all prop inputs
+[pfName,pfType,pfStatus,pfFloor,pfW,pfH,pfX,pfY,pfRot,pfColor,pfBgColor,pfBgOpacity].forEach(el=>{
+  el.addEventListener('input',applyProp);
+  el.addEventListener('change',applyProp);
 });
-document.addEventListener('keyup',e=>{if(e.code==='Space'){spaceDown=false;if(!panning)cv.style.cursor='';}});
-cv.addEventListener('mousedown',e=>{if(e.button===1||(e.button===0&&spaceDown)){e.preventDefault();panning=true;panSX=e.clientX;panSY=e.clientY;panSL=cv.scrollLeft;panST=cv.scrollTop;cv.style.cursor='grabbing';}});
-document.addEventListener('mousemove',e=>{if(!panning)return;cv.scrollLeft=panSL-(e.clientX-panSX);cv.scrollTop=panST-(e.clientY-panSY);});
-document.addEventListener('mouseup',e=>{if(panning){panning=false;cv.style.cursor=spaceDown?'grab':'';}});
+
+// Delete & duplicate buttons
+document.getElementById('pf-del').addEventListener('click',function(){if(sel){sel.remove();sel=null;hideProps();}});
+document.getElementById('pf-dup').addEventListener('click',function(){
+  if(!sel)return;var d=sel;
+  place(parseInt(d.style.left)+16,parseInt(d.style.top)+16,{w:parseInt(d.style.width),h:parseInt(d.style.height),l:d.dataset.l,c:d.dataset.c,bg:d.dataset.bg,type:d.dataset.type,status:d.dataset.status||''});
+});
+
+// ╔════════════════════════════════════════════╗
+// ║  KEYBOARD                                  ║
+// ╚════════════════════════════════════════════╝
+document.addEventListener('keydown',function(e){
+  if(e.target.matches('input,select,textarea'))return;
+  if((e.key==='Delete'||e.key==='Backspace')&&sel){sel.remove();sel=null;hideProps();}
+});
 
 // ╔════════════════════════════════════════════╗
 // ║  CUSTOM ITEM                               ║
@@ -438,19 +707,21 @@ document.getElementById('addBtn').addEventListener('click',function(){
 function serializeObjects(){
   var objs=[];
   fp.querySelectorAll('.pl').forEach(d=>{
-    objs.push({floor:+d.dataset.floor,x:parseInt(d.style.left),y:parseInt(d.style.top),w:parseInt(d.style.width),h:parseInt(d.style.height),l:d.dataset.l,c:d.dataset.c,bg:d.dataset.bg,type:d.dataset.type,rot:d.dataset.rot||'0'});
+    objs.push({floor:+d.dataset.floor,x:parseInt(d.style.left),y:parseInt(d.style.top),w:parseInt(d.style.width),h:parseInt(d.style.height),l:d.dataset.l,c:d.dataset.c,bg:d.dataset.bg,type:d.dataset.type,rot:d.dataset.rot||'0',status:d.dataset.status||''});
   });
   return objs;
 }
 
 function loadObjects(objs){
   fp.querySelectorAll('.pl').forEach(d=>d.remove());
+  sel=null;hideProps();
   objs.forEach(o=>{
     var savedFloor=floor;floor=o.floor;
-    place(o.x,o.y,{w:o.w,h:o.h,l:o.l,c:o.c,bg:o.bg,type:o.type||''});
+    place(o.x,o.y,{w:o.w,h:o.h,l:o.l,c:o.c,bg:o.bg,type:o.type||'',status:o.status||''});
     floor=savedFloor;
   });
-  draw();
+  if(sel){sel.classList.remove('sel');sel=null;hideProps();}
+  draw();applyTransform();
 }
 
 function generateJS(objs){
@@ -503,7 +774,7 @@ function toast(msg,type){var t=document.getElementById('toast');t.textContent=ms
 // ║  INIT                                      ║
 // ╚════════════════════════════════════════════╝
 function init(){
-  drawAndZoom();
+  draw();applyTransform();
   // Load saved objects
   var saved=localStorage.getItem('w17-objects');
   if(saved){try{loadObjects(JSON.parse(saved));toast('Hersteld vanuit opslag');}catch(e){}}
