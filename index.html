@@ -976,6 +976,7 @@
 
 <!-- CONTENT ENGINE: laadt content.js en vult de pagina -->
 <script src="content.js"></script>
+<script src="photos.js"></script>
 <script>
 (function() {
   const C = CONTENT;
@@ -1010,9 +1011,23 @@
   // Photos
   const photosEl = document.getElementById('c-photos');
   const photoSvg = '<svg class="ph-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>';
-  C.photoLabels.forEach(label => {
-    photosEl.innerHTML += `<div class="photo-placeholder">${photoSvg}<span class="ph-label">${label}</span></div>`;
+  const P = (typeof PHOTOS !== 'undefined') ? PHOTOS : {hero: null, strip: [null, null, null]};
+  C.photoLabels.forEach((label, i) => {
+    const photoUrl = P.strip && P.strip[i] ? P.strip[i] : null;
+    if (photoUrl) {
+      photosEl.innerHTML += `<div class="photo-placeholder" style="background-image:url('${photoUrl}');background-size:cover;background-position:center"><span class="ph-label">${label}</span></div>`;
+    } else {
+      photosEl.innerHTML += `<div class="photo-placeholder">${photoSvg}<span class="ph-label">${label}</span></div>`;
+    }
   });
+
+  // Hero photo
+  if (P.hero) {
+    const heroEl = document.querySelector('.hero-image');
+    if (heroEl) {
+      heroEl.innerHTML = `<img src="${P.hero}" alt="Werkplaats17" style="width:100%;height:100%;object-fit:cover;display:block">`;
+    }
+  }
 
   // Offers
   const offerIcons = [

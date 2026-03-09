@@ -137,6 +137,89 @@ body{background:var(--bg);color:var(--cream);font-family:'Courier New',monospace
 .toast{position:fixed;bottom:16px;right:16px;padding:8px 16px;font-size:9px;letter-spacing:.08em;background:var(--surface);border:1px solid var(--border);color:var(--cream);z-index:200;opacity:0;transform:translateY(8px);transition:all .3s}
 .toast.show{opacity:1;transform:translateY(0)}
 .toast.ok{border-color:var(--green)}.toast.err{border-color:var(--red)}
+
+/* ── VIEW SWITCHER ── */
+.view-tabs{display:flex;gap:2px;margin-left:12px}
+.view-tab{padding:4px 14px;font-size:9px;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--border);background:var(--bg);color:var(--muted);cursor:pointer;font-family:inherit;transition:all .15s}
+.view-tab.on{background:var(--amber);color:var(--bg);border-color:var(--amber)}
+.view-tab:hover:not(.on){border-color:var(--amber);color:var(--amber)}
+.view-panel{display:none;flex:1;overflow:hidden}
+.view-panel.active{display:flex}
+#view-content,#view-photos{display:none;flex:1;overflow-y:auto;padding:0}
+#view-content.active,#view-photos.active{display:block}
+
+/* ── CONTENT EDITOR ── */
+.ce-wrap{max-width:800px;margin:0 auto;padding:20px 24px 60px}
+.ce-section{border:1px solid var(--border);margin-bottom:8px;background:var(--surface)}
+.ce-section-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;cursor:pointer;user-select:none;transition:background .15s}
+.ce-section-hdr:hover{background:var(--surface2)}
+.ce-section-hdr h3{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);font-weight:normal}
+.ce-section-hdr .ce-arrow{font-size:10px;color:var(--muted);transition:transform .2s}
+.ce-section.open .ce-arrow{transform:rotate(180deg)}
+.ce-section-body{display:none;padding:12px 14px;border-top:1px solid var(--border)}
+.ce-section.open .ce-section-body{display:block}
+.ce-field{margin-bottom:12px}
+.ce-field:last-child{margin-bottom:0}
+.ce-label{font-size:7px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.ce-label .ce-tag{font-size:6px;padding:1px 4px;background:var(--border);color:var(--muted);letter-spacing:.05em}
+.ce-input{width:100%;padding:6px 10px;font-size:10px;font-family:inherit;background:var(--bg);border:1px solid var(--border);color:var(--cream);outline:none;line-height:1.5}
+.ce-input:focus{border-color:var(--amber)}
+textarea.ce-input{min-height:60px;resize:vertical}
+.ce-preview-toggle{font-size:7px;color:var(--amber);cursor:pointer;margin-left:auto;letter-spacing:.08em;text-transform:uppercase}
+.ce-preview{margin-top:6px;padding:8px 10px;background:var(--bg);border:1px solid var(--border);font-size:10px;line-height:1.6;color:var(--cream);display:none}
+.ce-preview.show{display:block}
+.ce-preview strong{color:var(--amber)}
+.ce-preview em{color:var(--amber);font-style:italic}
+
+/* array items */
+.ce-array-item{display:flex;gap:6px;align-items:flex-start;margin-bottom:6px;padding:8px;background:var(--bg);border:1px solid var(--border)}
+.ce-array-item .ce-input{border:none;padding:4px 6px;background:transparent}
+.ce-array-item .ce-input:focus{box-shadow:0 0 0 1px var(--amber)}
+.ce-array-rm{width:20px;height:20px;border:none;background:var(--red);color:#fff;font-size:10px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:inherit;margin-top:2px}
+.ce-array-rm:hover{filter:brightness(1.2)}
+.ce-array-add{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:8px;font-family:inherit;letter-spacing:.08em;text-transform:uppercase;background:var(--surface2);border:1px solid var(--border);color:var(--amber);cursor:pointer;margin-top:4px}
+.ce-array-add:hover{border-color:var(--amber)}
+.ce-check{display:flex;align-items:center;gap:6px}
+.ce-check input[type=checkbox]{accent-color:var(--amber);width:14px;height:14px}
+
+/* save bar */
+.ce-save-bar{position:sticky;bottom:0;background:var(--surface);border-top:1px solid var(--border);padding:10px 14px;display:flex;gap:8px;justify-content:flex-end;align-items:center}
+.ce-save-bar .ce-status{font-size:8px;color:var(--muted);margin-right:auto}
+.ce-btn{padding:6px 18px;font-size:9px;font-family:inherit;letter-spacing:.1em;text-transform:uppercase;border:none;cursor:pointer}
+.ce-btn-save{background:var(--amber);color:var(--bg);font-weight:bold}
+.ce-btn-save:hover{filter:brightness(1.15)}
+.ce-btn-reset{background:var(--bg);color:var(--muted);border:1px solid var(--border)}
+.ce-btn-reset:hover{border-color:var(--amber);color:var(--amber)}
+
+/* ── FOTO MANAGER ── */
+.pm-wrap{max-width:900px;margin:0 auto;padding:20px 24px 60px}
+.pm-section{margin-bottom:24px}
+.pm-section h3{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);margin-bottom:10px}
+.pm-grid{display:grid;gap:12px}
+.pm-grid.strip{grid-template-columns:1fr 1fr 1fr}
+.pm-grid.hero{grid-template-columns:1fr}
+.pm-slot{aspect-ratio:16/9;background:var(--surface);border:2px dashed var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;transition:border-color .2s}
+.pm-slot:hover{border-color:var(--amber)}
+.pm-slot.has-photo{border-style:solid}
+.pm-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.pm-slot .pm-overlay{position:absolute;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;gap:8px}
+.pm-slot:hover .pm-overlay{display:flex}
+.pm-slot .pm-icon{color:var(--muted);font-size:24px}
+.pm-slot .pm-label{font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+.pm-slot .pm-size{font-size:7px;color:var(--muted);margin-top:2px}
+.pm-overlay-btn{padding:4px 10px;font-size:8px;font-family:inherit;letter-spacing:.08em;text-transform:uppercase;border:1px solid;cursor:pointer}
+.pm-overlay-btn.change{background:var(--amber);color:var(--bg);border-color:var(--amber)}
+.pm-overlay-btn.remove{background:transparent;color:var(--red);border-color:var(--red)}
+.pm-save-bar{position:sticky;bottom:0;background:var(--surface);border-top:1px solid var(--border);padding:10px 14px;display:flex;gap:8px;justify-content:flex-end;align-items:center}
+.pm-save-bar .pm-status{font-size:8px;color:var(--muted);margin-right:auto}
+.pm-progress{font-size:8px;color:var(--amber);margin-right:8px}
+
+@media(max-width:700px){
+  .view-tabs{margin-left:0;width:100%;justify-content:center}
+  .ce-wrap,.pm-wrap{padding:12px 10px 60px}
+  .pm-grid.strip{grid-template-columns:1fr}
+  .ce-array-item{flex-direction:column}
+}
 </style>
 </head>
 <body>
@@ -145,28 +228,35 @@ body{background:var(--bg);color:var(--cream);font-family:'Courier New',monospace
 <div id="auth-gate">
   <div class="auth-box">
     <h1>Werk<span>plaats</span>17</h1>
-    <p>Plattegrond admin</p>
+    <p>Admin panel</p>
     <input type="password" id="auth-pw" placeholder="Wachtwoord" autofocus>
     <div class="auth-err" id="auth-err">Onjuist wachtwoord</div>
   </div>
 </div>
 
 <!-- EDITOR -->
-<div id="editor" style="display:none">
+<div id="editor" style="display:none;flex-direction:column;flex:1;overflow:hidden">
 <div class="hdr">
   <h1>W17 — Admin</h1>
-  <div class="tabs">
-    <div class="tab on" id="t0" onclick="show(0)">Begane grond</div>
-    <div class="tab" id="t1" onclick="show(1)">Verdieping — Entresol</div>
+  <div class="view-tabs">
+    <div class="view-tab on" data-view="plattegrond" onclick="switchView('plattegrond')">Plattegrond</div>
+    <div class="view-tab" data-view="content" onclick="switchView('content')">Content</div>
+    <div class="view-tab" data-view="photos" onclick="switchView('photos')">Foto's</div>
   </div>
-  <div class="hint">Sleep = pan · Scroll = zoom · Klik object = bewerken · Delete = verwijder</div>
-  <div class="hdr-btns">
+  <div class="hint" id="fp-hint">Sleep = pan · Scroll = zoom · Klik object = bewerken · Delete = verwijder</div>
+  <div class="hdr-btns" id="fp-btns">
     <button class="hbtn hbtn-pub" id="btn-save">Opslaan &amp; Publiceer</button>
     <button class="hbtn" id="btn-export">Export</button>
   </div>
 </div>
+<!-- ═══ VIEW: PLATTEGROND ═══ -->
+<div id="view-plattegrond" class="view-panel active" style="display:flex;flex-direction:column;flex:1;overflow:hidden">
 <div class="wrap">
 <div class="sb">
+  <div style="padding:5px 5px 0;display:flex;gap:2px">
+    <div class="tab on" id="t0" onclick="show(0)" style="flex:1;text-align:center">BG</div>
+    <div class="tab" id="t1" onclick="show(1)" style="flex:1;text-align:center">Entresol</div>
+  </div>
   <div class="sb-h">Objecten</div>
   <div class="sb-s">
     <div class="cat">Machines</div>
@@ -312,7 +402,56 @@ body{background:var(--bg);color:var(--cream);font-family:'Courier New',monospace
     <button class="zbtn" onclick="resetView()" style="font-size:7px;width:auto;padding:0 5px">Reset</button>
   </div>
 </div>
+</div><!-- /view-plattegrond -->
+
+<!-- ═══ VIEW: CONTENT ═══ -->
+<div id="view-content">
+<div class="ce-wrap" id="ce-form"></div>
+<div class="ce-save-bar">
+  <span class="ce-status" id="ce-status"></span>
+  <button class="ce-btn ce-btn-reset" onclick="ceReset()">Reset</button>
+  <button class="ce-btn ce-btn-save" id="ce-save" onclick="ceSave()">Opslaan &amp; Publiceer</button>
 </div>
+</div>
+
+<!-- ═══ VIEW: FOTO'S ═══ -->
+<div id="view-photos">
+<div class="pm-wrap">
+  <div class="pm-section">
+    <h3>Hero afbeelding</h3>
+    <div class="pm-grid hero">
+      <div class="pm-slot" data-slot="hero" onclick="pmPick('hero')">
+        <span class="pm-icon">📷</span>
+        <span class="pm-label">Klik of sleep een foto</span>
+      </div>
+    </div>
+  </div>
+  <div class="pm-section">
+    <h3>Fotostrip (3 foto's)</h3>
+    <div class="pm-grid strip">
+      <div class="pm-slot" data-slot="strip-0" onclick="pmPick('strip-0')">
+        <span class="pm-icon">📷</span>
+        <span class="pm-label" id="pm-label-0">Werkvloer</span>
+      </div>
+      <div class="pm-slot" data-slot="strip-1" onclick="pmPick('strip-1')">
+        <span class="pm-icon">📷</span>
+        <span class="pm-label" id="pm-label-1">Machines</span>
+      </div>
+      <div class="pm-slot" data-slot="strip-2" onclick="pmPick('strip-2')">
+        <span class="pm-icon">📷</span>
+        <span class="pm-label" id="pm-label-2">Entresol</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="pm-save-bar">
+  <span class="pm-status" id="pm-status"></span>
+  <span class="pm-progress" id="pm-progress"></span>
+  <button class="ce-btn ce-btn-save" id="pm-save" onclick="pmSave()">Opslaan &amp; Publiceer</button>
+</div>
+</div>
+
+</div><!-- /editor -->
 
 <!-- TOKEN SETUP MODAL (eenmalig) -->
 <div class="modal-bg" id="token-modal">
@@ -330,7 +469,9 @@ body{background:var(--bg);color:var(--cream);font-family:'Courier New',monospace
 </div>
 
 <div class="toast" id="toast"></div>
+<input type="file" id="pm-file-input" accept="image/*" style="display:none">
 
+<script src="content.js"></script>
 <script>
 // ╔════════════════════════════════════════════╗
 // ║  AUTH                                      ║
@@ -338,11 +479,11 @@ body{background:var(--bg);color:var(--cream);font-family:'Courier New',monospace
 const PASS_HASH='0b6276f7e578cb0fe6d5b47b967b7a4f121352021bbd0863df84a4855db4194c';
 async function sha256(m){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(m));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');}
 const authGate=document.getElementById('auth-gate');
-if(sessionStorage.getItem('w17auth')==='ok'){authGate.style.display='none';document.getElementById('editor').style.display='';init();}
+if(sessionStorage.getItem('w17auth')==='ok'){authGate.style.display='none';document.getElementById('editor').style.display='flex';init();}
 document.getElementById('auth-pw').addEventListener('keydown',async e=>{
   if(e.key!=='Enter')return;
   if(await sha256(e.target.value)===PASS_HASH){
-    sessionStorage.setItem('w17auth','ok');authGate.style.display='none';document.getElementById('editor').style.display='';init();
+    sessionStorage.setItem('w17auth','ok');authGate.style.display='none';document.getElementById('editor').style.display='flex';init();
   }else{document.getElementById('auth-err').classList.add('show');e.target.value='';setTimeout(()=>document.getElementById('auth-err').classList.remove('show'),2000);}
 });
 
@@ -781,45 +922,58 @@ function generateJS(objs){
   return '// Werkplaats17 — Geplaatste objecten\n// Laatst gewijzigd: '+new Date().toISOString()+'\n// Gegenereerd via admin.html\n\nconst PLACED_OBJECTS = '+JSON.stringify(objs,null,2)+';\n';
 }
 
-// ── GitHub publish helper ──
-var saveBtn=document.getElementById('btn-save');
-async function publishToGitHub(){
+// ── GitHub publish helper (generiek) ──
+async function publishFile(filepath, content, commitMsg, btn){
   var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats17';
   var token=localStorage.getItem('w17-gh-token');
-  if(!token){showTokenModal();return;}
-  saveBtn.textContent='Publiceren...';saveBtn.disabled=true;
+  if(!token){showTokenModal();return false;}
+  var origText=btn?btn.textContent:'';
+  if(btn){btn.textContent='Publiceren...';btn.disabled=true;}
   try{
-    var content=generateJS(serializeObjects());
     var b64=btoa(unescape(encodeURIComponent(content)));
     var sha=null;
-    try{var gr=await fetch('https://api.github.com/repos/'+repo+'/contents/placed-objects.js',{headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github.v3+json'}});if(gr.ok){sha=(await gr.json()).sha;}}catch(e){console.warn('SHA ophalen mislukt:',e);}
-    var body={message:'Plattegrond bijgewerkt via admin ('+new Date().toLocaleString('nl-NL')+')',content:b64};if(sha)body.sha=sha;
-    var r=await fetch('https://api.github.com/repos/'+repo+'/contents/placed-objects.js',{method:'PUT',headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
+    try{var gr=await fetch('https://api.github.com/repos/'+repo+'/contents/'+filepath,{headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github.v3+json'}});if(gr.ok){sha=(await gr.json()).sha;}}catch(e){console.warn('SHA ophalen mislukt:',e);}
+    var body={message:commitMsg||filepath+' bijgewerkt via admin',content:b64};if(sha)body.sha=sha;
+    var r=await fetch('https://api.github.com/repos/'+repo+'/contents/'+filepath,{method:'PUT',headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
     if(r.ok){
-      saveBtn.textContent='Gepubliceerd!';saveBtn.style.background='var(--green)';
-      toast('Opgeslagen & gepubliceerd!','ok');
-      setTimeout(function(){saveBtn.textContent='Opslaan & Publiceer';saveBtn.style.background='';},3000);
+      if(btn){btn.textContent='Gepubliceerd!';btn.style.background='var(--green)';setTimeout(function(){btn.textContent=origText;btn.style.background='';},3000);}
+      toast(filepath+' gepubliceerd!','ok');
+      if(btn)btn.disabled=false;
+      return true;
     }else{
-      var err=await r.json();
-      var msg='Fout: '+(err.message||r.status);
-      saveBtn.textContent=msg;saveBtn.style.background='var(--red)';
-      toast(msg,'err');
-      console.error('Publish fout:',r.status,err);
-      setTimeout(function(){saveBtn.textContent='Opslaan & Publiceer';saveBtn.style.background='';},5000);
+      var err=await r.json();var msg='Fout: '+(err.message||r.status);
+      if(btn){btn.textContent=msg;btn.style.background='var(--red)';setTimeout(function(){btn.textContent=origText;btn.style.background='';},5000);}
+      toast(msg,'err');console.error('Publish fout:',r.status,err);
+      if(btn)btn.disabled=false;
+      return false;
     }
   }catch(e){
-    saveBtn.textContent='Fout: '+e.message;saveBtn.style.background='var(--red)';
-    toast('Fout: '+e.message,'err');
-    console.error('Publish error:',e);
-    setTimeout(function(){saveBtn.textContent='Opslaan & Publiceer';saveBtn.style.background='';},5000);
+    if(btn){btn.textContent='Fout: '+e.message;btn.style.background='var(--red)';setTimeout(function(){btn.textContent=origText;btn.style.background='';},5000);}
+    toast('Fout: '+e.message,'err');console.error('Publish error:',e);
+    if(btn)btn.disabled=false;
+    return false;
   }
-  saveBtn.disabled=false;
 }
 
+// Upload binary file to GitHub (voor foto's)
+async function publishBinary(filepath, base64data, commitMsg){
+  var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats17';
+  var token=localStorage.getItem('w17-gh-token');
+  if(!token){showTokenModal();return false;}
+  try{
+    var sha=null;
+    try{var gr=await fetch('https://api.github.com/repos/'+repo+'/contents/'+filepath,{headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github.v3+json'}});if(gr.ok){sha=(await gr.json()).sha;}}catch(e){}
+    var body={message:commitMsg||'Foto upload: '+filepath,content:base64data};if(sha)body.sha=sha;
+    var r=await fetch('https://api.github.com/repos/'+repo+'/contents/'+filepath,{method:'PUT',headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
+    return r.ok;
+  }catch(e){console.error('Upload error:',e);return false;}
+}
+
+var saveBtn=document.getElementById('btn-save');
 // Save = localStorage + direct publish
 document.getElementById('btn-save').addEventListener('click',function(){
   localStorage.setItem('w17-objects',JSON.stringify(serializeObjects()));
-  publishToGitHub();
+  publishFile('placed-objects.js',generateJS(serializeObjects()),'Plattegrond bijgewerkt via admin ('+new Date().toLocaleString('nl-NL')+')',saveBtn);
 });
 
 // Export
@@ -851,6 +1005,427 @@ document.getElementById('token-save').addEventListener('click',function(){
 document.getElementById('token-modal').addEventListener('click',e=>{if(e.target.id==='token-modal')e.target.classList.remove('show');});
 
 function toast(msg,type){var t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(type?' '+type:'');setTimeout(()=>t.className='toast',2500);}
+
+// ╔════════════════════════════════════════════╗
+// ║  VIEW SWITCHING                            ║
+// ╚════════════════════════════════════════════╝
+window.switchView=function(view){
+  document.querySelectorAll('.view-tab').forEach(t=>t.classList.toggle('on',t.dataset.view===view));
+  document.getElementById('view-plattegrond').style.display=view==='plattegrond'?'flex':'none';
+  document.getElementById('view-plattegrond').classList.toggle('active',view==='plattegrond');
+  document.getElementById('view-content').style.display=view==='content'?'block':'none';
+  document.getElementById('view-content').classList.toggle('active',view==='content');
+  document.getElementById('view-photos').style.display=view==='photos'?'block':'none';
+  document.getElementById('view-photos').classList.toggle('active',view==='photos');
+  // Toggle plattegrond-specifieke header items
+  document.getElementById('fp-hint').style.display=view==='plattegrond'?'':'none';
+  document.getElementById('fp-btns').style.display=view==='plattegrond'?'':'none';
+  // Lazy init
+  if(view==='content'&&!ceInitialized)ceInit();
+  if(view==='photos'&&!pmInitialized)pmInit();
+};
+
+// ╔════════════════════════════════════════════╗
+// ║  CONTENT EDITOR                            ║
+// ╚════════════════════════════════════════════╝
+var ceInitialized=false;
+var ceData={};
+
+// Schema voor de content editor
+var CE_SCHEMA=[
+  {id:'meta',title:'Meta & SEO',fields:[
+    {key:'siteTitle',label:'Site titel',type:'text'},
+    {key:'metaDescription',label:'Meta description',type:'textarea'},
+    {key:'ogDescription',label:'OG description',type:'textarea'},
+  ]},
+  {id:'header',title:'Header',fields:[
+    {key:'eyebrow',label:'Eyebrow tekst',type:'text'},
+    {key:'tagline',label:'Tagline',type:'html'},
+  ]},
+  {id:'locatie',title:'Locatie & Intro',fields:[
+    {key:'locationText',label:'Locatie tekst',type:'text'},
+    {key:'introText',label:'Intro tekst',type:'html'},
+    {key:'accessItems',label:'Kenmerken',type:'array-text'},
+  ]},
+  {id:'aanbod',title:'Aanbod',fields:[
+    {key:'offers',label:'Aanbod kaarten',type:'array-obj',objFields:['title','text']},
+  ]},
+  {id:'machines',title:'Machines',fields:[
+    {key:'machines',label:'Machines',type:'array-machine'},
+  ]},
+  {id:'tarieven',title:'Tarieven',fields:[
+    {key:'pricing',label:'Tarieven',type:'array-pricing'},
+    {key:'pricingNote',label:'Tarieven noot',type:'textarea'},
+  ]},
+  {id:'doelgroep',title:'Doelgroep',fields:[
+    {key:'targetAudience',label:'Doelgroep items',type:'array-text'},
+    {key:'notForText',label:'Niet voor',type:'html'},
+  ]},
+  {id:'contact',title:'Contact',fields:[
+    {key:'ctaHeading',label:'CTA heading',type:'html'},
+    {key:'email',label:'E-mailadres',type:'text'},
+    {key:'whatsappNumber',label:'WhatsApp nummer',type:'text'},
+    {key:'whatsappText',label:'WhatsApp vooraf-tekst',type:'text'},
+    {key:'contactLines',label:'Contact regels',type:'array-text'},
+  ]},
+  {id:'social',title:'Instagram & Footer',fields:[
+    {key:'instagramHandle',label:'Instagram handle',type:'text'},
+    {key:'instagramUrl',label:'Instagram URL',type:'text'},
+    {key:'photoLabels',label:'Fotostrip labels',type:'array-text'},
+    {key:'hashtags',label:'Hashtags',type:'html'},
+    {key:'copyright',label:'Copyright',type:'text'},
+  ]},
+];
+
+function ceInit(){
+  ceInitialized=true;
+  // Deep clone content.js data — haal het op van GitHub of gebruik lokale cache
+  ceLoadFromGitHub();
+}
+
+async function ceLoadFromGitHub(){
+  var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats17';
+  var token=localStorage.getItem('w17-gh-token');
+  document.getElementById('ce-status').textContent='Content laden...';
+  try{
+    if(token){
+      var r=await fetch('https://api.github.com/repos/'+repo+'/contents/content.js',{headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github.v3+json'}});
+      if(r.ok){
+        var data=await r.json();
+        var raw=atob(data.content);
+        // Parse CONTENT object uit het bestand
+        var fn=new Function(raw+'\nreturn CONTENT;');
+        ceData=fn();
+        ceBuild();
+        document.getElementById('ce-status').textContent='Content geladen van GitHub';
+        return;
+      }
+    }
+  }catch(e){console.warn('GitHub content laden mislukt:',e);}
+  // Fallback: probeer lokaal (als content.js geladen is)
+  if(typeof CONTENT!=='undefined'){ceData=JSON.parse(JSON.stringify(CONTENT));ceBuild();document.getElementById('ce-status').textContent='Content geladen (lokaal)';}
+  else{document.getElementById('ce-status').textContent='Kon content niet laden';toast('Content laden mislukt','err');}
+}
+
+function ceBuild(){
+  var form=document.getElementById('ce-form');
+  form.innerHTML='';
+  CE_SCHEMA.forEach(function(section){
+    var sec=document.createElement('div');sec.className='ce-section';sec.id='ce-s-'+section.id;
+    var hdr=document.createElement('div');hdr.className='ce-section-hdr';
+    hdr.innerHTML='<h3>'+section.title+'</h3><span class="ce-arrow">▼</span>';
+    hdr.onclick=function(){sec.classList.toggle('open');};
+    sec.appendChild(hdr);
+    var body=document.createElement('div');body.className='ce-section-body';
+    section.fields.forEach(function(f){
+      body.appendChild(ceRenderField(f));
+    });
+    sec.appendChild(body);
+    form.appendChild(sec);
+  });
+}
+
+function ceRenderField(f){
+  var wrap=document.createElement('div');wrap.className='ce-field';
+  var val=ceData[f.key];
+  if(f.type==='text'){
+    wrap.innerHTML='<div class="ce-label">'+f.label+'</div>';
+    var inp=document.createElement('input');inp.className='ce-input';inp.type='text';inp.value=val||'';inp.dataset.key=f.key;
+    inp.oninput=function(){ceData[f.key]=this.value;};
+    wrap.appendChild(inp);
+  }else if(f.type==='textarea'){
+    wrap.innerHTML='<div class="ce-label">'+f.label+'</div>';
+    var ta=document.createElement('textarea');ta.className='ce-input';ta.value=val||'';ta.dataset.key=f.key;
+    ta.oninput=function(){ceData[f.key]=this.value;};
+    wrap.appendChild(ta);
+  }else if(f.type==='html'){
+    var lbl=document.createElement('div');lbl.className='ce-label';
+    lbl.innerHTML=f.label+' <span class="ce-tag">HTML</span>';
+    var toggle=document.createElement('span');toggle.className='ce-preview-toggle';toggle.textContent='Preview';
+    lbl.appendChild(toggle);
+    wrap.appendChild(lbl);
+    var ta=document.createElement('textarea');ta.className='ce-input';ta.value=val||'';ta.dataset.key=f.key;
+    ta.oninput=function(){ceData[f.key]=this.value;prev.innerHTML=this.value;};
+    wrap.appendChild(ta);
+    var prev=document.createElement('div');prev.className='ce-preview';prev.innerHTML=val||'';
+    toggle.onclick=function(){prev.classList.toggle('show');this.textContent=prev.classList.contains('show')?'Verberg':'Preview';};
+    wrap.appendChild(prev);
+  }else if(f.type==='array-text'){
+    wrap.innerHTML='<div class="ce-label">'+f.label+'</div>';
+    var list=document.createElement('div');list.dataset.key=f.key;
+    function renderArrayText(){
+      list.innerHTML='';
+      (ceData[f.key]||[]).forEach(function(item,i){
+        var row=document.createElement('div');row.className='ce-array-item';
+        var inp=document.createElement('input');inp.className='ce-input';inp.type='text';inp.value=item;
+        inp.oninput=function(){ceData[f.key][i]=this.value;};
+        row.appendChild(inp);
+        var rm=document.createElement('button');rm.className='ce-array-rm';rm.textContent='✕';
+        rm.onclick=function(){ceData[f.key].splice(i,1);renderArrayText();};
+        row.appendChild(rm);
+        list.appendChild(row);
+      });
+    }
+    renderArrayText();
+    wrap.appendChild(list);
+    var addBtn=document.createElement('button');addBtn.className='ce-array-add';addBtn.textContent='+ Toevoegen';
+    addBtn.onclick=function(){if(!ceData[f.key])ceData[f.key]=[];ceData[f.key].push('');renderArrayText();};
+    wrap.appendChild(addBtn);
+  }else if(f.type==='array-obj'){
+    wrap.innerHTML='<div class="ce-label">'+f.label+'</div>';
+    var list=document.createElement('div');list.dataset.key=f.key;
+    function renderArrayObj(){
+      list.innerHTML='';
+      (ceData[f.key]||[]).forEach(function(item,i){
+        var row=document.createElement('div');row.className='ce-array-item';row.style.flexDirection='column';
+        f.objFields.forEach(function(ofk){
+          var inp=document.createElement('input');inp.className='ce-input';inp.type='text';inp.value=item[ofk]||'';
+          inp.placeholder=ofk;inp.style.marginBottom='4px';
+          inp.oninput=function(){ceData[f.key][i][ofk]=this.value;};
+          row.appendChild(inp);
+        });
+        var rm=document.createElement('button');rm.className='ce-array-rm';rm.textContent='✕';rm.style.alignSelf='flex-end';
+        rm.onclick=function(){ceData[f.key].splice(i,1);renderArrayObj();};
+        row.appendChild(rm);
+        list.appendChild(row);
+      });
+    }
+    renderArrayObj();
+    wrap.appendChild(list);
+    var addBtn=document.createElement('button');addBtn.className='ce-array-add';addBtn.textContent='+ Toevoegen';
+    addBtn.onclick=function(){if(!ceData[f.key])ceData[f.key]=[];var obj={};f.objFields.forEach(function(k){obj[k]='';});ceData[f.key].push(obj);renderArrayObj();};
+    wrap.appendChild(addBtn);
+  }else if(f.type==='array-machine'){
+    wrap.innerHTML='<div class="ce-label">'+f.label+'</div>';
+    var list=document.createElement('div');list.dataset.key=f.key;
+    function renderMachines(){
+      list.innerHTML='';
+      (ceData[f.key]||[]).forEach(function(item,i){
+        var row=document.createElement('div');row.className='ce-array-item';
+        var inp=document.createElement('input');inp.className='ce-input';inp.type='text';inp.value=item.name||'';inp.style.flex='1';
+        inp.oninput=function(){ceData[f.key][i].name=this.value;};
+        row.appendChild(inp);
+        var chk=document.createElement('div');chk.className='ce-check';
+        var cb=document.createElement('input');cb.type='checkbox';cb.checked=!!item.highlight;
+        cb.onchange=function(){ceData[f.key][i].highlight=this.checked;};
+        var cbl=document.createElement('span');cbl.textContent='Highlight';cbl.style.cssText='font-size:8px;color:var(--muted)';
+        chk.appendChild(cb);chk.appendChild(cbl);
+        row.appendChild(chk);
+        var rm=document.createElement('button');rm.className='ce-array-rm';rm.textContent='✕';
+        rm.onclick=function(){ceData[f.key].splice(i,1);renderMachines();};
+        row.appendChild(rm);
+        list.appendChild(row);
+      });
+    }
+    renderMachines();
+    wrap.appendChild(list);
+    var addBtn=document.createElement('button');addBtn.className='ce-array-add';addBtn.textContent='+ Toevoegen';
+    addBtn.onclick=function(){if(!ceData[f.key])ceData[f.key]=[];ceData[f.key].push({name:'',highlight:false});renderMachines();};
+    wrap.appendChild(addBtn);
+  }else if(f.type==='array-pricing'){
+    wrap.innerHTML='<div class="ce-label">'+f.label+'</div>';
+    var list=document.createElement('div');list.dataset.key=f.key;
+    function renderPricing(){
+      list.innerHTML='';
+      (ceData[f.key]||[]).forEach(function(item,i){
+        var row=document.createElement('div');row.className='ce-array-item';row.style.flexDirection='column';
+        ['label','sub','price','unit'].forEach(function(pk){
+          var inp=document.createElement('input');inp.className='ce-input';inp.type='text';inp.value=item[pk]||'';
+          inp.placeholder=pk;inp.style.marginBottom='4px';
+          inp.oninput=function(){ceData[f.key][i][pk]=this.value;};
+          row.appendChild(inp);
+        });
+        var rm=document.createElement('button');rm.className='ce-array-rm';rm.textContent='✕';rm.style.alignSelf='flex-end';
+        rm.onclick=function(){ceData[f.key].splice(i,1);renderPricing();};
+        row.appendChild(rm);
+        list.appendChild(row);
+      });
+    }
+    renderPricing();
+    wrap.appendChild(list);
+    var addBtn=document.createElement('button');addBtn.className='ce-array-add';addBtn.textContent='+ Toevoegen';
+    addBtn.onclick=function(){if(!ceData[f.key])ceData[f.key]=[];ceData[f.key].push({label:'',sub:'',price:'',unit:''});renderPricing();};
+    wrap.appendChild(addBtn);
+  }
+  return wrap;
+}
+
+function ceGenerateJS(){
+  var lines=['// ╔══════════════════════════════════════════════════════════════╗'];
+  lines.push('// ║  WERKPLAATS17 — CONTENT CONFIGURATIE                       ║');
+  lines.push('// ║  Pas hier alle teksten, prijzen en contactgegevens aan.    ║');
+  lines.push('// ║  Na aanpassing: opslaan → site herlaadt automatisch.       ║');
+  lines.push('// ╚══════════════════════════════════════════════════════════════╝');
+  lines.push('');
+  lines.push('const CONTENT = '+JSON.stringify(ceData,null,2)+';');
+  return lines.join('\n')+'\n';
+}
+
+window.ceSave=async function(){
+  var btn=document.getElementById('ce-save');
+  var js=ceGenerateJS();
+  var ok=await publishFile('content.js',js,'Content bijgewerkt via admin ('+new Date().toLocaleString('nl-NL')+')',btn);
+  if(ok)document.getElementById('ce-status').textContent='Gepubliceerd om '+new Date().toLocaleTimeString('nl-NL');
+};
+
+window.ceReset=function(){
+  if(!confirm('Alle wijzigingen ongedaan maken?'))return;
+  ceLoadFromGitHub();
+};
+
+// ╔════════════════════════════════════════════╗
+// ║  FOTO MANAGER                              ║
+// ╚════════════════════════════════════════════╝
+var pmInitialized=false;
+var pmPhotos={hero:null,strip:[null,null,null]};
+var pmPendingUploads={};
+
+function pmInit(){
+  pmInitialized=true;
+  pmLoadFromGitHub();
+  // Drag & drop op slots
+  document.querySelectorAll('.pm-slot').forEach(function(slot){
+    slot.addEventListener('dragover',function(e){e.preventDefault();slot.style.borderColor='var(--amber)';});
+    slot.addEventListener('dragleave',function(){slot.style.borderColor='';});
+    slot.addEventListener('drop',function(e){
+      e.preventDefault();slot.style.borderColor='';
+      var file=e.dataTransfer.files[0];
+      if(file&&file.type.startsWith('image/'))pmProcessFile(slot.dataset.slot,file);
+    });
+  });
+}
+
+async function pmLoadFromGitHub(){
+  var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats17';
+  var token=localStorage.getItem('w17-gh-token');
+  document.getElementById('pm-status').textContent='Foto\'s laden...';
+  try{
+    if(token){
+      var r=await fetch('https://api.github.com/repos/'+repo+'/contents/photos.js',{headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github.v3+json'}});
+      if(r.ok){
+        var data=await r.json();
+        var raw=atob(data.content);
+        var fn=new Function(raw+'\nreturn PHOTOS;');
+        pmPhotos=fn();
+        if(!pmPhotos.strip)pmPhotos.strip=[null,null,null];
+        pmRenderSlots();
+        document.getElementById('pm-status').textContent='Foto\'s geladen';
+        return;
+      }
+    }
+  }catch(e){console.warn('Photos laden mislukt:',e);}
+  pmRenderSlots();
+  document.getElementById('pm-status').textContent='Geen foto\'s gevonden';
+}
+
+function pmRenderSlots(){
+  var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats17';
+  // Hero
+  var heroSlot=document.querySelector('[data-slot="hero"]');
+  pmRenderSlot(heroSlot,pmPhotos.hero,'hero');
+  // Strip
+  for(var i=0;i<3;i++){
+    var slot=document.querySelector('[data-slot="strip-'+i+'"]');
+    pmRenderSlot(slot,pmPhotos.strip[i],'strip-'+i);
+  }
+}
+
+function pmRenderSlot(slot,photoPath,slotId){
+  if(!slot)return;
+  var pending=pmPendingUploads[slotId];
+  if(pending){
+    slot.classList.add('has-photo');
+    slot.innerHTML='<img src="'+pending.dataUrl+'" alt="preview"><div class="pm-overlay"><button class="pm-overlay-btn change" onclick="event.stopPropagation();pmPick(\''+slotId+'\')">Wijzig</button><button class="pm-overlay-btn remove" onclick="event.stopPropagation();pmRemove(\''+slotId+'\')">Verwijder</button></div>';
+  }else if(photoPath){
+    var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats17';
+    var url='https://raw.githubusercontent.com/'+repo+'/master/'+photoPath+'?t='+Date.now();
+    slot.classList.add('has-photo');
+    slot.innerHTML='<img src="'+url+'" alt="foto"><div class="pm-overlay"><button class="pm-overlay-btn change" onclick="event.stopPropagation();pmPick(\''+slotId+'\')">Wijzig</button><button class="pm-overlay-btn remove" onclick="event.stopPropagation();pmRemove(\''+slotId+'\')">Verwijder</button></div>';
+  }else{
+    slot.classList.remove('has-photo');
+    slot.innerHTML='<span class="pm-icon">📷</span><span class="pm-label">Klik of sleep een foto</span>';
+  }
+}
+
+window.pmPick=function(slotId){
+  var inp=document.createElement('input');inp.type='file';inp.accept='image/*';
+  inp.onchange=function(){if(this.files[0])pmProcessFile(slotId,this.files[0]);};
+  inp.click();
+};
+
+window.pmRemove=function(slotId){
+  delete pmPendingUploads[slotId];
+  if(slotId==='hero')pmPhotos.hero=null;
+  else{var idx=parseInt(slotId.split('-')[1]);pmPhotos.strip[idx]=null;}
+  pmRenderSlots();
+};
+
+function pmProcessFile(slotId,file){
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var img=new Image();
+    img.onload=function(){
+      var canvas=document.createElement('canvas');
+      var maxW=1600,w=img.width,h=img.height;
+      if(w>maxW){h=Math.round(h*(maxW/w));w=maxW;}
+      canvas.width=w;canvas.height=h;
+      var ctx=canvas.getContext('2d');
+      ctx.drawImage(img,0,0,w,h);
+      var dataUrl=canvas.toDataURL('image/jpeg',0.82);
+      var b64=dataUrl.split(',')[1];
+      pmPendingUploads[slotId]={b64:b64,dataUrl:dataUrl,filename:slotId.replace('strip-','strip')+'.jpg'};
+      pmRenderSlots();
+      document.getElementById('pm-status').textContent='Foto klaar voor upload';
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+window.pmSave=async function(){
+  var btn=document.getElementById('pm-save');
+  var progress=document.getElementById('pm-progress');
+  btn.disabled=true;btn.textContent='Uploaden...';
+  var keys=Object.keys(pmPendingUploads);
+  var total=keys.length;
+  if(total===0){
+    // Alleen photos.js updaten (voor verwijderingen)
+    var js=pmGenerateJS();
+    await publishFile('photos.js',js,'Foto referenties bijgewerkt via admin',btn);
+    btn.disabled=false;
+    return;
+  }
+  var done=0;
+  for(var i=0;i<keys.length;i++){
+    var slotId=keys[i];
+    var up=pmPendingUploads[slotId];
+    var filepath='photos/'+up.filename;
+    progress.textContent='('+(done+1)+'/'+total+') '+up.filename+'...';
+    var ok=await publishBinary(filepath,up.b64,'Foto upload: '+up.filename+' via admin');
+    if(ok){
+      // Update photos reference
+      if(slotId==='hero')pmPhotos.hero=filepath;
+      else{var idx=parseInt(slotId.split('-')[1]);pmPhotos.strip[idx]=filepath;}
+      delete pmPendingUploads[slotId];
+      done++;
+    }else{
+      toast('Upload mislukt: '+up.filename,'err');
+    }
+  }
+  progress.textContent='';
+  // Save photos.js
+  var js=pmGenerateJS();
+  var ok=await publishFile('photos.js',js,'Foto referenties bijgewerkt via admin',btn);
+  if(ok){
+    document.getElementById('pm-status').textContent=done+' foto\'s geüpload om '+new Date().toLocaleTimeString('nl-NL');
+    pmRenderSlots();
+  }
+  btn.disabled=false;
+};
+
+function pmGenerateJS(){
+  return '// Werkplaats17 — Foto referenties\n// Laatst gewijzigd: '+new Date().toISOString()+'\n// Gegenereerd via admin.html\n\nconst PHOTOS = '+JSON.stringify(pmPhotos,null,2)+';\n';
+}
 
 // ╔════════════════════════════════════════════╗
 // ║  INIT                                      ║
