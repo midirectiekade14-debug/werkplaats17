@@ -361,67 +361,13 @@
     padding: 0 40px;
     border-bottom: 1px solid var(--line);
     padding-bottom: 36px;
-    position: relative;
   }
-  .floorplan-tabs {
-    display: flex;
-    gap: 0;
-    margin-bottom: 16px;
-  }
-  .floorplan-tab {
-    padding: 8px 20px;
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--muted);
-    background: transparent;
-    border: 1px solid var(--line);
-    border-right: none;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .floorplan-tab:last-child { border-right: 1px solid var(--line); }
-  .floorplan-tab:hover { color: var(--cream); }
-  .floorplan-tab.active {
-    color: var(--amber);
-    background: var(--amber-glow);
-    border-color: var(--amber);
-  }
-  .floorplan-tab.active + .floorplan-tab { border-left-color: var(--amber); }
   .floorplan-svg {
     width: 100%;
     max-width: 600px;
     margin: 0 auto;
     display: block;
   }
-  .fp-obj { cursor: default; transition: opacity 0.2s; }
-  .fp-obj.status-beschikbaar rect.fp-bg { filter: drop-shadow(0 0 6px rgba(76,175,80,0.4)); }
-  .fp-obj.status-bezet { opacity: 0.45; }
-  .fp-obj.status-gereserveerd rect.fp-bg { filter: drop-shadow(0 0 6px rgba(255,152,0,0.4)); }
-  .fp-obj.huurunit { cursor: pointer; }
-  .fp-obj.huurunit:hover { opacity: 1 !important; }
-  .fp-tooltip {
-    position: absolute;
-    background: var(--surface);
-    border: 1px solid var(--amber);
-    padding: 10px 14px;
-    font-size: 11px;
-    color: var(--cream);
-    pointer-events: none;
-    z-index: 50;
-    min-width: 140px;
-    line-height: 1.6;
-    opacity: 0;
-    transition: opacity 0.15s;
-  }
-  .fp-tooltip.visible { opacity: 1; }
-  .fp-tooltip .tt-label { font-weight: 500; margin-bottom: 4px; }
-  .fp-tooltip .tt-detail { font-size: 9px; color: var(--muted); letter-spacing: 0.05em; }
-  .fp-tooltip .tt-status { font-size: 9px; text-transform: uppercase; letter-spacing: 0.15em; margin-top: 4px; }
-  .fp-tooltip .tt-status.beschikbaar { color: #4CAF50; }
-  .fp-tooltip .tt-status.bezet { color: #888; }
-  .fp-tooltip .tt-status.gereserveerd { color: #FF9800; }
   .floorplan-legend {
     display: flex;
     flex-wrap: wrap;
@@ -932,11 +878,59 @@
 
   <!-- PLATTEGROND -->
   <p class="section-label" id="indeling">Indeling werkplaats</p>
-  <div class="floorplan-block" id="floorplan-container">
-    <div class="floorplan-tabs" id="floorplan-tabs"></div>
-    <svg class="floorplan-svg" id="floorplan-svg" viewBox="0 0 500 320" xmlns="http://www.w3.org/2000/svg"></svg>
-    <div class="fp-tooltip" id="fp-tooltip"></div>
-    <div class="floorplan-legend" id="floorplan-legend"></div>
+  <div class="floorplan-block">
+    <svg class="floorplan-svg" viewBox="0 0 500 320" xmlns="http://www.w3.org/2000/svg">
+      <rect x="20" y="20" width="460" height="260" fill="none" stroke="#3a3425" stroke-width="2" rx="2"/>
+      <rect x="20" y="20" width="460" height="80" fill="rgba(224,154,47,0.04)" stroke="#3a3425" stroke-width="1"/>
+      <text x="250" y="48" font-family="'Bebas Neue', sans-serif" font-size="14" fill="#E09A2F" text-anchor="middle" letter-spacing="2">ENTRESOL</text>
+      <line x1="135" y1="20" x2="135" y2="100" stroke="#2e2920" stroke-width="0.5" stroke-dasharray="4,4"/>
+      <line x1="250" y1="20" x2="250" y2="100" stroke="#2e2920" stroke-width="0.5" stroke-dasharray="4,4"/>
+      <line x1="365" y1="20" x2="365" y2="100" stroke="#2e2920" stroke-width="0.5" stroke-dasharray="4,4"/>
+      <text x="77" y="72" font-family="'DM Mono', monospace" font-size="7" fill="#7a7060" text-anchor="middle">Unit A</text>
+      <text x="192" y="72" font-family="'DM Mono', monospace" font-size="7" fill="#7a7060" text-anchor="middle">Unit B</text>
+      <text x="307" y="72" font-family="'DM Mono', monospace" font-size="7" fill="#7a7060" text-anchor="middle">Unit C</text>
+      <text x="422" y="72" font-family="'DM Mono', monospace" font-size="7" fill="#7a7060" text-anchor="middle">Unit D</text>
+      <text x="77" y="82" font-family="'DM Mono', monospace" font-size="5.5" fill="#2e2920" text-anchor="middle">~25 m²</text>
+      <text x="192" y="82" font-family="'DM Mono', monospace" font-size="5.5" fill="#2e2920" text-anchor="middle">~25 m²</text>
+      <text x="307" y="82" font-family="'DM Mono', monospace" font-size="5.5" fill="#2e2920" text-anchor="middle">~25 m²</text>
+      <text x="422" y="82" font-family="'DM Mono', monospace" font-size="5.5" fill="#2e2920" text-anchor="middle">~25 m²</text>
+      <line x1="20" y1="100" x2="480" y2="100" stroke="#3a3425" stroke-width="1.5"/>
+      <text x="250" y="96" font-family="'DM Mono', monospace" font-size="5" fill="#3a3425" text-anchor="middle" letter-spacing="0.3em">VLOERRAND ENTRESOL</text>
+      <text x="250" y="130" font-family="'Bebas Neue', sans-serif" font-size="14" fill="#F0EAE0" text-anchor="middle" letter-spacing="2" opacity="0.5">WERKVLOER</text>
+      <rect x="40" y="145" width="180" height="80" fill="rgba(224,154,47,0.03)" stroke="#2e2920" stroke-width="0.5" stroke-dasharray="3,3" rx="2"/>
+      <text x="130" y="162" font-family="'DM Mono', monospace" font-size="7" fill="#E09A2F" text-anchor="middle" letter-spacing="0.1em">MACHINEZONE</text>
+      <rect x="55" y="172" width="30" height="18" fill="none" stroke="#2e2920" stroke-width="0.5" rx="1"/>
+      <text x="70" y="184" font-family="'DM Mono', monospace" font-size="4.5" fill="#7a7060" text-anchor="middle">FZ</text>
+      <rect x="95" y="172" width="30" height="18" fill="none" stroke="#2e2920" stroke-width="0.5" rx="1"/>
+      <text x="110" y="184" font-family="'DM Mono', monospace" font-size="4.5" fill="#7a7060" text-anchor="middle">VD</text>
+      <rect x="135" y="172" width="30" height="18" fill="none" stroke="#2e2920" stroke-width="0.5" rx="1"/>
+      <text x="150" y="184" font-family="'DM Mono', monospace" font-size="4.5" fill="#7a7060" text-anchor="middle">LZ</text>
+      <rect x="175" y="172" width="30" height="18" fill="none" stroke="#2e2920" stroke-width="0.5" rx="1"/>
+      <text x="190" y="184" font-family="'DM Mono', monospace" font-size="4.5" fill="#7a7060" text-anchor="middle">MZ</text>
+      <text x="130" y="215" font-family="'DM Mono', monospace" font-size="4.5" fill="#2e2920" text-anchor="middle">FZ=Formaatzaag VD=Vandiktebank</text>
+      <text x="130" y="222" font-family="'DM Mono', monospace" font-size="4.5" fill="#2e2920" text-anchor="middle">LZ=Lintzaag MZ=Metaalzaag</text>
+      <rect x="240" y="145" width="220" height="80" fill="rgba(240,234,224,0.02)" stroke="#2e2920" stroke-width="0.5" stroke-dasharray="3,3" rx="2"/>
+      <text x="350" y="162" font-family="'DM Mono', monospace" font-size="7" fill="#7a7060" text-anchor="middle" letter-spacing="0.1em">FLEXSPACE</text>
+      <text x="350" y="195" font-family="'DM Mono', monospace" font-size="6" fill="#2e2920" text-anchor="middle">Grote projecten</text>
+      <text x="350" y="205" font-family="'DM Mono', monospace" font-size="6" fill="#2e2920" text-anchor="middle">op aanvraag</text>
+      <rect x="20" y="240" width="140" height="40" fill="rgba(224,154,47,0.03)" stroke="#2e2920" stroke-width="0.5" rx="1"/>
+      <text x="90" y="264" font-family="'DM Mono', monospace" font-size="7" fill="#7a7060" text-anchor="middle">OPSLAG</text>
+      <rect x="170" y="240" width="100" height="40" fill="rgba(240,234,224,0.02)" stroke="#2e2920" stroke-width="0.5" rx="1"/>
+      <text x="220" y="264" font-family="'DM Mono', monospace" font-size="7" fill="#7a7060" text-anchor="middle">KANTOOR</text>
+      <rect x="280" y="240" width="100" height="40" fill="rgba(240,234,224,0.02)" stroke="#2e2920" stroke-width="0.5" rx="1"/>
+      <text x="330" y="264" font-family="'DM Mono', monospace" font-size="7" fill="#7a7060" text-anchor="middle">BUREAU</text>
+      <rect x="400" y="272" width="40" height="8" fill="rgba(224,154,47,0.12)" stroke="#E09A2F" stroke-width="0.5" stroke-opacity="0.4" rx="1"/>
+      <text x="420" y="268" font-family="'DM Mono', monospace" font-size="5" fill="#E09A2F" text-anchor="middle" opacity="0.6">DEUR 1</text>
+      <rect x="450" y="272" width="30" height="8" fill="rgba(224,154,47,0.12)" stroke="#E09A2F" stroke-width="0.5" stroke-opacity="0.4" rx="1"/>
+      <text x="465" y="268" font-family="'DM Mono', monospace" font-size="5" fill="#E09A2F" text-anchor="middle" opacity="0.6">DEUR 2</text>
+      <text x="470" y="38" font-family="'DM Mono', monospace" font-size="8" fill="#3a3425">N ↑</text>
+    </svg>
+    <div class="floorplan-legend">
+      <div class="legend-item"><div class="legend-swatch" style="background: rgba(224,154,47,0.08);"></div> Werkplekken entresol</div>
+      <div class="legend-item"><div class="legend-swatch" style="background: rgba(224,154,47,0.05); border-color: #E09A2F;"></div> Machinezone</div>
+      <div class="legend-item"><div class="legend-swatch" style="background: rgba(240,234,224,0.04);"></div> Flexspace / gedeeld</div>
+      <div class="legend-item"><div class="legend-swatch" style="background: rgba(224,154,47,0.15);"></div> Overheaddeuren</div>
+    </div>
   </div>
 
   <!-- PRICING -->
@@ -981,8 +975,6 @@
 
 </div>
 
-<!-- PLATTEGROND DATA -->
-<script src="floorplan-data.js"></script>
 <!-- CONTENT ENGINE: laadt content.js en vult de pagina -->
 <script src="content.js"></script>
 <script>
@@ -1088,196 +1080,6 @@
     nav.classList.toggle('visible', !e.isIntersecting);
   }, { threshold: 0 });
   observer.observe(header);
-})();
-</script>
-
-<!-- FLOORPLAN RENDERER -->
-<script>
-(function() {
-  if (typeof FLOORPLAN === 'undefined') return;
-  var FP = FLOORPLAN;
-  var svg = document.getElementById('floorplan-svg');
-  var tabsEl = document.getElementById('floorplan-tabs');
-  var legendEl = document.getElementById('floorplan-legend');
-  var tooltip = document.getElementById('fp-tooltip');
-  var activeFloor = 'all';
-  var NS = 'http://www.w3.org/2000/svg';
-
-  function el(tag, a, t) {
-    var e = document.createElementNS(NS, tag);
-    if (a) for (var k in a) { if (a.hasOwnProperty(k)) e.setAttribute(k, a[k]); }
-    if (t !== undefined) e.textContent = t;
-    return e;
-  }
-  function add(tag, a, t) { svg.appendChild(el(tag, a, t)); }
-  function obj(id) { return FP.objects.find(function(o) { return o.id === id; }); }
-
-  // Tabs
-  FP.floors.forEach(function(f) {
-    var btn = document.createElement('button');
-    btn.className = 'floorplan-tab' + (f.id === activeFloor ? ' active' : '');
-    btn.textContent = f.label;
-    btn.dataset.floor = f.id;
-    btn.addEventListener('click', function() {
-      activeFloor = f.id;
-      tabsEl.querySelectorAll('.floorplan-tab').forEach(function(t) {
-        t.classList.toggle('active', t.dataset.floor === f.id);
-      });
-      render();
-    });
-    tabsEl.appendChild(btn);
-  });
-
-  // Legend
-  FP.legend.forEach(function(l) {
-    var d = document.createElement('div');
-    d.className = 'legend-item';
-    d.innerHTML = '<div class="legend-swatch" style="background:' + l.color + ';border-color:' + l.borderColor + ';"></div> ' + l.label;
-    legendEl.appendChild(d);
-  });
-
-  // Status color for unit label
-  function statusColor(s) {
-    if (s === 'beschikbaar') return '#4CAF50';
-    if (s === 'gereserveerd') return '#FF9800';
-    if (s === 'bezet') return '#666';
-    return '#7a7060';
-  }
-
-  function render() {
-    svg.setAttribute('viewBox', '0 0 500 320');
-    svg.innerHTML = '';
-    var showE = activeFloor === 'all' || activeFloor === 'entresol';
-    var showB = activeFloor === 'all' || activeFloor === 'bg';
-
-    // ── Exact replica of original SVG structure ──
-
-    // Outer wall
-    add('rect', { x:20, y:20, width:460, height:260, fill:'none', stroke:'#3a3425', 'stroke-width':2, rx:2 });
-
-    // ── ENTRESOL ──
-    if (showE) {
-      // Entresol background
-      add('rect', { x:20, y:20, width:460, height:80, fill:'rgba(224,154,47,0.04)', stroke:'#3a3425', 'stroke-width':1 });
-      add('text', { x:250, y:48, 'font-family':"'Bebas Neue', sans-serif", 'font-size':14, fill:'#E09A2F', 'text-anchor':'middle', 'letter-spacing':2 }, 'ENTRESOL');
-      // Unit dividers
-      add('line', { x1:135, y1:20, x2:135, y2:100, stroke:'#2e2920', 'stroke-width':0.5, 'stroke-dasharray':'4,4' });
-      add('line', { x1:250, y1:20, x2:250, y2:100, stroke:'#2e2920', 'stroke-width':0.5, 'stroke-dasharray':'4,4' });
-      add('line', { x1:365, y1:20, x2:365, y2:100, stroke:'#2e2920', 'stroke-width':0.5, 'stroke-dasharray':'4,4' });
-
-      // Unit labels — data-driven from FLOORPLAN
-      var units = [
-        { id: 'unit-a', cx: 77 },
-        { id: 'unit-b', cx: 192 },
-        { id: 'unit-c', cx: 307 },
-        { id: 'unit-d', cx: 422 }
-      ];
-      units.forEach(function(u) {
-        var o = obj(u.id);
-        if (!o) return;
-        var g = el('g', { class: 'fp-obj huurunit', 'data-id': o.id });
-        // Unit name
-        g.appendChild(el('text', { x: u.cx, y: 72, 'font-family':"'DM Mono', monospace", 'font-size':7, fill:'#7a7060', 'text-anchor':'middle' }, o.label));
-        // Area
-        g.appendChild(el('text', { x: u.cx, y: 82, 'font-family':"'DM Mono', monospace", 'font-size':5.5, fill:'#2e2920', 'text-anchor':'middle' }, '~' + (o.area || 25) + ' m\u00B2'));
-        // Status indicator — small colored dot + text
-        if (o.status) {
-          g.appendChild(el('circle', { cx: u.cx, cy: 90, r: 2.5, fill: statusColor(o.status) }));
-        }
-        // Tooltip
-        g.addEventListener('mouseenter', function(e) {
-          var h = '<div class="tt-label">' + o.label + '</div>';
-          if (o.area) h += '<div class="tt-detail">~' + o.area + ' m\u00B2</div>';
-          if (o.price) h += '<div class="tt-detail">' + o.price + '</div>';
-          if (o.status) h += '<div class="tt-status ' + o.status + '">' + o.status + '</div>';
-          tooltip.innerHTML = h;
-          tooltip.classList.add('visible');
-        });
-        g.addEventListener('mousemove', function(e) {
-          var cr = document.getElementById('floorplan-container').getBoundingClientRect();
-          tooltip.style.left = (e.clientX - cr.left + 12) + 'px';
-          tooltip.style.top = (e.clientY - cr.top - 10) + 'px';
-        });
-        g.addEventListener('mouseleave', function() { tooltip.classList.remove('visible'); });
-        svg.appendChild(g);
-      });
-    }
-
-    // Floor edge
-    add('line', { x1:20, y1:100, x2:480, y2:100, stroke:'#3a3425', 'stroke-width':1.5 });
-    add('text', { x:250, y:96, 'font-family':"'DM Mono', monospace", 'font-size':5, fill:'#3a3425', 'text-anchor':'middle', 'letter-spacing':'0.3em' }, 'VLOERRAND ENTRESOL');
-
-    // ── WERKVLOER ──
-    if (showB) {
-      add('text', { x:250, y:130, 'font-family':"'Bebas Neue', sans-serif", 'font-size':14, fill:'#F0EAE0', 'text-anchor':'middle', 'letter-spacing':2, opacity:0.5 }, 'WERKVLOER');
-
-      // Machinezone
-      var mz = obj('machinezone');
-      if (mz) {
-        add('rect', { x:mz.x, y:mz.y, width:mz.width, height:mz.height, fill:'rgba(224,154,47,0.03)', stroke:'#2e2920', 'stroke-width':0.5, 'stroke-dasharray':'3,3', rx:2 });
-        add('text', { x:130, y:162, 'font-family':"'DM Mono', monospace", 'font-size':7, fill:'#E09A2F', 'text-anchor':'middle', 'letter-spacing':'0.1em' }, 'MACHINEZONE');
-      }
-
-      // Machines
-      ['fz','vd','lz','mz'].forEach(function(mid) {
-        var m = obj(mid);
-        if (!m) return;
-        add('rect', { x:m.x, y:m.y, width:m.width, height:m.height, fill:'none', stroke:'#2e2920', 'stroke-width':0.5, rx:1 });
-        add('text', { x: m.x + m.width/2, y: m.y + m.height/2 + 2, 'font-family':"'DM Mono', monospace", 'font-size':4.5, fill:'#7a7060', 'text-anchor':'middle' }, m.label);
-      });
-
-      // Machine legend
-      add('text', { x:130, y:215, 'font-family':"'DM Mono', monospace", 'font-size':4.5, fill:'#2e2920', 'text-anchor':'middle' }, 'FZ=Formaatzaag VD=Vandiktebank');
-      add('text', { x:130, y:222, 'font-family':"'DM Mono', monospace", 'font-size':4.5, fill:'#2e2920', 'text-anchor':'middle' }, 'LZ=Lintzaag MZ=Metaalzaag');
-
-      // Flexspace
-      var fs = obj('flexspace');
-      if (fs) {
-        add('rect', { x:fs.x, y:fs.y, width:fs.width, height:fs.height, fill:'rgba(240,234,224,0.02)', stroke:'#2e2920', 'stroke-width':0.5, 'stroke-dasharray':'3,3', rx:2 });
-        add('text', { x: fs.x+fs.width/2, y:162, 'font-family':"'DM Mono', monospace", 'font-size':7, fill:'#7a7060', 'text-anchor':'middle', 'letter-spacing':'0.1em' }, 'FLEXSPACE');
-        add('text', { x: fs.x+fs.width/2, y:195, 'font-family':"'DM Mono', monospace", 'font-size':6, fill:'#2e2920', 'text-anchor':'middle' }, 'Grote projecten');
-        add('text', { x: fs.x+fs.width/2, y:205, 'font-family':"'DM Mono', monospace", 'font-size':6, fill:'#2e2920', 'text-anchor':'middle' }, 'op aanvraag');
-      }
-
-      // Opslag
-      var op = obj('opslag');
-      if (op) {
-        add('rect', { x:op.x, y:op.y, width:op.width, height:op.height, fill:'rgba(224,154,47,0.03)', stroke:'#2e2920', 'stroke-width':0.5, rx:1 });
-        add('text', { x: op.x+op.width/2, y:264, 'font-family':"'DM Mono', monospace", 'font-size':7, fill:'#7a7060', 'text-anchor':'middle' }, 'OPSLAG');
-      }
-
-      // Kantoor
-      var kt = obj('kantoor');
-      if (kt) {
-        add('rect', { x:kt.x, y:kt.y, width:kt.width, height:kt.height, fill:'rgba(240,234,224,0.02)', stroke:'#2e2920', 'stroke-width':0.5, rx:1 });
-        add('text', { x: kt.x+kt.width/2, y:264, 'font-family':"'DM Mono', monospace", 'font-size':7, fill:'#7a7060', 'text-anchor':'middle' }, 'KANTOOR');
-      }
-
-      // Bureau
-      var bu = obj('bureau');
-      if (bu) {
-        add('rect', { x:bu.x, y:bu.y, width:bu.width, height:bu.height, fill:'rgba(240,234,224,0.02)', stroke:'#2e2920', 'stroke-width':0.5, rx:1 });
-        add('text', { x: bu.x+bu.width/2, y:264, 'font-family':"'DM Mono', monospace", 'font-size':7, fill:'#7a7060', 'text-anchor':'middle' }, 'BUREAU');
-      }
-
-      // Deuren
-      var d1 = obj('deur1');
-      if (d1) {
-        add('rect', { x:d1.x, y:d1.y, width:d1.width, height:d1.height, fill:'rgba(224,154,47,0.12)', stroke:'#E09A2F', 'stroke-width':0.5, 'stroke-opacity':0.4, rx:1 });
-        add('text', { x: d1.x+d1.width/2, y:268, 'font-family':"'DM Mono', monospace", 'font-size':5, fill:'#E09A2F', 'text-anchor':'middle', opacity:0.6 }, 'DEUR 1');
-      }
-      var d2 = obj('deur2');
-      if (d2) {
-        add('rect', { x:d2.x, y:d2.y, width:d2.width, height:d2.height, fill:'rgba(224,154,47,0.12)', stroke:'#E09A2F', 'stroke-width':0.5, 'stroke-opacity':0.4, rx:1 });
-        add('text', { x: d2.x+d2.width/2, y:268, 'font-family':"'DM Mono', monospace", 'font-size':5, fill:'#E09A2F', 'text-anchor':'middle', opacity:0.6 }, 'DEUR 2');
-      }
-    }
-
-    // Compass
-    add('text', { x:470, y:38, 'font-family':"'DM Mono', monospace", 'font-size':8, fill:'#3a3425' }, 'N \u2191');
-  }
-
-  render();
 })();
 </script>
 </body>
