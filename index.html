@@ -362,29 +362,32 @@
     border-bottom: 1px solid var(--line);
     padding-bottom: 36px;
   }
-  .floorplan-svg {
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
-    display: block;
+  .fp-tabs { display: flex; gap: 0; margin-bottom: 16px; }
+  .fp-tab {
+    padding: 6px 16px; font-size: 10px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted); background: transparent;
+    border: 1px solid var(--line); cursor: pointer; transition: all 0.15s;
+    font-family: 'DM Mono', monospace;
   }
-  .floorplan-legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    margin-top: 16px;
+  .fp-tab:first-child { border-right: none; }
+  .fp-tab:hover { color: var(--cream); }
+  .fp-tab.active { color: var(--amber); background: var(--amber-glow); border-color: var(--amber); }
+  .fp-canvas {
+    position: relative; overflow-x: auto; overflow-y: hidden;
+    background: var(--bg); border: 1px solid var(--line);
   }
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 10px;
-    color: var(--muted);
-    letter-spacing: 0.08em;
+  .fp-canvas::-webkit-scrollbar { height: 4px; }
+  .fp-canvas::-webkit-scrollbar-thumb { background: var(--line); }
+  #fp { position: relative; }
+  .fp-legend {
+    display: flex; flex-wrap: wrap; gap: 16px; margin-top: 16px;
   }
-  .legend-swatch {
-    width: 12px; height: 12px;
-    border: 1px solid var(--line);
+  .fp-legend-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 10px; color: var(--muted); letter-spacing: 0.08em;
+  }
+  .fp-legend-swatch {
+    width: 12px; height: 12px; border: 1px solid var(--line);
   }
 
   /* ── PRICING ── */
@@ -876,6 +879,22 @@
     <div class="machine-list" id="c-machines"></div>
   </div>
 
+  <!-- PLATTEGROND -->
+  <p class="section-label" id="indeling">Indeling werkplaats</p>
+  <div class="floorplan-block">
+    <div class="fp-tabs">
+      <div class="fp-tab active" onclick="fpShow(0)">Begane grond</div>
+      <div class="fp-tab" onclick="fpShow(1)">Entresol</div>
+    </div>
+    <div class="fp-canvas"><div id="fp"></div></div>
+    <div class="fp-legend">
+      <div class="fp-legend-item"><div class="fp-legend-swatch" style="background:rgba(224,154,47,.13);border-color:rgba(224,154,47,.5)"></div>Hal</div>
+      <div class="fp-legend-item"><div class="fp-legend-swatch" style="background:rgba(110,150,220,.13);border-color:rgba(110,150,220,.5)"></div>Kantoor</div>
+      <div class="fp-legend-item"><div class="fp-legend-swatch" style="background:rgba(180,140,80,.13);border-color:rgba(180,140,80,.45)"></div>Trap</div>
+      <div class="fp-legend-item"><div class="fp-legend-swatch" style="background:rgba(180,100,220,.13);border-color:rgba(180,100,220,.5)"></div>Entresol</div>
+    </div>
+  </div>
+
   <!-- PRICING -->
   <p class="section-label" id="tarieven">Units & tarieven</p>
   <div class="pricing-block" id="c-pricing"></div>
@@ -1023,6 +1042,189 @@
     nav.classList.toggle('visible', !e.isIntersecting);
   }, { threshold: 0 });
   observer.observe(header);
+})();
+</script>
+
+<!-- PLATTEGROND RENDERER (read-only, overgenomen uit werkplaats17_plattegrond.html) -->
+<script>
+(function(){
+  const S=0.03;
+  const UW=11500, UH=21550;
+  const Xl=100,Xkl=6245,Xkr=6345,Xr=11400;
+  const Yb=100,Ytb=1300,Ytt=1400,Ykat=7870,Ysb=7970,Yst=8970,Yt=21450;
+  const GAP=0;
+  let floor=0;
+  const fp=document.getElementById('fp');
+  if(!fp)return;
+
+  function px(mm){return mm*S;}
+  function mx(x,w){return UW-x-w;}
+
+  function makeDiv(style){
+    const d=document.createElement('div');
+    d.style.cssText='position:absolute;';
+    Object.assign(d.style,style);
+    return d;
+  }
+  function wall(x,y,w,h,ox,oy){
+    fp.appendChild(makeDiv({left:px(x)+ox+'px',top:px(y)+oy+'px',width:px(w)+'px',height:px(h)+'px',background:'#4a4438'}));
+  }
+  function room(x,y,w,h,ox,oy,bg,bc,lbl,area){
+    const d=makeDiv({left:px(x)+ox+'px',top:px(y)+oy+'px',width:px(w)+'px',height:px(h)+'px',background:bg,border:'1px solid '+bc,pointerEvents:'none'});
+    if(lbl){
+      const t=document.createElement('div');
+      t.style.cssText='position:absolute;top:4px;left:5px;font-size:7px;letter-spacing:.09em;text-transform:uppercase;color:'+bc+';font-weight:bold;line-height:1.4;pointer-events:none';
+      t.textContent=lbl;
+      d.appendChild(t);
+    }
+    if(area){
+      const a=document.createElement('div');
+      a.style.cssText='position:absolute;bottom:4px;right:5px;font-size:6px;color:rgba(255,255,255,.22);pointer-events:none';
+      a.textContent=area;
+      d.appendChild(a);
+    }
+    fp.appendChild(d);
+  }
+  function unitLbl(ox,oy,lbl){
+    const d=makeDiv({left:ox+px(UW/2)-30+'px',top:oy-16+'px',width:'60px',textAlign:'center',fontSize:'7.5px',letterSpacing:'.15em',color:'#7a7060',textTransform:'uppercase',pointerEvents:'none'});
+    d.textContent=lbl;
+    fp.appendChild(d);
+  }
+  function dimH(x,y,w,lbl){
+    const d=makeDiv({left:x+'px',top:y+'px',width:w+'px',height:'18px',pointerEvents:'none'});
+    d.innerHTML='<div style="position:absolute;left:0;right:0;top:4px;height:1px;background:#7a7060;opacity:.3"></div><div style="position:absolute;left:0;right:0;top:7px;font-size:6px;color:#7a7060;text-align:center;letter-spacing:.08em">'+lbl+'</div>';
+    fp.appendChild(d);
+  }
+  function dimV(x,y,h,lbl){
+    const d=makeDiv({left:x+'px',top:y+'px',height:h+'px',width:'24px',pointerEvents:'none'});
+    d.innerHTML='<div style="position:absolute;left:5px;top:0;bottom:0;width:1px;background:#7a7060;opacity:.3"></div><div style="position:absolute;left:8px;top:50%;transform:translateY(-50%);font-size:6px;color:#7a7060;white-space:nowrap;letter-spacing:.08em">'+lbl+'</div>';
+    fp.appendChild(d);
+  }
+
+  function drawUnitL(ox,oy){
+    wall(0,0,UW,100,ox,oy); wall(0,UH-100,UW,100,ox,oy);
+    wall(0,0,100,UH,ox,oy);
+    wall(Xkl,Yb,Xkr-Xkl,Ykat-Yb,ox,oy);
+    wall(0,Ytb,Xkl,Ytt-Ytb,ox,oy);
+    var kanW=Xr-Xkr, kanH=Ykat-Yb;
+    room(Xkr,Yb,kanW,kanH,ox,oy,'rgba(110,150,220,.13)','rgba(110,150,220,.5)','Kantoor',Math.round(kanW/1000*kanH/1000)+'m²');
+    var trW=Xr-Xkl, trH=Yst-Ysb;
+    room(Xkl,Ysb,trW,trH,ox,oy,'rgba(180,140,80,.13)','rgba(180,140,80,.45)','Trap','');
+  }
+  function drawUnitM(ox,oy){
+    wall(0,0,UW,100,ox,oy); wall(0,UH-100,UW,100,ox,oy);
+    wall(UW-100,0,100,UH,ox,oy);
+    var kdw=Xkr-Xkl;
+    wall(mx(Xkl,kdw),Yb,kdw,Ykat-Yb,ox,oy);
+    wall(mx(0,Xkl),Ytb,Xkl,Ytt-Ytb,ox,oy);
+    var kanW=Xr-Xkr, kanH=Ykat-Yb;
+    room(mx(Xkr,kanW),Yb,kanW,kanH,ox,oy,'rgba(110,150,220,.13)','rgba(110,150,220,.5)','Kantoor',Math.round(kanW/1000*kanH/1000)+'m²');
+    var trW=Xr-Xkl, trH=Yst-Ysb;
+    room(mx(Xkl,trW),Ysb,trW,trH,ox,oy,'rgba(180,140,80,.13)','rgba(180,140,80,.45)','Trap','');
+  }
+  function drawEntresolL(ox,oy){
+    drawUnitL(ox,oy);
+    var kW=Xr-Xkr, kH=Ykat-Yb;
+    room(Xkr,Yb,kW,kH,ox,oy,'rgba(180,100,220,.13)','rgba(180,100,220,.5)','Entresol',Math.round(kW/1000*kH/1000)+'m²');
+  }
+  function drawEntresolM(ox,oy){
+    drawUnitM(ox,oy);
+    var kanW=Xr-Xkr, kanH=Ykat-Yb;
+    room(mx(Xkr,kanW),Yb,kanW,kanH,ox,oy,'rgba(180,100,220,.13)','rgba(180,100,220,.5)','Entresol',Math.round(kanW/1000*kanH/1000)+'m²');
+    var eW=Xr-Xl, eH=Yt-Yst;
+    room(Xl,Yst,eW,eH,ox,oy,'rgba(180,100,220,.13)','rgba(180,100,220,.5)','Entresol',Math.round(eW/1000*eH/1000)+'m²');
+  }
+
+  function draw(){
+    fp.innerHTML='';
+    var TW=px(UW)*2+GAP+80, TH=px(UH)+70;
+    fp.style.cssText='position:relative;width:'+TW+'px;height:'+TH+'px;min-width:'+TW+'px;min-height:'+TH+'px;';
+
+    // grid
+    var g=makeDiv({inset:'0',pointerEvents:'none',zIndex:'0',
+      backgroundImage:'linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px)',
+      backgroundSize:px(1000)+'px '+px(1000)+'px'});
+    fp.appendChild(g);
+
+    var ox0=30, ox1=30+px(UW)+GAP, oy=28;
+
+    if(floor===0){
+      drawUnitL(ox0,oy); drawUnitM(ox1,oy);
+    } else {
+      drawEntresolL(ox0,oy); drawEntresolM(ox1,oy);
+    }
+
+    // Hal (L-vormig over beide units)
+    var svgLeft=px(Xl)+ox0, svgTop=px(Ytt)+oy;
+    var svgRight=px(Xr)+ox1, svgW=svgRight-svgLeft, svgH=px(Yt-Ytt);
+    function lx(mmX,unitOx){return px(mmX)+unitOx-svgLeft;}
+    function ly(mmY){return px(mmY)+oy-svgTop;}
+
+    var halSvg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+    halSvg.setAttribute('width',svgW);
+    halSvg.setAttribute('height',svgH);
+    halSvg.style.cssText='position:absolute;left:'+svgLeft+'px;top:'+svgTop+'px;pointer-events:none;overflow:visible;z-index:1;';
+
+    var kanW=Xr-Xkr, trW=Xr-Xkl;
+    var L_x0=lx(Xl,ox0),L_xk=lx(Xkl,ox0),L_xr=lx(Xr,ox0);
+    var L_ytt=ly(Ytt),L_ykat=ly(Ykat),L_yb=ly(Yt);
+    var M_xl=lx(Xl,ox1),M_xkr=lx(UW-Xkl,ox1),M_xr=lx(Xr,ox1);
+    var tLx1=lx(Xkl,ox0),tLy1=ly(Ysb),tLx2=lx(Xr,ox0),tLy2=ly(Yst);
+    var tMx1=lx(mx(Xkl,trW),ox1),tMy1=ly(Ysb),tMx2=lx(mx(Xkl,trW)+trW,ox1),tMy2=ly(Yst);
+
+    var path=document.createElementNS('http://www.w3.org/2000/svg','path');
+    path.setAttribute('d',[
+      'M'+L_x0+','+L_ytt,'L'+L_xk+','+L_ytt,'L'+L_xk+','+L_ykat,'L'+L_xr+','+L_ykat,'L'+L_xr+','+L_yb,'L'+L_x0+','+L_yb,'Z',
+      'M'+M_xr+','+L_ytt,'L'+M_xkr+','+L_ytt,'L'+M_xkr+','+L_ykat,'L'+M_xl+','+L_ykat,'L'+M_xl+','+L_yb,'L'+M_xr+','+L_yb,'Z',
+      'M'+tLx1+','+tLy1+' L'+tLx1+','+tLy2+' L'+tLx2+','+tLy2+' L'+tLx2+','+tLy1+' Z',
+      'M'+tMx1+','+tMy1+' L'+tMx1+','+tMy2+' L'+tMx2+','+tMy2+' L'+tMx2+','+tMy1+' Z'
+    ].join(' '));
+    path.setAttribute('fill-rule','evenodd');
+    path.setAttribute('fill','rgba(224,154,47,.13)');
+    path.setAttribute('stroke','rgba(224,154,47,.5)');
+    path.setAttribute('stroke-width','1');
+    halSvg.appendChild(path);
+
+    var halLbl=document.createElement('div');
+    halLbl.style.cssText='position:absolute;left:'+(svgLeft+5)+'px;top:'+(px(Ytt)+oy+4)+'px;font-size:7px;letter-spacing:.09em;text-transform:uppercase;color:rgba(224,154,47,.5);font-weight:bold;pointer-events:none;z-index:1';
+    halLbl.textContent='Hal';
+
+    var halLeftArea=(Xkl-Xl)/1000*(Yt-Ytt)/1000;
+    var halRightArea=(Xr-Xkl)/1000*(Yt-Ykat)/1000;
+    var trArea=trW/1000*(Yst-Ysb)/1000;
+    var halM2=Math.round((halLeftArea+halRightArea-trArea)*2);
+    var halAreaEl=document.createElement('div');
+    halAreaEl.style.cssText='position:absolute;left:'+(svgLeft+svgW-40)+'px;top:'+(px(Yt)+oy-14)+'px;font-size:6px;color:rgba(255,255,255,.22);pointer-events:none;z-index:1';
+    halAreaEl.textContent=halM2+'m²';
+
+    fp.appendChild(halSvg);
+    fp.appendChild(halLbl);
+    fp.appendChild(halAreaEl);
+
+    // Middellijn
+    fp.appendChild(makeDiv({left:ox1+'px',top:oy+'px',width:'1px',height:px(UH)+'px',
+      background:'rgba(255,255,255,.18)',borderLeft:'1px dashed rgba(255,255,255,.18)',pointerEvents:'none',zIndex:'5'}));
+
+    // Traplijnen
+    fp.appendChild(makeDiv({left:px(Xkl)+ox0+'px',top:px(Ysb)+oy+'px',width:'2px',height:px(Yst-Ysb)+'px',background:'rgba(255,255,255,.35)',pointerEvents:'none',zIndex:'6'}));
+    fp.appendChild(makeDiv({left:px(UW-Xkl-2)+ox1+'px',top:px(Ysb)+oy+'px',width:'2px',height:px(Yst-Ysb)+'px',background:'rgba(255,255,255,.35)',pointerEvents:'none',zIndex:'6'}));
+
+    unitLbl(ox0,oy,'Unit L'); unitLbl(ox1,oy,'Unit M');
+    dimH(ox0,oy+px(UH)+12,px(UW),'11,5 m');
+    dimH(ox1,oy+px(UH)+12,px(UW),'11,5 m');
+    dimV(8,oy,px(UH),'21,6 m');
+    if(floor===1) dimV(8,oy+px(Ytt),px(Ysb-Ytt),'6,6 m');
+  }
+
+  window.fpShow=function(f){
+    floor=f;
+    document.querySelectorAll('.fp-tab').forEach(function(t,i){
+      t.classList.toggle('active',i===f);
+    });
+    draw();
+  };
+
+  draw();
 })();
 </script>
 </body>
