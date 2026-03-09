@@ -69,6 +69,12 @@ body{background:var(--bg);color:var(--cream);font-family:'Courier New',monospace
 .db{left:0;background:#a03030;color:#fff}
 .rb{right:0;background:var(--amber);color:var(--bg)}
 .cpb{left:14px;background:#306090;color:#fff}
+.stb{position:absolute;bottom:-14px;left:0;height:13px;border:none;cursor:pointer;display:none;align-items:center;justify-content:center;font-size:7px;z-index:20;padding:0 5px;letter-spacing:.04em;text-transform:uppercase;font-family:inherit}
+.pl.sel .stb{display:flex}
+.stb[data-st="beschikbaar"]{background:#4CAF50;color:#fff}
+.stb[data-st="bezet"]{background:#666;color:#fff}
+.stb[data-st="gereserveerd"]{background:#FF9800;color:#fff}
+.stb[data-st=""]{background:var(--muted);color:var(--bg)}
 
 /* right sidebar — properties panel */
 .props{width:220px;background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden}
@@ -153,9 +159,8 @@ body{background:var(--bg);color:var(--cream);font-family:'Courier New',monospace
   </div>
   <div class="hint">Sleep = pan · Scroll = zoom · Klik object = bewerken · Delete = verwijder</div>
   <div class="hdr-btns">
-    <button class="hbtn" id="btn-save">Opslaan</button>
+    <button class="hbtn hbtn-pub" id="btn-save">Opslaan &amp; Publiceer</button>
     <button class="hbtn" id="btn-export">Export</button>
-    <button class="hbtn hbtn-pub" id="btn-pub">Publiceer</button>
   </div>
 </div>
 <div class="wrap">
@@ -189,6 +194,7 @@ body{background:var(--bg);color:var(--cream);font-family:'Courier New',monospace
     <div class="item" draggable="true" data-w="15" data-h="15" data-l="Compressor" data-c="#607080" data-bg="rgba(96,112,128,.15)"><div class="sw" style="background:#607080"></div>Compressor</div>
     <div class="cat">Huurunits</div>
     <div class="item" draggable="true" data-w="150" data-h="150" data-l="Huurunit ~25m²" data-c="#50b478" data-bg="rgba(80,180,120,.1)" data-type="huurunit"><div class="sw" style="background:#50b478"></div>Huurunit ~25m²</div>
+    <div class="item" draggable="true" data-w="134" data-h="134" data-l="Huurunit ~20m²" data-c="#50b478" data-bg="rgba(80,180,120,.1)" data-type="huurunit"><div class="sw" style="background:#50b478"></div>Huurunit ~20m²</div>
   </div>
   <div class="sb-add">
     <div class="cat">+ Eigen object</div>
@@ -302,16 +308,16 @@ body{background:var(--bg);color:var(--cream);font-family:'Courier New',monospace
 </div>
 </div>
 
-<!-- PUBLISH MODAL -->
-<div class="modal-bg" id="pub-modal">
+<!-- TOKEN SETUP MODAL (eenmalig) -->
+<div class="modal-bg" id="token-modal">
   <div class="modal">
-    <h2>Publiceer</h2>
-    <p>Commit geplaatste objecten naar GitHub. De website wordt automatisch bijgewerkt.</p>
+    <h2>GitHub Token</h2>
+    <p>Eenmalige setup. Token wordt opgeslagen in je browser zodat Opslaan direct publiceert.</p>
     <input type="text" id="gh-repo" placeholder="user/repo" value="midirectiekade14-debug/werkplaats17">
     <input type="password" id="gh-token" placeholder="GitHub Personal Access Token (classic)">
     <div class="modal-btns">
-      <button class="hbtn" onclick="document.getElementById('pub-modal').classList.remove('show')">Annuleer</button>
-      <button class="hbtn hbtn-pub" id="pub-go">Publiceer</button>
+      <button class="hbtn" onclick="document.getElementById('token-modal').classList.remove('show')">Annuleer</button>
+      <button class="hbtn hbtn-pub" id="token-save">Opslaan</button>
     </div>
     <div class="pub-status" id="pub-status"></div>
   </div>
@@ -531,6 +537,22 @@ function place(x,y,data){
       </div>`;
   }
   d.dataset.c=data.c;d.dataset.bg=data.bg||'';d.dataset.type=data.type||'';d.dataset.l=data.l;d.dataset.rot='0';d.dataset.status=data.status||'';
+  // Status toggle button (huurunits)
+  if(data.type==='huurunit'){
+    var stBtn=document.createElement('button');stBtn.className='stb';
+    var statuses=['beschikbaar','bezet','gereserveerd'];
+    function updateStBtn(){stBtn.dataset.st=d.dataset.status||'';stBtn.textContent=d.dataset.status||'status';}
+    updateStBtn();
+    stBtn.addEventListener('click',function(e){
+      e.stopPropagation();
+      var cur=d.dataset.status||'',idx=statuses.indexOf(cur);
+      d.dataset.status=statuses[(idx+1)%statuses.length];
+      updateStBtn();applyStatusVisual(d);
+      if(sel===d)populateProps(d);
+    });
+    d.appendChild(stBtn);
+    applyStatusVisual(d);
+  }
   // Delete
   d.querySelector('.db').addEventListener('click',e=>{e.stopPropagation();d.remove();if(sel===d){sel=null;hideProps();}});
   // Rotate
@@ -665,11 +687,26 @@ function applyProp(){
   if(idEl)idEl.textContent=Math.round(parseFloat(d.style.width)/S/10)+'×'+Math.round(parseFloat(d.style.height)/S/10)+'cm';
 }
 
+// Status visual helper
+function applyStatusVisual(d){
+  if(d.dataset.type!=='huurunit')return;
+  var st=d.dataset.status,ib=d.querySelector('.ib');if(!ib)return;
+  if(st==='beschikbaar'){ib.style.borderColor='#4CAF50';ib.style.background='rgba(76,175,80,0.12)';ib.style.boxShadow='0 0 6px rgba(76,175,80,0.3)';}
+  else if(st==='bezet'){ib.style.borderColor='#666';ib.style.background='rgba(120,120,120,0.08)';ib.style.boxShadow='none';}
+  else if(st==='gereserveerd'){ib.style.borderColor='#FF9800';ib.style.background='rgba(255,152,0,0.12)';ib.style.boxShadow='0 0 6px rgba(255,152,0,0.2)';}
+  else{ib.style.borderColor=d.dataset.c;ib.style.background=d.dataset.bg;ib.style.boxShadow='none';}
+  // Update status toggle button text
+  var stb=d.querySelector('.stb');if(stb){stb.dataset.st=st||'';stb.textContent=st||'status';}
+}
+
 // Bind all prop inputs
-[pfName,pfType,pfStatus,pfFloor,pfW,pfH,pfX,pfY,pfRot,pfColor,pfBgColor,pfBgOpacity].forEach(el=>{
+[pfName,pfType,pfFloor,pfW,pfH,pfX,pfY,pfRot,pfColor,pfBgColor,pfBgOpacity].forEach(el=>{
   el.addEventListener('input',applyProp);
   el.addEventListener('change',applyProp);
 });
+// Status change also applies visual
+pfStatus.addEventListener('change',function(){applyProp();if(sel)applyStatusVisual(sel);});
+pfStatus.addEventListener('input',function(){applyProp();if(sel)applyStatusVisual(sel);});
 
 // Delete & duplicate buttons
 document.getElementById('pf-del').addEventListener('click',function(){if(sel){sel.remove();sel=null;hideProps();}});
@@ -728,10 +765,28 @@ function generateJS(objs){
   return '// Werkplaats17 — Geplaatste objecten\n// Laatst gewijzigd: '+new Date().toISOString()+'\n// Gegenereerd via admin.html\n\nconst PLACED_OBJECTS = '+JSON.stringify(objs,null,2)+';\n';
 }
 
-// Save to localStorage
+// ── GitHub publish helper ──
+async function publishToGitHub(){
+  var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats17';
+  var token=localStorage.getItem('w17-gh-token');
+  if(!token){showTokenModal();return;}
+  toast('Publiceren...','');
+  try{
+    var content=generateJS(serializeObjects());
+    var b64=btoa(unescape(encodeURIComponent(content)));
+    var sha=null;
+    try{var gr=await fetch('https://api.github.com/repos/'+repo+'/contents/placed-objects.js',{headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github.v3+json'}});if(gr.ok){sha=(await gr.json()).sha;}}catch(e){}
+    var body={message:'Plattegrond bijgewerkt via admin ('+new Date().toLocaleString('nl-NL')+')',content:b64};if(sha)body.sha=sha;
+    var r=await fetch('https://api.github.com/repos/'+repo+'/contents/placed-objects.js',{method:'PUT',headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(r.ok){toast('Opgeslagen & gepubliceerd!','ok');}
+    else{var err=await r.json();toast('Fout: '+(err.message||r.status),'err');}
+  }catch(e){toast('Fout: '+e.message,'err');}
+}
+
+// Save = localStorage + direct publish
 document.getElementById('btn-save').addEventListener('click',function(){
   localStorage.setItem('w17-objects',JSON.stringify(serializeObjects()));
-  toast('Opgeslagen in browser','ok');
+  publishToGitHub();
 });
 
 // Export
@@ -742,31 +797,25 @@ document.getElementById('btn-export').addEventListener('click',function(){
   toast('Geëxporteerd','ok');
 });
 
-// Publish modal
-document.getElementById('btn-pub').addEventListener('click',function(){
-  document.getElementById('pub-modal').classList.add('show');
+// Token modal (eenmalig)
+function showTokenModal(){
+  document.getElementById('token-modal').classList.add('show');
   document.getElementById('pub-status').textContent='';document.getElementById('pub-status').className='pub-status';
-  var t=sessionStorage.getItem('w17-gh-token');if(t)document.getElementById('gh-token').value=t;
-});
-
-document.getElementById('pub-go').addEventListener('click',async function(){
+  var t=localStorage.getItem('w17-gh-token');if(t)document.getElementById('gh-token').value=t;
+  var r=localStorage.getItem('w17-gh-repo');if(r)document.getElementById('gh-repo').value=r;
+}
+document.getElementById('token-save').addEventListener('click',function(){
   var repo=document.getElementById('gh-repo').value.trim(),token=document.getElementById('gh-token').value.trim();
   var st=document.getElementById('pub-status');
   if(!repo||!token){st.textContent='Vul repo en token in';st.className='pub-status err';return;}
-  sessionStorage.setItem('w17-gh-token',token);
-  st.textContent='Publiceren...';st.className='pub-status';
-  try{
-    var content=generateJS(serializeObjects());
-    var b64=btoa(unescape(encodeURIComponent(content)));
-    var sha=null;
-    try{var gr=await fetch('https://api.github.com/repos/'+repo+'/contents/placed-objects.js',{headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github.v3+json'}});if(gr.ok){sha=(await gr.json()).sha;}}catch(e){}
-    var body={message:'Plattegrond bijgewerkt via admin ('+new Date().toLocaleString('nl-NL')+')',content:b64};if(sha)body.sha=sha;
-    var r=await fetch('https://api.github.com/repos/'+repo+'/contents/placed-objects.js',{method:'PUT',headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
-    if(r.ok){st.textContent='Gepubliceerd! Site wordt bijgewerkt...';st.className='pub-status ok';toast('Gepubliceerd','ok');localStorage.removeItem('w17-objects');}
-    else{var err=await r.json();st.textContent='Fout: '+(err.message||r.status);st.className='pub-status err';}
-  }catch(e){st.textContent='Fout: '+e.message;st.className='pub-status err';}
+  localStorage.setItem('w17-gh-repo',repo);
+  localStorage.setItem('w17-gh-token',token);
+  document.getElementById('token-modal').classList.remove('show');
+  toast('Token opgeslagen','ok');
+  // Nu meteen publiceren
+  publishToGitHub();
 });
-document.getElementById('pub-modal').addEventListener('click',e=>{if(e.target.id==='pub-modal')e.target.classList.remove('show');});
+document.getElementById('token-modal').addEventListener('click',e=>{if(e.target.id==='token-modal')e.target.classList.remove('show');});
 
 function toast(msg,type){var t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(type?' '+type:'');setTimeout(()=>t.className='toast',2500);}
 
