@@ -1,5 +1,175 @@
 // Werkplaats17 — Geplaatste objecten
-// Laatst gewijzigd: 2026-03-09T16:00:00Z
+// Laatst gewijzigd: 2026-03-09T14:13:47.447Z
 // Gegenereerd via admin.html
 
-const PLACED_OBJECTS = [];
+const PLACED_OBJECTS = [
+  {
+    "floor": 0,
+    "x": 75,
+    "y": 70,
+    "w": 101,
+    "h": 12,
+    "l": "Overheaddeur 3.35m",
+    "c": "#E09A2F",
+    "bg": "rgba(224,154,47,.15)",
+    "type": "overhead",
+    "rot": "0",
+    "status": ""
+  },
+  {
+    "floor": 0,
+    "x": 580,
+    "y": 70,
+    "w": 101,
+    "h": 12,
+    "l": "Overheaddeur 3.35m",
+    "c": "#E09A2F",
+    "bg": "rgba(224,154,47,.15)",
+    "type": "overhead",
+    "rot": "0",
+    "status": ""
+  },
+  {
+    "floor": 1,
+    "x": 380,
+    "y": 520,
+    "w": 120,
+    "h": 150,
+    "l": "Huurunit 20m2",
+    "c": "#c0a070",
+    "bg": "rgba(192,160,112,.13)",
+    "type": "",
+    "rot": "0",
+    "status": ""
+  },
+  {
+    "floor": 1,
+    "x": 595,
+    "y": 520,
+    "w": 120,
+    "h": 150,
+    "l": "Huurunit 20m2",
+    "c": "#c0a070",
+    "bg": "rgba(192,160,112,.13)",
+    "type": "",
+    "rot": "0",
+    "status": ""
+  },
+  {
+    "floor": 1,
+    "x": 380,
+    "y": 370,
+    "w": 120,
+    "h": 150,
+    "l": "Huurunit 20m2",
+    "c": "#c0a070",
+    "bg": "rgba(192,160,112,.13)",
+    "type": "",
+    "rot": "0",
+    "status": ""
+  },
+  {
+    "floor": 1,
+    "x": 595,
+    "y": 370,
+    "w": 120,
+    "h": 150,
+    "l": "Huurunit 20m2",
+    "c": "#c0a070",
+    "bg": "rgba(192,160,112,.13)",
+    "type": "",
+    "rot": "0",
+    "status": ""
+  },
+  {
+    "floor": 1,
+    "x": 200,
+    "y": 105,
+    "w": 27,
+    "h": 12,
+    "l": "Toegangsdeur",
+    "c": "#b0c0d0",
+    "bg": "rgba(176,192,208,.1)",
+    "type": "door",
+    "rot": "0",
+    "status": ""
+  },
+  {
+    "floor": 1,
+    "x": 285,
+    "y": 265,
+    "w": 27,
+    "h": 12,
+    "l": "Toegangsdeur",
+    "c": "#b0c0d0",
+    "bg": "rgba(176,192,208,.1)",
+    "type": "door",
+    "rot": "0",
+    "status": ""
+  },
+  {
+    "floor": 1,
+    "x": 525,
+    "y": 105,
+    "w": 27,
+    "h": 12,
+    "l": "Toegangsdeur",
+    "c": "#b0c0d0",
+    "bg": "rgba(176,192,208,.1)",
+    "type": "door",
+    "rot": "0",
+    "status": ""
+  },
+  {
+    "floor": 1,
+    "x": 435,
+    "y": 265,
+    "w": 27,
+    "h": 12,
+    "l": "Toegangsdeur",
+    "c": "#b0c0d0",
+    "bg": "rgba(176,192,208,.1)",
+    "type": "door",
+    "rot": "0",
+    "status": ""
+  },
+  {
+    "floor": 0,
+    "x": 580,
+    "y": 535,
+    "w": 134,
+    "h": 134,
+    "l": "Huurunit ~20m²",
+    "c": "#50b478",
+    "bg": "rgba(80,180,120,0.10)",
+    "type": "huurunit",
+    "rot": "0",
+    "status": "beschikbaar"
+  },
+  {
+    "floor": 0,
+    "x": 580,
+    "y": 400,
+    "w": 134,
+    "h": 134,
+    "l": "Huurunit ~20m²",
+    "c": "#50b478",
+    "bg": "rgba(80,180,120,0.10)",
+    "type": "huurunit",
+    "rot": "0",
+    "status": "bezet"
+  },
+  {
+    "floor": 0,
+    "x": 375,
+    "y": 535,
+    "w": 134,
+    "h": 134,
+    "l": "Huurunit ~20m²",
+    "c": "#50b478",
+    "bg": "rgba(80,180,120,0.20)",
+    "type": "huurunit",
+    "rot": "0",
+    "status": "beschikbaar"
+  }
+];
