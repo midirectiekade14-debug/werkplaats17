@@ -1157,7 +1157,10 @@
   function draw(){
     fp.innerHTML='';
     var TW=px(UW)*2+GAP+80, TH=px(UH)+70;
-    fp.style.cssText='position:relative;width:'+TW+'px;height:'+TH+'px;min-width:'+TW+'px;min-height:'+TH+'px;';
+    fp.style.width=TW+'px';fp.style.height=TH+'px';fp.style.minWidth=TW+'px';fp.style.minHeight=TH+'px';
+    // Stel canvas hoogte in zodat het zichtbaar blijft
+    var canvas=document.querySelector('.fp-canvas');
+    if(canvas)canvas.style.height=Math.min(TH+20,600)+'px';
 
     // grid
     var g=makeDiv({inset:'0',pointerEvents:'none',zIndex:'0',
@@ -1265,15 +1268,6 @@
     });
   }
 
-  window.fpShow=function(f){
-    floor=f;
-    document.querySelectorAll('.fp-tab').forEach(function(t,i){
-      t.classList.toggle('active',i===f);
-    });
-    draw();
-    renderPlacedObjects();
-  };
-
   // ── ZOOM & PAN ──
   var fpZoomLevel=1, panX=0, panY=0;
   var canvas=document.querySelector('.fp-canvas');
@@ -1348,7 +1342,18 @@
     if(ids.length<2) lastDist=0;
   });
 
+  window.fpShow=function(f){
+    floor=f;
+    document.querySelectorAll('.fp-tab').forEach(function(t,i){
+      t.classList.toggle('active',i===f);
+    });
+    draw();
+    applyTransform();
+    renderPlacedObjects();
+  };
+
   draw();
+  applyTransform();
   renderPlacedObjects();
 })();
 </script>
