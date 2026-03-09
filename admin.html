@@ -1090,6 +1090,9 @@ function ceInit(){
   ceLoadFromGitHub();
 }
 
+// Decode base64 van GitHub (bevat newlines die atob niet accepteert)
+function ghDecode(b64){return decodeURIComponent(escape(atob(b64.replace(/\s/g,''))));}
+
 async function ceLoadFromGitHub(){
   var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats17';
   var token=localStorage.getItem('w17-gh-token');
@@ -1099,8 +1102,7 @@ async function ceLoadFromGitHub(){
       var r=await fetch('https://api.github.com/repos/'+repo+'/contents/content.js',{headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github.v3+json'}});
       if(r.ok){
         var data=await r.json();
-        var raw=atob(data.content);
-        // Parse CONTENT object uit het bestand
+        var raw=ghDecode(data.content);
         var fn=new Function(raw+'\nreturn CONTENT;');
         ceData=fn();
         ceBuild();
@@ -1109,7 +1111,7 @@ async function ceLoadFromGitHub(){
       }
     }
   }catch(e){console.warn('GitHub content laden mislukt:',e);}
-  // Fallback: probeer lokaal (als content.js geladen is)
+  // Fallback: lokaal geladen content.js
   if(typeof CONTENT!=='undefined'){ceData=JSON.parse(JSON.stringify(CONTENT));ceBuild();document.getElementById('ce-status').textContent='Content geladen (lokaal)';}
   else{document.getElementById('ce-status').textContent='Kon content niet laden';toast('Content laden mislukt','err');}
 }
@@ -1338,7 +1340,7 @@ async function pmLoadFromGitHub(){
       var r=await fetch('https://api.github.com/repos/'+repo+'/contents/photos.js',{headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github.v3+json'}});
       if(r.ok){
         var data=await r.json();
-        var raw=atob(data.content);
+        var raw=ghDecode(data.content);
         var fn=new Function(raw+'\nreturn PHOTOS;');
         pmPhotos=fn();
         if(!pmPhotos.strip)pmPhotos.strip=[null,null,null];
