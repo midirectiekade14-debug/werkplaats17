@@ -1259,7 +1259,7 @@
         d.innerHTML='<div style="width:100%;height:100%;position:relative;overflow:hidden;'+(o.rot&&o.rot!=='0'?'transform:rotate('+o.rot+'deg)':'')+'">'+ inner+'</div>';
       }else{
         var bc=ss?ss.border:o.c, bbg=ss?ss.bg:(o.bg||'transparent'), shadow=ss?';box-shadow:'+ss.glow:'';
-        d.innerHTML='<div '+tooltip+' style="width:100%;height:100%;border:1.5px solid '+bc+';background:'+bbg+';display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;cursor:'+(tooltip?'help':'default')+shadow+'"><div style="font-size:7px;letter-spacing:.05em;text-align:center;padding:1px;line-height:1.3;text-transform:uppercase;color:'+bc+'">'+o.l+'</div><div style="font-size:5.5px;color:rgba(255,255,255,.28)">'+Math.round(o.w/S/10)+'×'+Math.round(o.h/S/10)+'cm</div></div>';
+        d.innerHTML='<div '+tooltip+' style="width:100%;height:100%;border:1.5px solid '+bc+';background:'+bbg+';display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;cursor:'+(tooltip?'help':'default')+shadow+'"><div style="font-size:7px;letter-spacing:.05em;text-align:center;padding:1px;line-height:1.3;text-transform:uppercase;color:'+bc+'">'+o.l+'</div></div><div style="position:absolute;bottom:-10px;left:0;right:0;font-size:5.5px;color:rgba(255,255,255,.35);text-align:center;white-space:nowrap;pointer-events:none">'+Math.round(o.w/S/10)+'×'+Math.round(o.h/S/10)+'cm</div>';
       }
       fp.appendChild(d);
     });

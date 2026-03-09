@@ -49,8 +49,10 @@ body{background:var(--bg);color:var(--cream);font-family:'Courier New',monospace
 .sb-s{overflow-y:auto;flex:1;padding:5px}
 .sb-s::-webkit-scrollbar{width:3px}.sb-s::-webkit-scrollbar-thumb{background:var(--border)}
 .cat{font-size:7px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);padding:5px 3px 3px}
-.item{display:flex;align-items:center;gap:6px;padding:4px 6px;margin-bottom:2px;border:1px solid var(--border);background:var(--bg);cursor:grab;font-size:9px;color:var(--cream);user-select:none}
+.item{display:flex;align-items:center;gap:6px;padding:4px 6px;margin-bottom:2px;border:1px solid var(--border);background:var(--bg);cursor:grab;font-size:9px;color:var(--cream);user-select:none;position:relative}
 .item:hover{border-color:var(--amber)}
+.item .item-del{display:none;position:absolute;right:2px;top:2px;width:12px;height:12px;border:none;background:#a03030;color:#fff;font-size:7px;cursor:pointer;align-items:center;justify-content:center;z-index:2;padding:0;line-height:1}
+.item:hover .item-del{display:flex}
 .sw{width:7px;height:7px;border-radius:1px;flex-shrink:0}
 /* canvas */
 .cv{flex:1;overflow:hidden;background:var(--bg);cursor:grab;touch-action:none;user-select:none;position:relative}
@@ -62,7 +64,7 @@ body{background:var(--bg);color:var(--cream);font-family:'Courier New',monospace
 .pl.sel .ib{border-color:#fff!important;box-shadow:0 0 0 1px rgba(255,255,255,.3)}
 .ib{width:100%;height:100%;border:1.5px solid;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
 .il{font-size:7px;letter-spacing:.05em;text-align:center;padding:1px;line-height:1.3;text-transform:uppercase;pointer-events:none}
-.id{font-size:5.5px;color:rgba(255,255,255,.28);pointer-events:none}
+.id{position:absolute;bottom:-10px;left:0;right:0;font-size:5.5px;color:rgba(255,255,255,.35);pointer-events:none;text-align:center;white-space:nowrap}
 .db,.rb,.cpb{position:absolute;width:13px;height:13px;border:none;cursor:pointer;display:none;align-items:center;justify-content:center;font-size:8px;z-index:20;top:-14px}
 .pl.sel .db,.pl.sel .rb{display:flex}
 .pl:hover .cpb{display:flex}
@@ -203,6 +205,10 @@ body{background:var(--bg);color:var(--cream);font-family:'Courier New',monospace
       <input type="number" id="addB" placeholder="B cm" min="1">
       <span style="color:var(--muted);font-size:8px">×</span>
       <input type="number" id="addD" placeholder="D cm" min="1">
+    </div>
+    <div class="sb-row">
+      <span style="color:var(--muted);font-size:7px">Kleur</span>
+      <input type="color" id="addC" value="#c0a070" style="width:24px;height:18px;padding:0;border:1px solid var(--border);background:var(--bg);cursor:pointer;flex-shrink:0">
     </div>
     <button id="addBtn">Toevoegen</button>
   </div>
@@ -500,12 +506,19 @@ cv.addEventListener('touchend',function(e){
 // ╔════════════════════════════════════════════╗
 // ║  DRAG & DROP uit sidebar                   ║
 // ╚════════════════════════════════════════════╝
-document.querySelectorAll('.item').forEach(item=>{
+function setupItem(item){
   item.addEventListener('dragstart',e=>{
     drag={w:+item.dataset.w,h:+item.dataset.h,l:item.dataset.l,c:item.dataset.c,bg:item.dataset.bg,type:item.dataset.type||''};
     e.dataTransfer.effectAllowed='copy';
   });
-});
+  // Delete knop
+  if(!item.querySelector('.item-del')){
+    var db=document.createElement('button');db.className='item-del';db.textContent='✕';
+    db.addEventListener('click',function(e){e.stopPropagation();e.preventDefault();item.remove();});
+    item.appendChild(db);
+  }
+}
+document.querySelectorAll('.item').forEach(setupItem);
 cv.addEventListener('dragover',e=>e.preventDefault());
 cv.addEventListener('drop',e=>{
   e.preventDefault();if(!drag)return;
@@ -533,8 +546,8 @@ function place(x,y,data){
     d.innerHTML=`<button class="db">✕</button><button class="cpb">⧉</button><button class="rb">↻</button>
       <div class="ib" style="border-color:${data.c};background:${data.bg}">
         <div class="il" style="color:${data.c}">${data.l}</div>
-        <div class="id">${Math.round(data.w/S/10)}×${Math.round(data.h/S/10)}cm</div>
-      </div>`;
+      </div>
+      <div class="id">${Math.round(data.w/S/10)}×${Math.round(data.h/S/10)}cm</div>`;
   }
   d.dataset.c=data.c;d.dataset.bg=data.bg||'';d.dataset.type=data.type||'';d.dataset.l=data.l;d.dataset.rot='0';d.dataset.status=data.status||'';
   // Status toggle button (huurunits)
@@ -729,12 +742,15 @@ document.addEventListener('keydown',function(e){
 document.getElementById('addBtn').addEventListener('click',function(){
   var n=document.getElementById('addN').value.trim(),b=parseInt(document.getElementById('addB').value),dd=parseInt(document.getElementById('addD').value);
   if(!n||!b||!dd)return;
-  var wpx=Math.max(3,Math.round(b*10*S)),hpx=Math.max(3,Math.round(dd*10*S)),col='#c0a070',bg='rgba(192,160,112,.13)';
+  var col=document.getElementById('addC').value||'#c0a070';
+  var r=parseInt(col.substr(1,2),16),g=parseInt(col.substr(3,2),16),bl=parseInt(col.substr(5,2),16);
+  var bg='rgba('+r+','+g+','+bl+',.13)';
+  var wpx=Math.max(3,Math.round(b*10*S)),hpx=Math.max(3,Math.round(dd*10*S));
   var el=document.createElement('div');el.className='item';el.draggable=true;
   el.dataset.w=wpx;el.dataset.h=hpx;el.dataset.l=n;el.dataset.c=col;el.dataset.bg=bg;el.dataset.type='';
   el.innerHTML=`<div class="sw" style="background:${col}"></div>${n}`;
   document.querySelector('.sb-s').appendChild(el);
-  el.addEventListener('dragstart',e=>{drag={w:+el.dataset.w,h:+el.dataset.h,l:el.dataset.l,c:el.dataset.c,bg:el.dataset.bg,type:''};e.dataTransfer.effectAllowed='copy';});
+  setupItem(el);
   document.getElementById('addN').value='';document.getElementById('addB').value='';document.getElementById('addD').value='';
 });
 
