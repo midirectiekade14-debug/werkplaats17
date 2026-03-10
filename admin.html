@@ -930,10 +930,11 @@ function generateJS(objs){
 }
 
 // ── GitHub publish helper (generiek) ──
+var _pendingPublish=null;
 async function publishFile(filepath, content, commitMsg, btn){
   var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats17';
   var token=localStorage.getItem('w17-gh-token');
-  if(!token){showTokenModal();return false;}
+  if(!token){_pendingPublish=function(){return publishFile(filepath,content,commitMsg,btn);};showTokenModal();return false;}
   var origText=btn?btn.textContent:'';
   if(btn){btn.textContent='Publiceren...';btn.disabled=true;}
   try{
@@ -1006,8 +1007,8 @@ document.getElementById('token-save').addEventListener('click',function(){
   localStorage.setItem('w17-gh-token',token);
   document.getElementById('token-modal').classList.remove('show');
   toast('Token opgeslagen','ok');
-  // Nu meteen publiceren
-  publishToGitHub();
+  // Retry de publish die om het token vroeg
+  if(_pendingPublish){var fn=_pendingPublish;_pendingPublish=null;fn();}
 });
 document.getElementById('token-modal').addEventListener('click',e=>{if(e.target.id==='token-modal')e.target.classList.remove('show');});
 
