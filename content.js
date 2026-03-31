@@ -10,7 +10,7 @@ const CONTENT = {
   "ogDescription": "Multifunctionele bedrijfsruimte voor vakmensen en kleine studio's. Bedrijfshal, kantoren, machines. Naast A20, Maasland.",
   "eyebrow": "Beschikbaar · Maasland",
   "tagline": "Multifunctionele bedrijfsruimte voor professionele makers",
-  "locationText": "Oud Camp 3b · Maasland · Naast A20 · 5 min Den Haag / Rotterdam",
+  "locationText": "Oud Camp 3b · Maasland · Naast A20 · 15 min Den Haag / Rotterdam",
   "introText": "Werkplaats17 is een <strong>multifunctionele bedrijfsruimte van 904 m²</strong> voor zelfstandige vakmensen en kleine studio's. Bedrijfshal van 719 m², plus 185 m² kantoorruimte.<br><br>Drie verdiepingen, vloerverwarming, airco, LED-verlichting en glasvezel. Parkeren op eigen terrein.",
   "accessItems": [
     "904 m² · hal 719 m² · kantoor 185 m²",
