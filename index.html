@@ -170,7 +170,7 @@
   /* ── HERO IMAGE ── */
   .hero-image {
     width: 100%;
-    aspect-ratio: 2 / 1;
+    aspect-ratio: 3 / 1;
     background: var(--surface);
     position: relative;
     overflow: hidden;
@@ -691,32 +691,46 @@
 
   <!-- HERO -->
   <div class="hero-image">
-    <svg viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    <svg viewBox="0 60 1200 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
   <defs>
     <linearGradient id="heroFloorG" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#211e18"/>
+      <stop offset="0%" stop-color="#231f19"/>
       <stop offset="100%" stop-color="#161412"/>
     </linearGradient>
     <linearGradient id="heroWallG" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1e1b17"/>
+      <stop offset="0%" stop-color="#201c16"/>
+      <stop offset="60%" stop-color="#1c1915"/>
       <stop offset="100%" stop-color="#1a1714"/>
     </linearGradient>
     <linearGradient id="heroLightG" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#E09A2F" stop-opacity="0.18"/>
-      <stop offset="100%" stop-color="#E09A2F" stop-opacity="0.01"/>
+      <stop offset="0%" stop-color="#E09A2F" stop-opacity="0.22"/>
+      <stop offset="40%" stop-color="#E09A2F" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#E09A2F" stop-opacity="0"/>
     </linearGradient>
     <linearGradient id="heroWindowG" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#E09A2F" stop-opacity="0.06"/>
+      <stop offset="0%" stop-color="#E09A2F" stop-opacity="0.08"/>
       <stop offset="100%" stop-color="#E09A2F" stop-opacity="0.02"/>
     </linearGradient>
-    <radialGradient id="heroSpotG" cx="50%" cy="30%" r="60%">
-      <stop offset="0%" stop-color="#E09A2F" stop-opacity="0.07"/>
+    <radialGradient id="heroSpotG" cx="50%" cy="35%" r="55%">
+      <stop offset="0%" stop-color="#E09A2F" stop-opacity="0.06"/>
       <stop offset="100%" stop-color="#161412" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="dustG" x1="0" y1="0" x2="0" y2="1">
+    <!-- Floor reflection gradient -->
+    <linearGradient id="heroFloorReflG" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="#E09A2F" stop-opacity="0.04"/>
       <stop offset="100%" stop-color="#E09A2F" stop-opacity="0"/>
     </linearGradient>
+    <!-- Window daylight glow -->
+    <radialGradient id="windowGlowG" cx="50%" cy="50%" r="80%">
+      <stop offset="0%" stop-color="#c4b896" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#c4b896" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Concrete wall noise texture -->
+    <filter id="wallNoise" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" result="noise"/>
+      <feColorMatrix type="saturate" values="0" in="noise" result="grey"/>
+      <feBlend in="SourceGraphic" in2="grey" mode="multiply"/>
+    </filter>
   </defs>
 
   <!-- Background -->
@@ -725,235 +739,344 @@
 
   <!-- ══════════ INTERIOR WORKSPACE ══════════ -->
 
-  <!-- Back wall -->
+  <!-- Back wall with subtle texture -->
   <rect x="0" y="0" width="1200" height="340" fill="url(#heroWallG)"/>
+  <!-- Concrete block lines (horizontal) -->
   <line x1="0" y1="60" x2="1200" y2="60" stroke="#252118" stroke-width="0.4" opacity="0.5"/>
   <line x1="0" y1="120" x2="1200" y2="120" stroke="#252118" stroke-width="0.3" opacity="0.4"/>
   <line x1="0" y1="180" x2="1200" y2="180" stroke="#252118" stroke-width="0.3" opacity="0.3"/>
   <line x1="0" y1="240" x2="1200" y2="240" stroke="#252118" stroke-width="0.25" opacity="0.25"/>
+  <!-- Vertical mortar joints (staggered) -->
+  <line x1="200" y1="60" x2="200" y2="120" stroke="#252118" stroke-width="0.2" opacity="0.2"/>
+  <line x1="500" y1="60" x2="500" y2="120" stroke="#252118" stroke-width="0.2" opacity="0.2"/>
+  <line x1="900" y1="60" x2="900" y2="120" stroke="#252118" stroke-width="0.2" opacity="0.2"/>
+  <line x1="350" y1="120" x2="350" y2="180" stroke="#252118" stroke-width="0.2" opacity="0.15"/>
+  <line x1="700" y1="120" x2="700" y2="180" stroke="#252118" stroke-width="0.2" opacity="0.15"/>
+  <line x1="1050" y1="120" x2="1050" y2="180" stroke="#252118" stroke-width="0.2" opacity="0.15"/>
 
-  <!-- Steel beams -->
-  <rect x="0" y="24" width="1200" height="5" fill="#2e2920" opacity="0.8"/>
-  <rect x="150" y="29" width="4" height="36" fill="#2e2920" opacity="0.5"/>
-  <rect x="400" y="29" width="4" height="36" fill="#2e2920" opacity="0.5"/>
-  <rect x="600" y="29" width="4" height="36" fill="#2e2920" opacity="0.5"/>
-  <rect x="800" y="29" width="4" height="36" fill="#2e2920" opacity="0.5"/>
-  <rect x="1050" y="29" width="4" height="36" fill="#2e2920" opacity="0.5"/>
-
-  <!-- Hanging lights with warm cones -->
-  <line x1="250" y1="29" x2="250" y2="78" stroke="#3a3425" stroke-width="1"/>
-  <circle cx="250" cy="82" r="6" fill="none" stroke="#E09A2F" stroke-width="0.8" opacity="0.6"/>
-  <circle cx="250" cy="82" r="2" fill="#E09A2F" opacity="0.4"/>
-  <polygon points="232,86 268,86 290,200 210,200" fill="url(#heroLightG)" opacity="0.35"/>
-
-  <line x1="600" y1="29" x2="600" y2="78" stroke="#3a3425" stroke-width="1"/>
-  <circle cx="600" cy="82" r="6" fill="none" stroke="#E09A2F" stroke-width="0.8" opacity="0.6"/>
-  <circle cx="600" cy="82" r="2" fill="#E09A2F" opacity="0.4"/>
-  <polygon points="582,86 618,86 640,200 560,200" fill="url(#heroLightG)" opacity="0.35"/>
-
-  <line x1="950" y1="29" x2="950" y2="78" stroke="#3a3425" stroke-width="1"/>
-  <circle cx="950" cy="82" r="6" fill="none" stroke="#E09A2F" stroke-width="0.8" opacity="0.6"/>
-  <circle cx="950" cy="82" r="2" fill="#E09A2F" opacity="0.4"/>
-  <polygon points="932,86 968,86 990,200 910,200" fill="url(#heroLightG)" opacity="0.35"/>
-
-  <!-- High windows -->
-  <rect x="80" y="80" width="120" height="80" fill="url(#heroWindowG)" stroke="#3a3425" stroke-width="0.6"/>
-  <line x1="140" y1="80" x2="140" y2="160" stroke="#F0EAE0" stroke-width="0.6" stroke-opacity="0.2"/>
-  <line x1="80" y1="120" x2="200" y2="120" stroke="#F0EAE0" stroke-width="0.6" stroke-opacity="0.2"/>
-
-  <rect x="440" y="80" width="120" height="80" fill="url(#heroWindowG)" stroke="#3a3425" stroke-width="0.6"/>
-  <line x1="500" y1="80" x2="500" y2="160" stroke="#F0EAE0" stroke-width="0.6" stroke-opacity="0.2"/>
-  <line x1="440" y1="120" x2="560" y2="120" stroke="#F0EAE0" stroke-width="0.6" stroke-opacity="0.2"/>
-
-  <rect x="750" y="80" width="120" height="80" fill="url(#heroWindowG)" stroke="#3a3425" stroke-width="0.6"/>
-  <line x1="810" y1="80" x2="810" y2="160" stroke="#F0EAE0" stroke-width="0.6" stroke-opacity="0.2"/>
-  <line x1="750" y1="120" x2="870" y2="120" stroke="#F0EAE0" stroke-width="0.6" stroke-opacity="0.2"/>
-
-  <rect x="1040" y="80" width="120" height="80" fill="url(#heroWindowG)" stroke="#3a3425" stroke-width="0.6"/>
-  <line x1="1100" y1="80" x2="1100" y2="160" stroke="#F0EAE0" stroke-width="0.6" stroke-opacity="0.2"/>
-  <line x1="1040" y1="120" x2="1160" y2="120" stroke="#F0EAE0" stroke-width="0.6" stroke-opacity="0.2"/>
-
-  <!-- Subtle text on back wall -->
-  <text x="600" y="230" font-family="'Bebas Neue', sans-serif" font-size="48" fill="#252118" text-anchor="middle" letter-spacing="8" opacity="0.35">WERKPLAATS17</text>
-
-  <!-- Floor -->
-  <rect x="0" y="340" width="1200" height="260" fill="url(#heroFloorG)"/>
-  <line x1="0" y1="340" x2="1200" y2="340" stroke="#3a3425" stroke-width="1"/>
-  <line x1="0" y1="380" x2="1200" y2="380" stroke="#252118" stroke-width="0.3" opacity="0.35"/>
-  <line x1="0" y1="420" x2="1200" y2="420" stroke="#252118" stroke-width="0.25" opacity="0.25"/>
-  <line x1="0" y1="460" x2="1200" y2="460" stroke="#252118" stroke-width="0.2" opacity="0.2"/>
-  <line x1="0" y1="500" x2="1200" y2="500" stroke="#252118" stroke-width="0.15" opacity="0.15"/>
-
-  <!-- Dust extraction pipes (ceiling) -->
-  <line x1="120" y1="65" x2="120" y2="280" stroke="#2e2920" stroke-width="3" opacity="0.4"/>
-  <line x1="420" y1="65" x2="420" y2="260" stroke="#2e2920" stroke-width="3" opacity="0.4"/>
-  <line x1="970" y1="65" x2="970" y2="240" stroke="#2e2920" stroke-width="3" opacity="0.4"/>
-  <line x1="120" y1="65" x2="970" y2="65" stroke="#2e2920" stroke-width="3" opacity="0.4"/>
-
-  <!-- Overhead door (left wall) -->
-  <rect x="0" y="180" width="30" height="160" fill="rgba(224,154,47,0.06)" stroke="#3a3425" stroke-width="0.6"/>
-  <line x1="0" y1="200" x2="30" y2="200" stroke="#E09A2F" stroke-width="0.3" stroke-opacity="0.2"/>
-  <line x1="0" y1="220" x2="30" y2="220" stroke="#E09A2F" stroke-width="0.3" stroke-opacity="0.2"/>
-  <line x1="0" y1="240" x2="30" y2="240" stroke="#E09A2F" stroke-width="0.3" stroke-opacity="0.2"/>
-  <line x1="0" y1="260" x2="30" y2="260" stroke="#E09A2F" stroke-width="0.3" stroke-opacity="0.2"/>
-  <line x1="0" y1="280" x2="30" y2="280" stroke="#E09A2F" stroke-width="0.3" stroke-opacity="0.2"/>
-  <line x1="0" y1="300" x2="30" y2="300" stroke="#E09A2F" stroke-width="0.3" stroke-opacity="0.2"/>
-  <line x1="0" y1="320" x2="30" y2="320" stroke="#E09A2F" stroke-width="0.3" stroke-opacity="0.2"/>
-
-  <!-- ══════════ FORMAATZAAG (links) ══════════ -->
-  <!-- Table saw - large prominent machine -->
-  <rect x="60" y="280" width="200" height="100" fill="#1a1714" stroke="#3a3425" stroke-width="0.8" rx="2"/>
-  <!-- Saw table surface -->
-  <rect x="68" y="286" width="184" height="56" fill="none" stroke="#E09A2F" stroke-width="0.5" stroke-opacity="0.35" rx="1"/>
-  <!-- Fence rail -->
-  <rect x="68" y="290" width="184" height="3" fill="#E09A2F" fill-opacity="0.12"/>
-  <!-- Saw blade slot -->
-  <line x1="160" y1="286" x2="160" y2="342" stroke="#E09A2F" stroke-width="1" stroke-opacity="0.3"/>
-  <!-- Outfeed extension -->
-  <rect x="260" y="296" width="50" height="40" fill="#1a1714" stroke="#3a3425" stroke-width="0.5" rx="1"/>
-  <!-- Fence handle -->
-  <rect x="245" y="288" width="6" height="10" fill="#E09A2F" fill-opacity="0.2" rx="1"/>
-  <!-- Dust chute -->
-  <rect x="148" y="344" width="24" height="14" fill="none" stroke="#2e2920" stroke-width="0.5"/>
-  <line x1="160" y1="358" x2="120" y2="280" stroke="#2e2920" stroke-width="2" opacity="0.3"/>
-
-  <!-- Person 1: vakman aan formaatzaag, duwt plaat door zaag -->
-  <g opacity="0.7">
-    <!-- Legs -->
-    <line x1="180" y1="310" x2="174" y2="350" stroke="#F0EAE0" stroke-width="2.5" stroke-linecap="round"/>
-    <line x1="180" y1="310" x2="188" y2="348" stroke="#F0EAE0" stroke-width="2.5" stroke-linecap="round"/>
-    <!-- Torso -->
-    <line x1="180" y1="310" x2="178" y2="272" stroke="#F0EAE0" stroke-width="3" stroke-linecap="round"/>
-    <!-- Head -->
-    <circle cx="178" cy="262" r="8" fill="none" stroke="#F0EAE0" stroke-width="1.5"/>
-    <!-- Safety glasses -->
-    <line x1="172" y1="260" x2="184" y2="260" stroke="#E09A2F" stroke-width="1" stroke-opacity="0.5"/>
-    <!-- Arms pushing sheet material through saw -->
-    <line x1="178" y1="280" x2="158" y2="290" stroke="#F0EAE0" stroke-width="2" stroke-linecap="round"/>
-    <line x1="158" y1="290" x2="150" y2="288" stroke="#F0EAE0" stroke-width="2" stroke-linecap="round"/>
-    <line x1="178" y1="280" x2="195" y2="288" stroke="#F0EAE0" stroke-width="2" stroke-linecap="round"/>
-    <line x1="195" y1="288" x2="200" y2="286" stroke="#F0EAE0" stroke-width="2" stroke-linecap="round"/>
+  <!-- Steel I-beams (more realistic) -->
+  <rect x="0" y="22" width="1200" height="8" fill="#2a2518" opacity="0.85"/>
+  <rect x="0" y="24" width="1200" height="4" fill="#322c20" opacity="0.6"/>
+  <!-- Beam supports (I-beam profile) -->
+  <g opacity="0.55">
+    <rect x="148" y="30" width="8" height="34" fill="#2a2518"/>
+    <rect x="146" y="30" width="12" height="2" fill="#2a2518"/>
+    <rect x="398" y="30" width="8" height="34" fill="#2a2518"/>
+    <rect x="396" y="30" width="12" height="2" fill="#2a2518"/>
+    <rect x="598" y="30" width="8" height="34" fill="#2a2518"/>
+    <rect x="596" y="30" width="12" height="2" fill="#2a2518"/>
+    <rect x="798" y="30" width="8" height="34" fill="#2a2518"/>
+    <rect x="796" y="30" width="12" height="2" fill="#2a2518"/>
+    <rect x="1048" y="30" width="8" height="34" fill="#2a2518"/>
+    <rect x="1046" y="30" width="12" height="2" fill="#2a2518"/>
   </g>
 
-  <!-- Sheet material being cut (MDF/multiplex plaat) -->
-  <rect x="100" y="285" width="120" height="3" fill="#E09A2F" fill-opacity="0.25" rx="0.5"/>
-  <rect x="100" y="285" width="60" height="3" fill="#E09A2F" fill-opacity="0.15" rx="0.5"/>
+  <!-- Hanging industrial lights with warm cones -->
+  <g>
+    <line x1="250" y1="30" x2="250" y2="72" stroke="#3a3425" stroke-width="1.2"/>
+    <rect x="240" y="72" width="20" height="8" fill="#2a2518" rx="2"/>
+    <ellipse cx="250" cy="83" rx="10" ry="4" fill="none" stroke="#E09A2F" stroke-width="0.6" opacity="0.5"/>
+    <circle cx="250" cy="80" r="2.5" fill="#E09A2F" opacity="0.5"/>
+    <circle cx="250" cy="80" r="1" fill="#F5D090" opacity="0.8"/>
+    <polygon points="228,84 272,84 300,210 200,210" fill="url(#heroLightG)" opacity="0.4"/>
+  </g>
+  <g>
+    <line x1="600" y1="30" x2="600" y2="72" stroke="#3a3425" stroke-width="1.2"/>
+    <rect x="590" y="72" width="20" height="8" fill="#2a2518" rx="2"/>
+    <ellipse cx="600" cy="83" rx="10" ry="4" fill="none" stroke="#E09A2F" stroke-width="0.6" opacity="0.5"/>
+    <circle cx="600" cy="80" r="2.5" fill="#E09A2F" opacity="0.5"/>
+    <circle cx="600" cy="80" r="1" fill="#F5D090" opacity="0.8"/>
+    <polygon points="578,84 622,84 650,210 550,210" fill="url(#heroLightG)" opacity="0.4"/>
+  </g>
+  <g>
+    <line x1="950" y1="30" x2="950" y2="72" stroke="#3a3425" stroke-width="1.2"/>
+    <rect x="940" y="72" width="20" height="8" fill="#2a2518" rx="2"/>
+    <ellipse cx="950" cy="83" rx="10" ry="4" fill="none" stroke="#E09A2F" stroke-width="0.6" opacity="0.5"/>
+    <circle cx="950" cy="80" r="2.5" fill="#E09A2F" opacity="0.5"/>
+    <circle cx="950" cy="80" r="1" fill="#F5D090" opacity="0.8"/>
+    <polygon points="928,84 972,84 1000,210 900,210" fill="url(#heroLightG)" opacity="0.4"/>
+  </g>
+
+  <!-- High windows with daylight glow -->
+  <g>
+    <rect x="80" y="80" width="120" height="80" fill="url(#heroWindowG)" stroke="#3a3425" stroke-width="0.8"/>
+    <rect x="80" y="80" width="120" height="80" fill="url(#windowGlowG)"/>
+    <line x1="140" y1="80" x2="140" y2="160" stroke="#4a4235" stroke-width="1.2"/>
+    <line x1="80" y1="120" x2="200" y2="120" stroke="#4a4235" stroke-width="1.2"/>
+    <!-- Window sill -->
+    <rect x="76" y="158" width="128" height="4" fill="#2a2518" opacity="0.6"/>
+    <!-- Light shaft from window -->
+    <polygon points="80,160 200,160 260,340 20,340" fill="#E09A2F" fill-opacity="0.012"/>
+  </g>
+  <g>
+    <rect x="440" y="80" width="120" height="80" fill="url(#heroWindowG)" stroke="#3a3425" stroke-width="0.8"/>
+    <rect x="440" y="80" width="120" height="80" fill="url(#windowGlowG)"/>
+    <line x1="500" y1="80" x2="500" y2="160" stroke="#4a4235" stroke-width="1.2"/>
+    <line x1="440" y1="120" x2="560" y2="120" stroke="#4a4235" stroke-width="1.2"/>
+    <rect x="436" y="158" width="128" height="4" fill="#2a2518" opacity="0.6"/>
+    <polygon points="440,160 560,160 620,340 380,340" fill="#E09A2F" fill-opacity="0.012"/>
+  </g>
+  <g>
+    <rect x="750" y="80" width="120" height="80" fill="url(#heroWindowG)" stroke="#3a3425" stroke-width="0.8"/>
+    <rect x="750" y="80" width="120" height="80" fill="url(#windowGlowG)"/>
+    <line x1="810" y1="80" x2="810" y2="160" stroke="#4a4235" stroke-width="1.2"/>
+    <line x1="750" y1="120" x2="870" y2="120" stroke="#4a4235" stroke-width="1.2"/>
+    <rect x="746" y="158" width="128" height="4" fill="#2a2518" opacity="0.6"/>
+  </g>
+  <g>
+    <rect x="1040" y="80" width="120" height="80" fill="url(#heroWindowG)" stroke="#3a3425" stroke-width="0.8"/>
+    <rect x="1040" y="80" width="120" height="80" fill="url(#windowGlowG)"/>
+    <line x1="1100" y1="80" x2="1100" y2="160" stroke="#4a4235" stroke-width="1.2"/>
+    <line x1="1040" y1="120" x2="1160" y2="120" stroke="#4a4235" stroke-width="1.2"/>
+    <rect x="1036" y="158" width="128" height="4" fill="#2a2518" opacity="0.6"/>
+  </g>
+
+  <!-- Subtle text on back wall (stenciled) -->
+  <text x="600" y="230" font-family="'Bebas Neue', sans-serif" font-size="48" fill="#252118" text-anchor="middle" letter-spacing="10" opacity="0.25">WERKPLAATS17</text>
+
+  <!-- Floor — polished concrete with reflections -->
+  <rect x="0" y="340" width="1200" height="260" fill="url(#heroFloorG)"/>
+  <line x1="0" y1="340" x2="1200" y2="340" stroke="#3a3425" stroke-width="1.2"/>
+  <!-- Floor joint lines (concrete slabs) -->
+  <line x1="0" y1="380" x2="1200" y2="380" stroke="#252118" stroke-width="0.3" opacity="0.3"/>
+  <line x1="0" y1="420" x2="1200" y2="420" stroke="#252118" stroke-width="0.2" opacity="0.2"/>
+  <line x1="0" y1="460" x2="1200" y2="460" stroke="#252118" stroke-width="0.15" opacity="0.15"/>
+  <line x1="300" y1="340" x2="300" y2="600" stroke="#252118" stroke-width="0.2" opacity="0.15"/>
+  <line x1="600" y1="340" x2="600" y2="600" stroke="#252118" stroke-width="0.2" opacity="0.12"/>
+  <line x1="900" y1="340" x2="900" y2="600" stroke="#252118" stroke-width="0.2" opacity="0.1"/>
+  <!-- Warm light pools on floor -->
+  <ellipse cx="250" cy="370" rx="60" ry="20" fill="#E09A2F" fill-opacity="0.03"/>
+  <ellipse cx="600" cy="370" rx="60" ry="20" fill="#E09A2F" fill-opacity="0.03"/>
+  <ellipse cx="950" cy="370" rx="60" ry="20" fill="#E09A2F" fill-opacity="0.03"/>
+
+  <!-- Dust extraction pipes (ceiling) — thicker, more industrial -->
+  <line x1="120" y1="65" x2="120" y2="280" stroke="#2e2920" stroke-width="4" opacity="0.45"/>
+  <line x1="420" y1="65" x2="420" y2="260" stroke="#2e2920" stroke-width="4" opacity="0.45"/>
+  <line x1="970" y1="65" x2="970" y2="240" stroke="#2e2920" stroke-width="4" opacity="0.45"/>
+  <line x1="120" y1="65" x2="970" y2="65" stroke="#2e2920" stroke-width="4" opacity="0.45"/>
+  <!-- Pipe brackets -->
+  <rect x="116" y="130" width="8" height="3" fill="#3a3425" opacity="0.4"/>
+  <rect x="416" y="140" width="8" height="3" fill="#3a3425" opacity="0.4"/>
+  <rect x="966" y="120" width="8" height="3" fill="#3a3425" opacity="0.4"/>
+
+  <!-- Overhead door (left wall) — sectional door -->
+  <rect x="0" y="180" width="35" height="160" fill="rgba(30,27,23,0.8)" stroke="#3a3425" stroke-width="0.8"/>
+  <line x1="0" y1="200" x2="35" y2="200" stroke="#3a3425" stroke-width="0.5"/>
+  <line x1="0" y1="220" x2="35" y2="220" stroke="#3a3425" stroke-width="0.5"/>
+  <line x1="0" y1="240" x2="35" y2="240" stroke="#3a3425" stroke-width="0.5"/>
+  <line x1="0" y1="260" x2="35" y2="260" stroke="#3a3425" stroke-width="0.5"/>
+  <line x1="0" y1="280" x2="35" y2="280" stroke="#3a3425" stroke-width="0.5"/>
+  <line x1="0" y1="300" x2="35" y2="300" stroke="#3a3425" stroke-width="0.5"/>
+  <line x1="0" y1="320" x2="35" y2="320" stroke="#3a3425" stroke-width="0.5"/>
+  <!-- Door handle -->
+  <rect x="28" y="268" width="4" height="12" fill="#4a4235" rx="1"/>
+
+  <!-- ══════════ FORMAATZAAG (links) ══════════ -->
+  <!-- Table saw — Altendorf style panel saw -->
+  <rect x="60" y="280" width="200" height="100" fill="#1c1916" stroke="#3a3425" stroke-width="1" rx="3"/>
+  <!-- Machine body shadow -->
+  <rect x="62" y="340" width="196" height="38" fill="#151310" opacity="0.6" rx="2"/>
+  <!-- Saw table surface (cast iron, slightly reflective) -->
+  <rect x="68" y="286" width="184" height="52" fill="#1e1b17" stroke="#4a4235" stroke-width="0.6" rx="1"/>
+  <!-- Miter slots -->
+  <line x1="100" y1="286" x2="100" y2="338" stroke="#2a2518" stroke-width="1" opacity="0.4"/>
+  <line x1="220" y1="286" x2="220" y2="338" stroke="#2a2518" stroke-width="1" opacity="0.4"/>
+  <!-- Fence rail -->
+  <rect x="68" y="290" width="184" height="4" fill="#2a2518"/>
+  <rect x="68" y="291" width="184" height="1.5" fill="#E09A2F" fill-opacity="0.08"/>
+  <!-- Saw blade slot -->
+  <line x1="160" y1="286" x2="160" y2="338" stroke="#E09A2F" stroke-width="1.2" stroke-opacity="0.25"/>
+  <!-- Blade guard (overhead) -->
+  <rect x="152" y="272" width="16" height="14" fill="#1c1916" stroke="#3a3425" stroke-width="0.5" rx="1"/>
+  <line x1="160" y1="272" x2="160" y2="260" stroke="#3a3425" stroke-width="1"/>
+  <!-- Outfeed extension -->
+  <rect x="260" y="296" width="55" height="40" fill="#1c1916" stroke="#3a3425" stroke-width="0.6" rx="2"/>
+  <!-- Fence handle -->
+  <rect x="244" y="287" width="8" height="12" fill="#3a3425" rx="2"/>
+  <!-- Dust chute -->
+  <rect x="146" y="340" width="28" height="16" fill="#1c1916" stroke="#2e2920" stroke-width="0.6" rx="1"/>
+  <line x1="160" y1="356" x2="120" y2="280" stroke="#2e2920" stroke-width="3" opacity="0.35"/>
+
+  <!-- Person 1: vakman aan formaatzaag -->
+  <g opacity="0.7">
+    <!-- Legs (work trousers) -->
+    <line x1="180" y1="312" x2="174" y2="352" stroke="#8a8070" stroke-width="3.5" stroke-linecap="round"/>
+    <line x1="180" y1="312" x2="188" y2="350" stroke="#8a8070" stroke-width="3.5" stroke-linecap="round"/>
+    <!-- Boots -->
+    <rect x="170" y="350" width="10" height="4" fill="#3a3425" rx="1"/>
+    <rect x="184" y="348" width="10" height="4" fill="#3a3425" rx="1"/>
+    <!-- Torso (work shirt) -->
+    <line x1="180" y1="312" x2="178" y2="274" stroke="#6a7a6a" stroke-width="4.5" stroke-linecap="round"/>
+    <!-- Shoulders -->
+    <line x1="168" y1="278" x2="190" y2="278" stroke="#6a7a6a" stroke-width="3" stroke-linecap="round"/>
+    <!-- Head -->
+    <circle cx="178" cy="264" r="8" fill="#d4b896" fill-opacity="0.4" stroke="#c4a880" stroke-width="1"/>
+    <!-- Safety glasses -->
+    <rect x="172" y="261" width="12" height="4" fill="none" stroke="#E09A2F" stroke-width="0.8" stroke-opacity="0.6" rx="1"/>
+    <!-- Hair/cap -->
+    <path d="M170,260 Q178,252 186,260" fill="#3a3425" opacity="0.5"/>
+    <!-- Arms pushing sheet -->
+    <line x1="168" y1="280" x2="155" y2="290" stroke="#6a7a6a" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="155" y1="290" x2="148" y2="288" stroke="#d4b896" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+    <line x1="190" y1="280" x2="200" y2="288" stroke="#6a7a6a" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="200" y1="288" x2="206" y2="286" stroke="#d4b896" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+  </g>
+
+  <!-- Sheet material being cut (MDF plaat) -->
+  <rect x="95" y="284" width="130" height="4" fill="#9a8a6a" fill-opacity="0.25" rx="0.5"/>
+  <rect x="95" y="284" width="65" height="4" fill="#8a7a5a" fill-opacity="0.15" rx="0.5"/>
   <!-- Sawdust particles -->
-  <circle cx="162" cy="295" r="1" fill="#E09A2F" opacity="0.15"/>
-  <circle cx="158" cy="300" r="0.8" fill="#E09A2F" opacity="0.12"/>
-  <circle cx="165" cy="298" r="0.6" fill="#E09A2F" opacity="0.1"/>
-  <circle cx="155" cy="292" r="0.7" fill="#E09A2F" opacity="0.08"/>
+  <circle cx="162" cy="296" r="1.2" fill="#E09A2F" opacity="0.15"/>
+  <circle cx="158" cy="302" r="0.9" fill="#E09A2F" opacity="0.12"/>
+  <circle cx="166" cy="299" r="0.7" fill="#E09A2F" opacity="0.1"/>
+  <circle cx="155" cy="293" r="0.8" fill="#E09A2F" opacity="0.08"/>
+  <circle cx="163" cy="304" r="0.5" fill="#E09A2F" opacity="0.06"/>
 
   <!-- ══════════ WERKBANK (midden-links) ══════════ -->
-  <rect x="370" y="270" width="180" height="90" fill="#1a1714" stroke="#3a3425" stroke-width="0.8" rx="2"/>
+  <rect x="370" y="272" width="180" height="88" fill="#1c1916" stroke="#3a3425" stroke-width="1" rx="3"/>
+  <!-- Bench legs -->
+  <rect x="378" y="340" width="6" height="20" fill="#2a2518" opacity="0.5"/>
+  <rect x="540" y="340" width="6" height="20" fill="#2a2518" opacity="0.5"/>
+  <!-- Bench top (hardwood) -->
+  <rect x="370" y="272" width="180" height="8" fill="#2e2820" stroke="#3a3425" stroke-width="0.5"/>
   <!-- Bench vise -->
-  <rect x="378" y="275" width="24" height="18" fill="none" stroke="#E09A2F" stroke-width="0.5" stroke-opacity="0.35"/>
-  <rect x="380" y="278" width="8" height="12" fill="#E09A2F" fill-opacity="0.08"/>
-  <rect x="392" y="278" width="8" height="12" fill="#E09A2F" fill-opacity="0.08"/>
+  <rect x="378" y="275" width="26" height="20" fill="#2a2518" stroke="#4a4235" stroke-width="0.6"/>
+  <rect x="380" y="278" width="9" height="14" fill="#E09A2F" fill-opacity="0.06"/>
+  <rect x="393" y="278" width="9" height="14" fill="#E09A2F" fill-opacity="0.06"/>
+  <rect x="389" y="280" width="4" height="2" fill="#4a4235"/>
   <!-- Tools on bench -->
-  <rect x="420" y="278" width="30" height="6" fill="none" stroke="#2e2920" stroke-width="0.5" rx="1"/>
-  <rect x="460" y="276" width="12" height="10" fill="none" stroke="#2e2920" stroke-width="0.5" rx="1"/>
-  <line x1="480" y1="282" x2="510" y2="282" stroke="#2e2920" stroke-width="0.5"/>
+  <rect x="420" y="278" width="30" height="6" fill="none" stroke="#3a3425" stroke-width="0.6" rx="1"/>
+  <rect x="460" y="276" width="12" height="10" fill="none" stroke="#3a3425" stroke-width="0.6" rx="1"/>
+  <line x1="480" y1="282" x2="510" y2="282" stroke="#3a3425" stroke-width="0.6"/>
   <!-- Clamps on edge -->
-  <rect x="515" y="270" width="6" height="20" fill="none" stroke="#E09A2F" stroke-width="0.4" stroke-opacity="0.25"/>
-  <rect x="528" y="270" width="6" height="20" fill="none" stroke="#E09A2F" stroke-width="0.4" stroke-opacity="0.25"/>
+  <rect x="515" y="270" width="7" height="22" fill="none" stroke="#E09A2F" stroke-width="0.5" stroke-opacity="0.3"/>
+  <rect x="528" y="270" width="7" height="22" fill="none" stroke="#E09A2F" stroke-width="0.5" stroke-opacity="0.3"/>
 
-  <!-- Person 2: timmerman schuurt/bewerkt werkstuk aan werkbank -->
+  <!-- Person 2: timmerman aan werkbank -->
   <g opacity="0.65">
     <!-- Legs -->
-    <line x1="440" y1="310" x2="434" y2="352" stroke="#F0EAE0" stroke-width="2.5" stroke-linecap="round"/>
-    <line x1="440" y1="310" x2="448" y2="350" stroke="#F0EAE0" stroke-width="2.5" stroke-linecap="round"/>
-    <!-- Torso (slightly leaning forward) -->
-    <line x1="440" y1="310" x2="435" y2="270" stroke="#F0EAE0" stroke-width="3" stroke-linecap="round"/>
+    <line x1="440" y1="312" x2="434" y2="354" stroke="#7a6a5a" stroke-width="3.5" stroke-linecap="round"/>
+    <line x1="440" y1="312" x2="448" y2="352" stroke="#7a6a5a" stroke-width="3.5" stroke-linecap="round"/>
+    <!-- Boots -->
+    <rect x="430" y="352" width="10" height="4" fill="#3a3425" rx="1"/>
+    <rect x="444" y="350" width="10" height="4" fill="#3a3425" rx="1"/>
+    <!-- Torso (leaning forward) -->
+    <line x1="440" y1="312" x2="435" y2="272" stroke="#5a6a7a" stroke-width="4.5" stroke-linecap="round"/>
+    <!-- Shoulders -->
+    <line x1="425" y1="276" x2="447" y2="276" stroke="#5a6a7a" stroke-width="3" stroke-linecap="round"/>
     <!-- Head -->
-    <circle cx="433" cy="260" r="8" fill="none" stroke="#F0EAE0" stroke-width="1.5"/>
+    <circle cx="433" cy="262" r="8" fill="#d4b896" fill-opacity="0.35" stroke="#c4a880" stroke-width="1"/>
     <!-- Arms working on piece -->
-    <line x1="435" y1="278" x2="415" y2="280" stroke="#F0EAE0" stroke-width="2" stroke-linecap="round"/>
-    <line x1="415" y1="280" x2="405" y2="278" stroke="#F0EAE0" stroke-width="2" stroke-linecap="round"/>
-    <line x1="435" y1="278" x2="455" y2="280" stroke="#F0EAE0" stroke-width="2" stroke-linecap="round"/>
-    <line x1="455" y1="280" x2="462" y2="278" stroke="#F0EAE0" stroke-width="2" stroke-linecap="round"/>
+    <line x1="425" y1="278" x2="412" y2="280" stroke="#5a6a7a" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="412" y1="280" x2="405" y2="278" stroke="#d4b896" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+    <line x1="447" y1="278" x2="458" y2="280" stroke="#5a6a7a" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="458" y1="280" x2="462" y2="278" stroke="#d4b896" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
     <!-- Wood piece being worked -->
-    <rect x="400" y="275" width="65" height="4" fill="#E09A2F" fill-opacity="0.2" rx="1"/>
+    <rect x="400" y="275" width="65" height="4" fill="#9a8a6a" fill-opacity="0.2" rx="1"/>
   </g>
 
   <!-- ══════════ PLAATMATERIAAL OPSLAG (rechts-midden) ══════════ -->
-  <!-- Vertical sheet material rack -->
-  <rect x="630" y="200" width="8" height="140" fill="#2e2920" stroke="#3a3425" stroke-width="0.4"/>
-  <rect x="680" y="200" width="8" height="140" fill="#2e2920" stroke="#3a3425" stroke-width="0.4"/>
-  <!-- Sheets leaning in rack (MDF, multiplex, etc) -->
-  <line x1="636" y1="340" x2="640" y2="202" stroke="#7a7060" stroke-width="3" opacity="0.5"/>
-  <line x1="642" y1="340" x2="645" y2="205" stroke="#5a5040" stroke-width="3" opacity="0.45"/>
-  <line x1="648" y1="340" x2="650" y2="208" stroke="#8a7a60" stroke-width="2.5" opacity="0.4"/>
-  <line x1="654" y1="340" x2="655" y2="210" stroke="#6a6050" stroke-width="3" opacity="0.35"/>
-  <line x1="660" y1="340" x2="661" y2="212" stroke="#7a6a50" stroke-width="2.5" opacity="0.4"/>
-  <line x1="666" y1="340" x2="666" y2="215" stroke="#5a5545" stroke-width="3" opacity="0.35"/>
-  <line x1="672" y1="340" x2="671" y2="218" stroke="#8a7a60" stroke-width="2.5" opacity="0.3"/>
-  <!-- More planks leaning against back wall -->
-  <line x1="1100" y1="340" x2="1085" y2="200" stroke="#7a7060" stroke-width="4" opacity="0.5"/>
-  <line x1="1110" y1="340" x2="1095" y2="205" stroke="#5a5040" stroke-width="3.5" opacity="0.45"/>
-  <line x1="1120" y1="340" x2="1105" y2="210" stroke="#8a7a60" stroke-width="3" opacity="0.4"/>
-  <line x1="1130" y1="340" x2="1115" y2="215" stroke="#6a5a48" stroke-width="3" opacity="0.35"/>
-  <line x1="1138" y1="340" x2="1122" y2="220" stroke="#7a6a50" stroke-width="2.5" opacity="0.3"/>
+  <!-- Vertical sheet material rack (steel A-frame) -->
+  <rect x="628" y="200" width="10" height="140" fill="#2a2518" stroke="#3a3425" stroke-width="0.5"/>
+  <rect x="680" y="200" width="10" height="140" fill="#2a2518" stroke="#3a3425" stroke-width="0.5"/>
+  <!-- Cross brace -->
+  <line x1="633" y1="220" x2="685" y2="320" stroke="#2a2518" stroke-width="1.5" opacity="0.4"/>
+  <!-- Sheets leaning in rack (various wood types) -->
+  <line x1="636" y1="340" x2="640" y2="202" stroke="#8a7a60" stroke-width="4" opacity="0.5"/>
+  <line x1="643" y1="340" x2="646" y2="205" stroke="#5a5040" stroke-width="3.5" opacity="0.45"/>
+  <line x1="650" y1="340" x2="652" y2="208" stroke="#a08a68" stroke-width="3" opacity="0.4"/>
+  <line x1="656" y1="340" x2="657" y2="210" stroke="#6a6050" stroke-width="3.5" opacity="0.38"/>
+  <line x1="662" y1="340" x2="663" y2="212" stroke="#7a6a50" stroke-width="3" opacity="0.35"/>
+  <line x1="668" y1="340" x2="668" y2="215" stroke="#5a5545" stroke-width="3.5" opacity="0.32"/>
+  <line x1="674" y1="340" x2="673" y2="218" stroke="#9a8a68" stroke-width="3" opacity="0.3"/>
+  <!-- More planks leaning against back wall (right) -->
+  <line x1="1100" y1="340" x2="1085" y2="200" stroke="#8a7a60" stroke-width="5" opacity="0.5"/>
+  <line x1="1110" y1="340" x2="1095" y2="205" stroke="#5a5040" stroke-width="4.5" opacity="0.45"/>
+  <line x1="1120" y1="340" x2="1105" y2="210" stroke="#a08a68" stroke-width="4" opacity="0.4"/>
+  <line x1="1130" y1="340" x2="1115" y2="215" stroke="#6a5a48" stroke-width="3.5" opacity="0.35"/>
+  <line x1="1138" y1="340" x2="1122" y2="220" stroke="#7a6a50" stroke-width="3" opacity="0.3"/>
 
   <!-- Person 3: iemand pakt plaat uit rek -->
   <g opacity="0.55">
     <!-- Legs -->
-    <line x1="700" y1="310" x2="694" y2="352" stroke="#F0EAE0" stroke-width="2.5" stroke-linecap="round"/>
-    <line x1="700" y1="310" x2="708" y2="348" stroke="#F0EAE0" stroke-width="2.5" stroke-linecap="round"/>
-    <!-- Torso (reaching up to rack) -->
-    <line x1="700" y1="310" x2="695" y2="264" stroke="#F0EAE0" stroke-width="3" stroke-linecap="round"/>
+    <line x1="700" y1="312" x2="694" y2="354" stroke="#8a7a6a" stroke-width="3.5" stroke-linecap="round"/>
+    <line x1="700" y1="312" x2="708" y2="350" stroke="#8a7a6a" stroke-width="3.5" stroke-linecap="round"/>
+    <!-- Boots -->
+    <rect x="690" y="352" width="10" height="4" fill="#3a3425" rx="1"/>
+    <rect x="704" y="348" width="10" height="4" fill="#3a3425" rx="1"/>
+    <!-- Torso (reaching up) -->
+    <line x1="700" y1="312" x2="695" y2="266" stroke="#7a6a5a" stroke-width="4.5" stroke-linecap="round"/>
     <!-- Head -->
-    <circle cx="693" cy="254" r="8" fill="none" stroke="#F0EAE0" stroke-width="1.5"/>
+    <circle cx="693" cy="256" r="8" fill="#d4b896" fill-opacity="0.3" stroke="#c4a880" stroke-width="1"/>
     <!-- Arms reaching toward sheets -->
-    <line x1="695" y1="274" x2="675" y2="260" stroke="#F0EAE0" stroke-width="2" stroke-linecap="round"/>
-    <line x1="675" y1="260" x2="668" y2="250" stroke="#F0EAE0" stroke-width="2" stroke-linecap="round"/>
-    <line x1="695" y1="274" x2="672" y2="270" stroke="#F0EAE0" stroke-width="2" stroke-linecap="round"/>
+    <line x1="695" y1="276" x2="675" y2="262" stroke="#7a6a5a" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="675" y1="262" x2="668" y2="252" stroke="#d4b896" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+    <line x1="695" y1="276" x2="672" y2="272" stroke="#7a6a5a" stroke-width="2.5" stroke-linecap="round"/>
   </g>
 
   <!-- ══════════ EXTRA WERKBANK rechts ══════════ -->
-  <rect x="830" y="280" width="160" height="80" fill="#1a1714" stroke="#3a3425" stroke-width="0.8" rx="2"/>
-  <!-- Laptop/tekeningen op bureau -->
-  <rect x="840" y="285" width="30" height="20" fill="none" stroke="#2e2920" stroke-width="0.5" rx="1"/>
-  <rect x="842" y="287" width="26" height="14" fill="rgba(110,150,220,0.06)"/>
+  <rect x="830" y="280" width="160" height="80" fill="#1c1916" stroke="#3a3425" stroke-width="1" rx="3"/>
+  <rect x="830" y="280" width="160" height="8" fill="#2e2820" stroke="#3a3425" stroke-width="0.5"/>
+  <!-- Laptop -->
+  <rect x="840" y="284" width="30" height="20" fill="#1a1a22" stroke="#3a3a4a" stroke-width="0.6" rx="1"/>
+  <rect x="842" y="286" width="26" height="14" fill="rgba(110,150,220,0.08)"/>
   <!-- Koffiekop -->
-  <circle cx="895" cy="292" r="5" fill="none" stroke="#2e2920" stroke-width="0.5"/>
+  <circle cx="895" cy="290" r="5" fill="#2a2518" stroke="#3a3425" stroke-width="0.6"/>
+  <path d="M900,288 Q904,290 900,292" fill="none" stroke="#3a3425" stroke-width="0.5"/>
+  <!-- Steam wisps -->
+  <path d="M894,282 Q892,278 894,274" fill="none" stroke="#F0EAE0" stroke-width="0.4" opacity="0.06"/>
+  <path d="M896,283 Q898,279 896,275" fill="none" stroke="#F0EAE0" stroke-width="0.3" opacity="0.04"/>
   <!-- Schaaf & beitel -->
-  <rect x="920" y="288" width="40" height="5" fill="none" stroke="#E09A2F" stroke-width="0.4" stroke-opacity="0.25" rx="1"/>
-  <rect x="970" y="286" width="8" height="8" fill="none" stroke="#E09A2F" stroke-width="0.4" stroke-opacity="0.2" rx="1"/>
+  <rect x="920" y="286" width="40" height="6" fill="#2a2518" stroke="#E09A2F" stroke-width="0.4" stroke-opacity="0.2" rx="1"/>
+  <rect x="970" y="284" width="10" height="10" fill="#2a2518" stroke="#E09A2F" stroke-width="0.4" stroke-opacity="0.18" rx="1"/>
 
-  <!-- Person 4: designer bekijkt tekeningen (achtergrond, kleiner) -->
+  <!-- Person 4: designer bekijkt tekeningen -->
   <g opacity="0.45">
-    <!-- Sitting on stool -->
-    <line x1="870" y1="310" x2="866" y2="340" stroke="#F0EAE0" stroke-width="2" stroke-linecap="round"/>
-    <line x1="870" y1="310" x2="876" y2="338" stroke="#F0EAE0" stroke-width="2" stroke-linecap="round"/>
+    <!-- Stool -->
+    <rect x="862" y="320" width="16" height="3" fill="#2a2518" rx="1"/>
+    <line x1="866" y1="323" x2="864" y2="342" stroke="#2a2518" stroke-width="1.5"/>
+    <line x1="874" y1="323" x2="876" y2="342" stroke="#2a2518" stroke-width="1.5"/>
+    <!-- Sitting legs -->
+    <line x1="870" y1="312" x2="864" y2="340" stroke="#7a6a5a" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="870" y1="312" x2="878" y2="338" stroke="#7a6a5a" stroke-width="2.5" stroke-linecap="round"/>
     <!-- Torso -->
-    <line x1="870" y1="310" x2="868" y2="276" stroke="#F0EAE0" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="870" y1="312" x2="868" y2="278" stroke="#4a5a6a" stroke-width="3.5" stroke-linecap="round"/>
     <!-- Head -->
-    <circle cx="867" cy="267" r="7" fill="none" stroke="#F0EAE0" stroke-width="1.3"/>
+    <circle cx="867" cy="268" r="7.5" fill="#d4b896" fill-opacity="0.3" stroke="#c4a880" stroke-width="0.8"/>
     <!-- Arms on desk -->
-    <line x1="868" y1="284" x2="852" y2="290" stroke="#F0EAE0" stroke-width="1.8" stroke-linecap="round"/>
-    <line x1="868" y1="284" x2="884" y2="290" stroke="#F0EAE0" stroke-width="1.8" stroke-linecap="round"/>
+    <line x1="868" y1="286" x2="852" y2="290" stroke="#4a5a6a" stroke-width="2" stroke-linecap="round"/>
+    <line x1="868" y1="286" x2="884" y2="290" stroke="#4a5a6a" stroke-width="2" stroke-linecap="round"/>
   </g>
 
   <!-- ══════════ LINTZAAG (rechts achter) ══════════ -->
-  <rect x="1040" y="250" width="50" height="100" fill="#1a1714" stroke="#3a3425" stroke-width="0.8" rx="2"/>
-  <circle cx="1065" cy="272" r="16" fill="none" stroke="#3a3425" stroke-width="0.6"/>
-  <circle cx="1065" cy="332" r="10" fill="none" stroke="#3a3425" stroke-width="0.6"/>
-  <line x1="1065" y1="288" x2="1065" y2="322" stroke="#E09A2F" stroke-width="0.5" stroke-opacity="0.3"/>
+  <rect x="1038" y="248" width="54" height="104" fill="#1c1916" stroke="#3a3425" stroke-width="1" rx="3"/>
+  <!-- Upper wheel housing -->
+  <circle cx="1065" cy="270" r="18" fill="#1e1b17" stroke="#3a3425" stroke-width="0.8"/>
+  <circle cx="1065" cy="270" r="12" fill="none" stroke="#2e2920" stroke-width="0.4"/>
+  <!-- Lower wheel -->
+  <circle cx="1065" cy="334" r="12" fill="#1e1b17" stroke="#3a3425" stroke-width="0.6"/>
+  <!-- Blade -->
+  <line x1="1065" y1="288" x2="1065" y2="322" stroke="#E09A2F" stroke-width="0.6" stroke-opacity="0.35"/>
   <!-- Table -->
-  <rect x="1030" y="300" width="70" height="4" fill="#1a1714" stroke="#3a3425" stroke-width="0.4"/>
+  <rect x="1028" y="300" width="74" height="5" fill="#1e1b17" stroke="#3a3425" stroke-width="0.5"/>
 
   <!-- ══════════ SFEER: stof in lichtbundels ══════════ -->
-  <circle cx="248" cy="140" r="1" fill="#F0EAE0" opacity="0.04"/>
-  <circle cx="255" cy="155" r="0.8" fill="#F0EAE0" opacity="0.035"/>
-  <circle cx="242" cy="165" r="1.2" fill="#F0EAE0" opacity="0.03"/>
-  <circle cx="260" cy="130" r="0.6" fill="#F0EAE0" opacity="0.04"/>
-  <circle cx="598" cy="135" r="1" fill="#F0EAE0" opacity="0.04"/>
-  <circle cx="605" cy="150" r="0.8" fill="#F0EAE0" opacity="0.035"/>
-  <circle cx="592" cy="168" r="1.1" fill="#F0EAE0" opacity="0.03"/>
-  <circle cx="948" cy="138" r="0.9" fill="#F0EAE0" opacity="0.035"/>
-  <circle cx="955" cy="155" r="1" fill="#F0EAE0" opacity="0.03"/>
-  <circle cx="942" cy="148" r="0.7" fill="#F0EAE0" opacity="0.04"/>
+  <circle cx="248" cy="140" r="1.2" fill="#F0EAE0" opacity="0.04"/>
+  <circle cx="256" cy="155" r="0.9" fill="#F0EAE0" opacity="0.035"/>
+  <circle cx="242" cy="168" r="1.4" fill="#F0EAE0" opacity="0.025"/>
+  <circle cx="261" cy="128" r="0.7" fill="#F0EAE0" opacity="0.04"/>
+  <circle cx="245" cy="180" r="0.8" fill="#F0EAE0" opacity="0.02"/>
+  <circle cx="598" cy="135" r="1.1" fill="#F0EAE0" opacity="0.04"/>
+  <circle cx="606" cy="152" r="0.9" fill="#F0EAE0" opacity="0.035"/>
+  <circle cx="592" cy="170" r="1.2" fill="#F0EAE0" opacity="0.025"/>
+  <circle cx="610" cy="142" r="0.6" fill="#F0EAE0" opacity="0.03"/>
+  <circle cx="948" cy="138" r="1" fill="#F0EAE0" opacity="0.035"/>
+  <circle cx="956" cy="158" r="1.1" fill="#F0EAE0" opacity="0.025"/>
+  <circle cx="942" cy="148" r="0.8" fill="#F0EAE0" opacity="0.04"/>
+  <circle cx="952" cy="172" r="0.7" fill="#F0EAE0" opacity="0.02"/>
+
+  <!-- Vignette overlay -->
+  <rect width="1200" height="600" fill="url(#heroSpotG)" opacity="0.5"/>
 </svg>
 
   </div>
