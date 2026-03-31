@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title id="siteTitle">Werkplaats17</title>
-<meta name="description" id="metaDesc" content="">
-<meta property="og:title" id="ogTitle" content="">
-<meta property="og:description" id="ogDesc" content="">
+<title>Werkplaats17 — Professionele werkruimte Rotterdam</title>
+<meta name="description" content="Volwaardige werkruimte voor zelfstandige vakmensen en kleine studio's. Vaste werkplek met toegang tot professionele machines. Schaapherderweg 17, Rotterdam.">
+<meta property="og:title" content="Werkplaats17 — Professionele werkruimte Rotterdam">
+<meta property="og:description" content="Volwaardige werkruimte voor zelfstandige vakmensen en kleine studio's. Vaste werkplek, professionele machines, flexspace.">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="nl_NL">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -362,55 +362,29 @@
     border-bottom: 1px solid var(--line);
     padding-bottom: 36px;
   }
-  .fp-tabs { display: flex; gap: 0; margin-bottom: 16px; }
-  .fp-tab {
-    padding: 6px 16px; font-size: 10px; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--muted); background: transparent;
-    border: 1px solid var(--line); cursor: pointer; transition: all 0.15s;
-    font-family: 'DM Mono', monospace;
+  .floorplan-svg {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    display: block;
   }
-  .fp-tab:first-child { border-right: none; }
-  .fp-tab:hover { color: var(--cream); }
-  .fp-tab.active { color: var(--amber); background: var(--amber-glow); border-color: var(--amber); }
-  .fp-canvas {
-    position: relative; overflow: hidden; cursor: grab;
-    background: var(--bg); border: 1px solid var(--line);
-    touch-action: none; user-select: none;
+  .floorplan-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 16px;
   }
-  .fp-canvas.grabbing { cursor: grabbing; }
-  .fp-canvas::-webkit-scrollbar { display: none; }
-  #fp { position: relative; transform-origin: 0 0; }
-  .fp-controls {
-    display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 10px;
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
   }
-  .fp-zoom-overlay {
-    position: absolute; bottom: 8px; right: 8px; display: flex; align-items: center; gap: 6px;
-    background: rgba(22,20,18,.85); border: 1px solid var(--line); padding: 4px 8px;
-    z-index: 20; backdrop-filter: blur(4px);
-  }
-  .fp-zbtn {
-    width: 24px; height: 24px; border: 1px solid var(--line); background: var(--bg);
-    color: var(--muted); font-size: 13px; cursor: pointer; display: flex;
-    align-items: center; justify-content: center; font-family: 'DM Mono', monospace;
-    transition: all 0.15s;
-  }
-  .fp-zbtn:hover { border-color: var(--amber); color: var(--amber); }
-  .fp-zlbl { font-size: 9px; color: var(--muted); min-width: 30px; text-align: center; letter-spacing: 0.08em; }
-  .fp-hint {
-    position: absolute; bottom: 8px; left: 8px; font-size: 8px; color: var(--muted);
-    letter-spacing: 0.06em; opacity: 0.5; z-index: 20;
-    background: rgba(22,20,18,.85); padding: 4px 8px; border: 1px solid var(--line);
-    backdrop-filter: blur(4px);
-  }
-  .fp-legend {
-    display: flex; flex-wrap: wrap; gap: 16px; margin-top: 16px;
-  }
-  .fp-legend-item {
-    display: flex; align-items: center; gap: 8px;
-    font-size: 10px; color: var(--muted); letter-spacing: 0.08em;
-  }
-  .fp-legend-swatch {
-    width: 12px; height: 12px; border: 1px solid var(--line);
+  .legend-swatch {
+    width: 12px; height: 12px;
+    border: 1px solid var(--line);
   }
 
   /* ── PRICING ── */
@@ -710,9 +684,9 @@
 
   <!-- HEADER -->
   <header>
-    <p class="eyebrow" id="c-eyebrow"></p>
+    <p class="eyebrow">Beschikbaar · Rotterdam Ring-oost</p>
     <h1>Werk<span>plaats</span></h1>
-    <p class="tagline" id="c-tagline"></p>
+    <p class="tagline">Volwaardige werkruimte voor<br>professionele makers</p>
   </header>
 
   <!-- HERO -->
@@ -741,8 +715,12 @@
       <stop offset="100%" stop-color="#E09A2F" stop-opacity="0.10"/>
     </linearGradient>
   </defs>
+
+  <!-- ══════════ BACKGROUND ══════════ -->
   <rect width="800" height="400" fill="#161412"/>
   <rect width="800" height="40" fill="url(#skyG)"/>
+
+  <!-- ══════════ ROOFLINE ══════════ -->
   <rect x="10" y="52" width="230" height="5" fill="#1e1b17" stroke="#3a3425" stroke-width="0.5"/>
   <line x1="8" y1="51" x2="242" y2="51" stroke="#3a3425" stroke-width="0.8"/>
   <rect x="560" y="52" width="230" height="5" fill="#1e1b17" stroke="#3a3425" stroke-width="0.5"/>
@@ -751,6 +729,8 @@
   <line x1="236" y1="35" x2="564" y2="35" stroke="#3a3425" stroke-width="0.8"/>
   <line x1="240" y1="36" x2="240" y2="52" stroke="#3a3425" stroke-width="0.6"/>
   <line x1="560" y1="36" x2="560" y2="52" stroke="#3a3425" stroke-width="0.6"/>
+
+  <!-- ══════════ UPPER FASCIA ══════════ -->
   <rect x="10" y="57" width="230" height="30" fill="#1a1714" stroke="#2e2920" stroke-width="0.4"/>
   <line x1="10" y1="72" x2="240" y2="72" stroke="#252118" stroke-width="0.35"/>
   <line x1="80" y1="57" x2="80" y2="87" stroke="#252118" stroke-width="0.25"/>
@@ -761,6 +741,14 @@
   <line x1="720" y1="57" x2="720" y2="87" stroke="#252118" stroke-width="0.25"/>
   <rect x="238" y="41" width="324" height="22" fill="#1a1714" stroke="#2e2920" stroke-width="0.4"/>
   <line x1="238" y1="52" x2="562" y2="52" stroke="#252118" stroke-width="0.3"/>
+
+
+  <!-- ══════════════════════════════════ -->
+  <!--             LEFT WING             -->
+  <!-- wall(68) door(100) 2gap window(58) → flush against center(240) -->
+  <!-- ══════════════════════════════════ -->
+
+  <!-- Left wall: 10–78 -->
   <rect x="10" y="87" width="68" height="185" fill="#1a1714" stroke="#2e2920" stroke-width="0.3"/>
   <line x1="10" y1="112" x2="78" y2="112" stroke="#252118" stroke-width="0.3"/>
   <line x1="10" y1="137" x2="78" y2="137" stroke="#252118" stroke-width="0.3"/>
@@ -770,9 +758,13 @@
   <line x1="10" y1="237" x2="78" y2="237" stroke="#252118" stroke-width="0.3"/>
   <line x1="10" y1="255" x2="78" y2="255" stroke="#252118" stroke-width="0.3"/>
   <line x1="44" y1="87" x2="44" y2="272" stroke="#252118" stroke-width="0.2"/>
+
+  <!-- Wall above left door+window: 78–240, y 87–108 -->
   <rect x="78" y="87" width="162" height="21" fill="#1a1714" stroke="#2e2920" stroke-width="0.3"/>
   <line x1="78" y1="98" x2="240" y2="98" stroke="#252118" stroke-width="0.25"/>
   <line x1="140" y1="87" x2="140" y2="108" stroke="#252118" stroke-width="0.25"/>
+
+  <!-- LEFT OVERHEAD DOOR: 80–180 (100px wide), y 110–272 (162px tall) -->
   <rect x="80" y="110" width="100" height="162" fill="url(#doorBeige)" stroke="#3a3425" stroke-width="0.6" rx="1"/>
   <line x1="80" y1="133" x2="180" y2="133" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.25"/>
   <line x1="80" y1="156" x2="180" y2="156" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.25"/>
@@ -781,19 +773,33 @@
   <line x1="80" y1="225" x2="180" y2="225" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.25"/>
   <line x1="80" y1="248" x2="180" y2="248" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.25"/>
   <rect x="76" y="107" width="108" height="168" fill="none" stroke="#3a3425" stroke-width="0.7"/>
+
+  <!-- WINDOW NEXT TO LEFT DOOR: 182–240 (58px), flush against center -->
   <rect x="182" y="110" width="58" height="162" fill="url(#glassG)" stroke="#3a3425" stroke-width="0.5"/>
   <line x1="211" y1="110" x2="211" y2="272" stroke="#F0EAE0" stroke-width="0.8" stroke-opacity="0.3"/>
   <line x1="182" y1="164" x2="240" y2="164" stroke="#F0EAE0" stroke-width="0.8" stroke-opacity="0.3"/>
   <line x1="182" y1="218" x2="240" y2="218" stroke="#F0EAE0" stroke-width="0.8" stroke-opacity="0.3"/>
   <line x1="187" y1="115" x2="187" y2="158" stroke="#F0EAE0" stroke-width="0.3" stroke-opacity="0.05"/>
+
+
+  <!-- ══════════════════════════════════ -->
+  <!--            RIGHT WING             -->
+  <!-- flush against center(560) → window(58) 2gap door(100) wall(68) -->
+  <!-- ══════════════════════════════════ -->
+
+  <!-- WINDOW NEXT TO RIGHT DOOR: 560–618 (58px), flush against center -->
   <rect x="560" y="110" width="58" height="162" fill="url(#glassG)" stroke="#3a3425" stroke-width="0.5"/>
   <line x1="589" y1="110" x2="589" y2="272" stroke="#F0EAE0" stroke-width="0.8" stroke-opacity="0.3"/>
   <line x1="560" y1="164" x2="618" y2="164" stroke="#F0EAE0" stroke-width="0.8" stroke-opacity="0.3"/>
   <line x1="560" y1="218" x2="618" y2="218" stroke="#F0EAE0" stroke-width="0.8" stroke-opacity="0.3"/>
   <line x1="613" y1="115" x2="613" y2="158" stroke="#F0EAE0" stroke-width="0.3" stroke-opacity="0.05"/>
+
+  <!-- Wall above right door+window: 560–722, y 87–108 -->
   <rect x="560" y="87" width="162" height="21" fill="#1a1714" stroke="#2e2920" stroke-width="0.3"/>
   <line x1="560" y1="98" x2="722" y2="98" stroke="#252118" stroke-width="0.25"/>
   <line x1="660" y1="87" x2="660" y2="108" stroke="#252118" stroke-width="0.25"/>
+
+  <!-- RIGHT OVERHEAD DOOR: 620–720 (100px wide), y 110–272 (162px tall) -->
   <rect x="620" y="110" width="100" height="162" fill="url(#doorBeige)" stroke="#3a3425" stroke-width="0.6" rx="1"/>
   <line x1="620" y1="133" x2="720" y2="133" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.25"/>
   <line x1="620" y1="156" x2="720" y2="156" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.25"/>
@@ -802,6 +808,8 @@
   <line x1="620" y1="225" x2="720" y2="225" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.25"/>
   <line x1="620" y1="248" x2="720" y2="248" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.25"/>
   <rect x="616" y="107" width="108" height="168" fill="none" stroke="#3a3425" stroke-width="0.7"/>
+
+  <!-- Right wall: 722–790 -->
   <rect x="722" y="87" width="68" height="185" fill="#1a1714" stroke="#2e2920" stroke-width="0.3"/>
   <line x1="722" y1="112" x2="790" y2="112" stroke="#252118" stroke-width="0.3"/>
   <line x1="722" y1="137" x2="790" y2="137" stroke="#252118" stroke-width="0.3"/>
@@ -811,14 +819,26 @@
   <line x1="722" y1="237" x2="790" y2="237" stroke="#252118" stroke-width="0.3"/>
   <line x1="722" y1="255" x2="790" y2="255" stroke="#252118" stroke-width="0.3"/>
   <line x1="756" y1="87" x2="756" y2="272" stroke="#252118" stroke-width="0.2"/>
+
+
+  <!-- ══════════════════════════════════ -->
+  <!--           CENTER BLOCK            -->
+  <!-- 240–560 = 320px. Layout: 8+114+6+64+6+114+8 = 320 -->
+  <!-- ══════════════════════════════════ -->
+
+  <!-- Light gray frame -->
   <rect x="240" y="63" width="320" height="211" fill="#1e1b17" stroke="#3a3425" stroke-width="1.2" rx="1"/>
   <rect x="242" y="65" width="316" height="207" fill="none" stroke="#F0EAE0" stroke-width="0.3" stroke-opacity="0.06"/>
+
+  <!-- LEFT CENTER WINDOW: 248–362 (114px), y 70–268 -->
   <rect x="248" y="70" width="114" height="198" fill="url(#glassG)" stroke="#3a3425" stroke-width="0.5"/>
   <line x1="305" y1="70" x2="305" y2="268" stroke="#F0EAE0" stroke-width="1" stroke-opacity="0.35"/>
   <line x1="248" y1="136" x2="362" y2="136" stroke="#F0EAE0" stroke-width="1" stroke-opacity="0.35"/>
   <line x1="248" y1="202" x2="362" y2="202" stroke="#F0EAE0" stroke-width="1" stroke-opacity="0.35"/>
   <line x1="254" y1="76" x2="254" y2="130" stroke="#F0EAE0" stroke-width="0.4" stroke-opacity="0.05"/>
   <line x1="311" y1="142" x2="311" y2="196" stroke="#F0EAE0" stroke-width="0.3" stroke-opacity="0.04"/>
+
+  <!-- ORANGE STRIP: 368–432 (64px), y 70–268, full height -->
   <rect x="368" y="70" width="64" height="198" fill="url(#orangeG)" stroke="#E09A2F" stroke-width="0.6" stroke-opacity="0.5" rx="0.5"/>
   <line x1="368" y1="84" x2="432" y2="84" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.3"/>
   <line x1="368" y1="98" x2="432" y2="98" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.3"/>
@@ -833,17 +853,27 @@
   <line x1="368" y1="224" x2="432" y2="224" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.3"/>
   <line x1="368" y1="238" x2="432" y2="238" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.3"/>
   <line x1="368" y1="252" x2="432" y2="252" stroke="#E09A2F" stroke-width="0.35" stroke-opacity="0.3"/>
+
+  <!-- RIGHT CENTER WINDOW: 438–552 (114px), y 70–268 -->
   <rect x="438" y="70" width="114" height="198" fill="url(#glassG)" stroke="#3a3425" stroke-width="0.5"/>
   <line x1="495" y1="70" x2="495" y2="268" stroke="#F0EAE0" stroke-width="1" stroke-opacity="0.35"/>
   <line x1="438" y1="136" x2="552" y2="136" stroke="#F0EAE0" stroke-width="1" stroke-opacity="0.35"/>
   <line x1="438" y1="202" x2="552" y2="202" stroke="#F0EAE0" stroke-width="1" stroke-opacity="0.35"/>
   <line x1="444" y1="76" x2="444" y2="130" stroke="#F0EAE0" stroke-width="0.4" stroke-opacity="0.05"/>
   <line x1="501" y1="142" x2="501" y2="196" stroke="#F0EAE0" stroke-width="0.3" stroke-opacity="0.04"/>
+
+
+  <!-- Wall lights -->
   <circle cx="243" cy="106" r="3" fill="none" stroke="#3a3425" stroke-width="0.5"/>
   <circle cx="243" cy="106" r="1" fill="#E09A2F" fill-opacity="0.2"/>
   <circle cx="557" cy="106" r="3" fill="none" stroke="#3a3425" stroke-width="0.5"/>
   <circle cx="557" cy="106" r="1" fill="#E09A2F" fill-opacity="0.2"/>
+
+
+  <!-- ══════════ GROUND LINE ══════════ -->
   <line x1="0" y1="274" x2="800" y2="274" stroke="#3a3425" stroke-width="1.2"/>
+
+  <!-- ══════════ FORECOURT ══════════ -->
   <rect x="0" y="274" width="800" height="126" fill="url(#floorG)"/>
   <line x1="0" y1="290" x2="800" y2="290" stroke="#252118" stroke-width="0.35" opacity="0.5"/>
   <line x1="0" y1="306" x2="800" y2="306" stroke="#252118" stroke-width="0.3" opacity="0.4"/>
@@ -874,81 +904,227 @@
   <line x1="750" y1="306" x2="750" y2="322" stroke="#252118" stroke-width="0.2" opacity="0.3"/>
   <rect x="0" y="360" width="800" height="2" fill="#2e2920" opacity="0.4"/>
 </svg>
+
   </div>
 
   <!-- LOCATIE -->
   <div class="location-bar">
     <div class="pin"></div>
-    <span id="c-location"></span>
+    <span>Schaapherderweg 17 · Afslag IJsselmonde (A15) · Direct aan de ring</span>
   </div>
 
   <!-- INTRO -->
   <div class="intro">
-    <p id="c-intro"></p>
-    <div class="access-detail" id="c-access"></div>
+    <p>
+      Werkplaats17 is een <strong>volledig uitgeruste werkplaats</strong> voor zelfstandige vakmensen en kleine studio's. Je huurt een vaste werkplek én toegang tot professionele machines — inclusief de ruimte om te groeien als een project het vraagt.<br><br>
+      Gevestigd naast een actieve meubelmakerij. Directe toegang, gedeelde kennis, professionele omgeving.
+    </p>
+    <div class="access-detail">
+      <div class="access-item">
+        <span class="ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+        24/7 toegang
+      </div>
+      <div class="access-item">
+        <span class="ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+        Eigen sleutel
+      </div>
+      <div class="access-item">
+        <span class="ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></span>
+        Kantoor & ontvangstruimte
+      </div>
+    </div>
   </div>
 
   <!-- SFEERBEELDEN -->
   <p class="section-label">De werkplaats</p>
-  <div class="photo-strip" id="c-photos"></div>
+  <div class="photo-strip">
+    <div class="photo-placeholder">
+      <svg class="ph-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      <span class="ph-label">Werkvloer</span>
+    </div>
+    <div class="photo-placeholder">
+      <svg class="ph-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      <span class="ph-label">Machines</span>
+    </div>
+    <div class="photo-placeholder">
+      <svg class="ph-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      <span class="ph-label">Entresol</span>
+    </div>
+  </div>
 
   <!-- AANBOD -->
   <p class="section-label" id="aanbod">Wat je krijgt</p>
-  <div class="offer-grid" id="c-offers"></div>
+  <div class="offer-grid">
+    <div class="offer-card">
+      <span class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="1"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></span>
+      <h3>Vaste werkplek</h3>
+      <p>Open unit op de entresol. Altijd beschikbaar, laat je project staan.</p>
+    </div>
+    <div class="offer-card">
+      <span class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 9 2 12 5 15"/><polyline points="19 9 22 12 19 15"/><line x1="2" y1="12" x2="22" y2="12"/></svg></span>
+      <h3>Flexspace</h3>
+      <p>Werkvloer voor grote projecten. Meer ruimte wanneer je die nodig hebt.</p>
+    </div>
+    <div class="offer-card">
+      <span class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8V21H3V8"/><path d="M23 3H1v5h22V3z"/><line x1="10" y1="12" x2="14" y2="12"/></svg></span>
+      <h3>Opslag</h3>
+      <p>Basisopslag inbegrepen bij je werkplek. Extra opslag huurbaar.</p>
+    </div>
+    <div class="offer-card">
+      <span class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+      <h3>Faciliteiten</h3>
+      <p>Bureauruimte, gezamenlijke ruimte, 2 overheaddeuren, parkeren op eigen terrein.</p>
+    </div>
+  </div>
 
   <!-- MACHINES -->
   <p class="section-label">Machines & gereedschap</p>
   <div class="machines-block">
-    <div class="machine-list" id="c-machines"></div>
+    <div class="machine-list">
+      <span class="machine-tag highlight">Formaatzaag</span>
+      <span class="machine-tag highlight">Vlak- & vandiktebank</span>
+      <span class="machine-tag highlight">Lintzaag</span>
+      <span class="machine-tag highlight">3D printer</span>
+      <span class="machine-tag">Metaalzaag</span>
+      <span class="machine-tag">Straalcabine</span>
+      <span class="machine-tag">Afzuiging</span>
+      <span class="machine-tag">Perslucht</span>
+      <span class="machine-tag">Alle handgereedschappen</span>
+    </div>
   </div>
 
   <!-- PLATTEGROND -->
   <p class="section-label" id="indeling">Indeling werkplaats</p>
   <div class="floorplan-block">
-    <div class="fp-tabs">
-      <div class="fp-tab active" onclick="fpShow(0)">Begane grond</div>
-      <div class="fp-tab" onclick="fpShow(1)">Entresol</div>
-    </div>
-    <div class="fp-canvas">
-      <div id="fp"></div>
-      <span class="fp-hint">Sleep om te pannen · Scroll om te zoomen</span>
-      <div class="fp-zoom-overlay">
-        <button class="fp-zbtn" onclick="fpZoom(-0.15)">−</button>
-        <span class="fp-zlbl" id="fp-zlbl">100%</span>
-        <button class="fp-zbtn" onclick="fpZoom(0.15)">+</button>
-        <button class="fp-zbtn" onclick="fpReset()" style="font-size:8px;width:auto;padding:0 6px">Reset</button>
-      </div>
-    </div>
-    <div class="fp-controls">
-      <div class="fp-legend-item"><div class="fp-legend-swatch" style="background:rgba(224,154,47,.13);border-color:rgba(224,154,47,.5)"></div>Hal</div>
-      <div class="fp-legend-item"><div class="fp-legend-swatch" style="background:rgba(110,150,220,.13);border-color:rgba(110,150,220,.5)"></div>Kantoor</div>
-      <div class="fp-legend-item"><div class="fp-legend-swatch" style="background:rgba(180,140,80,.13);border-color:rgba(180,140,80,.45)"></div>Trap</div>
-      <div class="fp-legend-item"><div class="fp-legend-swatch" style="background:rgba(180,100,220,.13);border-color:rgba(180,100,220,.5)"></div>Entresol</div>
-      <span class="fp-sep" style="width:1px;height:14px;background:var(--line);opacity:.3;margin:0 4px"></span>
-      <div class="fp-legend-item"><div class="fp-legend-swatch" style="background:rgba(76,175,80,0.12);border-color:#4CAF50;box-shadow:0 0 4px rgba(76,175,80,0.3)"></div>Beschikbaar</div>
-      <div class="fp-legend-item"><div class="fp-legend-swatch" style="background:rgba(255,152,0,0.12);border-color:#FF9800;box-shadow:0 0 4px rgba(255,152,0,0.2)"></div>Gereserveerd</div>
-      <div class="fp-legend-item"><div class="fp-legend-swatch" style="background:rgba(120,120,120,0.08);border-color:#666"></div>Bezet</div>
+    <svg class="floorplan-svg" viewBox="0 0 500 320" xmlns="http://www.w3.org/2000/svg">
+      <!-- Outer walls -->
+      <rect x="20" y="20" width="460" height="260" fill="none" stroke="#3a3425" stroke-width="2" rx="2"/>
+
+      <!-- Entresol (upper level) -->
+      <rect x="20" y="20" width="460" height="80" fill="rgba(224,154,47,0.04)" stroke="#3a3425" stroke-width="1"/>
+      <text x="250" y="48" font-family="'Bebas Neue', sans-serif" font-size="14" fill="#E09A2F" text-anchor="middle" letter-spacing="2">ENTRESOL</text>
+      <!-- Werkplek divisions -->
+      <line x1="135" y1="20" x2="135" y2="100" stroke="#2e2920" stroke-width="0.5" stroke-dasharray="4,4"/>
+      <line x1="250" y1="20" x2="250" y2="100" stroke="#2e2920" stroke-width="0.5" stroke-dasharray="4,4"/>
+      <line x1="365" y1="20" x2="365" y2="100" stroke="#2e2920" stroke-width="0.5" stroke-dasharray="4,4"/>
+      <text x="77" y="72" font-family="'DM Mono', monospace" font-size="7" fill="#7a7060" text-anchor="middle">Unit A</text>
+      <text x="192" y="72" font-family="'DM Mono', monospace" font-size="7" fill="#7a7060" text-anchor="middle">Unit B</text>
+      <text x="307" y="72" font-family="'DM Mono', monospace" font-size="7" fill="#7a7060" text-anchor="middle">Unit C</text>
+      <text x="422" y="72" font-family="'DM Mono', monospace" font-size="7" fill="#7a7060" text-anchor="middle">Unit D</text>
+      <!-- ~25m2 labels -->
+      <text x="77" y="82" font-family="'DM Mono', monospace" font-size="5.5" fill="#2e2920" text-anchor="middle">~25 m²</text>
+      <text x="192" y="82" font-family="'DM Mono', monospace" font-size="5.5" fill="#2e2920" text-anchor="middle">~25 m²</text>
+      <text x="307" y="82" font-family="'DM Mono', monospace" font-size="5.5" fill="#2e2920" text-anchor="middle">~25 m²</text>
+      <text x="422" y="82" font-family="'DM Mono', monospace" font-size="5.5" fill="#2e2920" text-anchor="middle">~25 m²</text>
+
+      <!-- Entresol floor line -->
+      <line x1="20" y1="100" x2="480" y2="100" stroke="#3a3425" stroke-width="1.5"/>
+      <text x="250" y="96" font-family="'DM Mono', monospace" font-size="5" fill="#3a3425" text-anchor="middle" letter-spacing="0.3em">VLOERRAND ENTRESOL</text>
+
+      <!-- Werkvloer (main floor) -->
+      <text x="250" y="130" font-family="'Bebas Neue', sans-serif" font-size="14" fill="#F0EAE0" text-anchor="middle" letter-spacing="2" opacity="0.5">WERKVLOER</text>
+
+      <!-- Machine zone -->
+      <rect x="40" y="145" width="180" height="80" fill="rgba(224,154,47,0.03)" stroke="#2e2920" stroke-width="0.5" stroke-dasharray="3,3" rx="2"/>
+      <text x="130" y="162" font-family="'DM Mono', monospace" font-size="7" fill="#E09A2F" text-anchor="middle" letter-spacing="0.1em">MACHINEZONE</text>
+      <!-- Machine indicators -->
+      <rect x="55" y="172" width="30" height="18" fill="none" stroke="#2e2920" stroke-width="0.5" rx="1"/>
+      <text x="70" y="184" font-family="'DM Mono', monospace" font-size="4.5" fill="#7a7060" text-anchor="middle">FZ</text>
+      <rect x="95" y="172" width="30" height="18" fill="none" stroke="#2e2920" stroke-width="0.5" rx="1"/>
+      <text x="110" y="184" font-family="'DM Mono', monospace" font-size="4.5" fill="#7a7060" text-anchor="middle">VD</text>
+      <rect x="135" y="172" width="30" height="18" fill="none" stroke="#2e2920" stroke-width="0.5" rx="1"/>
+      <text x="150" y="184" font-family="'DM Mono', monospace" font-size="4.5" fill="#7a7060" text-anchor="middle">LZ</text>
+      <rect x="175" y="172" width="30" height="18" fill="none" stroke="#2e2920" stroke-width="0.5" rx="1"/>
+      <text x="190" y="184" font-family="'DM Mono', monospace" font-size="4.5" fill="#7a7060" text-anchor="middle">MZ</text>
+      <text x="130" y="215" font-family="'DM Mono', monospace" font-size="4.5" fill="#2e2920" text-anchor="middle">FZ=Formaatzaag VD=Vandiktebank</text>
+      <text x="130" y="222" font-family="'DM Mono', monospace" font-size="4.5" fill="#2e2920" text-anchor="middle">LZ=Lintzaag MZ=Metaalzaag</text>
+
+      <!-- Flex space -->
+      <rect x="240" y="145" width="220" height="80" fill="rgba(240,234,224,0.02)" stroke="#2e2920" stroke-width="0.5" stroke-dasharray="3,3" rx="2"/>
+      <text x="350" y="162" font-family="'DM Mono', monospace" font-size="7" fill="#7a7060" text-anchor="middle" letter-spacing="0.1em">FLEXSPACE</text>
+      <text x="350" y="195" font-family="'DM Mono', monospace" font-size="6" fill="#2e2920" text-anchor="middle">Grote projecten</text>
+      <text x="350" y="205" font-family="'DM Mono', monospace" font-size="6" fill="#2e2920" text-anchor="middle">op aanvraag</text>
+
+      <!-- Bottom: opslag + kantoor + bureau -->
+      <rect x="20" y="240" width="140" height="40" fill="rgba(224,154,47,0.03)" stroke="#2e2920" stroke-width="0.5" rx="1"/>
+      <text x="90" y="264" font-family="'DM Mono', monospace" font-size="7" fill="#7a7060" text-anchor="middle">OPSLAG</text>
+
+      <rect x="170" y="240" width="100" height="40" fill="rgba(240,234,224,0.02)" stroke="#2e2920" stroke-width="0.5" rx="1"/>
+      <text x="220" y="264" font-family="'DM Mono', monospace" font-size="7" fill="#7a7060" text-anchor="middle">KANTOOR</text>
+
+      <rect x="280" y="240" width="100" height="40" fill="rgba(240,234,224,0.02)" stroke="#2e2920" stroke-width="0.5" rx="1"/>
+      <text x="330" y="264" font-family="'DM Mono', monospace" font-size="7" fill="#7a7060" text-anchor="middle">BUREAU</text>
+
+      <!-- Overhead doors -->
+      <rect x="400" y="272" width="40" height="8" fill="rgba(224,154,47,0.12)" stroke="#E09A2F" stroke-width="0.5" stroke-opacity="0.4" rx="1"/>
+      <text x="420" y="268" font-family="'DM Mono', monospace" font-size="5" fill="#E09A2F" text-anchor="middle" opacity="0.6">DEUR 1</text>
+      <rect x="450" y="272" width="30" height="8" fill="rgba(224,154,47,0.12)" stroke="#E09A2F" stroke-width="0.5" stroke-opacity="0.4" rx="1"/>
+      <text x="465" y="268" font-family="'DM Mono', monospace" font-size="5" fill="#E09A2F" text-anchor="middle" opacity="0.6">DEUR 2</text>
+
+      <!-- North arrow -->
+      <text x="470" y="38" font-family="'DM Mono', monospace" font-size="8" fill="#3a3425">N ↑</text>
+    </svg>
+    <div class="floorplan-legend">
+      <div class="legend-item"><div class="legend-swatch" style="background: rgba(224,154,47,0.08);"></div> Werkplekken entresol</div>
+      <div class="legend-item"><div class="legend-swatch" style="background: rgba(224,154,47,0.05); border-color: #E09A2F;"></div> Machinezone</div>
+      <div class="legend-item"><div class="legend-swatch" style="background: rgba(240,234,224,0.04);"></div> Flexspace / gedeeld</div>
+      <div class="legend-item"><div class="legend-swatch" style="background: rgba(224,154,47,0.15);"></div> Overheaddeuren</div>
     </div>
   </div>
-  <script src="placed-objects.js"></script>
 
   <!-- PRICING -->
   <p class="section-label" id="tarieven">Units & tarieven</p>
-  <div class="pricing-block" id="c-pricing"></div>
-  <p class="pricing-note" id="c-pricing-note"></p>
+  <div class="pricing-block">
+    <div class="pricing-row">
+      <div>
+        <div class="label">Werkplek entresol</div>
+        <div class="sub">~25 m² · machines inbegrepen</div>
+      </div>
+      <div class="price">€950<small>/mnd</small></div>
+    </div>
+    <div class="pricing-row">
+      <div>
+        <div class="label">Extra opslag</div>
+        <div class="sub">Plaatrek of vloerruimte</div>
+      </div>
+      <div class="price">v.a. €60<small>/mnd</small></div>
+    </div>
+  </div>
+  <p class="pricing-note">Alle prijzen excl. BTW. Exacte prijs afhankelijk van unit en afspraken — neem contact op voor een rondleiding.</p>
 
   <!-- VOOR WIE -->
   <p class="section-label">Voor wie</p>
   <div class="for-who">
-    <ul class="criteria-list" id="c-audience"></ul>
-    <div class="not-for" id="c-not-for"></div>
+    <ul class="criteria-list">
+      <li><span class="check">✦</span> Zelfstandig meubelmaker of restaurateur</li>
+      <li><span class="check">✦</span> Interieurontwerper die zelf prototypes bouwt</li>
+      <li><span class="check">✦</span> Kleine studio zonder eigen productieruimte</li>
+      <li><span class="check">✦</span> Timmerman / interieurbouwer met eigen projecten</li>
+      <li><span class="check">✦</span> Maker die meer ruimte en machines nodig heeft</li>
+    </ul>
+    <div class="not-for">
+      <strong>KvK-inschrijving verplicht.</strong> Werkplaats17 is uitsluitend voor professionele gebruikers. Particulieren en hobbyisten kunnen hier niet terecht.
+    </div>
   </div>
 
   <!-- CTA -->
   <div class="cta-block" id="contact">
-    <h2 id="c-cta-heading"></h2>
-    <div class="cta-actions" id="c-cta-actions"></div>
-    <div class="cta-info" id="c-cta-info"></div>
+    <h2>Interesse?<br>Kom <em>kijken.</em></h2>
+    <div class="cta-actions">
+      <a href="mailto:info@werkplaats17.nl" class="btn-primary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Mail ons
+      </a>
+      <a href="https://wa.me/31612345678?text=Hoi%2C%20ik%20heb%20interesse%20in%20een%20werkplek%20bij%20Werkplaats17." class="btn-secondary" target="_blank" rel="noopener">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        WhatsApp
+      </a>
+    </div>
+    <div class="cta-info">
+      <div class="cta-line"><div class="dot"></div><span>Schaapherderweg 17, Rotterdam ring-oost (afslag IJsselmonde)</span></div>
+      <div class="cta-line"><div class="dot"></div><span>Beperkt aantal plekken beschikbaar</span></div>
+      <div class="cta-line"><div class="dot"></div><span>Rondleiding op afspraak — <a href="mailto:info@werkplaats17.nl">info@werkplaats17.nl</a></span></div>
+    </div>
   </div>
 
   <!-- INSTAGRAM -->
@@ -960,446 +1136,22 @@
       <div class="insta-tile"><svg class="insta-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg></div>
       <div class="insta-tile"><svg class="insta-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg></div>
     </div>
-    <div class="insta-handle" id="c-insta"></div>
+    <div class="insta-handle">
+      <a href="https://instagram.com/werkplaats17" target="_blank" rel="noopener">@werkplaats17</a>
+    </div>
   </div>
 
   <!-- FOOTER -->
   <footer>
     <div class="brand">Werk<span>plaats</span>17</div>
     <div class="footer-right">
-      <div class="hashtags" id="c-hashtags"></div>
-      <div class="copy" id="c-copyright"></div>
+      <div class="hashtags">
+        #werkplaats17 #rotterdam<br>
+        #makerspace #meubelmaker<br>
+        #vakman #werkruimte
+      </div>
+      <div class="copy">© 2026 Werkplaats17</div>
     </div>
   </footer>
 
 </div>
-
-<!-- CONTENT ENGINE: laadt content.js en vult de pagina -->
-<script src="content.js"></script>
-<script src="photos.js"></script>
-<script>
-(function() {
-  const C = CONTENT;
-
-  // Meta
-  document.getElementById('siteTitle').textContent = C.siteTitle;
-  document.getElementById('metaDesc').setAttribute('content', C.metaDescription);
-  document.getElementById('ogTitle').setAttribute('content', C.siteTitle);
-  document.getElementById('ogDesc').setAttribute('content', C.ogDescription);
-
-  // Header
-  document.getElementById('c-eyebrow').textContent = C.eyebrow;
-  document.getElementById('c-tagline').innerHTML = C.tagline;
-
-  // Location
-  document.getElementById('c-location').textContent = C.locationText;
-
-  // Intro
-  document.getElementById('c-intro').innerHTML = C.introText;
-
-  // Access items
-  const accessIcons = [
-    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
-    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
-    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>',
-  ];
-  const accessEl = document.getElementById('c-access');
-  C.accessItems.forEach((text, i) => {
-    accessEl.innerHTML += `<div class="access-item"><span class="ico">${accessIcons[i] || accessIcons[0]}</span>${text}</div>`;
-  });
-
-  // Photos
-  const photosEl = document.getElementById('c-photos');
-  const photoSvg = '<svg class="ph-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>';
-  const P = (typeof PHOTOS !== 'undefined') ? PHOTOS : {hero: null, strip: [null, null, null]};
-  C.photoLabels.forEach((label, i) => {
-    const photoUrl = P.strip && P.strip[i] ? P.strip[i] : null;
-    if (photoUrl) {
-      photosEl.innerHTML += `<div class="photo-placeholder" style="background-image:url('${photoUrl}');background-size:cover;background-position:center"><span class="ph-label">${label}</span></div>`;
-    } else {
-      photosEl.innerHTML += `<div class="photo-placeholder">${photoSvg}<span class="ph-label">${label}</span></div>`;
-    }
-  });
-
-  // Hero photo
-  if (P.hero) {
-    const heroEl = document.querySelector('.hero-image');
-    if (heroEl) {
-      heroEl.innerHTML = `<img src="${P.hero}" alt="Werkplaats17" style="width:100%;height:100%;object-fit:cover;display:block">`;
-    }
-  }
-
-  // Offers
-  const offerIcons = [
-    '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="1"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>',
-    '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 9 2 12 5 15"/><polyline points="19 9 22 12 19 15"/><line x1="2" y1="12" x2="22" y2="12"/></svg>',
-    '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8V21H3V8"/><path d="M23 3H1v5h22V3z"/><line x1="10" y1="12" x2="14" y2="12"/></svg>',
-    '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
-  ];
-  const offersEl = document.getElementById('c-offers');
-  C.offers.forEach((o, i) => {
-    offersEl.innerHTML += `<div class="offer-card"><span class="icon">${offerIcons[i] || ''}</span><h3>${o.title}</h3><p>${o.text}</p></div>`;
-  });
-
-  // Machines
-  const machinesEl = document.getElementById('c-machines');
-  C.machines.forEach(m => {
-    machinesEl.innerHTML += `<span class="machine-tag${m.highlight ? ' highlight' : ''}">${m.name}</span>`;
-  });
-
-  // Pricing
-  const pricingEl = document.getElementById('c-pricing');
-  C.pricing.forEach(p => {
-    pricingEl.innerHTML += `<div class="pricing-row"><div><div class="label">${p.label}</div><div class="sub">${p.sub}</div></div><div class="price">${p.price}<small>${p.unit}</small></div></div>`;
-  });
-  document.getElementById('c-pricing-note').innerHTML = C.pricingNote;
-
-  // Target audience
-  const audienceEl = document.getElementById('c-audience');
-  C.targetAudience.forEach(item => {
-    audienceEl.innerHTML += `<li><span class="check">✦</span> ${item}</li>`;
-  });
-  document.getElementById('c-not-for').innerHTML = C.notForText;
-
-  // CTA
-  document.getElementById('c-cta-heading').innerHTML = C.ctaHeading;
-  const ctaActions = document.getElementById('c-cta-actions');
-  ctaActions.innerHTML = `
-    <a href="mailto:${C.email}" class="btn-primary">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-      Mail ons
-    </a>
-    <a href="https://wa.me/${C.whatsappNumber}?text=${encodeURIComponent(C.whatsappText)}" class="btn-secondary" target="_blank" rel="noopener">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-      WhatsApp
-    </a>`;
-
-  const ctaInfo = document.getElementById('c-cta-info');
-  C.contactLines.forEach(line => {
-    ctaInfo.innerHTML += `<div class="cta-line"><div class="dot"></div><span>${line}</span></div>`;
-  });
-  ctaInfo.innerHTML += `<div class="cta-line"><div class="dot"></div><span>Rondleiding op afspraak — <a href="mailto:${C.email}">${C.email}</a></span></div>`;
-
-  // Instagram
-  document.getElementById('c-insta').innerHTML = `<a href="${C.instagramUrl}" target="_blank" rel="noopener">${C.instagramHandle}</a>`;
-
-  // Footer
-  document.getElementById('c-hashtags').innerHTML = C.hashtags;
-  document.getElementById('c-copyright').textContent = C.copyright;
-
-  // Sticky nav
-  const nav = document.getElementById('stickyNav');
-  const header = document.querySelector('header');
-  const observer = new IntersectionObserver(([e]) => {
-    nav.classList.toggle('visible', !e.isIntersecting);
-  }, { threshold: 0 });
-  observer.observe(header);
-})();
-</script>
-
-<!-- PLATTEGROND RENDERER (read-only, overgenomen uit werkplaats17_plattegrond.html) -->
-<script>
-(function(){
-  const S=0.03;
-  const UW=11500, UH=21550;
-  const Xl=100,Xkl=6245,Xkr=6345,Xr=11400;
-  const Yb=100,Ytb=1300,Ytt=1400,Ykat=7870,Ysb=7970,Yst=8970,Yt=21450;
-  const GAP=0;
-  let floor=0;
-  const fp=document.getElementById('fp');
-  if(!fp)return;
-
-  function px(mm){return mm*S;}
-  function mx(x,w){return UW-x-w;}
-
-  function makeDiv(style){
-    const d=document.createElement('div');
-    d.style.cssText='position:absolute;';
-    Object.assign(d.style,style);
-    return d;
-  }
-  function wall(x,y,w,h,ox,oy){
-    fp.appendChild(makeDiv({left:px(x)+ox+'px',top:px(y)+oy+'px',width:px(w)+'px',height:px(h)+'px',background:'#4a4438'}));
-  }
-  function room(x,y,w,h,ox,oy,bg,bc,lbl,area){
-    const d=makeDiv({left:px(x)+ox+'px',top:px(y)+oy+'px',width:px(w)+'px',height:px(h)+'px',background:bg,border:'1px solid '+bc,pointerEvents:'none'});
-    if(lbl){
-      const t=document.createElement('div');
-      t.style.cssText='position:absolute;top:4px;left:5px;font-size:7px;letter-spacing:.09em;text-transform:uppercase;color:'+bc+';font-weight:bold;line-height:1.4;pointer-events:none';
-      t.textContent=lbl;
-      d.appendChild(t);
-    }
-    if(area){
-      const a=document.createElement('div');
-      a.style.cssText='position:absolute;bottom:4px;right:5px;font-size:6px;color:rgba(255,255,255,.22);pointer-events:none';
-      a.textContent=area;
-      d.appendChild(a);
-    }
-    fp.appendChild(d);
-  }
-  function unitLbl(ox,oy,lbl){
-    const d=makeDiv({left:ox+px(UW/2)-30+'px',top:oy-16+'px',width:'60px',textAlign:'center',fontSize:'7.5px',letterSpacing:'.15em',color:'#7a7060',textTransform:'uppercase',pointerEvents:'none'});
-    d.textContent=lbl;
-    fp.appendChild(d);
-  }
-  function dimH(x,y,w,lbl){
-    const d=makeDiv({left:x+'px',top:y+'px',width:w+'px',height:'18px',pointerEvents:'none'});
-    d.innerHTML='<div style="position:absolute;left:0;right:0;top:4px;height:1px;background:#7a7060;opacity:.3"></div><div style="position:absolute;left:0;right:0;top:7px;font-size:6px;color:#7a7060;text-align:center;letter-spacing:.08em">'+lbl+'</div>';
-    fp.appendChild(d);
-  }
-  function dimV(x,y,h,lbl){
-    const d=makeDiv({left:x+'px',top:y+'px',height:h+'px',width:'24px',pointerEvents:'none'});
-    d.innerHTML='<div style="position:absolute;left:5px;top:0;bottom:0;width:1px;background:#7a7060;opacity:.3"></div><div style="position:absolute;left:8px;top:50%;transform:translateY(-50%);font-size:6px;color:#7a7060;white-space:nowrap;letter-spacing:.08em">'+lbl+'</div>';
-    fp.appendChild(d);
-  }
-
-  function drawUnitL(ox,oy){
-    wall(0,0,UW,100,ox,oy); wall(0,UH-100,UW,100,ox,oy);
-    wall(0,0,100,UH,ox,oy);
-    wall(Xkl,Yb,Xkr-Xkl,Ykat-Yb,ox,oy);
-    wall(0,Ytb,Xkl,Ytt-Ytb,ox,oy);
-    var kanW=Xr-Xkr, kanH=Ykat-Yb;
-    room(Xkr,Yb,kanW,kanH,ox,oy,'rgba(110,150,220,.13)','rgba(110,150,220,.5)','Kantoor',Math.round(kanW/1000*kanH/1000)+'m²');
-    var trW=Xr-Xkl, trH=Yst-Ysb;
-    room(Xkl,Ysb,trW,trH,ox,oy,'rgba(180,140,80,.13)','rgba(180,140,80,.45)','Trap','');
-  }
-  function drawUnitM(ox,oy){
-    wall(0,0,UW,100,ox,oy); wall(0,UH-100,UW,100,ox,oy);
-    wall(UW-100,0,100,UH,ox,oy);
-    var kdw=Xkr-Xkl;
-    wall(mx(Xkl,kdw),Yb,kdw,Ykat-Yb,ox,oy);
-    wall(mx(0,Xkl),Ytb,Xkl,Ytt-Ytb,ox,oy);
-    var kanW=Xr-Xkr, kanH=Ykat-Yb;
-    room(mx(Xkr,kanW),Yb,kanW,kanH,ox,oy,'rgba(110,150,220,.13)','rgba(110,150,220,.5)','Kantoor',Math.round(kanW/1000*kanH/1000)+'m²');
-    var trW=Xr-Xkl, trH=Yst-Ysb;
-    room(mx(Xkl,trW),Ysb,trW,trH,ox,oy,'rgba(180,140,80,.13)','rgba(180,140,80,.45)','Trap','');
-  }
-  function drawEntresolL(ox,oy){
-    drawUnitL(ox,oy);
-    var kW=Xr-Xkr, kH=Ykat-Yb;
-    room(Xkr,Yb,kW,kH,ox,oy,'rgba(180,100,220,.13)','rgba(180,100,220,.5)','Entresol',Math.round(kW/1000*kH/1000)+'m²');
-  }
-  function drawEntresolM(ox,oy){
-    drawUnitM(ox,oy);
-    var kanW=Xr-Xkr, kanH=Ykat-Yb;
-    room(mx(Xkr,kanW),Yb,kanW,kanH,ox,oy,'rgba(180,100,220,.13)','rgba(180,100,220,.5)','Entresol',Math.round(kanW/1000*kanH/1000)+'m²');
-    var eW=Xr-Xl, eH=Yt-Yst;
-    room(Xl,Yst,eW,eH,ox,oy,'rgba(180,100,220,.13)','rgba(180,100,220,.5)','Entresol',Math.round(eW/1000*eH/1000)+'m²');
-  }
-
-  function draw(){
-    fp.innerHTML='';
-    var TW=px(UW)*2+GAP+80, TH=px(UH)+70;
-    fp.style.width=TW+'px';fp.style.height=TH+'px';fp.style.minWidth=TW+'px';fp.style.minHeight=TH+'px';
-    // Stel canvas hoogte in
-    var canvas=document.querySelector('.fp-canvas');
-    if(canvas)canvas.style.height='500px';
-
-    // grid
-    var g=makeDiv({inset:'0',pointerEvents:'none',zIndex:'0',
-      backgroundImage:'linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px)',
-      backgroundSize:px(1000)+'px '+px(1000)+'px'});
-    fp.appendChild(g);
-
-    var ox0=30, ox1=30+px(UW)+GAP, oy=28;
-
-    if(floor===0){
-      drawUnitL(ox0,oy); drawUnitM(ox1,oy);
-    } else {
-      drawEntresolL(ox0,oy); drawEntresolM(ox1,oy);
-    }
-
-    // Hal (L-vormig over beide units)
-    var svgLeft=px(Xl)+ox0, svgTop=px(Ytt)+oy;
-    var svgRight=px(Xr)+ox1, svgW=svgRight-svgLeft, svgH=px(Yt-Ytt);
-    function lx(mmX,unitOx){return px(mmX)+unitOx-svgLeft;}
-    function ly(mmY){return px(mmY)+oy-svgTop;}
-
-    var halSvg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-    halSvg.setAttribute('width',svgW);
-    halSvg.setAttribute('height',svgH);
-    halSvg.style.cssText='position:absolute;left:'+svgLeft+'px;top:'+svgTop+'px;pointer-events:none;overflow:visible;z-index:1;';
-
-    var kanW=Xr-Xkr, trW=Xr-Xkl;
-    var L_x0=lx(Xl,ox0),L_xk=lx(Xkl,ox0),L_xr=lx(Xr,ox0);
-    var L_ytt=ly(Ytt),L_ykat=ly(Ykat),L_yb=ly(Yt);
-    var M_xl=lx(Xl,ox1),M_xkr=lx(UW-Xkl,ox1),M_xr=lx(Xr,ox1);
-    var tLx1=lx(Xkl,ox0),tLy1=ly(Ysb),tLx2=lx(Xr,ox0),tLy2=ly(Yst);
-    var tMx1=lx(mx(Xkl,trW),ox1),tMy1=ly(Ysb),tMx2=lx(mx(Xkl,trW)+trW,ox1),tMy2=ly(Yst);
-
-    var path=document.createElementNS('http://www.w3.org/2000/svg','path');
-    path.setAttribute('d',[
-      'M'+L_x0+','+L_ytt,'L'+L_xk+','+L_ytt,'L'+L_xk+','+L_ykat,'L'+L_xr+','+L_ykat,'L'+L_xr+','+L_yb,'L'+L_x0+','+L_yb,'Z',
-      'M'+M_xr+','+L_ytt,'L'+M_xkr+','+L_ytt,'L'+M_xkr+','+L_ykat,'L'+M_xl+','+L_ykat,'L'+M_xl+','+L_yb,'L'+M_xr+','+L_yb,'Z',
-      'M'+tLx1+','+tLy1+' L'+tLx1+','+tLy2+' L'+tLx2+','+tLy2+' L'+tLx2+','+tLy1+' Z',
-      'M'+tMx1+','+tMy1+' L'+tMx1+','+tMy2+' L'+tMx2+','+tMy2+' L'+tMx2+','+tMy1+' Z'
-    ].join(' '));
-    path.setAttribute('fill-rule','evenodd');
-    path.setAttribute('fill','rgba(224,154,47,.13)');
-    path.setAttribute('stroke','rgba(224,154,47,.5)');
-    path.setAttribute('stroke-width','1');
-    halSvg.appendChild(path);
-
-    var halLbl=document.createElement('div');
-    halLbl.style.cssText='position:absolute;left:'+(svgLeft+5)+'px;top:'+(px(Ytt)+oy+4)+'px;font-size:7px;letter-spacing:.09em;text-transform:uppercase;color:rgba(224,154,47,.5);font-weight:bold;pointer-events:none;z-index:1';
-    halLbl.textContent='Hal';
-
-    var halLeftArea=(Xkl-Xl)/1000*(Yt-Ytt)/1000;
-    var halRightArea=(Xr-Xkl)/1000*(Yt-Ykat)/1000;
-    var trArea=trW/1000*(Yst-Ysb)/1000;
-    var halM2=Math.round((halLeftArea+halRightArea-trArea)*2);
-    var halAreaEl=document.createElement('div');
-    halAreaEl.style.cssText='position:absolute;left:'+(svgLeft+svgW-40)+'px;top:'+(px(Yt)+oy-14)+'px;font-size:6px;color:rgba(255,255,255,.22);pointer-events:none;z-index:1';
-    halAreaEl.textContent=halM2+'m²';
-
-    fp.appendChild(halSvg);
-    fp.appendChild(halLbl);
-    fp.appendChild(halAreaEl);
-
-    // Middellijn
-    fp.appendChild(makeDiv({left:ox1+'px',top:oy+'px',width:'1px',height:px(UH)+'px',
-      background:'rgba(255,255,255,.18)',borderLeft:'1px dashed rgba(255,255,255,.18)',pointerEvents:'none',zIndex:'5'}));
-
-    // Traplijnen
-    fp.appendChild(makeDiv({left:px(Xkl)+ox0+'px',top:px(Ysb)+oy+'px',width:'2px',height:px(Yst-Ysb)+'px',background:'rgba(255,255,255,.35)',pointerEvents:'none',zIndex:'6'}));
-    fp.appendChild(makeDiv({left:px(UW-Xkl-2)+ox1+'px',top:px(Ysb)+oy+'px',width:'2px',height:px(Yst-Ysb)+'px',background:'rgba(255,255,255,.35)',pointerEvents:'none',zIndex:'6'}));
-
-    unitLbl(ox0,oy,'Unit L'); unitLbl(ox1,oy,'Unit M');
-    dimH(ox0,oy+px(UH)+12,px(UW),'11,5 m');
-    dimH(ox1,oy+px(UH)+12,px(UW),'11,5 m');
-    dimV(8,oy,px(UH),'21,6 m');
-    if(floor===1) dimV(8,oy+px(Ytt),px(Ysb-Ytt),'6,6 m');
-  }
-
-  // Render placed objects from admin (placed-objects.js)
-  function statusStyle(status){
-    if(status==='beschikbaar')return{border:'#4CAF50',bg:'rgba(76,175,80,0.12)',glow:'0 0 6px rgba(76,175,80,0.3)'};
-    if(status==='bezet')return{border:'#666',bg:'rgba(120,120,120,0.08)',glow:'none'};
-    if(status==='gereserveerd')return{border:'#FF9800',bg:'rgba(255,152,0,0.12)',glow:'0 0 6px rgba(255,152,0,0.2)'};
-    return null;
-  }
-  function renderPlacedObjects(){
-    if(typeof PLACED_OBJECTS==='undefined')return;
-    PLACED_OBJECTS.forEach(function(o){
-      if(o.floor!==floor)return;
-      var d=document.createElement('div');
-      var ss=o.status?statusStyle(o.status):null;
-      var tooltip=o.type==='huurunit'&&o.status?'title="'+o.l+(o.status?' — '+o.status:'')+'"':'';
-      d.style.cssText='position:absolute;left:'+o.x+'px;top:'+o.y+'px;width:'+o.w+'px;height:'+o.h+'px;z-index:10;pointer-events:'+(tooltip?'auto':'none')+';';
-      var isDoor=o.type==='overhead'||o.type==='door';
-      if(isDoor){
-        var inner='<div style="position:absolute;left:0;right:0;top:0;height:4px;background:'+o.c+';opacity:.9"></div>';
-        if(o.type==='overhead')inner+='<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:3px">'+Array(5).fill('<div style="width:1px;height:55%;background:'+o.c+';opacity:.4"></div>').join('')+'</div>';
-        else inner+='<div style="position:absolute;bottom:1px;left:2px;right:2px;border-bottom:1px solid '+o.c+';border-right:1px solid '+o.c+';border-radius:0 0 80% 0;opacity:.5;height:80%"></div>';
-        inner+='<div style="position:absolute;bottom:2px;left:0;right:0;text-align:center;font-size:6px;color:'+o.c+';letter-spacing:.08em;text-transform:uppercase">'+o.l+'</div>';
-        d.innerHTML='<div style="width:100%;height:100%;position:relative;overflow:hidden;'+(o.rot&&o.rot!=='0'?'transform:rotate('+o.rot+'deg)':'')+'">'+ inner+'</div>';
-      }else{
-        var bc=ss?ss.border:o.c, bbg=ss?ss.bg:(o.bg||'transparent'), shadow=ss?';box-shadow:'+ss.glow:'';
-        d.innerHTML='<div '+tooltip+' style="width:100%;height:100%;border:1.5px solid '+bc+';background:'+bbg+';display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;cursor:'+(tooltip?'help':'default')+shadow+'"><div style="font-size:7px;letter-spacing:.05em;text-align:center;padding:1px;line-height:1.3;text-transform:uppercase;color:'+bc+'">'+o.l+'</div></div><div style="position:absolute;bottom:-10px;left:0;right:0;font-size:5.5px;color:rgba(255,255,255,.35);text-align:center;white-space:nowrap;pointer-events:none">'+Math.round(o.w/S/10)+'×'+Math.round(o.h/S/10)+'cm</div>';
-      }
-      fp.appendChild(d);
-    });
-  }
-
-  // ── ZOOM & PAN ──
-  var fpZoomLevel=1, panX=0, panY=0;
-  var canvas=document.querySelector('.fp-canvas');
-
-  function applyTransform(){
-    fp.style.transform='translate('+panX+'px,'+panY+'px) scale('+fpZoomLevel+')';
-    document.getElementById('fp-zlbl').textContent=Math.round(fpZoomLevel*100)+'%';
-  }
-
-  window.fpZoom=function(delta){
-    fpZoomLevel=Math.min(3,Math.max(0.3,fpZoomLevel+delta));
-    applyTransform();
-  };
-  function fitToView(){
-    var rect=canvas.getBoundingClientRect();
-    var cw=rect.width, ch=rect.height;
-    var TW=parseFloat(fp.style.width), TH=parseFloat(fp.style.height);
-    if(!cw||!ch||!TW||!TH)return;
-    fpZoomLevel=Math.min(cw/TW, ch/TH)*0.95;
-    fpZoomLevel=Math.max(0.3,Math.min(3,fpZoomLevel));
-    panX=(cw-TW*fpZoomLevel)/2;
-    panY=(ch-TH*fpZoomLevel)/2;
-    applyTransform();
-  }
-  window.fpReset=function(){
-    fitToView();
-  };
-
-  // Scroll zoom
-  canvas.addEventListener('wheel',function(e){
-    e.preventDefault();
-    var rect=canvas.getBoundingClientRect();
-    var mx=e.clientX-rect.left, my=e.clientY-rect.top;
-    var oldZ=fpZoomLevel;
-    fpZoomLevel=Math.min(3,Math.max(0.3,fpZoomLevel-e.deltaY*0.002));
-    var ratio=fpZoomLevel/oldZ;
-    panX=mx-(mx-panX)*ratio;
-    panY=my-(my-panY)*ratio;
-    applyTransform();
-  },{passive:false});
-
-  // Mouse drag pan
-  var dragging=false, dragSX=0, dragSY=0, dragPX=0, dragPY=0;
-  canvas.addEventListener('mousedown',function(e){
-    if(e.button!==0)return;
-    dragging=true;dragSX=e.clientX;dragSY=e.clientY;dragPX=panX;dragPY=panY;
-    canvas.classList.add('grabbing');
-  });
-  document.addEventListener('mousemove',function(e){
-    if(!dragging)return;
-    panX=dragPX+(e.clientX-dragSX);panY=dragPY+(e.clientY-dragSY);
-    applyTransform();
-  });
-  document.addEventListener('mouseup',function(){
-    if(dragging){dragging=false;canvas.classList.remove('grabbing');}
-  });
-
-  // Touch pan & pinch zoom
-  var touches={},lastDist=0;
-  canvas.addEventListener('touchstart',function(e){
-    e.preventDefault();
-    for(var i=0;i<e.changedTouches.length;i++) touches[e.changedTouches[i].identifier]={x:e.changedTouches[i].clientX,y:e.changedTouches[i].clientY};
-    var ids=Object.keys(touches);
-    if(ids.length===1){dragPX=panX;dragPY=panY;dragSX=touches[ids[0]].x;dragSY=touches[ids[0]].y;}
-    if(ids.length===2){var t0=touches[ids[0]],t1=touches[ids[1]];lastDist=Math.hypot(t1.x-t0.x,t1.y-t0.y);}
-  },{passive:false});
-  canvas.addEventListener('touchmove',function(e){
-    e.preventDefault();
-    for(var i=0;i<e.changedTouches.length;i++) touches[e.changedTouches[i].identifier]={x:e.changedTouches[i].clientX,y:e.changedTouches[i].clientY};
-    var ids=Object.keys(touches);
-    if(ids.length===1){panX=dragPX+(touches[ids[0]].x-dragSX);panY=dragPY+(touches[ids[0]].y-dragSY);applyTransform();}
-    if(ids.length>=2){
-      var t0=touches[ids[0]],t1=touches[ids[1]];
-      var dist=Math.hypot(t1.x-t0.x,t1.y-t0.y);
-      if(lastDist>0){var scale=dist/lastDist;fpZoomLevel=Math.min(3,Math.max(0.3,fpZoomLevel*scale));}
-      lastDist=dist;applyTransform();
-    }
-  },{passive:false});
-  canvas.addEventListener('touchend',function(e){
-    for(var i=0;i<e.changedTouches.length;i++) delete touches[e.changedTouches[i].identifier];
-    var ids=Object.keys(touches);
-    if(ids.length===1){dragPX=panX;dragPY=panY;dragSX=touches[ids[0]].x;dragSY=touches[ids[0]].y;}
-    if(ids.length<2) lastDist=0;
-  });
-
-  window.fpShow=function(f){
-    floor=f;
-    document.querySelectorAll('.fp-tab').forEach(function(t,i){
-      t.classList.toggle('active',i===f);
-    });
-    draw();
-    renderPlacedObjects();
-    fitToView();
-  };
-
-  draw();
-  renderPlacedObjects();
-  fitToView();
-})();
-</script>
-</body>
-</html>
