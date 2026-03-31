@@ -44,7 +44,7 @@ body{background:var(--bg);color:var(--cream);font-family:'Courier New',monospace
 /* layout */
 .wrap{display:flex;flex:1;overflow:hidden}
 /* left sidebar */
-.sb{width:166px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden}
+.sb{width:180px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden}
 .sb-h{font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);padding:8px 10px 5px;border-bottom:1px solid var(--border)}
 .sb-s{overflow-y:auto;flex:1;padding:5px}
 .sb-s::-webkit-scrollbar{width:3px}.sb-s::-webkit-scrollbar-thumb{background:var(--border)}
@@ -79,7 +79,7 @@ body{background:var(--bg);color:var(--cream);font-family:'Courier New',monospace
 .stb[data-st=""]{background:var(--muted);color:var(--bg)}
 
 /* right sidebar — properties panel */
-.props{width:220px;background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden}
+.props{width:200px;background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden}
 .props-h{font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);padding:8px 10px 5px;border-bottom:1px solid var(--border)}
 .props-empty{padding:20px 10px;font-size:9px;color:var(--muted);text-align:center;line-height:1.6}
 .props-scroll{overflow-y:auto;flex:1;padding:8px}
@@ -348,17 +348,22 @@ textarea.ce-input{min-height:60px;resize:vertical}
       <input type="color" id="addC" value="#c0a070" style="width:24px;height:18px;padding:0;border:1px solid var(--border);background:var(--bg);cursor:pointer;flex-shrink:0">
     </div>
     <button id="addBtn">Toevoegen</button>
-    <div class="bgctl">
-    <label>Tekening inlezen</label>
-    <input type="file" id="scanFile" accept="image/*">
-    <input type="password" id="apiKey" placeholder="API key (Anthropic)" style="margin-top:3px;padding:3px 5px;font-size:7px;font-family:inherit;background:var(--bg);border:1px solid var(--border);color:var(--cream);width:100%">
-    <button id="scanBtn" style="width:100%;margin-top:4px;padding:5px;font-size:8px;font-family:inherit;letter-spacing:.1em;text-transform:uppercase;background:var(--amber);color:var(--bg);border:none;cursor:pointer" disabled>Scan ruimtes</button>
-    <div id="scanStatus" style="font-size:7px;color:var(--muted);margin-top:3px;min-height:12px"></div>
-    <label style="margin-top:4px">Achtergrond transparantie</label>
-    <input type="range" id="bgOp" min="0" max="60" value="20">
-    <div style="display:flex;gap:3px;margin-top:3px">
-      <button class="zbtn sm" onclick="toggleBg()" style="font-size:6px;width:auto;padding:0 5px;height:16px">Achtergrond aan/uit</button>
-    </div>
+  </div>
+  <div class="bgctl" style="border-top:1px solid var(--border)">
+    <details style="cursor:pointer">
+      <summary style="font-size:7px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);padding:2px 0;user-select:none">Tekening inlezen</summary>
+      <div style="padding-top:4px">
+        <input type="file" id="scanFile" accept="image/*" style="font-size:7px;color:var(--muted);width:100%">
+        <input type="password" id="apiKey" placeholder="API key (Anthropic)" style="margin-top:3px;padding:3px 5px;font-size:7px;font-family:inherit;background:var(--bg);border:1px solid var(--border);color:var(--cream);width:100%">
+        <button id="scanBtn" style="width:100%;margin-top:4px;padding:5px;font-size:8px;font-family:inherit;letter-spacing:.1em;text-transform:uppercase;background:var(--amber);color:var(--bg);border:none;cursor:pointer" disabled>Scan ruimtes</button>
+        <div id="scanStatus" style="font-size:7px;color:var(--muted);margin-top:3px;min-height:12px"></div>
+        <label style="margin-top:4px;font-size:7px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;display:block">Achtergrond transparantie</label>
+        <input type="range" id="bgOp" min="0" max="60" value="20" style="width:100%;accent-color:var(--amber)">
+        <div style="display:flex;gap:3px;margin-top:3px">
+          <button class="zbtn sm" onclick="toggleBg()" style="font-size:6px;width:auto;padding:0 5px;height:16px">Achtergrond aan/uit</button>
+        </div>
+      </div>
+    </details>
   </div>
 </div>
 
@@ -533,6 +538,7 @@ textarea.ce-input{min-height:60px;resize:vertical}
 <input type="file" id="pm-file-input" accept="image/*" style="display:none">
 
 <script src="content.js"></script>
+<script src="photos.js"></script>
 <script>
 // ╔════════════════════════════════════════════╗
 // ║  AUTH                                      ║
@@ -1406,6 +1412,111 @@ window.pmSave=async function(){
 function pmGenerateJS(){
   return '// Werkplaats17 — Foto referenties\n// Laatst gewijzigd: '+new Date().toISOString()+'\n// Gegenereerd via admin.html\n\nconst PHOTOS = '+JSON.stringify(pmPhotos,null,2)+';\n';
 }
+
+// ╔════════════════════════════════════════════╗
+// ║  TOAST                                     ║
+// ╚════════════════════════════════════════════╝
+function toast(msg,type){
+  var t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast show '+(type||'ok');
+  clearTimeout(t._timer);
+  t._timer=setTimeout(function(){t.classList.remove('show');},3000);
+}
+
+// ╔════════════════════════════════════════════╗
+// ║  GITHUB PUBLISH                            ║
+// ╚════════════════════════════════════════════╝
+async function getGHConfig(){
+  var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats17';
+  var token=localStorage.getItem('w17-gh-token');
+  if(!token){document.getElementById('token-modal').classList.add('show');return null;}
+  return{repo:repo,token:token};
+}
+
+async function publishFile(path,content,message,btn){
+  var gh=await getGHConfig();if(!gh)return false;
+  if(btn){btn.disabled=true;btn.textContent='Publiceren...';}
+  try{
+    // Get current SHA
+    var r=await fetch('https://api.github.com/repos/'+gh.repo+'/contents/'+path,{
+      headers:{'Authorization':'Bearer '+gh.token,'Accept':'application/vnd.github.v3+json'}
+    });
+    var sha=null;
+    if(r.ok){var d=await r.json();sha=d.sha;}
+    // Put file
+    var body={message:message||'Update '+path,content:btoa(unescape(encodeURIComponent(content)))};
+    if(sha)body.sha=sha;
+    var r2=await fetch('https://api.github.com/repos/'+gh.repo+'/contents/'+path,{
+      method:'PUT',
+      headers:{'Authorization':'Bearer '+gh.token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
+      body:JSON.stringify(body)
+    });
+    if(!r2.ok){var err=await r2.json();throw new Error(err.message||'HTTP '+r2.status);}
+    toast('Gepubliceerd: '+path);
+    return true;
+  }catch(e){
+    console.error('Publish error:',e);
+    toast('Publiceren mislukt: '+e.message,'err');
+    return false;
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent='Opslaan & Publiceer';}
+  }
+}
+
+async function publishBinary(path,b64Data,message){
+  var gh=await getGHConfig();if(!gh)return false;
+  try{
+    var r=await fetch('https://api.github.com/repos/'+gh.repo+'/contents/'+path,{
+      headers:{'Authorization':'Bearer '+gh.token,'Accept':'application/vnd.github.v3+json'}
+    });
+    var sha=null;
+    if(r.ok){var d=await r.json();sha=d.sha;}
+    var body={message:message||'Upload '+path,content:b64Data};
+    if(sha)body.sha=sha;
+    var r2=await fetch('https://api.github.com/repos/'+gh.repo+'/contents/'+path,{
+      method:'PUT',
+      headers:{'Authorization':'Bearer '+gh.token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
+      body:JSON.stringify(body)
+    });
+    if(!r2.ok){var err=await r2.json();throw new Error(err.message||'HTTP '+r2.status);}
+    return true;
+  }catch(e){
+    console.error('Binary upload error:',e);
+    return false;
+  }
+}
+
+// ╔════════════════════════════════════════════╗
+// ║  SAVE / EXPORT BUTTONS (Plattegrond)       ║
+// ╚════════════════════════════════════════════╝
+document.getElementById('btn-save').addEventListener('click',async function(){
+  var btn=this;
+  var objs=serializeObjects();
+  localStorage.setItem('w17-objects',JSON.stringify(objs));
+  var js=generateJS(objs);
+  await publishFile('placed-objects.js',js,'Plattegrond bijgewerkt via admin ('+new Date().toLocaleString('nl-NL')+')',btn);
+});
+
+document.getElementById('btn-export').addEventListener('click',function(){
+  var objs=serializeObjects();
+  var js=generateJS(objs);
+  var blob=new Blob([js],{type:'application/javascript'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='placed-objects.js';a.click();
+  toast('Export gedownload');
+});
+
+// ╔════════════════════════════════════════════╗
+// ║  TOKEN MODAL                               ║
+// ╚════════════════════════════════════════════╝
+document.getElementById('token-save').addEventListener('click',function(){
+  var repo=document.getElementById('gh-repo').value.trim();
+  var token=document.getElementById('gh-token').value.trim();
+  if(!repo||!token){document.getElementById('pub-status').textContent='Vul beide velden in';document.getElementById('pub-status').className='pub-status err';return;}
+  localStorage.setItem('w17-gh-repo',repo);
+  localStorage.setItem('w17-gh-token',token);
+  document.getElementById('token-modal').classList.remove('show');
+  toast('GitHub token opgeslagen');
+});
 
 // ╔════════════════════════════════════════════╗
 // ║  INIT                                      ║
