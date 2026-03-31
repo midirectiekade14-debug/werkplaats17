@@ -11,7 +11,7 @@ const CONTENT = {
   "eyebrow": "Beschikbaar · Maasland",
   "tagline": "Multifunctionele bedrijfsruimte voor professionele makers",
   "locationText": "Oud Camp 3b · Maasland · Naast A20 · 15 min Den Haag / Rotterdam",
-  "introText": "Werkplaats17 is een <strong>multifunctionele bedrijfsruimte van 904 m²</strong> voor zelfstandige vakmensen en kleine studio's. Bedrijfshal van 719 m², plus 185 m² kantoorruimte.<br><br>Drie verdiepingen, vloerverwarming, airco, LED-verlichting en glasvezel. Parkeren op eigen terrein.",
+  "introText": "Werkplaats17 is een <strong>multifunctionele bedrijfsruimte van 904 m²</strong> voor zelfstandige vakmensen en kleine studio's. Bedrijfshal van 719 m², plus 185 m² kantoorruimte.<br><br>Drie verdiepingen, vloerverwarming, airco, LED-verlichting en glasvezel.",
   "accessItems": [
     "904 m² · hal 719 m² · kantoor 185 m²",
     "Eigen sleutel · alarmsysteem",
@@ -36,10 +36,10 @@ const CONTENT = {
     {"name": "Alle handgereedschappen", "highlight": false}
   ],
   "pricing": [
-    {"label": "Werkplek in de hal", "sub": "Eigen afgebakende ruimte · gedeelde machines", "price": "Vanaf €650", "unit": "/mnd"},
+    {"label": "Werkplek in de hal", "sub": "Eigen ruimte met flexspace voor de grotere projecten", "price": "Vanaf €650", "unit": "/mnd"},
     {"label": "Kantoorruimte", "sub": "Eigen afgesloten kantoor · begane grond of 2e verdieping", "price": "Vanaf €450", "unit": "/mnd"},
     {"label": "Opslagruimte", "sub": "1e verdieping · flexibel in te delen", "price": "Vanaf €250", "unit": "/mnd"},
-    {"label": "Servicekosten", "sub": "Energie, onderhoud, verzekering · per werkplek", "price": "€95", "unit": "/mnd"}
+    {"label": "Servicekosten", "sub": "Energie en onderhoud inbegrepen · per werkplek", "price": "€95", "unit": "/mnd"}
   ],
   "pricingNote": "Alle prijzen excl. BTW. Neem contact op voor een rondleiding en beschikbare units.",
   "targetAudience": [
