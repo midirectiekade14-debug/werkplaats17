@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Werkplaats17 — Admin</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔧</text></svg>">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -546,7 +547,7 @@ textarea.ce-input{min-height:60px;resize:vertical}
 const PASS_HASH='0e122c4826c8a99766c3bdbeb89ba9e7446f9ff73b61996e5deed73c48fce803';
 async function sha256(m){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(m));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');}
 const authGate=document.getElementById('auth-gate');
-if(sessionStorage.getItem('w17auth')==='ok'){authGate.style.display='none';document.getElementById('editor').style.display='flex';init();}
+if(sessionStorage.getItem('w17auth')==='ok'){authGate.style.display='none';document.getElementById('editor').style.display='flex';setTimeout(init,0);}
 document.getElementById('auth-pw').addEventListener('keydown',async e=>{
   if(e.key!=='Enter')return;
   if(await sha256(e.target.value)===PASS_HASH){
@@ -1130,8 +1131,8 @@ function ceRenderField(f){
     // Toolbar
     var tb=document.createElement('div');tb.className='ce-toolbar';
     var ta=document.createElement('textarea');ta.className='ce-input';ta.dataset.key=f.key;
-    var prev=document.createElement('div');prev.className='ce-preview';prev.textContent=val||'';
-    function syncTa(){ceData[f.key]=ta.value.replace(/\n/g,'<br>');prev.textContent=ceData[f.key];}
+    var prev=document.createElement('div');prev.className='ce-preview';prev.innerHTML=val||'';
+    function syncTa(){ceData[f.key]=ta.value.replace(/\n/g,'<br>');prev.innerHTML=ceData[f.key];}
     [['B','strong'],['I','em']].forEach(function(pair){
       var btn=document.createElement('button');btn.className='ce-tb-btn';btn.type='button';btn.textContent=pair[0];if(pair[1]==='strong')btn.style.fontWeight='bold';if(pair[1]==='em')btn.style.fontStyle='italic';
       btn.onclick=function(){ceWrapSelection(ta,pair[1]);syncTa();};
