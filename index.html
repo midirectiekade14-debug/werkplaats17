@@ -364,12 +364,85 @@
     border-bottom: 1px solid var(--line);
     padding-bottom: 36px;
   }
-  .floorplan-svg {
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
-    display: block;
+  .fp-tabs {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 12px;
   }
+  .fp-tab {
+    padding: 6px 16px;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border: 1px solid var(--line);
+    background: var(--bg);
+    color: var(--muted);
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    transition: all 0.15s;
+  }
+  .fp-tab:hover { border-color: var(--amber); color: var(--amber); }
+  .fp-tab.on { background: var(--amber); color: var(--bg); border-color: var(--amber); }
+  .fp-canvas {
+    position: relative;
+    width: 100%;
+    max-width: 720px;
+    aspect-ratio: 900 / 550;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    overflow: hidden;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+  .fp-obj {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 3px 4px;
+    overflow: hidden;
+    transition: opacity 0.2s;
+  }
+  .fp-obj-label {
+    font-size: 7px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: bold;
+    pointer-events: none;
+    line-height: 1.2;
+  }
+  .fp-obj-area {
+    font-size: 5.5px;
+    color: rgba(255,255,255,0.22);
+    pointer-events: none;
+    position: absolute;
+    bottom: 2px;
+    right: 4px;
+  }
+  .fp-obj:hover {
+    filter: brightness(1.3);
+    z-index: 2;
+  }
+  .fp-tooltip {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    padding: 4px 8px;
+    font-size: 8px;
+    color: var(--cream);
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 10;
+    letter-spacing: 0.06em;
+  }
+  .fp-obj:hover .fp-tooltip { display: block; }
   .floorplan-legend {
     display: flex;
     flex-wrap: wrap;
@@ -1202,74 +1275,18 @@
   <!-- PLATTEGROND -->
   <p class="section-label" id="indeling">Indeling pand</p>
   <div class="floorplan-block">
-    <svg class="floorplan-svg" viewBox="0 0 500 420" xmlns="http://www.w3.org/2000/svg">
-      <!-- BG label -->
-      <text x="250" y="16" font-family="'Bebas Neue', sans-serif" font-size="12" fill="#E09A2F" text-anchor="middle" letter-spacing="2">BEGANE GROND · ~400 M²</text>
-
-      <!-- BG outer walls -->
-      <rect x="20" y="24" width="460" height="180" fill="none" stroke="#3a3425" stroke-width="2" rx="2"/>
-
-      <!-- Bedrijfshal -->
-      <rect x="20" y="24" width="280" height="180" fill="rgba(224,154,47,0.03)" stroke="#2e2920" stroke-width="0.5"/>
-      <text x="160" y="70" font-family="'Bebas Neue', sans-serif" font-size="14" fill="#F0EAE0" text-anchor="middle" letter-spacing="2" opacity="0.5">BEDRIJFSHAL</text>
-      <text x="160" y="86" font-family="'DM Mono', monospace" font-size="6" fill="#7a7060" text-anchor="middle">begane grond</text>
-
-      <!-- Machine zone in hal -->
-      <rect x="35" y="100" width="150" height="60" fill="rgba(224,154,47,0.03)" stroke="#2e2920" stroke-width="0.5" stroke-dasharray="3,3" rx="2"/>
-      <text x="110" y="118" font-family="'DM Mono', monospace" font-size="7" fill="#E09A2F" text-anchor="middle" letter-spacing="0.1em">MACHINEZONE</text>
-      <rect x="45" y="128" width="26" height="16" fill="none" stroke="#2e2920" stroke-width="0.5" rx="1"/>
-      <text x="58" y="139" font-family="'DM Mono', monospace" font-size="4.5" fill="#7a7060" text-anchor="middle">FZ</text>
-      <rect x="78" y="128" width="26" height="16" fill="none" stroke="#2e2920" stroke-width="0.5" rx="1"/>
-      <text x="91" y="139" font-family="'DM Mono', monospace" font-size="4.5" fill="#7a7060" text-anchor="middle">VD</text>
-      <rect x="111" y="128" width="26" height="16" fill="none" stroke="#2e2920" stroke-width="0.5" rx="1"/>
-      <text x="124" y="139" font-family="'DM Mono', monospace" font-size="4.5" fill="#7a7060" text-anchor="middle">LZ</text>
-      <rect x="144" y="128" width="26" height="16" fill="none" stroke="#2e2920" stroke-width="0.5" rx="1"/>
-      <text x="157" y="139" font-family="'DM Mono', monospace" font-size="4.5" fill="#7a7060" text-anchor="middle">RB</text>
-
-      <!-- Magazijn -->
-      <rect x="200" y="100" width="90" height="60" fill="rgba(160,128,96,0.06)" stroke="#2e2920" stroke-width="0.5" rx="1"/>
-      <text x="245" y="135" font-family="'DM Mono', monospace" font-size="7" fill="#7a7060" text-anchor="middle">MAGAZIJN</text>
-
-      <!-- Kantoren rechts -->
-      <rect x="300" y="24" width="180" height="180" fill="rgba(110,150,220,0.04)" stroke="#3a3425" stroke-width="1"/>
-      <text x="390" y="48" font-family="'DM Mono', monospace" font-size="7" fill="#E09A2F" text-anchor="middle" letter-spacing="0.1em">KANTOREN</text>
-      <line x1="390" y1="24" x2="390" y2="204" stroke="#2e2920" stroke-width="0.5" stroke-dasharray="4,4"/>
-      <line x1="300" y1="114" x2="480" y2="114" stroke="#2e2920" stroke-width="0.5" stroke-dasharray="4,4"/>
-      <text x="345" y="76" font-family="'DM Mono', monospace" font-size="6" fill="#7a7060" text-anchor="middle">Receptie</text>
-      <text x="435" y="76" font-family="'DM Mono', monospace" font-size="6" fill="#7a7060" text-anchor="middle">Kantoor 1</text>
-      <text x="345" y="166" font-family="'DM Mono', monospace" font-size="6" fill="#7a7060" text-anchor="middle">Kantoor 2</text>
-      <text x="435" y="166" font-family="'DM Mono', monospace" font-size="6" fill="#7a7060" text-anchor="middle">Kantoor 3</text>
-
-      <!-- Overheaddeur -->
-      <rect x="80" y="196" width="80" height="8" fill="rgba(224,154,47,0.12)" stroke="#E09A2F" stroke-width="0.5" stroke-opacity="0.4" rx="1"/>
-      <text x="120" y="194" font-family="'DM Mono', monospace" font-size="5" fill="#E09A2F" text-anchor="middle" opacity="0.6">OVERHEADDEUR</text>
-
-      <!-- Divider -->
-      <line x1="20" y1="230" x2="480" y2="230" stroke="#2e2920" stroke-width="0.5" stroke-dasharray="6,4"/>
-
-      <!-- 1e verdieping -->
-      <text x="250" y="252" font-family="'Bebas Neue', sans-serif" font-size="12" fill="#E09A2F" text-anchor="middle" letter-spacing="2">1E VERDIEPING · ~222 M²</text>
-      <rect x="20" y="260" width="460" height="60" fill="rgba(180,100,220,0.03)" stroke="#3a3425" stroke-width="1.5" rx="2"/>
-      <text x="250" y="295" font-family="'DM Mono', monospace" font-size="7" fill="#7a7060" text-anchor="middle">VLOER / WERKRUIMTE / OPSLAG</text>
-
-      <!-- Divider -->
-      <line x1="20" y1="340" x2="480" y2="340" stroke="#2e2920" stroke-width="0.5" stroke-dasharray="6,4"/>
-
-      <!-- 2e verdieping -->
-      <text x="250" y="362" font-family="'Bebas Neue', sans-serif" font-size="12" fill="#E09A2F" text-anchor="middle" letter-spacing="2">2E VERDIEPING · ~97 M²</text>
-      <rect x="20" y="370" width="220" height="40" fill="rgba(110,150,220,0.04)" stroke="#2e2920" stroke-width="0.5" rx="1"/>
-      <text x="130" y="394" font-family="'DM Mono', monospace" font-size="7" fill="#7a7060" text-anchor="middle">KANTOOR + KEUKEN</text>
-      <rect x="260" y="370" width="220" height="40" fill="rgba(110,150,220,0.04)" stroke="#2e2920" stroke-width="0.5" rx="1"/>
-      <text x="370" y="394" font-family="'DM Mono', monospace" font-size="7" fill="#7a7060" text-anchor="middle">KANTOOR</text>
-
-      <!-- North arrow -->
-      <text x="470" y="16" font-family="'DM Mono', monospace" font-size="8" fill="#3a3425">N ↑</text>
-    </svg>
+    <div class="fp-tabs">
+      <button class="fp-tab on" onclick="fpShow(0)">Begane grond</button>
+      <button class="fp-tab" onclick="fpShow(1)">1e verdieping</button>
+      <button class="fp-tab" onclick="fpShow(2)">2e verdieping</button>
+    </div>
+    <div class="fp-canvas" id="fp-viewer"></div>
     <div class="floorplan-legend">
-      <div class="legend-item"><div class="legend-swatch" style="background: rgba(224,154,47,0.06);"></div> Bedrijfshal</div>
-      <div class="legend-item"><div class="legend-swatch" style="background: rgba(110,150,220,0.08);"></div> Kantoren</div>
-      <div class="legend-item"><div class="legend-swatch" style="background: rgba(180,100,220,0.06);"></div> Verdieping</div>
-      <div class="legend-item"><div class="legend-swatch" style="background: rgba(160,128,96,0.1);"></div> Magazijn / opslag</div>
+      <div class="legend-item"><div class="legend-swatch" style="background: rgba(224,154,47,0.13); border-color: rgba(224,154,47,0.5);"></div> Bedrijfshal</div>
+      <div class="legend-item"><div class="legend-swatch" style="background: rgba(110,150,220,0.13); border-color: rgba(110,150,220,0.5);"></div> Kantoren</div>
+      <div class="legend-item"><div class="legend-swatch" style="background: rgba(180,100,220,0.13); border-color: rgba(180,100,220,0.5);"></div> Verdieping</div>
+      <div class="legend-item"><div class="legend-swatch" style="background: rgba(140,200,140,0.13); border-color: rgba(140,200,140,0.5);"></div> Keuken</div>
+      <div class="legend-item"><div class="legend-swatch" style="background: rgba(180,140,80,0.13); border-color: rgba(180,140,80,0.45);"></div> Trap</div>
     </div>
   </div>
 
@@ -1370,3 +1387,51 @@
   </footer>
 
 </div>
+<script src="placed-objects.js"></script>
+<script>
+(function(){
+  var S = 0.03, FPW = 900, FPH = 550;
+  var viewer = document.getElementById('fp-viewer');
+
+  function renderFloor(f) {
+    while (viewer.firstChild) viewer.removeChild(viewer.firstChild);
+    document.querySelectorAll('.fp-tab').forEach(function(t, i) { t.classList.toggle('on', i === f); });
+    if (typeof PLACED_OBJECTS === 'undefined') return;
+    var objs = PLACED_OBJECTS.filter(function(o) { return o.floor === f; });
+    objs.forEach(function(o) {
+      var el = document.createElement('div');
+      el.className = 'fp-obj';
+      var xPct = (o.x / FPW * 100).toFixed(2);
+      var yPct = (o.y / FPH * 100).toFixed(2);
+      var wPct = (o.w / FPW * 100).toFixed(2);
+      var hPct = (o.h / FPH * 100).toFixed(2);
+      el.style.cssText = 'left:' + xPct + '%;top:' + yPct + '%;width:' + wPct + '%;height:' + hPct + '%;border:1px solid ' + o.c + ';background:' + o.bg + ';';
+      var lbl = document.createElement('div');
+      lbl.className = 'fp-obj-label';
+      lbl.style.color = o.c;
+      lbl.textContent = o.l;
+      el.appendChild(lbl);
+      if (o.room) {
+        var wm = o.w / S / 1000, hm = o.h / S / 1000;
+        var area = Math.round(wm * hm * 10) / 10;
+        if (area >= 1) {
+          var areaEl = document.createElement('div');
+          areaEl.className = 'fp-obj-area';
+          areaEl.textContent = area + 'm\u00B2';
+          el.appendChild(areaEl);
+        }
+      }
+      var tip = document.createElement('div');
+      tip.className = 'fp-tooltip';
+      var wcm = Math.round(o.w / S / 10), hcm = Math.round(o.h / S / 10);
+      tip.textContent = o.l + ' \u2014 ' + wcm + '\u00D7' + hcm + 'cm';
+      if (o.room) { var wm2 = o.w / S / 1000, hm2 = o.h / S / 1000; tip.textContent += ' (' + (Math.round(wm2 * hm2 * 10) / 10) + 'm\u00B2)'; }
+      el.appendChild(tip);
+      viewer.appendChild(el);
+    });
+  }
+
+  window.fpShow = function(f) { renderFloor(f); };
+  renderFloor(0);
+})();
+</script>
