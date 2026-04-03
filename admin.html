@@ -527,8 +527,9 @@ textarea.ce-input{min-height:60px;resize:vertical}
   <div class="modal">
     <h2>GitHub Token</h2>
     <p>Eenmalige setup. Token wordt opgeslagen in je browser zodat Opslaan direct publiceert.</p>
-    <input type="text" id="gh-repo" placeholder="user/repo" value="midirectiekade14-debug/werkplaats17">
-    <input type="password" id="gh-token" placeholder="GitHub Personal Access Token (classic)">
+    <input type="text" id="gh-repo" placeholder="user/repo" value="midirectiekade14-debug/werkplaats17-rotterdam">
+    <input type="password" id="gh-token" placeholder="GitHub token (gh auth token)">
+    <p style="font-size:7px;color:var(--muted);margin-top:6px">Tip: run <code>gh auth token</code> in terminal voor een werkende token</p>
     <div class="modal-btns">
       <button class="hbtn" onclick="document.getElementById('token-modal').classList.remove('show')">Annuleer</button>
       <button class="hbtn hbtn-pub" id="token-save">Opslaan</button>
@@ -1470,8 +1471,14 @@ function toast(msg,type){
 // ╔════════════════════════════════════════════╗
 // ║  GITHUB PUBLISH                            ║
 // ╚════════════════════════════════════════════╝
+// Auto-inject token from URL hash: admin.html#token=xxx or #token=xxx&repo=user/repo
+(function(){
+  var h=window.location.hash;if(!h)return;
+  var m=h.match(/token=([^&]+)/);if(m){localStorage.setItem('w17-gh-token',m[1]);var r=h.match(/repo=([^&]+)/);if(r)localStorage.setItem('w17-gh-repo',decodeURIComponent(r[1]));history.replaceState(null,'',window.location.pathname+window.location.search);toast('GitHub token bijgewerkt');}
+})();
+
 async function getGHConfig(){
-  var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats17';
+  var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats17-rotterdam';
   var token=localStorage.getItem('w17-gh-token');
   if(!token){document.getElementById('token-modal').classList.add('show');return null;}
   return{repo:repo,token:token};
@@ -1495,7 +1502,7 @@ async function publishFile(path,content,message,btn){
       headers:{'Authorization':'Bearer '+gh.token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
       body:JSON.stringify(body)
     });
-    if(!r2.ok){var err=await r2.json();throw new Error(err.message||'HTTP '+r2.status);}
+    if(!r2.ok){var err=await r2.json();if(r2.status===401||r2.status===403){localStorage.removeItem('w17-gh-token');document.getElementById('token-modal').classList.add('show');throw new Error('Token verlopen — voer een nieuwe token in');}throw new Error(err.message||'HTTP '+r2.status);}
     toast('Gepubliceerd: '+path);
     return true;
   }catch(e){
