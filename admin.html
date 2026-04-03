@@ -527,7 +527,7 @@ textarea.ce-input{min-height:60px;resize:vertical}
   <div class="modal">
     <h2>GitHub Token</h2>
     <p>Eenmalige setup. Token wordt opgeslagen in je browser zodat Opslaan direct publiceert.</p>
-    <input type="text" id="gh-repo" placeholder="user/repo" value="midirectiekade14-debug/werkplaats17-rotterdam">
+    <input type="text" id="gh-repo" placeholder="user/repo" value="midirectiekade14-debug/werkplaats17">
     <input type="password" id="gh-token" placeholder="GitHub token (gh auth token)">
     <p style="font-size:7px;color:var(--muted);margin-top:6px">Tip: run <code>gh auth token</code> in terminal voor een werkende token</p>
     <div class="modal-btns">
@@ -1478,7 +1478,7 @@ function toast(msg,type){
 })();
 
 async function getGHConfig(){
-  var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats17-rotterdam';
+  var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats17';
   var token=localStorage.getItem('w17-gh-token');
   if(!token){document.getElementById('token-modal').classList.add('show');return null;}
   return{repo:repo,token:token};
