@@ -279,6 +279,8 @@ textarea.ce-input{min-height:60px;resize:vertical}
   </div>
   <div class="hint" id="fp-hint">Sleep = pan · Scroll = zoom · Klik object = bewerken · Delete = verwijder</div>
   <div class="hdr-btns" id="fp-btns">
+    <button class="hbtn" id="btn-undo" title="Undo (Ctrl+Z)" disabled style="opacity:.4">↩</button>
+    <button class="hbtn" id="btn-redo" title="Redo (Ctrl+Y)" disabled style="opacity:.4">↪</button>
     <button class="hbtn hbtn-pub" id="btn-save">Opslaan &amp; Publiceer</button>
     <button class="hbtn" id="btn-export">Export</button>
   </div>
@@ -712,6 +714,7 @@ document.querySelectorAll('.item').forEach(setupItem);
 cv.addEventListener('dragover',function(e){e.preventDefault()});
 cv.addEventListener('drop',function(e){
   e.preventDefault();if(!drag)return;
+  pushUndo();
   var rect=cv.getBoundingClientRect();
   var x=Math.round(((e.clientX-rect.left-panX)/zoom-drag.w/2)/SNAP)*SNAP;
   var y=Math.round(((e.clientY-rect.top-panY)/zoom-drag.h/2)/SNAP)*SNAP;
@@ -803,7 +806,7 @@ function place(x,y,data){
   }
 
   // Delete
-  dbtn.addEventListener('click',function(e){e.stopPropagation();d.remove();if(sel===d){sel=null;hideProps();}});
+  dbtn.addEventListener('click',function(e){e.stopPropagation();pushUndo();d.remove();if(sel===d){sel=null;hideProps();}});
   // Rotate (not for rooms)
   var rBtn=d.querySelector('.rb');
   if(rBtn) rBtn.addEventListener('click',function(e){e.stopPropagation();if(isDoor){var r=(parseInt(d.dataset.rot||'0')+90)%360;d.dataset.rot=r.toString();d.lastElementChild.style.transform='rotate('+r+'deg)';}else{var ow=d.style.width,oh=d.style.height;d.style.width=oh;d.style.height=ow;updateArea();}if(sel===d)populateProps(d);});
@@ -812,11 +815,12 @@ function place(x,y,data){
   epop.addEventListener('mousedown',function(e){e.stopPropagation()});
   eokBtn.addEventListener('click',function(e){e.stopPropagation();var nn=enInp.value.trim(),nw=parseInt(ewInp.value),nh=parseInt(ehInp.value);if(nn){d.dataset.l=nn;var lbl=d.querySelector('.rl')||d.querySelector('.il');if(lbl)lbl.textContent=nn;}if(nw>0)d.style.width=Math.max(3,Math.round(nw*10*S))+'px';if(nh>0)d.style.height=Math.max(3,Math.round(nh*10*S))+'px';updateArea();epop.classList.remove('on');if(sel===d)populateProps(d);});
   // Copy
-  cpbtn.addEventListener('click',function(e){e.stopPropagation();place(parseInt(d.style.left)+16,parseInt(d.style.top)+16,{w:parseInt(d.style.width),h:parseInt(d.style.height),l:d.dataset.l,c:d.dataset.c,bg:d.dataset.bg,type:d.dataset.type,room:d.dataset.room,status:d.dataset.status||''});});
+  cpbtn.addEventListener('click',function(e){e.stopPropagation();pushUndo();place(parseInt(d.style.left)+16,parseInt(d.style.top)+16,{w:parseInt(d.style.width),h:parseInt(d.style.height),l:d.dataset.l,c:d.dataset.c,bg:d.dataset.bg,type:d.dataset.type,room:d.dataset.room,status:d.dataset.status||''});});
   // Resize handles
   d.querySelectorAll('.rh').forEach(function(rh){
     rh.addEventListener('mousedown',function(e){
       e.stopPropagation();e.preventDefault();
+      pushUndo();
       var startX=e.clientX/zoom,startY=e.clientY/zoom;
       var startW=parseFloat(d.style.width),startH=parseFloat(d.style.height);
       var isE=rh.classList.contains('rh-e')||rh.classList.contains('rh-se');
@@ -836,7 +840,7 @@ function place(x,y,data){
     if(e.target.tagName==='BUTTON'||e.target.matches('input')||e.target.classList.contains('rh'))return;
     e.stopPropagation();selectObj(d);
     var startL=parseInt(d.style.left),startT=parseInt(d.style.top),sx=e.clientX,sy=e.clientY,moved=false;
-    var mv=function(e){moved=true;d.style.left=Math.round((startL+(e.clientX-sx)/zoom)/SNAP)*SNAP+'px';d.style.top=Math.round((startT+(e.clientY-sy)/zoom)/SNAP)*SNAP+'px';};
+    var mv=function(e){if(!moved){moved=true;pushUndo();}d.style.left=Math.round((startL+(e.clientX-sx)/zoom)/SNAP)*SNAP+'px';d.style.top=Math.round((startT+(e.clientY-sy)/zoom)/SNAP)*SNAP+'px';};
     var up=function(){document.removeEventListener('mousemove',mv);document.removeEventListener('mouseup',up);if(moved&&sel===d)populateProps(d);};
     document.addEventListener('mousemove',mv);document.addEventListener('mouseup',up);
   });
@@ -919,14 +923,19 @@ function applyStatusVisual(d){
 pfStatus.addEventListener('change',function(){applyProp();if(sel)applyStatusVisual(sel);});
 pfStatus.addEventListener('input',function(){applyProp();if(sel)applyStatusVisual(sel);});
 
-document.getElementById('pf-del').addEventListener('click',function(){if(sel){sel.remove();sel=null;hideProps();}});
+document.getElementById('pf-del').addEventListener('click',function(){if(sel){pushUndo();sel.remove();sel=null;hideProps();}});
 document.getElementById('pf-dup').addEventListener('click',function(){
-  if(!sel)return;var d=sel;
+  if(!sel)return;var d=sel;pushUndo();
   place(parseInt(d.style.left)+16,parseInt(d.style.top)+16,{w:parseInt(d.style.width),h:parseInt(d.style.height),l:d.dataset.l,c:d.dataset.c,bg:d.dataset.bg,type:d.dataset.type,room:d.dataset.room||'',status:d.dataset.status||''});
 });
 
 // KEYBOARD
-document.addEventListener('keydown',function(e){if(e.target.matches('input,select,textarea'))return;if((e.key==='Delete'||e.key==='Backspace')&&sel){sel.remove();sel=null;hideProps();}});
+document.addEventListener('keydown',function(e){
+  if(e.target.matches('input,select,textarea'))return;
+  if((e.key==='Delete'||e.key==='Backspace')&&sel){pushUndo();sel.remove();sel=null;hideProps();}
+  if(e.key==='z'&&(e.ctrlKey||e.metaKey)&&!e.shiftKey){e.preventDefault();doUndo();}
+  if((e.key==='y'&&(e.ctrlKey||e.metaKey))||(e.key==='z'&&(e.ctrlKey||e.metaKey)&&e.shiftKey)){e.preventDefault();doRedo();}
+});
 
 // CUSTOM ITEM
 document.getElementById('addBtn').addEventListener('click',function(){
@@ -965,6 +974,40 @@ function loadObjects(objs){
   if(sel){sel.classList.remove('sel');sel=null;hideProps();}
   draw();
 }
+
+// ╔════════════════════════════════════════════╗
+// ║  UNDO / REDO                               ║
+// ╚════════════════════════════════════════════╝
+var undoStack=[],redoStack=[],undoMax=50;
+function pushUndo(){
+  undoStack.push(JSON.stringify(serializeObjects()));
+  if(undoStack.length>undoMax)undoStack.shift();
+  redoStack=[];
+  updateUndoBtns();
+}
+function doUndo(){
+  if(!undoStack.length)return;
+  redoStack.push(JSON.stringify(serializeObjects()));
+  var state=JSON.parse(undoStack.pop());
+  loadObjects(state);
+  updateUndoBtns();
+  toast('Undo');
+}
+function doRedo(){
+  if(!redoStack.length)return;
+  undoStack.push(JSON.stringify(serializeObjects()));
+  var state=JSON.parse(redoStack.pop());
+  loadObjects(state);
+  updateUndoBtns();
+  toast('Redo');
+}
+function updateUndoBtns(){
+  var ub=document.getElementById('btn-undo'),rb=document.getElementById('btn-redo');
+  ub.disabled=!undoStack.length;ub.style.opacity=undoStack.length?'1':'.4';
+  rb.disabled=!redoStack.length;rb.style.opacity=redoStack.length?'1':'.4';
+}
+document.getElementById('btn-undo').addEventListener('click',doUndo);
+document.getElementById('btn-redo').addEventListener('click',doRedo);
 
 var DEFAULT_OBJECTS={"v":3,"floor":0,"zoom":1,"items":[{"floor":0,"x":28,"y":18,"w":36,"h":56,"l":"K","c":"rgba(140,200,140,.5)","bg":"rgba(140,200,140,.13)","type":"","room":"1","rot":0},{"floor":0,"x":68,"y":18,"w":78,"h":56,"l":"Kantoor","c":"rgba(110,150,220,.5)","bg":"rgba(110,150,220,.13)","type":"","room":"1","rot":0},{"floor":0,"x":150,"y":18,"w":48,"h":56,"l":"Kantoor","c":"rgba(110,150,220,.5)","bg":"rgba(110,150,220,.13)","type":"","room":"1","rot":0},{"floor":0,"x":202,"y":12,"w":42,"h":68,"l":"K","c":"rgba(140,200,140,.5)","bg":"rgba(140,200,140,.13)","type":"","room":"1","rot":0},{"floor":0,"x":248,"y":18,"w":50,"h":56,"l":"Kantoor","c":"rgba(110,150,220,.5)","bg":"rgba(110,150,220,.13)","type":"","room":"1","rot":0},{"floor":0,"x":302,"y":12,"w":48,"h":68,"l":"Trap","c":"rgba(180,140,80,.45)","bg":"rgba(180,140,80,.13)","type":"","room":"1","rot":0},{"floor":0,"x":354,"y":18,"w":200,"h":56,"l":"Kantoor","c":"rgba(110,150,220,.5)","bg":"rgba(110,150,220,.13)","type":"","room":"1","rot":0},{"floor":0,"x":28,"y":80,"w":528,"h":310,"l":"Magazijn","c":"rgba(224,154,47,.5)","bg":"rgba(224,154,47,.13)","type":"","room":"1","rot":0},{"floor":0,"x":562,"y":290,"w":66,"h":100,"l":"Toilet","c":"rgba(120,160,220,.5)","bg":"rgba(120,160,220,.18)","type":"","room":"1","rot":0},{"floor":0,"x":632,"y":290,"w":88,"h":100,"l":"Entree","c":"rgba(100,180,220,.5)","bg":"rgba(100,180,220,.13)","type":"","room":"1","rot":0},{"floor":1,"x":28,"y":18,"w":528,"h":62,"l":"Magazijn (entresol)","c":"rgba(180,100,220,.5)","bg":"rgba(180,100,220,.13)","type":"","room":"1","rot":0},{"floor":1,"x":28,"y":84,"w":250,"h":308,"l":"Vide","c":"rgba(255,255,255,.12)","bg":"rgba(255,255,255,.03)","type":"","room":"1","rot":0},{"floor":1,"x":282,"y":84,"w":274,"h":230,"l":"Magazijn","c":"rgba(180,100,220,.5)","bg":"rgba(180,100,220,.13)","type":"","room":"1","rot":0},{"floor":1,"x":345,"y":28,"w":48,"h":40,"l":"Trap","c":"rgba(180,140,80,.45)","bg":"rgba(180,140,80,.13)","type":"","room":"1","rot":0},{"floor":1,"x":478,"y":320,"w":78,"h":72,"l":"Overloop","c":"rgba(200,180,140,.5)","bg":"rgba(200,180,140,.13)","type":"","room":"1","rot":0},{"floor":1,"x":562,"y":290,"w":158,"h":102,"l":"Vide","c":"rgba(255,255,255,.12)","bg":"rgba(255,255,255,.03)","type":"","room":"1","rot":0},{"floor":2,"x":28,"y":18,"w":440,"h":374,"l":"Vide","c":"rgba(255,255,255,.12)","bg":"rgba(255,255,255,.03)","type":"","room":"1","rot":0},{"floor":2,"x":395,"y":22,"w":48,"h":40,"l":"Overloop","c":"rgba(200,180,140,.5)","bg":"rgba(200,180,140,.13)","type":"","room":"1","rot":0},{"floor":2,"x":345,"y":28,"w":46,"h":38,"l":"Trap","c":"rgba(180,140,80,.45)","bg":"rgba(180,140,80,.13)","type":"","room":"1","rot":0},{"floor":2,"x":472,"y":18,"w":86,"h":50,"l":"Kantoor","c":"rgba(110,150,220,.5)","bg":"rgba(110,150,220,.13)","type":"","room":"1","rot":0},{"floor":2,"x":472,"y":72,"w":86,"h":180,"l":"Kantoor","c":"rgba(110,150,220,.5)","bg":"rgba(110,150,220,.13)","type":"","room":"1","rot":0},{"floor":2,"x":472,"y":256,"w":58,"h":56,"l":"Berging","c":"rgba(160,140,120,.5)","bg":"rgba(160,140,120,.13)","type":"","room":"1","rot":0},{"floor":2,"x":534,"y":256,"w":24,"h":56,"l":"Keuken","c":"rgba(140,200,140,.5)","bg":"rgba(140,200,140,.13)","type":"","room":"1","rot":0},{"floor":2,"x":472,"y":316,"w":86,"h":76,"l":"Vide","c":"rgba(255,255,255,.12)","bg":"rgba(255,255,255,.03)","type":"","room":"1","rot":0},{"floor":2,"x":562,"y":290,"w":158,"h":102,"l":"Vide","c":"rgba(255,255,255,.12)","bg":"rgba(255,255,255,.03)","type":"","room":"1","rot":0}]};
 
