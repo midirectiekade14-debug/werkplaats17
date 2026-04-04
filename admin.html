@@ -283,6 +283,8 @@ textarea.ce-input{min-height:60px;resize:vertical}
     <button class="hbtn" id="btn-redo" title="Redo (Ctrl+Y)" disabled style="opacity:.4">↪</button>
     <button class="hbtn hbtn-pub" id="btn-save">Opslaan &amp; Publiceer</button>
     <button class="hbtn" id="btn-export">Export</button>
+    <button class="hbtn" id="btn-import">Import</button>
+    <input type="file" id="file-import" accept=".js" style="display:none">
   </div>
 </div>
 <!-- ═══ VIEW: PLATTEGROND ═══ -->
@@ -1554,6 +1556,27 @@ document.getElementById('btn-export').addEventListener('click',function(){
   var blob=new Blob([js],{type:'application/javascript'});
   var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='placed-objects.js';a.click();
   toast('Export gedownload');
+});
+
+document.getElementById('btn-import').addEventListener('click',function(){document.getElementById('file-import').click();});
+document.getElementById('file-import').addEventListener('change',function(e){
+  var file=e.target.files[0];if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(ev){
+    try{
+      var txt=ev.target.result;
+      var m=txt.match(/PLACED_OBJECTS\s*=\s*(\[[\s\S]*?\]);/);
+      if(!m)throw new Error('Geen PLACED_OBJECTS array gevonden');
+      var objs=JSON.parse(m[1]);
+      if(!Array.isArray(objs))throw new Error('Ongeldig formaat');
+      pushUndo();
+      loadObjects(objs);
+      localStorage.setItem('w17-objects',JSON.stringify(objs));
+      toast('Geïmporteerd: '+objs.length+' objecten');
+    }catch(err){toast('Import mislukt: '+err.message);}
+  };
+  reader.readAsText(file);
+  e.target.value='';
 });
 
 // ╔════════════════════════════════════════════╗
