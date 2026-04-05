@@ -474,6 +474,7 @@ textarea.ce-input{min-height:60px;resize:vertical}
     <span class="zlbl" id="zlbl">100%</span>
     <button class="zbtn" onclick="doZoom(0.15)">+</button>
     <button class="zbtn" onclick="resetView()" style="font-size:7px;width:auto;padding:0 5px">Reset</button>
+    <button class="zbtn" onclick="fitToContent()" style="font-size:7px;width:auto;padding:0 5px">Fit</button>
   </div>
 </div>
 </div><!-- /view-plattegrond -->
@@ -592,6 +593,22 @@ function applyTransform(){
 }
 window.doZoom=function(delta){zoom=Math.min(3,Math.max(0.3,zoom+delta));applyTransform();};
 window.resetView=function(){zoom=1;panX=0;panY=0;applyTransform();};
+window.fitToContent=function(){
+  var els=fp.querySelectorAll('.pl[data-floor="'+floor+'"]');
+  if(!els.length)return resetView();
+  var minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
+  els.forEach(function(d){
+    var x=parseInt(d.style.left),y=parseInt(d.style.top),w=parseInt(d.style.width),h=parseInt(d.style.height);
+    if(x<minX)minX=x;if(y<minY)minY=y;if(x+w>maxX)maxX=x+w;if(y+h>maxY)maxY=y+h;
+  });
+  var pad=40,bw=maxX-minX+pad*2,bh=maxY-minY+pad*2;
+  var rect=cv.getBoundingClientRect();
+  var scaleX=rect.width/bw,scaleY=rect.height/bh;
+  zoom=Math.min(scaleX,scaleY,2);zoom=Math.max(zoom,0.3);
+  panX=-(minX-pad)*zoom+(rect.width-bw*zoom)/2;
+  panY=-(minY-pad)*zoom+(rect.height-bh*zoom)/2;
+  applyTransform();
+};
 
 cv.addEventListener('wheel',function(e){
   e.preventDefault();
@@ -1604,6 +1621,7 @@ function init(){
   var saved=localStorage.getItem('w17-objects');
   if(saved){try{loadObjects(JSON.parse(saved));toast('Hersteld vanuit opslag');}catch(e){loadObjects(DEFAULT_OBJECTS.items);}}
   else{loadObjects(DEFAULT_OBJECTS.items);}
+  setTimeout(fitToContent,100);
   // Auto-save every 30s
   setInterval(function(){localStorage.setItem('w17-objects',JSON.stringify(serializeObjects()));},30000);
 }
