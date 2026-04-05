@@ -389,8 +389,6 @@
   .fp-canvas {
     position: relative;
     width: 100%;
-    max-width: 720px;
-    aspect-ratio: 900 / 550;
     background: var(--bg);
     border: 1px solid var(--line);
     overflow: hidden;
@@ -1417,29 +1415,90 @@
     var scale = viewerW / bw;
     var inner = document.createElement('div');
     inner.style.cssText = 'position:absolute;left:0;top:0;width:' + bw + 'px;height:' + bh + 'px;transform:scale(' + scale + ');transform-origin:0 0;';
+    // Compensate sizes for scale so content stays readable
+    var sc = 1 / scale;
+    var lblSize = Math.round(11 * sc);
+    var areaSize = Math.round(9 * sc);
+    var dimSize = Math.round(8 * sc);
+    var tipSize = Math.round(11 * sc);
+    var padV = Math.round(4 * sc);
+    var padH = Math.round(6 * sc);
+    var borderW = Math.max(1, Math.round(1.5 * sc));
+    // Minimum object size (in inner px) to show labels
+    var minLblW = lblSize * 3;
+    var minLblH = lblSize * 2;
     objs.forEach(function(o) {
+      var isDoor = o.type === 'overhead' || o.type === 'door';
       var el = document.createElement('div');
       el.className = 'fp-obj';
-      el.style.cssText = 'left:' + (o.x - minX) + 'px;top:' + (o.y - minY) + 'px;width:' + o.w + 'px;height:' + o.h + 'px;border:1px solid ' + o.c + ';background:' + o.bg + ';';
-      var lbl = document.createElement('div');
-      lbl.className = 'fp-obj-label';
-      lbl.style.color = o.c;
-      lbl.textContent = o.l;
-      el.appendChild(lbl);
-      if (o.room) {
-        var wm = o.w / S / 1000, hm = o.h / S / 1000;
-        var area = Math.round(wm * hm * 10) / 10;
-        if (area >= 1) {
-          var areaEl = document.createElement('div');
-          areaEl.className = 'fp-obj-area';
-          areaEl.textContent = area + 'm\u00B2';
-          el.appendChild(areaEl);
+      // Never rotate the positioned element — only inner content for doors
+      el.style.cssText = 'left:' + (o.x - minX) + 'px;top:' + (o.y - minY) + 'px;width:' + o.w + 'px;height:' + o.h + 'px;border:' + borderW + 'px solid ' + o.c + ';background:' + o.bg + ';padding:' + padV + 'px ' + padH + 'px;';
+      var showLabel = o.w >= minLblW && o.h >= minLblH;
+      if (isDoor) {
+        // Inner wrapper for rotation (admin rotates inner, not outer)
+        var dw = document.createElement('div');
+        var rot = o.rot && o.rot !== '0' ? 'transform:rotate(' + o.rot + 'deg);' : '';
+        dw.style.cssText = 'width:100%;height:100%;position:relative;overflow:hidden;' + rot;
+        var topBar = document.createElement('div');
+        topBar.style.cssText = 'position:absolute;left:0;right:0;top:0;height:' + Math.round(4 * sc) + 'px;background:' + o.c + ';opacity:.9';
+        dw.appendChild(topBar);
+        if (o.type === 'overhead') {
+          var lines = document.createElement('div');
+          lines.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:' + Math.round(3 * sc) + 'px';
+          for (var li = 0; li < 5; li++) {
+            var ln = document.createElement('div');
+            ln.style.cssText = 'width:' + Math.max(1, Math.round(1 * sc)) + 'px;height:55%;background:' + o.c + ';opacity:.4';
+            lines.appendChild(ln);
+          }
+          dw.appendChild(lines);
+        }
+        el.appendChild(dw);
+        // Label outside rotation so it stays readable
+        if (showLabel) {
+          var dlbl = document.createElement('div');
+          dlbl.className = 'fp-obj-label';
+          dlbl.style.cssText = 'position:absolute;bottom:' + Math.round(2 * sc) + 'px;left:0;right:0;text-align:center;font-size:' + Math.round(9 * sc) + 'px;color:' + o.c;
+          dlbl.textContent = o.l;
+          el.appendChild(dlbl);
+        }
+      } else {
+        if (showLabel) {
+          var lbl = document.createElement('div');
+          lbl.className = 'fp-obj-label';
+          lbl.style.color = o.c;
+          lbl.style.fontSize = lblSize + 'px';
+          lbl.textContent = o.l;
+          el.appendChild(lbl);
+        }
+        if (o.room && showLabel) {
+          var wm = o.w / S / 1000, hm = o.h / S / 1000;
+          var area = Math.round(wm * hm * 10) / 10;
+          if (area >= 1) {
+            var areaEl = document.createElement('div');
+            areaEl.className = 'fp-obj-area';
+            areaEl.style.fontSize = areaSize + 'px';
+            areaEl.textContent = area + 'm\u00B2';
+            el.appendChild(areaEl);
+          }
+        }
+        // Dimension text for non-room objects large enough to show it
+        if (!o.room && o.w >= minLblW && o.h >= minLblH) {
+          var wcm = Math.round(o.w / S / 10), hcm = Math.round(o.h / S / 10);
+          var dimEl = document.createElement('div');
+          dimEl.className = 'fp-obj-area';
+          dimEl.style.fontSize = dimSize + 'px';
+          dimEl.textContent = wcm + '\u00D7' + hcm + 'cm';
+          el.appendChild(dimEl);
         }
       }
+      // Tooltip (shown on hover, always present)
       var tip = document.createElement('div');
       tip.className = 'fp-tooltip';
-      var wcm = Math.round(o.w / S / 10), hcm = Math.round(o.h / S / 10);
-      tip.textContent = o.l + ' \u2014 ' + wcm + '\u00D7' + hcm + 'cm';
+      tip.style.fontSize = tipSize + 'px';
+      tip.style.padding = Math.round(6 * sc) + 'px ' + Math.round(10 * sc) + 'px';
+      tip.style.bottom = 'calc(100% + ' + Math.round(6 * sc) + 'px)';
+      var wcm2 = Math.round(o.w / S / 10), hcm2 = Math.round(o.h / S / 10);
+      tip.textContent = o.l + ' \u2014 ' + wcm2 + '\u00D7' + hcm2 + 'cm';
       if (o.room) { var wm2 = o.w / S / 1000, hm2 = o.h / S / 1000; tip.textContent += ' (' + (Math.round(wm2 * hm2 * 10) / 10) + 'm\u00B2)'; }
       el.appendChild(tip);
       inner.appendChild(el);
