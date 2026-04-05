@@ -1413,14 +1413,14 @@
     minX -= pad; minY -= pad; maxX += pad; maxY += pad;
     var bw = maxX - minX, bh = maxY - minY;
     viewer.style.aspectRatio = bw + ' / ' + bh;
+    var viewerW = viewer.offsetWidth;
+    var scale = viewerW / bw;
+    var inner = document.createElement('div');
+    inner.style.cssText = 'position:absolute;left:0;top:0;width:' + bw + 'px;height:' + bh + 'px;transform:scale(' + scale + ');transform-origin:0 0;';
     objs.forEach(function(o) {
       var el = document.createElement('div');
       el.className = 'fp-obj';
-      var xPct = ((o.x - minX) / bw * 100).toFixed(2);
-      var yPct = ((o.y - minY) / bh * 100).toFixed(2);
-      var wPct = (o.w / bw * 100).toFixed(2);
-      var hPct = (o.h / bh * 100).toFixed(2);
-      el.style.cssText = 'left:' + xPct + '%;top:' + yPct + '%;width:' + wPct + '%;height:' + hPct + '%;border:1px solid ' + o.c + ';background:' + o.bg + ';';
+      el.style.cssText = 'left:' + (o.x - minX) + 'px;top:' + (o.y - minY) + 'px;width:' + o.w + 'px;height:' + o.h + 'px;border:1px solid ' + o.c + ';background:' + o.bg + ';';
       var lbl = document.createElement('div');
       lbl.className = 'fp-obj-label';
       lbl.style.color = o.c;
@@ -1442,8 +1442,9 @@
       tip.textContent = o.l + ' \u2014 ' + wcm + '\u00D7' + hcm + 'cm';
       if (o.room) { var wm2 = o.w / S / 1000, hm2 = o.h / S / 1000; tip.textContent += ' (' + (Math.round(wm2 * hm2 * 10) / 10) + 'm\u00B2)'; }
       el.appendChild(tip);
-      viewer.appendChild(el);
+      inner.appendChild(el);
     });
+    viewer.appendChild(inner);
   }
 
   window.fpShow = function(f) { renderFloor(f); };
