@@ -1,5 +1,5 @@
 // Werkplaats17 -- Geplaatste objecten
-// Laatst gewijzigd: 2026-04-05T17:29:31.639Z
+// Laatst gewijzigd: 2026-04-05T19:16:30.696Z
 // Gegenereerd via admin.html
 
 const PLACED_OBJECTS = [
@@ -61,10 +61,10 @@ const PLACED_OBJECTS = [
   },
   {
     "floor": 0,
-    "x": 1164,
-    "y": 621,
+    "x": 1158,
+    "y": 624,
     "w": 105,
-    "h": 12,
+    "h": 21,
     "l": "Overheaddeur 3.35m",
     "c": "#E09A2F",
     "bg": "rgba(224,154,47,.15)",
@@ -75,10 +75,10 @@ const PLACED_OBJECTS = [
   },
   {
     "floor": 0,
-    "x": 1164,
-    "y": 753,
-    "w": 105,
-    "h": 12,
+    "x": 1158,
+    "y": 747,
+    "w": 102,
+    "h": 24,
     "l": "Overheaddeur 3.35m",
     "c": "#E09A2F",
     "bg": "rgba(224,154,47,.15)",
