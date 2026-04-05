@@ -1615,12 +1615,36 @@ document.getElementById('token-save').addEventListener('click',function(){
 // ╔════════════════════════════════════════════╗
 // ║  INIT                                      ║
 // ╚════════════════════════════════════════════╝
-function init(){
+async function init(){
   draw();applyTransform();
-  // Load saved objects
-  var saved=localStorage.getItem('w17-objects');
-  if(saved){try{loadObjects(JSON.parse(saved));toast('Hersteld vanuit opslag');}catch(e){loadObjects(DEFAULT_OBJECTS.items);}}
-  else{loadObjects(DEFAULT_OBJECTS.items);}
+  // Always try to load from GitHub first (single source of truth)
+  var loaded=false;
+  try{
+    var gh=await getGHConfig();
+    if(gh){
+      var r=await fetch('https://api.github.com/repos/'+gh.repo+'/contents/placed-objects.js',{
+        headers:{'Authorization':'Bearer '+gh.token,'Accept':'application/vnd.github.v3+json'}
+      });
+      if(r.ok){
+        var d=await r.json();
+        var js=decodeURIComponent(escape(atob(d.content)));
+        var m=js.match(/const PLACED_OBJECTS\s*=\s*(\[[\s\S]*\]);/);
+        if(m){
+          var objs=JSON.parse(m[1]);
+          loadObjects(objs);
+          localStorage.setItem('w17-objects',JSON.stringify(objs));
+          toast('Geladen vanuit GitHub');
+          loaded=true;
+        }
+      }
+    }
+  }catch(e){console.warn('GitHub load failed:',e);}
+  // Fallback to localStorage, then defaults
+  if(!loaded){
+    var saved=localStorage.getItem('w17-objects');
+    if(saved){try{loadObjects(JSON.parse(saved));toast('Hersteld vanuit opslag');}catch(e){loadObjects(DEFAULT_OBJECTS.items);}}
+    else{loadObjects(DEFAULT_OBJECTS.items);}
+  }
   setTimeout(fitToContent,100);
   // Auto-save every 30s
   setInterval(function(){localStorage.setItem('w17-objects',JSON.stringify(serializeObjects()));},30000);
