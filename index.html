@@ -1401,13 +1401,24 @@
     document.querySelectorAll('.fp-tab').forEach(function(t, i) { t.classList.toggle('on', i === f); });
     if (typeof PLACED_OBJECTS === 'undefined') return;
     var objs = PLACED_OBJECTS.filter(function(o) { return o.floor === f; });
+    if (!objs.length) return;
+    var minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    objs.forEach(function(o) {
+      if (o.x < minX) minX = o.x;
+      if (o.y < minY) minY = o.y;
+      if (o.x + o.w > maxX) maxX = o.x + o.w;
+      if (o.y + o.h > maxY) maxY = o.y + o.h;
+    });
+    var pad = 20;
+    minX -= pad; minY -= pad; maxX += pad; maxY += pad;
+    var bw = maxX - minX, bh = maxY - minY;
     objs.forEach(function(o) {
       var el = document.createElement('div');
       el.className = 'fp-obj';
-      var xPct = (o.x / FPW * 100).toFixed(2);
-      var yPct = (o.y / FPH * 100).toFixed(2);
-      var wPct = (o.w / FPW * 100).toFixed(2);
-      var hPct = (o.h / FPH * 100).toFixed(2);
+      var xPct = ((o.x - minX) / bw * 100).toFixed(2);
+      var yPct = ((o.y - minY) / bh * 100).toFixed(2);
+      var wPct = (o.w / bw * 100).toFixed(2);
+      var hPct = (o.h / bh * 100).toFixed(2);
       el.style.cssText = 'left:' + xPct + '%;top:' + yPct + '%;width:' + wPct + '%;height:' + hPct + '%;border:1px solid ' + o.c + ';background:' + o.bg + ';';
       var lbl = document.createElement('div');
       lbl.className = 'fp-obj-label';
