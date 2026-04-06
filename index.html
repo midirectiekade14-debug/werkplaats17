@@ -1494,9 +1494,8 @@
     });
     var pad=40, bw=maxX-minX+pad*2, bh=maxY-minY+pad*2;
     var rect=cv.getBoundingClientRect();
-    var zoom=Math.min(rect.width/bw, rect.height/bh||99, 2);
-    zoom=Math.max(zoom,0.3);
-    var panX=-(minX-pad)*zoom+(rect.width-bw*zoom)/2;
+    var zoom=rect.width/bw;
+    var panX=-(minX-pad)*zoom;
     var panY=-(minY-pad)*zoom;
     fp.style.width=FPW+'px';
     fp.style.height=FPH+'px';
