@@ -287,7 +287,7 @@ textarea.ce-input{min-height:60px;resize:vertical}
     <button class="hbtn hbtn-pub" id="btn-save">Opslaan &amp; Publiceer</button>
     <button class="hbtn" id="btn-export">Export</button>
     <button class="hbtn" id="btn-import">Import</button>
-    <input type="file" id="file-import" accept=".js" style="display:none">
+    <input type="file" id="file-import" accept=".js,.json,.txt,application/javascript,application/json,text/plain" style="display:none">
   </div>
 </div>
 <!-- ═══ VIEW: PLATTEGROND ═══ -->
@@ -1584,17 +1584,25 @@ document.getElementById('file-import').addEventListener('change',function(e){
   var reader=new FileReader();
   reader.onload=function(ev){
     try{
-      var txt=ev.target.result;
-      var m=txt.match(/PLACED_OBJECTS\s*=\s*(\[[\s\S]*?\]);/);
-      if(!m)throw new Error('Geen PLACED_OBJECTS array gevonden');
-      var objs=JSON.parse(m[1]);
-      if(!Array.isArray(objs))throw new Error('Ongeldig formaat');
+      var txt=ev.target.result.trim();
+      var objs;
+      // Try JS format: const/var/let PLACED_OBJECTS = [...];
+      var m=txt.match(/PLACED_OBJECTS\s*=\s*(\[[\s\S]*\]);?\s*$/);
+      if(m){
+        objs=JSON.parse(m[1].replace(/;\s*$/,''));
+      } else {
+        // Try pure JSON array
+        objs=JSON.parse(txt);
+      }
+      if(!Array.isArray(objs))throw new Error('Ongeldig formaat — verwacht een array');
+      if(!objs.length)throw new Error('Bestand bevat geen objecten');
       pushUndo();
       loadObjects(objs);
       localStorage.setItem('w17-objects',JSON.stringify(objs));
       toast('Geïmporteerd: '+objs.length+' objecten');
     }catch(err){toast('Import mislukt: '+err.message);}
   };
+  reader.onerror=function(){toast('Import mislukt: kan bestand niet lezen');};
   reader.readAsText(file);
   e.target.value='';
 });
