@@ -1,5 +1,5 @@
 // Werkplaats17 -- Geplaatste objecten
-// Laatst gewijzigd: 2026-04-06T19:17:20.620Z
+// Laatst gewijzigd: 2026-04-06T19:31:14.617Z
 // Gegenereerd via admin.html
 
 const PLACED_OBJECTS = [
@@ -289,6 +289,104 @@ const PLACED_OBJECTS = [
     "y": 882,
     "w": 57,
     "h": 18,
+    "l": "Trap",
+    "c": "rgba(180,140,80,.45)",
+    "bg": "rgba(180,140,80,.13)",
+    "type": "",
+    "rot": "0",
+    "status": "",
+    "room": "1"
+  },
+  {
+    "floor": 2,
+    "x": 12,
+    "y": 102,
+    "w": 885,
+    "h": 371,
+    "l": "Magazijn",
+    "c": "#e09a2f",
+    "bg": "rgba(224,154,47,0.02)",
+    "type": "",
+    "rot": "0",
+    "status": "",
+    "room": "1"
+  },
+  {
+    "floor": 2,
+    "x": 723,
+    "y": 102,
+    "w": 173,
+    "h": 132,
+    "l": "Kantoor",
+    "c": "rgba(110,150,220,.5)",
+    "bg": "rgba(110,150,220,.13)",
+    "type": "",
+    "rot": "0",
+    "status": "",
+    "room": "1"
+  },
+  {
+    "floor": 2,
+    "x": 723,
+    "y": 234,
+    "w": 173,
+    "h": 171,
+    "l": "Kantoor",
+    "c": "rgba(110,150,220,.5)",
+    "bg": "rgba(110,150,220,.13)",
+    "type": "",
+    "rot": "0",
+    "status": "",
+    "room": "1"
+  },
+  {
+    "floor": 2,
+    "x": 837,
+    "y": 405,
+    "w": 60,
+    "h": 30,
+    "l": "Keuken",
+    "c": "rgba(140,200,140,.5)",
+    "bg": "rgba(140,200,140,.13)",
+    "type": "",
+    "rot": "0",
+    "status": "",
+    "room": "1"
+  },
+  {
+    "floor": 2,
+    "x": 768,
+    "y": 405,
+    "w": 69,
+    "h": 30,
+    "l": "Berging",
+    "c": "rgba(160,140,120,.5)",
+    "bg": "rgba(160,140,120,.13)",
+    "type": "",
+    "rot": "0",
+    "status": "",
+    "room": "1"
+  },
+  {
+    "floor": 2,
+    "x": 723,
+    "y": 405,
+    "w": 45,
+    "h": 68,
+    "l": "Trap",
+    "c": "rgba(180,140,80,.45)",
+    "bg": "rgba(180,140,80,.13)",
+    "type": "",
+    "rot": "0",
+    "status": "",
+    "room": "1"
+  },
+  {
+    "floor": 2,
+    "x": 768,
+    "y": 435,
+    "w": 69,
+    "h": 38,
     "l": "Trap",
     "c": "rgba(180,140,80,.45)",
     "bg": "rgba(180,140,80,.13)",
