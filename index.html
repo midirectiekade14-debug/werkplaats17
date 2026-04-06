@@ -367,6 +367,28 @@
     border-bottom: 1px solid var(--line);
     padding-bottom: 36px;
   }
+  .fp-location-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .fp-loc-tab {
+    padding: 8px 20px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    transition: all 0.15s;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+  }
+  .fp-loc-tab:hover { color: var(--cream); }
+  .fp-loc-tab.on { color: var(--amber); border-bottom-color: var(--amber); }
   .fp-tabs {
     display: flex;
     gap: 2px;
@@ -1276,6 +1298,10 @@
   <!-- PLATTEGROND -->
   <p class="section-label" id="indeling">Indeling pand</p>
   <div class="floorplan-block">
+    <div class="fp-location-tabs">
+      <button class="fp-loc-tab on" onclick="fpSwitchLocation('maasland')">Maasland</button>
+      <button class="fp-loc-tab" onclick="fpSwitchLocation('rotterdam')">Rotterdam</button>
+    </div>
     <div class="fp-tabs">
       <button class="fp-tab on" onclick="fpShow(0)">Begane grond</button>
       <button class="fp-tab" onclick="fpShow(1)">1e verdieping</button>
@@ -1391,14 +1417,43 @@
 <script src="placed-objects.js"></script>
 <script>
 (function(){
-  var S = 0.03, FPW = 900, FPH = 550;
+  var S = 0.03;
   var viewer = document.getElementById('fp-viewer');
+  var currentLocation = 'maasland';
+  var maaslandObjects = typeof PLACED_OBJECTS !== 'undefined' ? PLACED_OBJECTS : [];
+  var rotterdamObjects = null;
+  var currentFloor = 0;
+
+  var FLOOR_TABS = {
+    maasland: ['Begane grond', '1e verdieping', '2e verdieping'],
+    rotterdam: ['Begane grond']
+  };
+
+  function updateFloorTabs() {
+    var tabsContainer = document.querySelector('.fp-tabs');
+    while (tabsContainer.firstChild) tabsContainer.removeChild(tabsContainer.firstChild);
+    var tabs = FLOOR_TABS[currentLocation];
+    tabs.forEach(function(label, i) {
+      var btn = document.createElement('button');
+      btn.className = 'fp-tab' + (i === 0 ? ' on' : '');
+      btn.textContent = label;
+      btn.onclick = function() { fpShow(i); };
+      tabsContainer.appendChild(btn);
+    });
+  }
+
+  function getActiveObjects() {
+    if (currentLocation === 'rotterdam') return rotterdamObjects || [];
+    return maaslandObjects;
+  }
 
   function renderFloor(f) {
+    currentFloor = f;
     while (viewer.firstChild) viewer.removeChild(viewer.firstChild);
     document.querySelectorAll('.fp-tab').forEach(function(t, i) { t.classList.toggle('on', i === f); });
-    if (typeof PLACED_OBJECTS === 'undefined') return;
-    var objs = PLACED_OBJECTS.filter(function(o) { return o.floor === f; });
+    var allObjs = getActiveObjects();
+    if (!allObjs.length) return;
+    var objs = allObjs.filter(function(o) { return o.floor === f; });
     if (!objs.length) return;
     var minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
     objs.forEach(function(o) {
@@ -1415,7 +1470,6 @@
     var scale = viewerW / bw;
     var inner = document.createElement('div');
     inner.style.cssText = 'position:absolute;left:0;top:0;width:' + bw + 'px;height:' + bh + 'px;transform:scale(' + scale + ');transform-origin:0 0;';
-    // Compensate sizes for scale so content stays readable
     var sc = 1 / scale;
     var lblSize = Math.round(11 * sc);
     var areaSize = Math.round(9 * sc);
@@ -1424,18 +1478,15 @@
     var padV = Math.round(4 * sc);
     var padH = Math.round(6 * sc);
     var borderW = Math.max(1, Math.round(1.5 * sc));
-    // Minimum object size (in inner px) to show labels
     var minLblW = lblSize * 3;
     var minLblH = lblSize * 2;
     objs.forEach(function(o) {
       var isDoor = o.type === 'overhead' || o.type === 'door';
       var el = document.createElement('div');
       el.className = 'fp-obj';
-      // Never rotate the positioned element — only inner content for doors
       el.style.cssText = 'left:' + (o.x - minX) + 'px;top:' + (o.y - minY) + 'px;width:' + o.w + 'px;height:' + o.h + 'px;border:' + borderW + 'px solid ' + o.c + ';background:' + o.bg + ';padding:' + padV + 'px ' + padH + 'px;';
       var showLabel = o.w >= minLblW && o.h >= minLblH;
       if (isDoor) {
-        // Inner wrapper for rotation (admin rotates inner, not outer)
         var dw = document.createElement('div');
         var rot = o.rot && o.rot !== '0' ? 'transform:rotate(' + o.rot + 'deg);' : '';
         dw.style.cssText = 'width:100%;height:100%;position:relative;overflow:hidden;' + rot;
@@ -1453,7 +1504,6 @@
           dw.appendChild(lines);
         }
         el.appendChild(dw);
-        // Label outside rotation so it stays readable
         if (showLabel) {
           var dlbl = document.createElement('div');
           dlbl.className = 'fp-obj-label';
@@ -1481,7 +1531,6 @@
             el.appendChild(areaEl);
           }
         }
-        // Dimension text for non-room objects large enough to show it
         if (!o.room && o.w >= minLblW && o.h >= minLblH) {
           var wcm = Math.round(o.w / S / 10), hcm = Math.round(o.h / S / 10);
           var dimEl = document.createElement('div');
@@ -1491,7 +1540,6 @@
           el.appendChild(dimEl);
         }
       }
-      // Tooltip (shown on hover, always present)
       var tip = document.createElement('div');
       tip.className = 'fp-tooltip';
       tip.style.fontSize = tipSize + 'px';
@@ -1505,6 +1553,37 @@
     });
     viewer.appendChild(inner);
   }
+
+  function loadRotterdamData(cb) {
+    if (rotterdamObjects) { cb(); return; }
+    var url = 'https://midirectiekade14-debug.github.io/werkplaats17-rotterdam/placed-objects.js';
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url);
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        var match = xhr.responseText.match(/const\s+PLACED_OBJECTS\s*=\s*(\[[\s\S]*\]);/);
+        if (match) {
+          try { rotterdamObjects = JSON.parse(match[1]); } catch(e) { rotterdamObjects = []; }
+        } else { rotterdamObjects = []; }
+      } else { rotterdamObjects = []; }
+      cb();
+    };
+    xhr.onerror = function() { rotterdamObjects = []; cb(); };
+    xhr.send();
+  }
+
+  window.fpSwitchLocation = function(loc) {
+    currentLocation = loc;
+    document.querySelectorAll('.fp-loc-tab').forEach(function(t) {
+      t.classList.toggle('on', t.textContent.toLowerCase() === loc);
+    });
+    updateFloorTabs();
+    if (loc === 'rotterdam') {
+      loadRotterdamData(function() { renderFloor(0); });
+    } else {
+      renderFloor(0);
+    }
+  };
 
   window.fpShow = function(f) { renderFloor(f); };
   renderFloor(0);
