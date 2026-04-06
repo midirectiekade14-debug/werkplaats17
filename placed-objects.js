@@ -1,5 +1,5 @@
 // Werkplaats17 -- Geplaatste objecten
-// Laatst gewijzigd: 2026-04-06T19:50:02.497Z
+// Laatst gewijzigd: 2026-04-06T19:58:28.134Z
 // Gegenereerd via admin.html
 
 const PLACED_OBJECTS = [
@@ -56,48 +56,6 @@ const PLACED_OBJECTS = [
     "bg": "rgba(176,192,208,.1)",
     "type": "door",
     "rot": "270",
-    "status": "",
-    "room": ""
-  },
-  {
-    "floor": 0,
-    "x": 219,
-    "y": 879,
-    "w": 210,
-    "h": 120,
-    "l": "Formaatzaag 700x400",
-    "c": "#E09A2F",
-    "bg": "rgba(224,154,47,.13)",
-    "type": "",
-    "rot": "0",
-    "status": "",
-    "room": ""
-  },
-  {
-    "floor": 0,
-    "x": 735,
-    "y": 936,
-    "w": 39,
-    "h": 72,
-    "l": "Afzuiging 240x130",
-    "c": "#607080",
-    "bg": "rgba(96,112,128,.15)",
-    "type": "",
-    "rot": "0",
-    "status": "",
-    "room": ""
-  },
-  {
-    "floor": 0,
-    "x": 570,
-    "y": 966,
-    "w": 54,
-    "h": 30,
-    "l": "Vlak/Vandiktebank",
-    "c": "#E09A2F",
-    "bg": "rgba(224,154,47,.13)",
-    "type": "",
-    "rot": "0",
     "status": "",
     "room": ""
   },
@@ -401,7 +359,7 @@ const PLACED_OBJECTS = [
     "y": 402,
     "w": 173,
     "h": 65,
-    "l": "Trap",
+    "l": "Trappenhuis",
     "c": "#b48c50",
     "bg": "rgba(180,140,80,0.13)",
     "type": "",
@@ -422,5 +380,117 @@ const PLACED_OBJECTS = [
     "rot": "0",
     "status": "",
     "room": "1"
+  },
+  {
+    "floor": 0,
+    "x": 1155,
+    "y": 816,
+    "w": 30,
+    "h": 24,
+    "l": "Toegangsdeur",
+    "c": "#b0c0d0",
+    "bg": "rgba(176,192,208,.1)",
+    "type": "door",
+    "rot": "180",
+    "status": "",
+    "room": ""
+  },
+  {
+    "floor": 0,
+    "x": 1215,
+    "y": 855,
+    "w": 30,
+    "h": 24,
+    "l": "Toegangsdeur",
+    "c": "#b0c0d0",
+    "bg": "rgba(176,192,208,.1)",
+    "type": "door",
+    "rot": "270",
+    "status": "",
+    "room": ""
+  },
+  {
+    "floor": 0,
+    "x": 831,
+    "y": 543,
+    "w": 30,
+    "h": 24,
+    "l": "Toegangsdeur",
+    "c": "#b0c0d0",
+    "bg": "rgba(176,192,208,.1)",
+    "type": "door",
+    "rot": "270",
+    "status": "",
+    "room": ""
+  },
+  {
+    "floor": 0,
+    "x": 831,
+    "y": 633,
+    "w": 30,
+    "h": 24,
+    "l": "Toegangsdeur",
+    "c": "#b0c0d0",
+    "bg": "rgba(176,192,208,.1)",
+    "type": "door",
+    "rot": "270",
+    "status": "",
+    "room": ""
+  },
+  {
+    "floor": 0,
+    "x": 720,
+    "y": 633,
+    "w": 30,
+    "h": 24,
+    "l": "Toegangsdeur",
+    "c": "#b0c0d0",
+    "bg": "rgba(176,192,208,.1)",
+    "type": "door",
+    "rot": "270",
+    "status": "",
+    "room": ""
+  },
+  {
+    "floor": 0,
+    "x": 504,
+    "y": 660,
+    "w": 30,
+    "h": 24,
+    "l": "Toegangsdeur",
+    "c": "#b0c0d0",
+    "bg": "rgba(176,192,208,.1)",
+    "type": "door",
+    "rot": "0",
+    "status": "",
+    "room": ""
+  },
+  {
+    "floor": 0,
+    "x": 390,
+    "y": 660,
+    "w": 30,
+    "h": 24,
+    "l": "Toegangsdeur",
+    "c": "#b0c0d0",
+    "bg": "rgba(176,192,208,.1)",
+    "type": "door",
+    "rot": "0",
+    "status": "",
+    "room": ""
+  },
+  {
+    "floor": 0,
+    "x": 1134,
+    "y": 843,
+    "w": 30,
+    "h": 24,
+    "l": "Toegangsdeur",
+    "c": "#b0c0d0",
+    "bg": "rgba(176,192,208,.1)",
+    "type": "door",
+    "rot": "270",
+    "status": "",
+    "room": ""
   }
 ];
