@@ -1,5 +1,5 @@
 // Werkplaats17 -- Geplaatste objecten
-// Laatst gewijzigd: 2026-04-06T19:58:28.134Z
+// Laatst gewijzigd: 2026-04-06T20:12:46.679Z
 // Gegenereerd via admin.html
 
 const PLACED_OBJECTS = [
@@ -492,5 +492,19 @@ const PLACED_OBJECTS = [
     "rot": "270",
     "status": "",
     "room": ""
+  },
+  {
+    "floor": 2,
+    "x": 36,
+    "y": 102,
+    "w": 885,
+    "h": 131,
+    "l": "Vloer",
+    "c": "#b464dc",
+    "bg": "rgba(180,100,220,0.05)",
+    "type": "",
+    "rot": "0",
+    "status": "",
+    "room": "1"
   }
 ];
