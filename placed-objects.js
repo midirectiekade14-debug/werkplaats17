@@ -1,5 +1,5 @@
 // Werkplaats17 -- Geplaatste objecten
-// Laatst gewijzigd: 2026-04-05T19:16:30.696Z
+// Laatst gewijzigd: 2026-04-06T18:29:50.055Z
 // Gegenereerd via admin.html
 
 const PLACED_OBJECTS = [
@@ -33,9 +33,9 @@ const PLACED_OBJECTS = [
   },
   {
     "floor": 0,
-    "x": 1071,
-    "y": 861,
-    "w": 150,
+    "x": 792,
+    "y": 531,
+    "w": 429,
     "h": 150,
     "l": "Kantoor",
     "c": "rgba(110,150,220,.5)",
@@ -47,8 +47,8 @@ const PLACED_OBJECTS = [
   },
   {
     "floor": 0,
-    "x": 921,
-    "y": 861,
+    "x": 822,
+    "y": 843,
     "w": 150,
     "h": 150,
     "l": "Kantoor",
@@ -58,20 +58,6 @@ const PLACED_OBJECTS = [
     "rot": "0",
     "status": "",
     "room": "1"
-  },
-  {
-    "floor": 0,
-    "x": 1158,
-    "y": 624,
-    "w": 105,
-    "h": 21,
-    "l": "Overheaddeur 3.35m",
-    "c": "#E09A2F",
-    "bg": "rgba(224,154,47,.15)",
-    "type": "overhead",
-    "rot": "90",
-    "status": "",
-    "room": ""
   },
   {
     "floor": 0,
@@ -89,56 +75,14 @@ const PLACED_OBJECTS = [
   },
   {
     "floor": 0,
-    "x": 885,
-    "y": 441,
-    "w": 90,
-    "h": 90,
-    "l": "Toiletgroep",
-    "c": "rgba(120,160,220,.5)",
-    "bg": "rgba(120,160,220,.18)",
-    "type": "",
-    "rot": "0",
-    "status": "",
-    "room": "1"
-  },
-  {
-    "floor": 0,
-    "x": 630,
-    "y": 441,
-    "w": 102,
-    "h": 90,
-    "l": "Berging",
-    "c": "rgba(160,140,120,.5)",
-    "bg": "rgba(160,140,120,.13)",
-    "type": "",
-    "rot": "0",
-    "status": "",
-    "room": "1"
-  },
-  {
-    "floor": 0,
-    "x": 1221,
-    "y": 825,
-    "w": 27,
-    "h": 33,
+    "x": 1215,
+    "y": 639,
+    "w": 30,
+    "h": 24,
     "l": "Toegangsdeur",
     "c": "#b0c0d0",
     "bg": "rgba(176,192,208,.1)",
     "type": "door",
-    "rot": "270",
-    "status": "",
-    "room": ""
-  },
-  {
-    "floor": 0,
-    "x": -324,
-    "y": 837,
-    "w": 102,
-    "h": 18,
-    "l": "Overheaddeur 3.35m",
-    "c": "#E09A2F",
-    "bg": "rgba(224,154,47,.15)",
-    "type": "overhead",
     "rot": "270",
     "status": "",
     "room": ""
@@ -215,34 +159,6 @@ const PLACED_OBJECTS = [
   },
   {
     "floor": 0,
-    "x": 975,
-    "y": 441,
-    "w": 84,
-    "h": 90,
-    "l": "Berging",
-    "c": "rgba(160,140,120,.5)",
-    "bg": "rgba(160,140,120,.13)",
-    "type": "",
-    "rot": "0",
-    "status": "",
-    "room": "1"
-  },
-  {
-    "floor": 0,
-    "x": 732,
-    "y": 441,
-    "w": 153,
-    "h": 90,
-    "l": "Berging",
-    "c": "rgba(160,140,120,.5)",
-    "bg": "rgba(160,140,120,.13)",
-    "type": "",
-    "rot": "0",
-    "status": "",
-    "room": "1"
-  },
-  {
-    "floor": 0,
     "x": 471,
     "y": 849,
     "w": 3,
@@ -279,20 +195,6 @@ const PLACED_OBJECTS = [
     "c": "#50b478",
     "bg": "rgba(80,180,120,.1)",
     "type": "huurunit",
-    "rot": "0",
-    "status": "",
-    "room": ""
-  },
-  {
-    "floor": 0,
-    "x": -276,
-    "y": 906,
-    "w": 36,
-    "h": 105,
-    "l": "Palletstelling 3.5x1.2",
-    "c": "#a08060",
-    "bg": "rgba(160,128,96,.15)",
-    "type": "",
     "rot": "0",
     "status": "",
     "room": ""
