@@ -1289,13 +1289,7 @@
       <button class="fp-tab" onclick="fpShow(2)">2e verdieping</button>
     </div>
     <div class="fp-canvas" id="cv"><div id="fp"></div></div>
-    <div class="floorplan-legend">
-      <div class="legend-item"><div class="legend-swatch" style="background: rgba(224,154,47,0.13); border-color: rgba(224,154,47,0.5);"></div> Bedrijfshal</div>
-      <div class="legend-item"><div class="legend-swatch" style="background: rgba(110,150,220,0.13); border-color: rgba(110,150,220,0.5);"></div> Kantoren</div>
-      <div class="legend-item"><div class="legend-swatch" style="background: rgba(180,100,220,0.13); border-color: rgba(180,100,220,0.5);"></div> Verdieping</div>
-      <div class="legend-item"><div class="legend-swatch" style="background: rgba(140,200,140,0.13); border-color: rgba(140,200,140,0.5);"></div> Keuken</div>
-      <div class="legend-item"><div class="legend-swatch" style="background: rgba(180,140,80,0.13); border-color: rgba(180,140,80,0.45);"></div> Trap</div>
-    </div>
+    <div class="floorplan-legend" id="fp-legend"></div>
   </div>
 
   <!-- PRICING -->
@@ -1531,13 +1525,35 @@
     });
   }
 
+  function buildLegend(objs){
+    var legend=document.getElementById('fp-legend');
+    while(legend.firstChild) legend.removeChild(legend.firstChild);
+    var seen={};
+    objs.forEach(function(o){
+      if(!o.room||seen[o.l]) return;
+      seen[o.l]=1;
+      var item=document.createElement('div');
+      item.className='legend-item';
+      var sw=document.createElement('div');
+      sw.className='legend-swatch';
+      sw.style.background=o.bg;
+      sw.style.borderColor=o.c;
+      var txt=document.createTextNode(' '+o.l);
+      item.appendChild(sw);
+      item.appendChild(txt);
+      legend.appendChild(item);
+    });
+  }
+
   function renderFloor(f){
     fp.querySelectorAll('.pl,.fp-grid').forEach(function(d){d.remove();});
     document.querySelectorAll('.fp-tab').forEach(function(t,i){t.classList.toggle('on',i===f);});
     var allObjs=getActiveObjects();
     if(!allObjs.length) return;
-    allObjs.filter(function(o){return o.floor===f;}).forEach(place);
+    var floorObjs=allObjs.filter(function(o){return o.floor===f;});
+    floorObjs.forEach(place);
     fitToContent();
+    buildLegend(floorObjs);
   }
 
   function loadRotterdamData(cb){
