@@ -411,44 +411,26 @@
   .fp-canvas {
     position: relative;
     width: 100%;
-    background: var(--bg);
+    overflow: hidden;
     border: 1px solid var(--line);
-    overflow: hidden;
-    background-image:
-      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-    background-size: 30px 30px;
   }
-  .fp-obj {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    padding: 3px 4px;
-    overflow: hidden;
-    transition: opacity 0.2s;
+  .fp-canvas #fp {
+    position: relative;
+    transform-origin: 0 0;
   }
-  .fp-obj-label {
-    font-size: 7px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    font-weight: bold;
-    pointer-events: none;
-    line-height: 1.2;
-  }
-  .fp-obj-area {
-    font-size: 5.5px;
-    color: rgba(255,255,255,0.22);
-    pointer-events: none;
-    position: absolute;
-    bottom: 2px;
-    right: 4px;
-  }
-  .fp-obj:hover {
-    filter: brightness(1.3);
-    z-index: 2;
-  }
+  .pl { position: absolute; user-select: none; z-index: 10; }
+  .pl.room-pl { z-index: 5; }
+  .rm { width: 100%; height: 100%; border: 1px solid; display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; overflow: hidden; padding: 4px 5px; }
+  .rl { font-size: 7px; letter-spacing: 0.09em; text-transform: uppercase; font-weight: bold; pointer-events: none; }
+  .ra { font-size: 5.5px; color: rgba(255,255,255,0.22); pointer-events: none; position: absolute; bottom: 3px; right: 5px; }
+  .ib { width: 100%; height: 100%; border: 1.5px solid; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+  .il { font-size: 7px; letter-spacing: 0.05em; text-align: center; padding: 1px; line-height: 1.3; text-transform: uppercase; pointer-events: none; }
+  .id { position: absolute; bottom: -10px; left: 0; right: 0; font-size: 5.5px; color: rgba(255,255,255,0.35); pointer-events: none; text-align: center; white-space: nowrap; }
+  .dl { position: absolute; bottom: 2px; left: 0; right: 0; text-align: center; font-size: 6px; pointer-events: none; }
+  .pl[data-status="beschikbaar"] .ib { border-color: #4CAF50 !important; background: rgba(76,175,80,0.12) !important; box-shadow: 0 0 6px rgba(76,175,80,0.3); }
+  .pl[data-status="bezet"] .ib { border-color: #666 !important; background: rgba(120,120,120,0.08) !important; }
+  .pl[data-status="gereserveerd"] .ib { border-color: #FF9800 !important; background: rgba(255,152,0,0.12) !important; box-shadow: 0 0 6px rgba(255,152,0,0.2); }
+  .pl:hover .fp-tooltip { display: block; }
   .fp-tooltip {
     display: none;
     position: absolute;
@@ -465,7 +447,6 @@
     z-index: 10;
     letter-spacing: 0.06em;
   }
-  .fp-obj:hover .fp-tooltip { display: block; }
   .floorplan-legend {
     display: flex;
     flex-wrap: wrap;
@@ -1307,7 +1288,7 @@
       <button class="fp-tab" onclick="fpShow(1)">1e verdieping</button>
       <button class="fp-tab" onclick="fpShow(2)">2e verdieping</button>
     </div>
-    <div class="fp-canvas" id="fp-viewer"></div>
+    <div class="fp-canvas" id="cv"><div id="fp"></div></div>
     <div class="floorplan-legend">
       <div class="legend-item"><div class="legend-swatch" style="background: rgba(224,154,47,0.13); border-color: rgba(224,154,47,0.5);"></div> Bedrijfshal</div>
       <div class="legend-item"><div class="legend-swatch" style="background: rgba(110,150,220,0.13); border-color: rgba(110,150,220,0.5);"></div> Kantoren</div>
@@ -1417,175 +1398,179 @@
 <script src="placed-objects.js"></script>
 <script>
 (function(){
-  var S = 0.03;
-  var viewer = document.getElementById('fp-viewer');
-  var currentLocation = 'maasland';
-  var maaslandObjects = typeof PLACED_OBJECTS !== 'undefined' ? PLACED_OBJECTS : [];
-  var rotterdamObjects = null;
-  var currentFloor = 0;
+  var S=0.03, FPW=900, FPH=550;
+  var cv=document.getElementById('cv');
+  var fp=document.getElementById('fp');
+  var currentLocation='maasland';
+  var maaslandObjects=typeof PLACED_OBJECTS!=='undefined'?PLACED_OBJECTS:[];
+  var rotterdamObjects=null;
 
-  var FLOOR_TABS = {
-    maasland: ['Begane grond', '1e verdieping', '2e verdieping'],
-    rotterdam: ['Begane grond']
+  var FLOOR_TABS={
+    maasland:['Begane grond','1e verdieping','2e verdieping'],
+    rotterdam:['Begane grond']
   };
 
-  function updateFloorTabs() {
-    var tabsContainer = document.querySelector('.fp-tabs');
-    while (tabsContainer.firstChild) tabsContainer.removeChild(tabsContainer.firstChild);
-    var tabs = FLOOR_TABS[currentLocation];
-    tabs.forEach(function(label, i) {
-      var btn = document.createElement('button');
-      btn.className = 'fp-tab' + (i === 0 ? ' on' : '');
-      btn.textContent = label;
-      btn.onclick = function() { fpShow(i); };
+  function place(o){
+    var isRoom=!!o.room;
+    var isDoor=o.type==='door'||o.type==='overhead';
+    var d=document.createElement('div');
+    d.className='pl'+(isRoom?' room-pl':'');
+    d.style.cssText='position:absolute;left:'+o.x+'px;top:'+o.y+'px;width:'+o.w+'px;height:'+o.h+'px;';
+    if(o.type==='huurunit'&&o.status) d.dataset.status=o.status;
+
+    if(isRoom){
+      var rm=document.createElement('div');
+      rm.className='rm';
+      rm.style.borderColor=o.c;
+      rm.style.background=o.bg;
+      var rl=document.createElement('div');
+      rl.className='rl';
+      rl.style.color=o.c;
+      rl.textContent=o.l;
+      var ra=document.createElement('div');
+      ra.className='ra';
+      var wm=o.w/S/1000,hm=o.h/S/1000;
+      var area=Math.round(wm*hm*10)/10;
+      if(area>=1) ra.textContent=area+'m\u00B2';
+      rm.appendChild(rl);
+      rm.appendChild(ra);
+      d.appendChild(rm);
+    } else if(isDoor){
+      var dw=document.createElement('div');
+      dw.style.cssText='width:100%;height:100%;position:relative;overflow:hidden';
+      if(o.rot&&o.rot!=='0') dw.style.transform='rotate('+o.rot+'deg)';
+      var topBar=document.createElement('div');
+      topBar.style.cssText='position:absolute;left:0;right:0;top:0;height:4px;background:'+o.c+';opacity:.9';
+      dw.appendChild(topBar);
+      if(o.type==='overhead'){
+        var lines=document.createElement('div');
+        lines.style.cssText='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:3px';
+        for(var li=0;li<5;li++){
+          var ln=document.createElement('div');
+          ln.style.cssText='width:1px;height:55%;background:'+o.c+';opacity:.4';
+          lines.appendChild(ln);
+        }
+        dw.appendChild(lines);
+      } else {
+        var arc=document.createElement('div');
+        arc.style.cssText='position:absolute;bottom:1px;left:2px;right:2px;border-bottom:1px solid '+o.c+';border-right:1px solid '+o.c+';border-radius:0 0 80% 0;opacity:.5;height:80%';
+        dw.appendChild(arc);
+      }
+      var dlbl=document.createElement('div');
+      dlbl.className='dl';
+      dlbl.style.color=o.c;
+      dlbl.textContent=o.l;
+      dw.appendChild(dlbl);
+      d.appendChild(dw);
+    } else {
+      var ib=document.createElement('div');
+      ib.className='ib';
+      ib.style.borderColor=o.c;
+      ib.style.background=o.bg;
+      var il=document.createElement('div');
+      il.className='il';
+      il.style.color=o.c;
+      il.textContent=o.l;
+      var idEl=document.createElement('div');
+      idEl.className='id';
+      idEl.textContent=Math.round(o.w/S/10)+'\u00D7'+Math.round(o.h/S/10)+'cm';
+      ib.appendChild(il);
+      ib.appendChild(idEl);
+      d.appendChild(ib);
+    }
+
+    var tip=document.createElement('div');
+    tip.className='fp-tooltip';
+    var wcm=Math.round(o.w/S/10),hcm=Math.round(o.h/S/10);
+    tip.textContent=o.l+' \u2014 '+wcm+'\u00D7'+hcm+'cm';
+    if(o.room){var wm2=o.w/S/1000,hm2=o.h/S/1000;tip.textContent+=' ('+Math.round(wm2*hm2*10)/10+'m\u00B2)';}
+    d.appendChild(tip);
+
+    fp.appendChild(d);
+  }
+
+  function fitToContent(){
+    var els=fp.querySelectorAll('.pl');
+    if(!els.length) return;
+    var minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
+    els.forEach(function(d){
+      var x=parseInt(d.style.left),y=parseInt(d.style.top),w=parseInt(d.style.width),h=parseInt(d.style.height);
+      if(x<minX) minX=x; if(y<minY) minY=y;
+      if(x+w>maxX) maxX=x+w; if(y+h>maxY) maxY=y+h;
+    });
+    var pad=40, bw=maxX-minX+pad*2, bh=maxY-minY+pad*2;
+    var rect=cv.getBoundingClientRect();
+    var zoom=Math.min(rect.width/bw, rect.height/bh||99, 2);
+    zoom=Math.max(zoom,0.3);
+    var panX=-(minX-pad)*zoom+(rect.width-bw*zoom)/2;
+    var panY=-(minY-pad)*zoom;
+    fp.style.width=FPW+'px';
+    fp.style.height=FPH+'px';
+    fp.style.transform='translate('+panX+'px,'+panY+'px) scale('+zoom+')';
+    cv.style.height=Math.ceil(bh*zoom)+'px';
+    var g=fp.querySelector('.fp-grid');
+    if(!g){g=document.createElement('div');g.className='fp-grid';fp.insertBefore(g,fp.firstChild);}
+    g.style.cssText='position:absolute;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:'+S*1000+'px '+S*1000+'px';
+  }
+
+  function getActiveObjects(){
+    if(currentLocation==='rotterdam') return rotterdamObjects||[];
+    return maaslandObjects;
+  }
+
+  function updateFloorTabs(){
+    var tabsContainer=document.querySelector('.fp-tabs');
+    while(tabsContainer.firstChild) tabsContainer.removeChild(tabsContainer.firstChild);
+    var tabs=FLOOR_TABS[currentLocation];
+    tabs.forEach(function(label,i){
+      var btn=document.createElement('button');
+      btn.className='fp-tab'+(i===0?' on':'');
+      btn.textContent=label;
+      btn.onclick=function(){fpShow(i);};
       tabsContainer.appendChild(btn);
     });
   }
 
-  function getActiveObjects() {
-    if (currentLocation === 'rotterdam') return rotterdamObjects || [];
-    return maaslandObjects;
+  function renderFloor(f){
+    fp.querySelectorAll('.pl,.fp-grid').forEach(function(d){d.remove();});
+    document.querySelectorAll('.fp-tab').forEach(function(t,i){t.classList.toggle('on',i===f);});
+    var allObjs=getActiveObjects();
+    if(!allObjs.length) return;
+    allObjs.filter(function(o){return o.floor===f;}).forEach(place);
+    fitToContent();
   }
 
-  function renderFloor(f) {
-    currentFloor = f;
-    while (viewer.firstChild) viewer.removeChild(viewer.firstChild);
-    document.querySelectorAll('.fp-tab').forEach(function(t, i) { t.classList.toggle('on', i === f); });
-    var allObjs = getActiveObjects();
-    if (!allObjs.length) return;
-    var objs = allObjs.filter(function(o) { return o.floor === f; });
-    if (!objs.length) return;
-    var minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-    objs.forEach(function(o) {
-      if (o.x < minX) minX = o.x;
-      if (o.y < minY) minY = o.y;
-      if (o.x + o.w > maxX) maxX = o.x + o.w;
-      if (o.y + o.h > maxY) maxY = o.y + o.h;
-    });
-    var pad = 20;
-    minX -= pad; minY -= pad; maxX += pad; maxY += pad;
-    var bw = maxX - minX, bh = maxY - minY;
-    viewer.style.aspectRatio = bw + ' / ' + bh;
-    var viewerW = viewer.offsetWidth;
-    var scale = viewerW / bw;
-    var inner = document.createElement('div');
-    inner.style.cssText = 'position:absolute;left:0;top:0;width:' + bw + 'px;height:' + bh + 'px;transform:scale(' + scale + ');transform-origin:0 0;';
-    var sc = 1 / scale;
-    var lblSize = Math.round(11 * sc);
-    var areaSize = Math.round(9 * sc);
-    var dimSize = Math.round(8 * sc);
-    var tipSize = Math.round(11 * sc);
-    var padV = Math.round(4 * sc);
-    var padH = Math.round(6 * sc);
-    var borderW = Math.max(1, Math.round(1.5 * sc));
-    var minLblW = lblSize * 3;
-    var minLblH = lblSize * 2;
-    objs.forEach(function(o) {
-      var isDoor = o.type === 'overhead' || o.type === 'door';
-      var el = document.createElement('div');
-      el.className = 'fp-obj';
-      el.style.cssText = 'left:' + (o.x - minX) + 'px;top:' + (o.y - minY) + 'px;width:' + o.w + 'px;height:' + o.h + 'px;border:' + borderW + 'px solid ' + o.c + ';background:' + o.bg + ';padding:' + padV + 'px ' + padH + 'px;';
-      var showLabel = o.w >= minLblW && o.h >= minLblH;
-      if (isDoor) {
-        var dw = document.createElement('div');
-        var rot = o.rot && o.rot !== '0' ? 'transform:rotate(' + o.rot + 'deg);' : '';
-        dw.style.cssText = 'width:100%;height:100%;position:relative;overflow:hidden;' + rot;
-        var topBar = document.createElement('div');
-        topBar.style.cssText = 'position:absolute;left:0;right:0;top:0;height:' + Math.round(4 * sc) + 'px;background:' + o.c + ';opacity:.9';
-        dw.appendChild(topBar);
-        if (o.type === 'overhead') {
-          var lines = document.createElement('div');
-          lines.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:' + Math.round(3 * sc) + 'px';
-          for (var li = 0; li < 5; li++) {
-            var ln = document.createElement('div');
-            ln.style.cssText = 'width:' + Math.max(1, Math.round(1 * sc)) + 'px;height:55%;background:' + o.c + ';opacity:.4';
-            lines.appendChild(ln);
-          }
-          dw.appendChild(lines);
-        }
-        el.appendChild(dw);
-        if (showLabel) {
-          var dlbl = document.createElement('div');
-          dlbl.className = 'fp-obj-label';
-          dlbl.style.cssText = 'position:absolute;bottom:' + Math.round(2 * sc) + 'px;left:0;right:0;text-align:center;font-size:' + Math.round(9 * sc) + 'px;color:' + o.c;
-          dlbl.textContent = o.l;
-          el.appendChild(dlbl);
-        }
-      } else {
-        if (showLabel) {
-          var lbl = document.createElement('div');
-          lbl.className = 'fp-obj-label';
-          lbl.style.color = o.c;
-          lbl.style.fontSize = lblSize + 'px';
-          lbl.textContent = o.l;
-          el.appendChild(lbl);
-        }
-        if (o.room && showLabel) {
-          var wm = o.w / S / 1000, hm = o.h / S / 1000;
-          var area = Math.round(wm * hm * 10) / 10;
-          if (area >= 1) {
-            var areaEl = document.createElement('div');
-            areaEl.className = 'fp-obj-area';
-            areaEl.style.fontSize = areaSize + 'px';
-            areaEl.textContent = area + 'm\u00B2';
-            el.appendChild(areaEl);
-          }
-        }
-        if (!o.room && o.w >= minLblW && o.h >= minLblH) {
-          var wcm = Math.round(o.w / S / 10), hcm = Math.round(o.h / S / 10);
-          var dimEl = document.createElement('div');
-          dimEl.className = 'fp-obj-area';
-          dimEl.style.fontSize = dimSize + 'px';
-          dimEl.textContent = wcm + '\u00D7' + hcm + 'cm';
-          el.appendChild(dimEl);
-        }
-      }
-      var tip = document.createElement('div');
-      tip.className = 'fp-tooltip';
-      tip.style.fontSize = tipSize + 'px';
-      tip.style.padding = Math.round(6 * sc) + 'px ' + Math.round(10 * sc) + 'px';
-      tip.style.bottom = 'calc(100% + ' + Math.round(6 * sc) + 'px)';
-      var wcm2 = Math.round(o.w / S / 10), hcm2 = Math.round(o.h / S / 10);
-      tip.textContent = o.l + ' \u2014 ' + wcm2 + '\u00D7' + hcm2 + 'cm';
-      if (o.room) { var wm2 = o.w / S / 1000, hm2 = o.h / S / 1000; tip.textContent += ' (' + (Math.round(wm2 * hm2 * 10) / 10) + 'm\u00B2)'; }
-      el.appendChild(tip);
-      inner.appendChild(el);
-    });
-    viewer.appendChild(inner);
-  }
-
-  function loadRotterdamData(cb) {
-    if (rotterdamObjects) { cb(); return; }
-    var url = 'https://midirectiekade14-debug.github.io/werkplaats17-rotterdam/placed-objects.js';
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', url);
-    xhr.onload = function() {
-      if (xhr.status === 200) {
-        var match = xhr.responseText.match(/const\s+PLACED_OBJECTS\s*=\s*(\[[\s\S]*\]);/);
-        if (match) {
-          try { rotterdamObjects = JSON.parse(match[1]); } catch(e) { rotterdamObjects = []; }
-        } else { rotterdamObjects = []; }
-      } else { rotterdamObjects = []; }
+  function loadRotterdamData(cb){
+    if(rotterdamObjects){cb();return;}
+    var url='https://midirectiekade14-debug.github.io/werkplaats17-rotterdam/placed-objects.js';
+    var xhr=new XMLHttpRequest();
+    xhr.open('GET',url);
+    xhr.onload=function(){
+      if(xhr.status===200){
+        var match=xhr.responseText.match(/const\s+PLACED_OBJECTS\s*=\s*(\[[\s\S]*\]);/);
+        if(match){try{rotterdamObjects=JSON.parse(match[1]);}catch(e){rotterdamObjects=[];}}
+        else{rotterdamObjects=[];}
+      }else{rotterdamObjects=[];}
       cb();
     };
-    xhr.onerror = function() { rotterdamObjects = []; cb(); };
+    xhr.onerror=function(){rotterdamObjects=[];cb();};
     xhr.send();
   }
 
-  window.fpSwitchLocation = function(loc) {
-    currentLocation = loc;
-    document.querySelectorAll('.fp-loc-tab').forEach(function(t) {
-      t.classList.toggle('on', t.textContent.toLowerCase() === loc);
+  window.fpSwitchLocation=function(loc){
+    currentLocation=loc;
+    document.querySelectorAll('.fp-loc-tab').forEach(function(t){
+      t.classList.toggle('on',t.textContent.toLowerCase()===loc);
     });
     updateFloorTabs();
-    if (loc === 'rotterdam') {
-      loadRotterdamData(function() { renderFloor(0); });
-    } else {
+    if(loc==='rotterdam'){
+      loadRotterdamData(function(){renderFloor(0);});
+    }else{
       renderFloor(0);
     }
   };
 
-  window.fpShow = function(f) { renderFloor(f); };
+  window.fpShow=function(f){renderFloor(f);};
   renderFloor(0);
 })();
 </script>
