@@ -1,5 +1,5 @@
 // Werkplaats17 -- Geplaatste objecten
-// Laatst gewijzigd: 2026-04-07T05:25:37.432Z
+// Laatst gewijzigd: 2026-04-07T05:27:28.115Z
 // Gegenereerd via admin.html
 
 const PLACED_OBJECTS = [
@@ -506,5 +506,61 @@ const PLACED_OBJECTS = [
     "rot": "0",
     "status": "",
     "room": "1"
+  },
+  {
+    "floor": 2,
+    "x": 717,
+    "y": 153,
+    "w": 30,
+    "h": 21,
+    "l": "",
+    "c": "#b0c0d0",
+    "bg": "rgba(176,192,208,0.10)",
+    "type": "door",
+    "rot": "270",
+    "status": "",
+    "room": ""
+  },
+  {
+    "floor": 2,
+    "x": 780,
+    "y": 213,
+    "w": 27,
+    "h": 24,
+    "l": "",
+    "c": "#b0c0d0",
+    "bg": "rgba(176,192,208,0.10)",
+    "type": "door",
+    "rot": "180",
+    "status": "",
+    "room": ""
+  },
+  {
+    "floor": 2,
+    "x": 726,
+    "y": 384,
+    "w": 27,
+    "h": 24,
+    "l": "",
+    "c": "#b0c0d0",
+    "bg": "rgba(176,192,208,0.10)",
+    "type": "door",
+    "rot": "180",
+    "status": "",
+    "room": ""
+  },
+  {
+    "floor": 2,
+    "x": 777,
+    "y": 384,
+    "w": 27,
+    "h": 24,
+    "l": "",
+    "c": "#b0c0d0",
+    "bg": "rgba(176,192,208,0.10)",
+    "type": "door",
+    "rot": "180",
+    "status": "",
+    "room": ""
   }
 ];
