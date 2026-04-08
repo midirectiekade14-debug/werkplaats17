@@ -1543,8 +1543,10 @@ async function publishFile(path,content,message,btn){
   }
   async function freshSha(){
     console.log('[publishFile] GET sha',path);
+    // GEEN Cache-Control header — die triggert CORS preflight die GitHub afkeurt.
+    // Cache-busting gaat via ?_t= query param, dat is genoeg.
     var r=await fetchT('https://api.github.com/repos/'+gh.repo+'/contents/'+path+'?ref=master&_t='+Date.now(),{
-      headers:{'Authorization':'Bearer '+gh.token,'Accept':'application/vnd.github.v3+json','Cache-Control':'no-cache','If-None-Match':''}
+      headers:{'Authorization':'Bearer '+gh.token,'Accept':'application/vnd.github.v3+json'}
     },15000);
     if(r.ok){var d=await r.json();return d.sha;}
     if(r.status===404)return null;
@@ -1584,7 +1586,7 @@ async function publishBinary(path,b64Data,message){
   var gh=await getGHConfig();if(!gh)return false;
   async function getSha(){
     var r=await fetchT('https://api.github.com/repos/'+gh.repo+'/contents/'+path+'?ref=master&_t='+Date.now(),{
-      headers:{'Authorization':'Bearer '+gh.token,'Accept':'application/vnd.github.v3+json','Cache-Control':'no-cache'}
+      headers:{'Authorization':'Bearer '+gh.token,'Accept':'application/vnd.github.v3+json'}
     },15000);
     if(r.ok){var d=await r.json();return d.sha;}
     if(r.status===404)return null;
