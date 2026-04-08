@@ -1324,9 +1324,21 @@ function ceGenerateJS(){
 
 window.ceSave=async function(){
   var btn=document.getElementById('ce-save');
-  var js=ceGenerateJS();
-  var ok=await publishFile('content.js',js,'Content bijgewerkt via admin ('+new Date().toLocaleString('nl-NL')+')',btn);
-  if(ok)document.getElementById('ce-status').textContent='Gepubliceerd om '+new Date().toLocaleTimeString('nl-NL');
+  try{
+    toast('Opslaan...');
+    var js=ceGenerateJS();
+    console.log('[ceSave] bytes:',js.length);
+    var ok=await publishFile('content.js',js,'Content bijgewerkt via admin ('+new Date().toLocaleString('nl-NL')+')',btn);
+    console.log('[ceSave] publishFile ok:',ok);
+    if(ok){
+      document.getElementById('ce-status').textContent='Gepubliceerd om '+new Date().toLocaleTimeString('nl-NL');
+    }
+  }catch(e){
+    console.error('[ceSave] error:',e);
+    toast('Opslaan mislukt: '+e.message,'err');
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent='Opslaan & Publiceer';}
+  }
 };
 
 window.ceReset=function(){
@@ -1507,7 +1519,7 @@ async function getGHConfig(){
 }
 
 async function publishFile(path,content,message,btn){
-  var gh=await getGHConfig();if(!gh)return false;
+  var gh=await getGHConfig();if(!gh){toast('Geen GitHub token — vul hem in','err');return false;}
   if(btn){btn.disabled=true;btn.textContent='Publiceren...';}
   try{
     // Get current SHA
