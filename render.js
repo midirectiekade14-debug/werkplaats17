@@ -187,6 +187,35 @@
   // Footer hashtags
   setHTML('footer .hashtags', C.hashtags);
 
+  // Photos — hero + strip. photos.js definieert PHOTOS = {hero, strip:[..]}
+  if (typeof PHOTOS !== 'undefined' && PHOTOS) {
+    function imgFor(path, alt) {
+      var img = document.createElement('img');
+      img.src = path + (path.indexOf('?') === -1 ? '?t=' + Date.now() : '');
+      img.alt = alt || '';
+      img.loading = 'lazy';
+      img.style.width = '100%';
+      img.style.height = '100%';
+      img.style.objectFit = 'cover';
+      img.style.display = 'block';
+      return img;
+    }
+    if (PHOTOS.hero) {
+      var heroWrap = document.querySelector('.hero-image');
+      if (heroWrap) replaceChildren(heroWrap, imgFor(PHOTOS.hero, 'Werkplaats17'));
+    }
+    if (Array.isArray(PHOTOS.strip)) {
+      var strip = document.querySelectorAll('.photo-strip .photo-placeholder');
+      PHOTOS.strip.forEach(function (p, i) {
+        if (!p || !strip[i]) return;
+        var label = strip[i].querySelector('.ph-label');
+        replaceChildren(strip[i], imgFor(p, 'Sfeerbeeld ' + (i + 1)));
+        if (label) strip[i].appendChild(label);
+        strip[i].classList.add('has-photo');
+      });
+    }
+  }
+
   // Copyright (admin link behouden)
   var copy = document.querySelector('footer .copy');
   if (copy && C.copyright) {
