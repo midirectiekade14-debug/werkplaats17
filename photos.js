@@ -1,8 +1,12 @@
 // Werkplaats17 — Foto referenties
-// Laatst gewijzigd: 2026-03-31
+// Laatst gewijzigd: 2026-04-08T16:32:08.050Z
 // Gegenereerd via admin.html
 
 const PHOTOS = {
-  "hero": null,
-  "strip": [null, null, null]
+  "hero": "photos/hero-test-1775665925898.jpg",
+  "strip": [
+    null,
+    null,
+    null
+  ]
 };
