@@ -18,28 +18,90 @@ const CONTENT = {
     "5 kantoren"
   ],
   "offers": [
-    {"title": "Bedrijfshal", "text": "400 m² begane grond. Vloerverwarming en LED-verlichting."},
-    {"title": "Kantoren", "text": "Receptie en drie kantoorruimtes op de begane grond. Twee kantoren op de 2e verdieping met keukenblok."},
-    {"title": "Opslag & 1e verdieping", "text": "221 m² op de eerste verdieping. Magazijn en opslagruimte op de begane grond."},
-    {"title": "Faciliteiten", "text": "Airco, glasvezel, alarmsysteem, keuken, elektrische overheaddeur, vloerverwarming."}
+    {
+      "title": "Bedrijfshal",
+      "text": "400 m² begane grond. Vloerverwarming en LED-verlichting."
+    },
+    {
+      "title": "Kantoren",
+      "text": "Receptie en drie kantoorruimtes op de begane grond. Twee kantoren op de 2e verdieping met keukenblok."
+    },
+    {
+      "title": "Opslag & 1e verdieping",
+      "text": "221 m² op de eerste verdieping. Magazijn en opslagruimte op de begane grond."
+    },
+    {
+      "title": "Faciliteiten",
+      "text": "Airco, glasvezel, alarmsysteem, keuken, elektrische overheaddeur, vloerverwarming."
+    }
   ],
   "machines": [
-    {"name": "Formaatzaag", "highlight": true},
-    {"name": "Vlak- & vandiktebank", "highlight": true},
-    {"name": "Lintzaag", "highlight": true},
-    {"name": "Rijgatenboormachine", "highlight": true},
-    {"name": "3D printer", "highlight": true},
-    {"name": "Metaalzaag", "highlight": false},
-    {"name": "Straalcabine", "highlight": false},
-    {"name": "Afzuiging", "highlight": false},
-    {"name": "Perslucht", "highlight": false},
-    {"name": "Alle handgereedschappen", "highlight": false}
+    {
+      "name": "Formaatzaag",
+      "highlight": true
+    },
+    {
+      "name": "Vlak- & vandiktebank",
+      "highlight": true
+    },
+    {
+      "name": "Lintzaag",
+      "highlight": true
+    },
+    {
+      "name": "Rijgatenboormachine",
+      "highlight": true
+    },
+    {
+      "name": "3D printer",
+      "highlight": true
+    },
+    {
+      "name": "Metaalzaag",
+      "highlight": false
+    },
+    {
+      "name": "Straalcabine",
+      "highlight": false
+    },
+    {
+      "name": "Afzuiging",
+      "highlight": false
+    },
+    {
+      "name": "Perslucht",
+      "highlight": false
+    },
+    {
+      "name": "Alle handgereedschappen",
+      "highlight": false
+    }
   ],
   "pricing": [
-    {"label": "Werkplek in de hal", "sub": "Eigen ruimte met flexspace voor de grotere projecten", "price": "Vanaf €650", "unit": "/mnd"},
-    {"label": "Kantoorruimte", "sub": "Eigen afgesloten kantoor · begane grond of 2e verdieping", "price": "Vanaf €450", "unit": "/mnd"},
-    {"label": "Opslagruimte", "sub": "1e verdieping · flexibel in te delen", "price": "Vanaf €250", "unit": "/mnd"},
-    {"label": "Servicekosten", "sub": "Energie en onderhoud inbegrepen · per werkplek", "price": "€95", "unit": "/mnd"}
+    {
+      "label": "Werkplek in de hal",
+      "sub": "Eigen ruimte met flexspace voor de grotere projecten",
+      "price": "Vanaf €650",
+      "unit": "/mnd"
+    },
+    {
+      "label": "Kantoorruimte",
+      "sub": "Eigen afgesloten kantoor · begane grond of 2e verdieping",
+      "price": "Vanaf €450",
+      "unit": "/mnd"
+    },
+    {
+      "label": "Opslagruimte",
+      "sub": "1e verdieping · flexibel in te delen",
+      "price": "Vanaf €250",
+      "unit": "/mnd"
+    },
+    {
+      "label": "Servicekosten",
+      "sub": "Energie en onderhoud inbegrepen · per werkplek",
+      "price": "€95",
+      "unit": "/mnd"
+    }
   ],
   "pricingNote": "Alle prijzen excl. BTW. Neem contact op voor een rondleiding en beschikbare units.",
   "targetAudience": [
@@ -61,7 +123,11 @@ const CONTENT = {
   ],
   "instagramHandle": "@werkplaats17",
   "instagramUrl": "https://instagram.com/werkplaats17",
-  "photoLabels": ["Bedrijfshal", "Kantoren", "Verdieping"],
+  "photoLabels": [
+    "Bedrijfshal",
+    "Kantoren",
+    "Verdieping"
+  ],
   "hashtags": "#werkplaats17 #maasland<br>#bedrijfsruimte #meubelmaker<br>#vakman #werkruimte",
   "copyright": "© 2026 Werkplaats17"
 };
