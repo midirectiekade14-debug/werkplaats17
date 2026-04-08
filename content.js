@@ -5,7 +5,7 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 const CONTENT = {
-  "siteTitle": "Werkplaats17 — Professionele werkruimte Maasland",
+  "siteTitle": " — Professionele werkruimte Maasland",
   "metaDescription": "Multifunctionele bedrijfsruimte voor vakmensen en kleine studio's. 904 m² met kantoren, bedrijfshal en machines. Oud Camp 3b, Maasland.",
   "ogDescription": "Multifunctionele bedrijfsruimte voor vakmensen en kleine studio's. Bedrijfshal, kantoren, machines. Naast A20, Maasland.",
   "eyebrow": "Beschikbaar · Maasland",
