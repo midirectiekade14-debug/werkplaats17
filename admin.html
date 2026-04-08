@@ -1518,25 +1518,41 @@ async function getGHConfig(){
   return{repo:repo,token:token};
 }
 
+var shaCache={};
 async function publishFile(path,content,message,btn){
   var gh=await getGHConfig();if(!gh){toast('Geen GitHub token — vul hem in','err');return false;}
   if(btn){btn.disabled=true;btn.textContent='Publiceren...';}
-  try{
-    // Get current SHA
-    var r=await fetch('https://api.github.com/repos/'+gh.repo+'/contents/'+path,{
-      headers:{'Authorization':'Bearer '+gh.token,'Accept':'application/vnd.github.v3+json'}
-    });
-    var sha=null;
-    if(r.ok){var d=await r.json();sha=d.sha;}
-    // Put file
+  async function attemptPut(sha){
     var body={message:message||'Update '+path,content:btoa(unescape(encodeURIComponent(content)))};
     if(sha)body.sha=sha;
-    var r2=await fetch('https://api.github.com/repos/'+gh.repo+'/contents/'+path,{
+    return fetch('https://api.github.com/repos/'+gh.repo+'/contents/'+path,{
       method:'PUT',
       headers:{'Authorization':'Bearer '+gh.token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
       body:JSON.stringify(body)
     });
+  }
+  async function freshSha(){
+    var r=await fetch('https://api.github.com/repos/'+gh.repo+'/contents/'+path+'?ref=master&_t='+Date.now(),{
+      headers:{'Authorization':'Bearer '+gh.token,'Accept':'application/vnd.github.v3+json','Cache-Control':'no-cache','If-None-Match':''}
+    });
+    if(r.ok){var d=await r.json();return d.sha;}
+    return null;
+  }
+  try{
+    // Prefer cached SHA from last successful PUT (authoritative), fallback to fresh GET
+    var sha=shaCache[path]||await freshSha();
+    var r2=await attemptPut(sha);
+    // 409/422 = SHA conflict → retry once with freshly fetched SHA
+    if(r2.status===409||r2.status===422){
+      console.warn('[publishFile] SHA conflict, retrying with fresh SHA');
+      delete shaCache[path];
+      var freshSha2=await freshSha();
+      r2=await attemptPut(freshSha2);
+    }
     if(!r2.ok){var err=await r2.json();if(r2.status===401||r2.status===403){localStorage.removeItem('w17-gh-token');document.getElementById('token-modal').classList.add('show');throw new Error('Token verlopen — voer een nieuwe token in');}throw new Error(err.message||'HTTP '+r2.status);}
+    // Remember the new SHA from the PUT response for next save
+    var putData=await r2.json();
+    if(putData&&putData.content&&putData.content.sha)shaCache[path]=putData.content.sha;
     toast('Gepubliceerd: '+path);
     return true;
   }catch(e){
