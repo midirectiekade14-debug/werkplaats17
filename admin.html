@@ -1519,24 +1519,36 @@ async function getGHConfig(){
 }
 
 var shaCache={};
+// Fetch met timeout — voorkomt dat de knop oneindig hangt
+// als Chrome/VPN de verbinding stillegt zonder TCP RST
+function fetchT(url,opts,timeoutMs){
+  var ctrl=new AbortController();
+  var t=setTimeout(function(){ctrl.abort();},timeoutMs||15000);
+  return fetch(url,Object.assign({},opts||{},{signal:ctrl.signal}))
+    .finally(function(){clearTimeout(t);});
+}
 async function publishFile(path,content,message,btn){
   var gh=await getGHConfig();if(!gh){toast('Geen GitHub token — vul hem in','err');return false;}
   if(btn){btn.disabled=true;btn.textContent='Publiceren...';}
+  console.log('[publishFile] start',path,'bytes:',content.length);
   async function attemptPut(sha){
     var body={message:message||'Update '+path,content:btoa(unescape(encodeURIComponent(content)))};
     if(sha)body.sha=sha;
-    return fetch('https://api.github.com/repos/'+gh.repo+'/contents/'+path,{
+    console.log('[publishFile] PUT',path,'sha:',sha||'(none)');
+    return fetchT('https://api.github.com/repos/'+gh.repo+'/contents/'+path,{
       method:'PUT',
       headers:{'Authorization':'Bearer '+gh.token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
       body:JSON.stringify(body)
-    });
+    },20000);
   }
   async function freshSha(){
-    var r=await fetch('https://api.github.com/repos/'+gh.repo+'/contents/'+path+'?ref=master&_t='+Date.now(),{
+    console.log('[publishFile] GET sha',path);
+    var r=await fetchT('https://api.github.com/repos/'+gh.repo+'/contents/'+path+'?ref=master&_t='+Date.now(),{
       headers:{'Authorization':'Bearer '+gh.token,'Accept':'application/vnd.github.v3+json','Cache-Control':'no-cache','If-None-Match':''}
-    });
+    },15000);
     if(r.ok){var d=await r.json();return d.sha;}
-    return null;
+    if(r.status===404)return null;
+    throw new Error('Kon SHA niet ophalen: HTTP '+r.status);
   }
   try{
     // Prefer cached SHA from last successful PUT (authoritative), fallback to fresh GET
@@ -1549,15 +1561,19 @@ async function publishFile(path,content,message,btn){
       var freshSha2=await freshSha();
       r2=await attemptPut(freshSha2);
     }
-    if(!r2.ok){var err=await r2.json();if(r2.status===401||r2.status===403){localStorage.removeItem('w17-gh-token');document.getElementById('token-modal').classList.add('show');throw new Error('Token verlopen — voer een nieuwe token in');}throw new Error(err.message||'HTTP '+r2.status);}
+    if(!r2.ok){var err={};try{err=await r2.json();}catch(_){}if(r2.status===401||r2.status===403){localStorage.removeItem('w17-gh-token');document.getElementById('token-modal').classList.add('show');throw new Error('Token verlopen — voer een nieuwe token in');}throw new Error(err.message||'HTTP '+r2.status);}
     // Remember the new SHA from the PUT response for next save
     var putData=await r2.json();
     if(putData&&putData.content&&putData.content.sha)shaCache[path]=putData.content.sha;
+    console.log('[publishFile] OK',path);
     toast('Gepubliceerd: '+path);
     return true;
   }catch(e){
-    console.error('Publish error:',e);
-    toast('Publiceren mislukt: '+e.message,'err');
+    var msg=e.message||String(e);
+    if(e.name==='AbortError')msg='Timeout (20s) — netwerk/VPN blokkeert GitHub API?';
+    else if(msg==='Failed to fetch')msg='Netwerk geblokkeerd — check VPN / adblocker / extensies';
+    console.error('[publishFile] error:',e,'name:',e.name);
+    toast('Publiceren mislukt: '+msg,'err');
     return false;
   }finally{
     if(btn){btn.disabled=false;btn.textContent='Opslaan & Publiceer';}
@@ -1567,22 +1583,24 @@ async function publishFile(path,content,message,btn){
 async function publishBinary(path,b64Data,message){
   var gh=await getGHConfig();if(!gh)return false;
   async function getSha(){
-    var r=await fetch('https://api.github.com/repos/'+gh.repo+'/contents/'+path+'?ref=master&_t='+Date.now(),{
+    var r=await fetchT('https://api.github.com/repos/'+gh.repo+'/contents/'+path+'?ref=master&_t='+Date.now(),{
       headers:{'Authorization':'Bearer '+gh.token,'Accept':'application/vnd.github.v3+json','Cache-Control':'no-cache'}
-    });
+    },15000);
     if(r.ok){var d=await r.json();return d.sha;}
-    return null;
+    if(r.status===404)return null;
+    throw new Error('Kon SHA niet ophalen: HTTP '+r.status);
   }
   async function attemptPut(sha){
     var body={message:message||'Upload '+path,content:b64Data};
     if(sha)body.sha=sha;
-    return fetch('https://api.github.com/repos/'+gh.repo+'/contents/'+path,{
+    return fetchT('https://api.github.com/repos/'+gh.repo+'/contents/'+path,{
       method:'PUT',
       headers:{'Authorization':'Bearer '+gh.token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
       body:JSON.stringify(body)
-    });
+    },30000);
   }
   try{
+    console.log('[publishBinary] start',path);
     var sha=shaCache[path]||await getSha();
     var r2=await attemptPut(sha);
     if(r2.status===409||r2.status===422){
@@ -1590,13 +1608,17 @@ async function publishBinary(path,b64Data,message){
       delete shaCache[path];
       r2=await attemptPut(await getSha());
     }
-    if(!r2.ok){var err=await r2.json();if(r2.status===401||r2.status===403){localStorage.removeItem('w17-gh-token');document.getElementById('token-modal').classList.add('show');}throw new Error(err.message||'HTTP '+r2.status);}
+    if(!r2.ok){var err={};try{err=await r2.json();}catch(_){}if(r2.status===401||r2.status===403){localStorage.removeItem('w17-gh-token');document.getElementById('token-modal').classList.add('show');}throw new Error(err.message||'HTTP '+r2.status);}
     var putData=await r2.json();
     if(putData&&putData.content&&putData.content.sha)shaCache[path]=putData.content.sha;
+    console.log('[publishBinary] OK',path);
     return true;
   }catch(e){
-    console.error('Binary upload error:',e);
-    toast('Upload mislukt: '+e.message,'err');
+    var msg=e.message||String(e);
+    if(e.name==='AbortError')msg='Timeout (30s) — netwerk/VPN blokkeert upload?';
+    else if(msg==='Failed to fetch')msg='Netwerk geblokkeerd — check VPN / adblocker';
+    console.error('[publishBinary] error:',e);
+    toast('Upload mislukt: '+msg,'err');
     return false;
   }
 }
