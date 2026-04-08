@@ -129,5 +129,5 @@ const CONTENT = {
     "Verdieping"
   ],
   "hashtags": "#werkplaats17 #maasland<br>#bedrijfsruimte #meubelmaker<br>#vakman #werkruimte",
-  "copyright": "© 2026 Werkplaats17 "
+  "copyright": "© 2026 Werkplaats17  "
 };
