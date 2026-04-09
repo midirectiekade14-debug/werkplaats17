@@ -14,8 +14,7 @@ const CONTENT = {
   "introText": "Werkplaats17 is een <strong>multifunctionele bedrijfsruimte van 904 m²</strong> voor zelfstandige vakmensen en kleine studio's. <br><br>Bedrijfshal van 719 m², plus 185 m² kantoorruimte.<br><br>Drie verdiepingen, vloerverwarming, airco, LED-verlichting en glasvezel.",
   "accessItems": [
     "904 m² · hal 719 m² · kantoor 185 m²",
-    "Eigen sleutel · alarmsysteem",
-    "5 kantoren"
+    "24/7 toegang"
   ],
   "offers": [
     {
