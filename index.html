@@ -1385,10 +1385,14 @@
   </footer>
 
 </div>
-<script src="content.js"></script>
-<script src="photos.js"></script>
-<script src="render.js"></script>
-<script src="placed-objects.js"></script>
+<script>
+(function(){
+  var t='?t='+Date.now();
+  var q=['content.js'+t,'photos.js'+t,'render.js','placed-objects.js'+t];
+  function next(){if(!q.length)return;var s=document.createElement('script');s.src=q.shift();s.onload=next;document.body.appendChild(s);}
+  next();
+})();
+</script>
 <script>
 (function(){
   var S=0.03, FPW=900, FPH=550;
