@@ -1352,6 +1352,7 @@ window.ceReset=function(){
 var pmInitialized=false;
 var pmPhotos={hero:null,strip:[null,null,null]};
 var pmPendingUploads={};
+var pmLocalCache={};
 
 function pmInit(){
   pmInitialized=true;
@@ -1408,7 +1409,7 @@ function pmRenderSlot(slot,photoPath,slotId){
   var pending=pmPendingUploads[slotId];
   function _ov(s,sid){var o=document.createElement('div');o.className='pm-overlay';var c=document.createElement('button');c.className='pm-overlay-btn change';c.textContent='Wijzig';c.onclick=function(e){e.stopPropagation();pmPick(sid);};var r=document.createElement('button');r.className='pm-overlay-btn remove';r.textContent='Verwijder';r.onclick=function(e){e.stopPropagation();pmRemove(sid);};o.appendChild(c);o.appendChild(r);s.appendChild(o);}
   if(pending){slot.classList.add('has-photo');var img=document.createElement('img');img.src=pending.dataUrl;img.alt='preview';slot.appendChild(img);_ov(slot,slotId);}
-  else if(photoPath){var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats17';var url='https://raw.githubusercontent.com/'+repo+'/master/'+photoPath+'?t='+Date.now();slot.classList.add('has-photo');var img=document.createElement('img');img.src=url;img.alt='foto';slot.appendChild(img);_ov(slot,slotId);}
+  else if(photoPath){var url;if(pmLocalCache[photoPath]){url=pmLocalCache[photoPath];}else{var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats17';url='https://raw.githubusercontent.com/'+repo+'/master/'+photoPath+'?t='+Date.now();}slot.classList.add('has-photo');var img=document.createElement('img');img.src=url;img.alt='foto';slot.appendChild(img);_ov(slot,slotId);}
   else{slot.classList.remove('has-photo');var ic=document.createElement('span');ic.className='pm-icon';ic.textContent='+';var lb=document.createElement('span');lb.className='pm-label';lb.textContent='Klik of sleep een foto';slot.appendChild(ic);slot.appendChild(lb);}
 }
 
@@ -1468,9 +1469,10 @@ window.pmSave=async function(){
     progress.textContent='('+(done+1)+'/'+total+') '+up.filename+'...';
     var ok=await publishBinary(filepath,up.b64,'Foto upload: '+up.filename+' via admin');
     if(ok){
-      // Update photos reference
+      // Update photos reference + cache dataUrl voor preview (raw.githubusercontent cached agressief)
       if(slotId==='hero')pmPhotos.hero=filepath;
       else{var idx=parseInt(slotId.split('-')[1]);pmPhotos.strip[idx]=filepath;}
+      pmLocalCache[filepath]=up.dataUrl;
       delete pmPendingUploads[slotId];
       done++;
     }else{
