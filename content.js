@@ -57,22 +57,26 @@ const CONTENT = {
     },
     {
       "name": "Metaalzaag",
-      "highlight": false
+      "highlight": true
     },
     {
       "name": "Straalcabine",
-      "highlight": false
+      "highlight": true
     },
     {
       "name": "Afzuiging",
-      "highlight": false
+      "highlight": true
     },
     {
       "name": "Perslucht",
-      "highlight": false
+      "highlight": true
     },
     {
       "name": "Alle handgereedschappen",
+      "highlight": true
+    },
+    {
+      "name": "Shapertool met Benchpilot",
       "highlight": false
     }
   ],
