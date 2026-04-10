@@ -1,5 +1,5 @@
 // Werkplaats17 -- Geplaatste objecten
-// Laatst gewijzigd: 2026-04-09T08:41:23.248Z
+// Laatst gewijzigd: 2026-04-10T13:45:10.291Z
 // Gegenereerd via admin.html
 
 const PLACED_OBJECTS = [
@@ -411,7 +411,7 @@ const PLACED_OBJECTS = [
   },
   {
     "floor": 0,
-    "x": 831,
+    "x": 834,
     "y": 543,
     "w": 30,
     "h": 24,
@@ -425,7 +425,7 @@ const PLACED_OBJECTS = [
   },
   {
     "floor": 0,
-    "x": 831,
+    "x": 834,
     "y": 633,
     "w": 30,
     "h": 24,
