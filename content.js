@@ -88,13 +88,13 @@ const CONTENT = {
     {
       "label": "Werkplek in de hal",
       "sub": "Eigen ruimte met flexspace voor de grotere projecten",
-      "price": "Vanaf €650",
+      "price": "Vanaf €850",
       "unit": "/mnd"
     },
     {
       "label": "Kantoorruimte",
       "sub": "Eigen afgesloten kantoor · begane grond of 2e verdieping",
-      "price": "Vanaf €450",
+      "price": "Vanaf €650",
       "unit": "/mnd"
     },
     {
@@ -105,12 +105,12 @@ const CONTENT = {
     },
     {
       "label": "Servicekosten",
-      "sub": "Energie en onderhoud inbegrepen · per werkplek",
+      "sub": "Energie, onderhoud en afvalcontainer inbegrepen · per werkplek",
       "price": "€95",
       "unit": "/mnd"
     }
   ],
-  "pricingNote": "Alle prijzen excl. BTW. Neem contact op voor een rondleiding en beschikbare units.",
+  "pricingNote": "Alle prijzen excl. BTW. Lijkt het je wat? Neem dan contact op voor een rondleiding en beschikbare units.",
   "targetAudience": [
     "Zelfstandig meubelmaker of restaurateur",
     "Interieurontwerper die zelf prototypes bouwt",
@@ -118,7 +118,7 @@ const CONTENT = {
     "Timmerman / interieurbouwer met eigen projecten",
     "Maker die meer ruimte en machines nodig heeft"
   ],
-  "notForText": "<strong>KvK-inschrijving verplicht.</strong> Werkplaats17 is uitsluitend voor professionele gebruikers. Particulieren en hobbyisten kunnen hier niet terecht.",
+  "notForText": "<strong>KvK-inschrijving en verzekering verplicht.</strong> Werkplaats17 is uitsluitend voor professionele gebruikers. Particulieren en hobbyisten kunnen hier niet terecht.",
   "ctaHeading": "Interesse?<br>Kom <em>kijken.</em>",
   "email": "info@werkplaats17.nl",
   "whatsappNumber": "31612345678",
