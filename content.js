@@ -18,15 +18,15 @@ const CONTENT = {
   ],
   "offers": [
     {
-      "title": "Bedrijfshal",
+      "title": "Machinale en opslag",
       "text": "400 m² begane grond. Vloerverwarming en LED-verlichting."
     },
     {
-      "title": "Kantoren",
+      "title": "Kantoren en verhuurbare werkruimtes",
       "text": "Receptie en drie kantoorruimtes op de begane grond. Twee kantoren op de 2e verdieping met keukenblok."
     },
     {
-      "title": "Opslag & 1e verdieping",
+      "title": "Verdiepingsvloer met verhuurbare ateliers",
       "text": "221 m² op de eerste verdieping. Magazijn en opslagruimte op de begane grond."
     },
     {
