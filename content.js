@@ -129,7 +129,7 @@ const CONTENT = {
     "Rondleiding op afspraak"
   ],
   "instagramHandle": "@werkplaats17",
-  "instagramUrl": "https://instagram.com/werkplaats17",
+  "instagramUrl": "https://instagram.com/werkplaats",
   "photoLabels": [
     "Bedrijfshal",
     "Kantoren",
