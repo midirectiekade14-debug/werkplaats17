@@ -5,7 +5,7 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 const CONTENT = {
-  "siteTitle": "Werkplaats17 — Professionele werkruimte Maasland",
+  "siteTitle": "Werkplaats3b — Professionele werkruimte Maasland",
   "metaDescription": "Multifunctionele bedrijfsruimte voor vakmensen en kleine studio's. 904 m² met kantoren, bedrijfshal en machines. Oud Camp 3b, Maasland.",
   "ogDescription": "Multifunctionele bedrijfsruimte voor vakmensen en kleine studio's. Bedrijfshal, kantoren, machines. Naast A20, Maasland.",
   "eyebrow": "Beschikbaar · Maasland",
@@ -80,8 +80,8 @@ const CONTENT = {
       "highlight": true
     },
     {
-      "name": "Blum Minipress",
-      "highlight": true
+      "name": "en nog veel meer!",
+      "highlight": false
     }
   ],
   "pricing": [
@@ -128,13 +128,13 @@ const CONTENT = {
     "Beperkt aantal plekken beschikbaar",
     "Rondleiding op afspraak"
   ],
-  "instagramHandle": "@werkplaats17",
-  "instagramUrl": "https://instagram.com/werkplaats",
+  "instagramHandle": "@werkplaats3b",
+  "instagramUrl": "https://instagram.com/werkplaats3b",
   "photoLabels": [
     "Bedrijfshal",
     "Kantoren",
     "Verdieping"
   ],
-  "hashtags": "#werkplaats17 #maasland<br>#bedrijfsruimte #meubelmaker<br>#vakman #werkruimte",
-  "copyright": "© 2026 Werkplaats17  "
+  "hashtags": "#werkplaats3b #maasland<br>#bedrijfsruimte #meubelmaker<br>#vakman #werkruimte",
+  "copyright": "© 2026 Werkplaats3b"
 };
