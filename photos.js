@@ -1,5 +1,5 @@
 // Werkplaats17 — Foto referenties
-// Laatst gewijzigd: 2026-04-16T18:29:11.363Z
+// Laatst gewijzigd: 2026-04-16T18:52:53.778Z
 // Gegenereerd via admin.html
 
 const PHOTOS = {
