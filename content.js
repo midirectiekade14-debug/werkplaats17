@@ -77,7 +77,11 @@ const CONTENT = {
     },
     {
       "name": "Shapertool met Benchpilot",
-      "highlight": false
+      "highlight": true
+    },
+    {
+      "name": "Blum Minipress",
+      "highlight": true
     }
   ],
   "pricing": [
