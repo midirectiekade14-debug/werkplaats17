@@ -1,0 +1,201 @@
+---
+import placedObjects from '../data/placed-objects.json';
+const serialized = JSON.stringify(placedObjects);
+---
+
+<p class="section-label" id="indeling">Indeling pand</p>
+<div class="floorplan-block">
+  <div class="fp-tabs" data-fp-tabs>
+    <button class="fp-tab on" type="button" data-floor="0">Begane grond</button>
+    <button class="fp-tab" type="button" data-floor="1">1e verdieping</button>
+    <button class="fp-tab" type="button" data-floor="2">2e verdieping</button>
+  </div>
+  <div class="fp-canvas" id="cv"><div id="fp"></div></div>
+  <div class="floorplan-legend" id="fp-legend"></div>
+</div>
+
+<script is:inline define:vars={{ serialized }}>
+  (function () {
+    const PLACED_OBJECTS = JSON.parse(serialized);
+    const S = 0.03;
+    const FPW = 900;
+    const FPH = 550;
+    const cv = document.getElementById('cv');
+    const fp = document.getElementById('fp');
+    if (!cv || !fp) return;
+
+    function place(o) {
+      const isRoom = !!o.room;
+      const isDoor = o.type === 'door' || o.type === 'overhead';
+      const d = document.createElement('div');
+      d.className = 'pl' + (isRoom ? ' room-pl' : '');
+      d.style.cssText =
+        'position:absolute;left:' + o.x + 'px;top:' + o.y + 'px;width:' + o.w + 'px;height:' + o.h + 'px;';
+      if (o.type === 'huurunit' && o.status) d.dataset.status = o.status;
+
+      if (isRoom) {
+        const rm = document.createElement('div');
+        rm.className = 'rm';
+        rm.style.borderColor = o.c;
+        rm.style.background = o.bg;
+        const rl = document.createElement('div');
+        rl.className = 'rl';
+        rl.style.color = o.c;
+        rl.textContent = o.l;
+        const ra = document.createElement('div');
+        ra.className = 'ra';
+        const wm = o.w / S / 1000;
+        const hm = o.h / S / 1000;
+        const area = Math.round(wm * hm * 10) / 10;
+        if (area >= 1) ra.textContent = area + 'm\u00B2';
+        rm.appendChild(rl);
+        rm.appendChild(ra);
+        d.appendChild(rm);
+      } else if (isDoor) {
+        const dw = document.createElement('div');
+        dw.style.cssText = 'width:100%;height:100%;position:relative;overflow:hidden';
+        if (o.rot && o.rot !== '0') dw.style.transform = 'rotate(' + o.rot + 'deg)';
+        const topBar = document.createElement('div');
+        topBar.style.cssText =
+          'position:absolute;left:0;right:0;top:0;height:4px;background:' + o.c + ';opacity:.9';
+        dw.appendChild(topBar);
+        if (o.type === 'overhead') {
+          const lines = document.createElement('div');
+          lines.style.cssText =
+            'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:3px';
+          for (let li = 0; li < 5; li++) {
+            const ln = document.createElement('div');
+            ln.style.cssText = 'width:1px;height:55%;background:' + o.c + ';opacity:.4';
+            lines.appendChild(ln);
+          }
+          dw.appendChild(lines);
+        } else {
+          const arc = document.createElement('div');
+          arc.style.cssText =
+            'position:absolute;bottom:1px;left:2px;right:2px;border-bottom:1px solid ' +
+            o.c +
+            ';border-right:1px solid ' +
+            o.c +
+            ';border-radius:0 0 80% 0;opacity:.5;height:80%';
+          dw.appendChild(arc);
+        }
+        const dlbl = document.createElement('div');
+        dlbl.className = 'dl';
+        dlbl.style.color = o.c;
+        dlbl.textContent = o.l;
+        dw.appendChild(dlbl);
+        d.appendChild(dw);
+      } else {
+        const ib = document.createElement('div');
+        ib.className = 'ib';
+        ib.style.borderColor = o.c;
+        ib.style.background = o.bg;
+        const il = document.createElement('div');
+        il.className = 'il';
+        il.style.color = o.c;
+        il.textContent = o.l;
+        const idEl = document.createElement('div');
+        idEl.className = 'id';
+        idEl.textContent = Math.round(o.w / S / 10) + '\u00D7' + Math.round(o.h / S / 10) + 'cm';
+        ib.appendChild(il);
+        ib.appendChild(idEl);
+        d.appendChild(ib);
+      }
+
+      const tip = document.createElement('div');
+      tip.className = 'fp-tooltip';
+      const wcm = Math.round(o.w / S / 10);
+      const hcm = Math.round(o.h / S / 10);
+      tip.textContent = o.l + ' \u2014 ' + wcm + '\u00D7' + hcm + 'cm';
+      if (o.room) {
+        const wm2 = o.w / S / 1000;
+        const hm2 = o.h / S / 1000;
+        tip.textContent += ' (' + Math.round(wm2 * hm2 * 10) / 10 + 'm\u00B2)';
+      }
+      d.appendChild(tip);
+
+      fp.appendChild(d);
+    }
+
+    function fitToContent() {
+      const els = fp.querySelectorAll('.pl');
+      if (!els.length) return;
+      let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+      els.forEach(function (d) {
+        const x = parseInt(d.style.left);
+        const y = parseInt(d.style.top);
+        const w = parseInt(d.style.width);
+        const h = parseInt(d.style.height);
+        if (x < minX) minX = x;
+        if (y < minY) minY = y;
+        if (x + w > maxX) maxX = x + w;
+        if (y + h > maxY) maxY = y + h;
+      });
+      const pad = 40;
+      const bw = maxX - minX + pad * 2;
+      const bh = maxY - minY + pad * 2;
+      const rect = cv.getBoundingClientRect();
+      const zoom = rect.width / bw;
+      const panX = -(minX - pad) * zoom;
+      const panY = -(minY - pad) * zoom;
+      fp.style.width = FPW + 'px';
+      fp.style.height = FPH + 'px';
+      fp.style.transform = 'translate(' + panX + 'px,' + panY + 'px) scale(' + zoom + ')';
+      cv.style.height = Math.ceil(bh * zoom) + 'px';
+      let g = fp.querySelector('.fp-grid');
+      if (!g) {
+        g = document.createElement('div');
+        g.className = 'fp-grid';
+        fp.insertBefore(g, fp.firstChild);
+      }
+      g.style.cssText =
+        'position:absolute;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:' +
+        S * 1000 + 'px ' + S * 1000 + 'px';
+    }
+
+    function buildLegend(objs) {
+      const legend = document.getElementById('fp-legend');
+      while (legend.firstChild) legend.removeChild(legend.firstChild);
+      const seen = {};
+      objs.forEach(function (o) {
+        if (!o.room || seen[o.l]) return;
+        seen[o.l] = 1;
+        const item = document.createElement('div');
+        item.className = 'legend-item';
+        const sw = document.createElement('div');
+        sw.className = 'legend-swatch';
+        sw.style.background = o.bg;
+        sw.style.borderColor = o.c;
+        const txt = document.createTextNode(' ' + o.l);
+        item.appendChild(sw);
+        item.appendChild(txt);
+        legend.appendChild(item);
+      });
+    }
+
+    function renderFloor(f) {
+      fp.querySelectorAll('.pl,.fp-grid').forEach(function (d) { d.remove(); });
+      document.querySelectorAll('[data-fp-tabs] .fp-tab').forEach(function (t, i) {
+        t.classList.toggle('on', i === f);
+      });
+      const floorObjs = PLACED_OBJECTS.filter(function (o) { return o.floor === f; });
+      floorObjs.forEach(place);
+      fitToContent();
+      buildLegend(floorObjs);
+    }
+
+    document.querySelectorAll('[data-fp-tabs] .fp-tab').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const floor = parseInt(btn.dataset.floor || '0', 10);
+        renderFloor(floor);
+      });
+    });
+
+    window.addEventListener('resize', function () {
+      const active = document.querySelector('[data-fp-tabs] .fp-tab.on');
+      if (active) renderFloor(parseInt(active.dataset.floor || '0', 10));
+    });
+
+    renderFloor(0);
+  })();
+</script>

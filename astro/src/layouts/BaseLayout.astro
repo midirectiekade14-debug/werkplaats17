@@ -1,0 +1,40 @@
+---
+import '../styles/global.css';
+import { content } from '../data/content';
+
+export interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = content.siteTitle,
+  description = content.metaDescription,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔧</text></svg>"
+    />
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={content.ogDescription} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="nl_NL" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
