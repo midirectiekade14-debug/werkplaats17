@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The City — Benchmark Analyse | Arcade Village Assen</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream:        #F5EFE3;
+      --cream-warm:   #EBE2D0;
+      --cream-deep:   #E4D8BF;
+      --paper:        #f3ecdb;
+      --paper-raised: #fbf6e9;
+      --paper-soft:   #ebe2cd;
+      --navy:         #0B1B2B;
+      --navy-soft:    #1a2d42;
+      --coral:        #FF6B47;
+      --coral-soft:   #ff8a6b;
+      --sage:         #6E9680;
+      --sage-deep:    #4f6a4c;
+      --sage-soft:    #a8c4b1;
+      --ochre:        #C9A961;
+      --ochre-deep:   #a47e3f;
+      --ochre-soft:   #ead9b4;
+      --clay:         #a54a3a;
+      --clay-soft:    #e5b6a8;
+      --fg-strong:    #0B1B2B;
+      --fg-default:   rgba(11, 27, 43, 0.78);
+      --fg-muted:     rgba(11, 27, 43, 0.58);
+      --fg-subtle:    rgba(11, 27, 43, 0.38);
+      --line:         rgba(11, 27, 43, 0.12);
+      --line-soft:    rgba(11, 27, 43, 0.06);
+      --shadow-card:  0 10px 26px -14px rgba(11,27,43,0.22), 0 2px 4px rgba(11,27,43,0.04);
+      --shadow-soft:  0 1px 2px rgba(11,27,43,0.04), 0 18px 40px -24px rgba(11,27,43,0.18);
+      --font-display: 'Dosis', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-body:    'Dosis', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --radius-sm:    10px;
+      --radius-md:    16px;
+      --radius-lg:    22px;
+      --radius-pill:  999px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--cream);
+      color: var(--fg-default);
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      padding: 0 0 80px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--navy);
+      padding: 56px 40px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(255,107,71,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -40px; left: 10%;
+      width: 260px; height: 260px;
+      background: radial-gradient(circle, rgba(201,169,97,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-tag {
+      display: inline-block;
+      background: rgba(255,107,71,0.18);
+      border: 1px solid rgba(255,107,71,0.4);
+      color: var(--coral-soft);
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: var(--radius-pill);
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: 38px;
+      font-weight: 400;
+      letter-spacing: -.02em;
+      color: var(--cream);
+      margin-bottom: 10px;
+      line-height: 1.12;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--coral);
+    }
+    .hero-sub {
+      color: rgba(245,239,227,0.6);
+      font-size: 14.5px;
+      margin-bottom: 32px;
+      max-width: 560px;
+    }
+    .hero-meta {
+      display: flex;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+    .hero-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .hero-meta-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      color: rgba(245,239,227,0.42);
+    }
+    .hero-meta-value {
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--cream);
+    }
+
+    /* ── LAYOUT ── */
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    /* ── NAV ── */
+    .toc {
+      background: var(--paper-raised);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      margin: 32px auto 0;
+      max-width: 960px;
+      padding: 18px 26px;
+      display: flex;
+      gap: 8px 22px;
+      flex-wrap: wrap;
+      box-shadow: var(--shadow-soft);
+    }
+    .toc a {
+      color: var(--fg-muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: color .15s;
+    }
+    .toc a:hover { color: var(--coral); }
+    .toc-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      color: var(--coral);
+      width: 100%;
+      margin-bottom: 4px;
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      margin-top: 52px;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+    .section-num {
+      width: 30px; height: 30px;
+      background: var(--coral);
+      color: var(--cream);
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px -4px rgba(255,107,71,0.5);
+    }
+    .section-header h2 {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--fg-strong);
+      letter-spacing: -.01em;
+    }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--paper-raised);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 22px 24px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-card);
+    }
+    .card-title {
+      font-family: var(--font-body);
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      color: var(--fg-muted);
+      margin-bottom: 14px;
+    }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+    /* ── FACT ROW ── */
+    .fact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .fact-item {
+      background: var(--paper-raised);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      box-shadow: var(--shadow-soft);
+    }
+    .fact-label {
+      font-size: 10px;
+      color: var(--fg-subtle);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .13em;
+      margin-bottom: 5px;
+    }
+    .fact-value {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--fg-strong);
+    }
+
+    /* ── TABLES ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th {
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      color: var(--fg-subtle);
+      border-bottom: 1px solid var(--line);
+    }
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--line-soft);
+      color: var(--fg-default);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(11,27,43,.025); }
+    .price { color: var(--coral); font-weight: 600; }
+
+    /* ── PILLS ── */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+    }
+    .pill-green  { background: rgba(110,150,128,.14); color: var(--sage-deep);  border: 1px solid rgba(110,150,128,.3); }
+    .pill-red    { background: rgba(165,74,58,.1);   color: var(--clay);       border: 1px solid rgba(165,74,58,.25); }
+    .pill-yellow { background: rgba(201,169,97,.14); color: var(--ochre-deep); border: 1px solid rgba(201,169,97,.3); }
+    .pill-blue   { background: rgba(11,27,43,.08);   color: var(--navy-soft);  border: 1px solid rgba(11,27,43,.15); }
+
+    /* ── COMPARISON ── */
+    .compare-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+    .compare-col {
+      padding: 20px 22px;
+      border-right: 1px solid var(--line);
+    }
+    .compare-col:last-child { border-right: none; }
+    .compare-col h3 {
+      font-family: var(--font-body);
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+    }
+    .compare-col.col-city h3  { color: var(--navy-soft); }
+    .compare-col.col-assen h3 { color: var(--sage-deep); }
+
+    .check-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .check-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      font-size: 13.5px;
+      color: var(--fg-default);
+    }
+    .check-list li::before {
+      content: '·';
+      flex-shrink: 0;
+      font-weight: 800;
+      margin-top: 0;
+      font-size: 18px;
+      line-height: 1.2;
+    }
+    .col-city  .check-list li::before { color: var(--navy-soft); }
+    .col-assen .check-list li::before { color: var(--sage); }
+
+    /* ── CALLOUT ── */
+    .callout {
+      border-left: 3px solid var(--coral);
+      background: rgba(255,107,71,0.06);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 16px 20px;
+      margin: 20px 0;
+      font-size: 14px;
+      color: var(--fg-default);
+    }
+    .callout strong { color: var(--coral); }
+
+    .callout-red {
+      border-left-color: var(--clay);
+      background: rgba(165,74,58,0.06);
+    }
+    .callout-red strong { color: var(--clay); }
+
+    .callout-green {
+      border-left-color: var(--sage);
+      background: rgba(110,150,128,0.07);
+    }
+    .callout-green strong { color: var(--sage-deep); }
+
+    /* ── QUESTIONS ── */
+    .q-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .q-cat-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      color: var(--coral);
+      margin: 12px 0 4px;
+    }
+    .q-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      background: var(--paper-raised);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-sm);
+      padding: 13px 16px;
+      font-size: 14px;
+      box-shadow: var(--shadow-soft);
+    }
+    .q-num {
+      width: 24px; height: 24px;
+      background: var(--cream-warm);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--coral);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .q-cat {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--fg-subtle);
+      margin-bottom: 2px;
+    }
+
+    /* ── HYPOTHESIS ── */
+    .hypo-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .hypo-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      background: var(--paper-raised);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      box-shadow: var(--shadow-soft);
+    }
+    .hypo-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .hypo-title {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--fg-strong);
+      margin-bottom: 5px;
+      letter-spacing: -.01em;
+    }
+    .hypo-body {
+      font-size: 13.5px;
+      color: var(--fg-muted);
+      line-height: 1.55;
+    }
+
+    /* ── RATING BAR ── */
+    .rating-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13.5px;
+      margin-bottom: 10px;
+    }
+    .rating-label { width: 180px; color: var(--fg-default); flex-shrink: 0; font-size: 13px; }
+    .rating-bar-bg {
+      flex: 1;
+      height: 5px;
+      background: var(--cream-warm);
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+    }
+    .rating-bar-fill {
+      height: 100%;
+      border-radius: var(--radius-pill);
+      background: linear-gradient(90deg, var(--coral), var(--ochre));
+    }
+    .rating-val { width: 36px; text-align: right; color: var(--fg-subtle); font-size: 12px; font-weight: 600; }
+
+    /* ── JOBS ── */
+    .job-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .job-item {
+      background: var(--paper-raised);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      box-shadow: var(--shadow-soft);
+    }
+    .job-item.job-shared { border-left: 3px solid var(--navy-soft); }
+    .job-item.job-assen  { border-left: 3px solid var(--sage); }
+    .job-num  {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 400;
+      color: var(--line);
+      margin-bottom: 6px;
+    }
+    .job-text { font-size: 13.5px; color: var(--fg-default); line-height: 1.5; }
+    .job-owner {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      margin-top: 8px;
+    }
+    .job-shared .job-owner { color: var(--navy-soft); }
+    .job-assen  .job-owner { color: var(--sage-deep); }
+
+    /* ── FOOTER ── */
+    .footer {
+      margin-top: 72px;
+      padding: 24px 40px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--fg-subtle);
+      max-width: 960px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 700px) {
+      .hero { padding: 36px 20px 32px; }
+      .hero h1 { font-size: 28px; }
+      .container { padding: 0 20px; }
+      .grid-2, .grid-3, .compare-row, .job-grid { grid-template-columns: 1fr; }
+      .compare-col { border-right: none; border-bottom: 1px solid var(--line); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════ HERO ══════════ -->
+<div class="hero">
+  <div class="hero-tag">Benchmark Analyse · Juni 2026</div>
+  <h1>The City <em>Food &amp; Fun</em></h1>
+  <p class="hero-sub">Businessmodel-analyse als voorbereiding op het eigenaarsgesprek — Arcade Village Assen</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <span class="hero-meta-label">Locatie</span>
+      <span class="hero-meta-value">'s-Gravenzande, Westland</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="hero-meta-label">Eigenaar</span>
+      <span class="hero-meta-value">Richard Bultink</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="hero-meta-label">Geopend</span>
+      <span class="hero-meta-value">Juni 2020</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="hero-meta-label">Award</span>
+      <span class="hero-meta-value">Beste FEC Nederland 2020</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="hero-meta-label">Reviews</span>
+      <span class="hero-meta-value">4,2 / 5 · 90% recommends</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ TOC ══════════ -->
+<div class="toc container">
+  <div class="toc-label">Inhoud</div>
+  <a href="#factsheet">1. Factsheet</a>
+  <a href="#businessmodel">2. Businessmodel</a>
+  <a href="#reviews">3. Reviews</a>
+  <a href="#vergelijking">4. Vergelijking</a>
+  <a href="#jobs">5. Jobs-to-be-done</a>
+  <a href="#risicos">6. Risico's &amp; Lessen</a>
+  <a href="#vragen">7. Vragen voor gesprek</a>
+  <a href="#hypothesen">8. Hypothesen</a>
+</div>
+
+<div class="container">
+
+<!-- ══════════ 1. FACTSHEET ══════════ -->
+<section id="factsheet">
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <h2>Factsheet</h2>
+  </div>
+
+  <div class="fact-grid" style="margin-bottom:20px">
+    <div class="fact-item">
+      <div class="fact-label">Pand</div>
+      <div class="fact-value">Voormalige tennishal + 4 squashbanen</div>
+    </div>
+    <div class="fact-item">
+      <div class="fact-label">Concept</div>
+      <div class="fact-value">"Complete avond uit" — FEC + horeca</div>
+    </div>
+    <div class="fact-item">
+      <div class="fact-label">Restaurant</div>
+      <div class="fact-value">Piazza — 250 zitplaatsen</div>
+    </div>
+    <div class="fact-item">
+      <div class="fact-label">Max. groepsgrootte</div>
+      <div class="fact-value">300 personen</div>
+    </div>
+    <div class="fact-item">
+      <div class="fact-label">Doelgroep</div>
+      <div class="fact-value">"Van 8 tot 80"</div>
+    </div>
+    <div class="fact-item">
+      <div class="fact-label">Parkeren</div>
+      <div class="fact-value">Gratis op eigen terrein</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Activiteiten &amp; Losse Prijzen</div>
+      <table>
+        <thead><tr><th>Activiteit</th><th>Prijs</th></tr></thead>
+        <tbody>
+          <tr><td>Minigolf (18 holes, glow-in-the-dark)</td><td class="price">€ 9,50 p.p.</td></tr>
+          <tr><td>VR gaming (4 ervaringen, max 4 pers.)</td><td class="price">€ 8,50 p.p. / 15 min</td></tr>
+          <tr><td>Bowling</td><td class="price">€ 27,50 / uur</td></tr>
+          <tr><td>Lasergame (The Gas Station)</td><td class="price">via combodeal</td></tr>
+          <tr><td>Karaoke (privékamer)</td><td class="price">via combodeal</td></tr>
+          <tr><td>Squash, pool, darts, jeu de boules</td><td class="price">los of combo</td></tr>
+          <tr><td>Pixel Floor</td><td class="price">los</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Combodeals (per persoon)</div>
+      <table>
+        <thead><tr><th>Combinatie</th><th>Prijs</th></tr></thead>
+        <tbody>
+          <tr><td>Minigolf + Lasergame</td><td class="price">€ 21,00</td></tr>
+          <tr><td>Lasergame + VR</td><td class="price">€ 22,00</td></tr>
+          <tr><td>Minigolf + VR</td><td class="price">€ 22,00</td></tr>
+          <tr><td>Bowling + Lasergame</td><td class="price">v.a. € 16,00</td></tr>
+          <tr><td>Bowling + Minigolf</td><td class="price">v.a. € 16,00</td></tr>
+          <tr><td>Karaoke + Bowling</td><td class="price">v.a. € 14,00</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <div class="card-title">Openingstijden</div>
+    <table>
+      <thead><tr><th>Dag</th><th>Tijden</th></tr></thead>
+      <tbody>
+        <tr><td>Maandag</td><td style="color:var(--clay)">Gesloten</td></tr>
+        <tr><td>Dinsdag – Donderdag</td><td>17:00 – 22:00 <span style="color:var(--fg-subtle);font-size:12px">(woensdag v.a. 12:00)</span></td></tr>
+        <tr><td>Vrijdag</td><td>14:00 – 00:00</td></tr>
+        <tr><td>Zaterdag</td><td>12:00 – 00:00</td></tr>
+        <tr><td>Zondag</td><td>12:00 – 20:00</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <div class="card-title">Thema-zones</div>
+    <table>
+      <thead><tr><th>Zone</th><th>Activiteit</th><th>Thema</th></tr></thead>
+      <tbody>
+        <tr><td>The Gas Station</td><td>Lasergame</td><td>Verlaten benzinestation, obstakels (auto, caravan)</td></tr>
+        <tr><td>The Theater / The Tube</td><td>Bowling (6 banen)</td><td>Bioscoop / metrotunnel met filmprojecties boven de pins</td></tr>
+        <tr><td>The Happy Highway</td><td>Minigolf (18 holes)</td><td>Junkyard / glow-in-the-dark, neon highway</td></tr>
+        <tr><td>Piazza</td><td>Italiaans restaurant</td><td>250 zitplaatsen, Neapolitaanse chef Franco</td></tr>
+        <tr><td>Overig</td><td>VR, karaoke, pool, squash, darts, jeu de boules</td><td>Geïntegreerd in het totaalconcept</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══════════ 2. BUSINESSMODEL ══════════ -->
+<section id="businessmodel">
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <h2>Businessmodel</h2>
+  </div>
+
+  <div class="callout">
+    <strong>Kernstrategie van Richard Bultink:</strong> "Een complete avond uit" — horeca en activiteiten zijn even zwaar. Dit is zijn bewuste breuk met het traditionele FEC-model waar F&amp;B bijzaak is.
+  </div>
+
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-title">Revenue Mix</div>
+      <div style="display:flex;flex-direction:column;gap:12px;margin-top:4px">
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px">
+            <span style="color:var(--fg-default)">Horeca (F&amp;B)</span><span style="color:var(--coral);font-weight:700">50%</span>
+          </div>
+          <div class="rating-bar-bg"><div class="rating-bar-fill" style="width:50%"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px">
+            <span style="color:var(--fg-default)">Activiteiten</span><span style="color:var(--navy-soft);font-weight:700">50%</span>
+          </div>
+          <div class="rating-bar-bg"><div class="rating-bar-fill" style="width:50%;background:linear-gradient(90deg,var(--navy-soft),var(--sage))"></div></div>
+        </div>
+        <p style="font-size:12px;color:var(--fg-muted);margin-top:2px">Doel van Bultink. Bezoekers geven hierdoor <strong style="color:var(--fg-strong)">dubbel zoveel</strong> als bij traditionele FEC's.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Horeca Strategie</div>
+      <ul class="check-list col-assen">
+        <li style="font-size:13.5px">Neapolitaanse chef Franco — échte pizza-oven</li>
+        <li style="font-size:13.5px">Pizza max € 14,50 — bewust bereikbaar</li>
+        <li style="font-size:13.5px">Dranken € 2,50 – € 4+</li>
+        <li style="font-size:13.5px">Tablets op elke tafel — bestellen terwijl je speelt</li>
+        <li style="font-size:13.5px">Staff bezorgt drankjes op de speellocatie</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Verlengde Verblijftijd</div>
+      <ul class="check-list col-assen">
+        <li style="font-size:13.5px">Combodeals bundelen 2 activiteiten → langere sessies</li>
+        <li style="font-size:13.5px">F&amp;B geïntegreerd in speelervaring</li>
+        <li style="font-size:13.5px">iPad-scoring + op afstand bestuurbare licht/rookeffecten</li>
+        <li style="font-size:13.5px">Groepscode-systeem voor gezelschappen</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:20px">
+    <strong>BEST FIVE analyse:</strong> Tijdens de conceptontwikkeling van The City werd de BEST FIVE-methode ingezet: een benchmarkrij langs Plopsa, De Voltage, The Maxx en FEC De Schatberg, waarbij op vijf assen wordt gemeten — klantreis, boekingsfrequentie, omzet per attractie, bezoekersvoorkeur, en kosten &amp; onderhoud. De uitkomsten bepaalden de attractiemix en F&amp;B-positionering. (Bron: Pretwerk / Recreatief Totaal, concept-artikel The City Food &amp; Fun)
+  </div>
+</section>
+
+<!-- ══════════ 3. REVIEWS ══════════ -->
+<section id="reviews">
+  <div class="section-header">
+    <div class="section-num">3</div>
+    <h2>Wat Bezoekers Zeggen</h2>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title" style="color:var(--sage-deep)">Complimenten (terugkerend)</div>
+      <ul class="check-list col-assen">
+        <li>Sfeer en eye for detail in het decor</li>
+        <li>Variatie: "voor iedereen wat — van 4 tot 69 jaar"</li>
+        <li>Vriendelijk en behulpzaam personeel</li>
+        <li>Tablet-bestelsysteem werkt soepel</li>
+        <li>Goede keuze voor bedrijfsfeestjes en verjaardagen</li>
+        <li>Goed bereikbaar, gratis parkeren</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="color:var(--clay)">Kritiekpunten (terugkerend)</div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px">
+        <li style="display:flex;gap:9px;font-size:13.5px"><span style="color:var(--clay);font-weight:700;margin-top:1px;font-size:16px;line-height:1.2">·</span>Prijs horeca aan de hoge kant</li>
+        <li style="display:flex;gap:9px;font-size:13.5px"><span style="color:var(--clay);font-weight:700;margin-top:1px;font-size:16px;line-height:1.2">·</span>VR: slechts 15 min voor € 8,50 — "verloren € 45"</li>
+        <li style="display:flex;gap:9px;font-size:13.5px"><span style="color:var(--clay);font-weight:700;margin-top:1px;font-size:16px;line-height:1.2">·</span>Wachttijd pizza tot bijna een uur in drukke periodes</li>
+        <li style="display:flex;gap:9px;font-size:13.5px"><span style="color:var(--clay);font-weight:700;margin-top:1px;font-size:16px;line-height:1.2">·</span>Soms fout order</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout callout-green" style="margin-top:16px">
+    <strong>Sleutelles voor Assen:</strong> De VR-klacht is structureel — activiteiten met harde tijdslimiet voelen duur bij een slechte prijs/tijdverhouding. Arcadekasten (onbeperkt spelen per credit) hebben dit probleem niet. Dat is een concurrentievoordeel van het Assen-concept dat expliciet gecommuniceerd kan worden.
+  </div>
+</section>
+
+<!-- ══════════ 4. VERGELIJKING ══════════ -->
+<section id="vergelijking">
+  <div class="section-header">
+    <div class="section-num">4</div>
+    <h2>Vergelijking met het Assen-concept</h2>
+  </div>
+
+  <div class="card" style="padding:0;overflow:hidden">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:30%">Aspect</th>
+          <th style="width:35%;color:var(--navy-soft)">The City</th>
+          <th style="width:35%;color:var(--sage-deep)">Assen — Arcade Village</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Pand-origine</td><td>Tennishal</td><td>Supermarkt (Jumbo + Lidl)</td></tr>
+        <tr><td>Oppervlakte</td><td>~1.500–2.500 m² (schatting)</td><td>1.600 m² (uitbreidbaar 2.700 m²)</td></tr>
+        <tr><td>Thema-esthetiek</td><td>Post-industrieel / verlaten</td><td>Post-apocalyptisch / retro-Amerikaans</td></tr>
+        <tr><td>Zones</td><td>~6 activiteiten</td><td>14 thema-zones</td></tr>
+        <tr><td>Decor als USP</td><td>Ja — gespecialiseerde aannemers</td><td>Ja — demontabel, kapitaalbehoud</td></tr>
+        <tr><td>Horeca</td><td>Centraal — 50/50 target, 250 zitpl.</td><td><span style="color:var(--clay)">Nog niet uitgewerkt</span></td></tr>
+        <tr><td>Vintage arcadekasten</td><td>Geen</td><td>~80 stuks + flipperkasten</td></tr>
+        <tr><td>Community / niche</td><td>Breed publiek</td><td>Pinball, retro-gaming, verzamelaars</td></tr>
+        <tr><td>VR</td><td>Ja (€ 8,50 / 15 min)</td><td>Niet in huidig concept</td></tr>
+        <tr><td>Groepsarrangementen</td><td>Uitgewerkt (t/m 300 pers.)</td><td>Nog te ontwikkelen</td></tr>
+        <tr><td>Tablet-bestelsysteem</td><td>Ja</td><td>Niet in huidig concept</td></tr>
+        <tr><td>Bewezen exploitatie</td><td>6 jaar draaiend</td><td>Greenfield</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="compare-row card" style="padding:0;overflow:hidden;margin-top:16px">
+    <div class="compare-col col-city">
+      <h3>Wat The City heeft dat Assen nog moet oplossen</h3>
+      <ul class="check-list col-city">
+        <li>Bewezen 50/50 F&amp;B-model met uitgewerkte horeca</li>
+        <li>Tablet-bestelsysteem — minder service-bottleneck</li>
+        <li>Groepsarrangementenstructuur voor 2–300 personen</li>
+        <li>Combodeal-structuur die spend verhoogt</li>
+        <li>VR-integratie</li>
+        <li>Brede doelgroep "8 tot 80"</li>
+        <li>6 jaar exploitatiedata en bijsturing</li>
+      </ul>
+    </div>
+    <div class="compare-col col-assen">
+      <h3>Wat Assen heeft dat The City niet heeft</h3>
+      <ul class="check-list col-assen">
+        <li>~80 authentieke vintage arcadekasten + flipperkasten</li>
+        <li>Arcade-cultuur als identiteit — community building</li>
+        <li>14 diep uitgewerkte thema-zones</li>
+        <li>Nostalgie-factor (25–45 jaar) met hoge loyaliteit</li>
+        <li>Onbeperkt spelen per credit — betere price/value dan VR</li>
+        <li>Toernooi- en eventpotentieel (pinball community)</li>
+        <li>Fotogeniek decor = organisch social mediabereik</li>
+        <li>Schaaloptie (demontabel decor)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 5. JOBS-TO-BE-DONE ══════════ -->
+<section id="jobs">
+  <div class="section-header">
+    <div class="section-num">5</div>
+    <h2>Jobs-to-be-done Analyse</h2>
+  </div>
+  <p style="color:var(--fg-muted);font-size:13.5px;margin-bottom:20px">Waarom komen mensen — en welke "klussen" vervullen ze via dit uitje?</p>
+
+  <div class="job-grid">
+    <div class="job-item job-shared">
+      <div class="job-num">01</div>
+      <div class="job-text">"Gezellig avondje uit met vrienden / collega's — activiteiten + eten + drinken op één plek"</div>
+      <div class="job-owner">Beide locaties</div>
+    </div>
+    <div class="job-item job-shared">
+      <div class="job-num">02</div>
+      <div class="job-text">"Kinderfeestje goed geregeld — personeel, arrangementen, catering"</div>
+      <div class="job-owner">Beide locaties</div>
+    </div>
+    <div class="job-item job-shared">
+      <div class="job-num">03</div>
+      <div class="job-text">"Bedrijfsuitje in eigen regio zonder gedoe — teambuilding, boeken en klaar"</div>
+      <div class="job-owner">Beide locaties</div>
+    </div>
+    <div class="job-item job-shared">
+      <div class="job-num">04</div>
+      <div class="job-text">"Iets doen bij slecht weer — indoor, breed aanbod"</div>
+      <div class="job-owner">Beide locaties</div>
+    </div>
+    <div class="job-item job-assen">
+      <div class="job-num">05</div>
+      <div class="job-text">"Nostalgie beleven / mijn jeugd terughalen via echte arcadekasten"</div>
+      <div class="job-owner">Uniek voor Assen</div>
+    </div>
+    <div class="job-item job-assen">
+      <div class="job-num">06</div>
+      <div class="job-text">"Vintage arcade-collectie ontdekken — educatieve / museale beleving"</div>
+      <div class="job-owner">Uniek voor Assen</div>
+    </div>
+    <div class="job-item job-assen">
+      <div class="job-num">07</div>
+      <div class="job-text">"Flipperkast-competitie meespelen — dedicated community, toernooien"</div>
+      <div class="job-owner">Uniek voor Assen</div>
+    </div>
+    <div class="job-item job-assen">
+      <div class="job-num">08</div>
+      <div class="job-text">"Instagram-waardige beleving — spectaculair decor, te uniek om niet te delen"</div>
+      <div class="job-owner">Uniek voor Assen</div>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:20px">
+    <strong>Strategische les:</strong> Jobs 01–04 zijn het overlappende territorium — daar concurreren Assen en The City direct. Jobs 05–08 zijn Assen's eigen terrein. <strong>Differentiatie = lean into jobs 05–08 en zorg dat jobs 01–04 ook solide zijn.</strong>
+  </div>
+</section>
+
+<!-- ══════════ 6. RISICO'S ══════════ -->
+<section id="risicos">
+  <div class="section-header">
+    <div class="section-num">6</div>
+    <h2>Risico's &amp; Lessen van The City</h2>
+  </div>
+
+  <div class="card" style="padding:0;overflow:hidden">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:25%">Risico</th>
+          <th style="width:35%">The City's aanpak</th>
+          <th style="width:40%">Les voor Assen</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>F&amp;B als bijzaak</td>
+          <td>50/50 target, echte chef, tablet-systeem</td>
+          <td><span class="pill pill-red">Urgent</span> Horecaconcept is prioriteit #1 — niet bedenken ná het decor</td>
+        </tr>
+        <tr>
+          <td>VR / high-tech: hoge prijs / korte tijd</td>
+          <td>Blijft terugkerend klachtpunt</td>
+          <td><span class="pill pill-green">Voordeel</span> Arcadekasten = onbeperkt spelen per credit — structureel beter</td>
+        </tr>
+        <tr>
+          <td>Beperkte doelgroep</td>
+          <td>"8 tot 80" als mantra</td>
+          <td>Nostalgie werkt voor 30+ — Assen kan breed én niche tegelijk bedienen</td>
+        </tr>
+        <tr>
+          <td>Doordeweekse middag leeg</td>
+          <td>Di–Do pas open vanaf 17:00</td>
+          <td>Assen: zelfde uitdaging — school- en bedrijfsgroepen als weekvulling</td>
+        </tr>
+        <tr>
+          <td>Service-bottleneck horeca</td>
+          <td>Tablets op tafel, staff brengt drankjes</td>
+          <td>Tablet-systeem of QR-bestel vroeg inplannen — niet achteraf retrofiten</td>
+        </tr>
+        <tr>
+          <td>Operationele complexiteit</td>
+          <td>TD'er + floor manager in vaste dienst</td>
+          <td>80 arcadekasten = constant onderhoud — vaste TD'er is geen luxe maar must</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-red" style="margin-top:20px">
+    <strong>Grootste openstaande vraag voor Assen:</strong> Het huidige concept heeft geen uitgewerkt horecamodel. The City's ervaring leert dat dit de primaire winstmotor is. Zonder 50/50 F&amp;B-split is de vraag of de exploitatie op pand-niveau rendabel kan zijn.
+  </div>
+</section>
+
+<!-- ══════════ 7. VRAGEN ══════════ -->
+<section id="vragen">
+  <div class="section-header">
+    <div class="section-num">7</div>
+    <h2>Vragen voor het Eigenaarsgesprek</h2>
+  </div>
+
+  <div class="q-grid">
+
+    <div class="q-cat-label">Businessmodel &amp; Financiën</div>
+    <div class="q-item"><div class="q-num">1</div><div><div class="q-cat">F&amp;B ratio</div>Halen jullie die 50/50 F&amp;B / activiteiten-split in de praktijk? Hoe lang duurde het voor jullie die verhouding bereikten?</div></div>
+    <div class="q-item"><div class="q-num">2</div><div><div class="q-cat">Spend</div>Wat is de gemiddelde besteding per hoofd — totaal, en F&amp;B apart?</div></div>
+    <div class="q-item"><div class="q-num">3</div><div><div class="q-cat">Verblijftijd</div>Hoe lang verblijft een bezoeker gemiddeld?</div></div>
+    <div class="q-item"><div class="q-num">4</div><div><div class="q-cat">Marge</div>Welke activiteit heeft de beste marge? Welke de slechtste?</div></div>
+    <div class="q-item"><div class="q-num">5</div><div><div class="q-cat">Tablet-systeem</div>Hoe werkt het tablet-bestelsysteem — eigen ontwikkeling of white-label? Wat kost het?</div></div>
+
+    <div class="q-cat-label" style="margin-top:6px">Pand &amp; Investering</div>
+    <div class="q-item"><div class="q-num">6</div><div><div class="q-cat">Oppervlakte</div>Hoe groot is het pand precies in m²?</div></div>
+    <div class="q-item"><div class="q-num">7</div><div><div class="q-cat">Investeringen</div>Wat heeft de totale verbouwing gekost — inclusief decor?</div></div>
+    <div class="q-item"><div class="q-num">8</div><div><div class="q-cat">Verrassingen</div>Wat waren de grootste verrassingen in de bouwfase?</div></div>
+    <div class="q-item"><div class="q-num">9</div><div><div class="q-cat">Energie</div>Hoe zijn de energiekosten — wat verbruikt het meest?</div></div>
+
+    <div class="q-cat-label" style="margin-top:6px">Bezoekers &amp; Marketing</div>
+    <div class="q-item"><div class="q-num">10</div><div><div class="q-cat">Volume</div>Hoeveel bezoekers per week? Hoe ziet de weekverdeling eruit?</div></div>
+    <div class="q-item"><div class="q-num">11</div><div><div class="q-cat">Catchment</div>Hoe ver reist de gemiddelde bezoeker? Wat is jullie primaire verzorgingsgebied?</div></div>
+    <div class="q-item"><div class="q-num">12</div><div><div class="q-cat">Loyalty</div>Wat is het herhalingsbezoekpercentage? Hoe stimuleer je terugkeer?</div></div>
+    <div class="q-item"><div class="q-num">13</div><div><div class="q-cat">Mix</div>Hoe verhoudt losse kassa zich tot groepsbookings en arrangementen?</div></div>
+    <div class="q-item"><div class="q-num">14</div><div><div class="q-cat">Kanalen</div>Wat zijn jullie beste marketingkanalen — wat werkt echt?</div></div>
+
+    <div class="q-cat-label" style="margin-top:6px">Activiteiten-mix &amp; Lessen</div>
+    <div class="q-item"><div class="q-num">15</div><div><div class="q-cat">Arcadekasten</div>Hebben jullie ooit overwogen arcadekasten toe te voegen? Waarom wel/niet?</div></div>
+    <div class="q-item"><div class="q-num">16</div><div><div class="q-cat">Spijt</div>Welke activiteit had je achteraf niet toegevoegd?</div></div>
+    <div class="q-item"><div class="q-num">17</div><div><div class="q-cat">Uitbreiding</div>Wat zou je als eerste uitbreiden als je extra ruimte had?</div></div>
+    <div class="q-item"><div class="q-num">18</div><div><div class="q-cat">Niet geweten</div>Wat wist je vooraf niet en had je willen weten?</div></div>
+    <div class="q-item"><div class="q-num">19</div><div><div class="q-cat">Personeel</div>Hoe groot is het personeelsbestand? Wat zijn de kritieke functies?</div></div>
+    <div class="q-item"><div class="q-num">20</div><div><div class="q-cat">COVID</div>Hoe was het eerste jaar (2020 = COVID) — hoe heb je dat overleefd?</div></div>
+  </div>
+</section>
+
+<!-- ══════════ 8. HYPOTHESEN ══════════ -->
+<section id="hypothesen">
+  <div class="section-header">
+    <div class="section-num">8</div>
+    <h2>Hypothesen om te Toetsen</h2>
+  </div>
+  <p style="color:var(--fg-muted);font-size:13.5px;margin-bottom:20px">Te verifiëren in het gesprek met de eigenaar.</p>
+
+  <div class="hypo-list">
+    <div class="hypo-item">
+      <div class="hypo-icon">💡</div>
+      <div>
+        <div class="hypo-title">Horeca is de levensader — niet de activiteiten</div>
+        <div class="hypo-body">Zonder 50/50 F&amp;B-split is de marge te dun om een groot pand rendabel te draaien. Activiteiten trekken bezoekers; horeca betaalt de rekeningen.</div>
+      </div>
+    </div>
+    <div class="hypo-item">
+      <div class="hypo-icon">⏱️</div>
+      <div>
+        <div class="hypo-title">Verblijftijd is de primaire hefboom</div>
+        <div class="hypo-body">Elke extra 30 minuten verblijftijd = +€ 8–15 F&amp;B-spend per bezoeker. Alles wat bezoekers langer binnen houdt (combodeals, horeca, events) is direct businessmodel-investering.</div>
+      </div>
+    </div>
+    <div class="hypo-item">
+      <div class="hypo-icon">🎮</div>
+      <div>
+        <div class="hypo-title">Arcadekasten zijn structureel beter dan VR op price/value</div>
+        <div class="hypo-body">VR (€ 8,50 / 15 min) is The City's meest geklaagde activiteit. Arcadekasten (onbeperkt spelen per credit, eigen tempo) hebben dit probleem niet en bouwen community.</div>
+      </div>
+    </div>
+    <div class="hypo-item">
+      <div class="hypo-icon">🎯</div>
+      <div>
+        <div class="hypo-title">Brede doelgroep voor bezetting, niche voor loyaliteit</div>
+        <div class="hypo-body">The City's "8 tot 80" vult de banen; Assen's retro-gaming niche zorgt voor herhaalbezoek en community. Beide zijn te combineren — ze bedienen andere behoeften op hetzelfde bezoek.</div>
+      </div>
+    </div>
+    <div class="hypo-item">
+      <div class="hypo-icon">📱</div>
+      <div>
+        <div class="hypo-title">Decor betaalt zichzelf terug via organisch sociaal bereik</div>
+        <div class="hypo-body">The City won in 2020 de landelijke FEC-award zonder groot marketingbudget. Spectaculair decor = gratis marketing via UGC. Assen's 14 zones zijn hier sterker dan The City's 6 activiteiten.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<!-- ══════════ FOOTER ══════════ -->
+<div class="footer container">
+  <span>Bronnen: thecity.nl · TripAdvisor · Pretwerk.nl · Recreatief Totaal · Facebook · Google reviews</span>
+  <span>Dex · Juni 2026 · Arcade Village Assen</span>
+</div>
+
+</body>
+</html>
