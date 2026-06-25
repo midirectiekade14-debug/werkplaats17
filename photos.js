@@ -1,4 +1,4 @@
-// Werkplaats17 — Foto referenties
+// Werkplaats3b — Foto referenties
 // Laatst gewijzigd: 2026-04-16T18:52:53.778Z
 // Gegenereerd via admin.html
 

@@ -1,5 +1,5 @@
 // ╔══════════════════════════════════════════════════════════════╗
-// ║  WERKPLAATS17 — CONTENT CONFIGURATIE                       ║
+// ║  WERKPLAATS3B — CONTENT CONFIGURATIE                       ║
 // ║  Pas hier alle teksten, prijzen en contactgegevens aan.    ║
 // ║  Na aanpassing: opslaan → site herlaadt automatisch.       ║
 // ╚══════════════════════════════════════════════════════════════╝
@@ -11,7 +11,7 @@ const CONTENT = {
   "eyebrow": "Beschikbaar · Maasland",
   "tagline": "Multifunctionele bedrijfsruimte voor professionele makers",
   "locationText": "Oud Camp 3b · Maasland · Naast A20 · 15 min Den Haag / Rotterdam",
-  "introText": "Werkplaats17 is een <strong>multifunctionele bedrijfsruimte van 904 m²</strong> voor zelfstandige vakmensen en kleine studio's. <br>Hier werken professionele en ambitieuze makers samen onder 1 dak aan aan mooie projecten. Hier kommen kennis, kunde en ambitie samen en gaan we voor kwaliteit! <br>Herken jij je hierin dan wordt het tijd voor een kennismaking. <br><br>Stel het klikt en we zien elkaar wel zitten dan krijg je een contract wat per kwartaal opzegbaar is, betaal je 2 maanden huur als borg en kun je meteen aan de gang. <br>",
+  "introText": "Werkplaats3b is een <strong>multifunctionele bedrijfsruimte van 904 m²</strong> voor zelfstandige vakmensen en kleine studio's. <br>Hier werken professionele en ambitieuze makers samen onder 1 dak aan aan mooie projecten. Hier kommen kennis, kunde en ambitie samen en gaan we voor kwaliteit! <br>Herken jij je hierin dan wordt het tijd voor een kennismaking. <br><br>Stel het klikt en we zien elkaar wel zitten dan krijg je een contract wat per kwartaal opzegbaar is, betaal je 2 maanden huur als borg en kun je meteen aan de gang. <br>",
   "accessItems": [
     "904 m² · hal 719 m² · kantoor 185 m²",
     "24/7 toegang"
@@ -118,11 +118,11 @@ const CONTENT = {
     "Timmerman / interieurbouwer met eigen projecten",
     "Maker die meer ruimte en machines nodig heeft"
   ],
-  "notForText": "<strong>KvK-inschrijving en verzekering verplicht.</strong> Werkplaats17 is uitsluitend voor professionele gebruikers. Particulieren en hobbyisten kunnen hier niet terecht.",
+  "notForText": "<strong>KvK-inschrijving en verzekering verplicht.</strong> Werkplaats3b is uitsluitend voor professionele gebruikers. Particulieren en hobbyisten kunnen hier niet terecht.",
   "ctaHeading": "Interesse?<br>Kom <em>kijken.</em>",
-  "email": "info@werkplaats17.nl",
+  "email": "info@werkplaats3b.nl",
   "whatsappNumber": "31612345678",
-  "whatsappText": "Hoi, ik heb interesse in een werkplek bij Werkplaats17.",
+  "whatsappText": "Hoi, ik heb interesse in een werkplek bij Werkplaats3b.",
   "contactLines": [
     "Oud Camp 3b, Maasland (naast A20)",
     "Beperkt aantal plekken beschikbaar",

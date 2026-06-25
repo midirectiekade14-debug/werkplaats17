@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>Werkplaats17 — Admin</title>
+<title>Werkplaats3b — Admin</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔧</text></svg>">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -264,7 +264,7 @@ textarea.ce-input{min-height:60px;resize:vertical}
 <!-- AUTH -->
 <div id="auth-gate">
   <div class="auth-box">
-    <h1>Werk<span>plaats</span>17</h1>
+    <h1>Werk<span>plaats</span>3b</h1>
     <p>Admin panel</p>
     <input type="password" id="auth-pw" placeholder="Wachtwoord" autofocus>
     <div class="auth-err" id="auth-err">Onjuist wachtwoord</div>
@@ -274,7 +274,7 @@ textarea.ce-input{min-height:60px;resize:vertical}
 <!-- EDITOR -->
 <div id="editor" style="display:none;flex-direction:column;flex:1;overflow:hidden">
 <div class="hdr">
-  <h1>W17 — Admin <span style="color:var(--amber);font-size:9px;letter-spacing:.15em;vertical-align:middle;margin-left:6px;padding:2px 8px;border:1px solid var(--amber);border-radius:3px">MAASLAND</span></h1>
+  <h1>W3b — Admin <span style="color:var(--amber);font-size:9px;letter-spacing:.15em;vertical-align:middle;margin-left:6px;padding:2px 8px;border:1px solid var(--amber);border-radius:3px">MAASLAND</span></h1>
   <div class="view-tabs">
     <div class="view-tab on" data-view="plattegrond" onclick="switchView('plattegrond')">Plattegrond</div>
     <div class="view-tab" data-view="content" onclick="switchView('content')">Content</div>
@@ -1035,7 +1035,7 @@ document.getElementById('btn-redo').addEventListener('click',doRedo);
 var DEFAULT_OBJECTS={"v":3,"floor":0,"zoom":1,"items":[{"floor":0,"x":28,"y":18,"w":36,"h":56,"l":"K","c":"rgba(140,200,140,.5)","bg":"rgba(140,200,140,.13)","type":"","room":"1","rot":0},{"floor":0,"x":68,"y":18,"w":78,"h":56,"l":"Kantoor","c":"rgba(110,150,220,.5)","bg":"rgba(110,150,220,.13)","type":"","room":"1","rot":0},{"floor":0,"x":150,"y":18,"w":48,"h":56,"l":"Kantoor","c":"rgba(110,150,220,.5)","bg":"rgba(110,150,220,.13)","type":"","room":"1","rot":0},{"floor":0,"x":202,"y":12,"w":42,"h":68,"l":"K","c":"rgba(140,200,140,.5)","bg":"rgba(140,200,140,.13)","type":"","room":"1","rot":0},{"floor":0,"x":248,"y":18,"w":50,"h":56,"l":"Kantoor","c":"rgba(110,150,220,.5)","bg":"rgba(110,150,220,.13)","type":"","room":"1","rot":0},{"floor":0,"x":302,"y":12,"w":48,"h":68,"l":"Trap","c":"rgba(180,140,80,.45)","bg":"rgba(180,140,80,.13)","type":"","room":"1","rot":0},{"floor":0,"x":354,"y":18,"w":200,"h":56,"l":"Kantoor","c":"rgba(110,150,220,.5)","bg":"rgba(110,150,220,.13)","type":"","room":"1","rot":0},{"floor":0,"x":28,"y":80,"w":528,"h":310,"l":"Magazijn","c":"rgba(224,154,47,.5)","bg":"rgba(224,154,47,.13)","type":"","room":"1","rot":0},{"floor":0,"x":562,"y":290,"w":66,"h":100,"l":"Toilet","c":"rgba(120,160,220,.5)","bg":"rgba(120,160,220,.18)","type":"","room":"1","rot":0},{"floor":0,"x":632,"y":290,"w":88,"h":100,"l":"Entree","c":"rgba(100,180,220,.5)","bg":"rgba(100,180,220,.13)","type":"","room":"1","rot":0},{"floor":1,"x":28,"y":18,"w":528,"h":62,"l":"Magazijn (entresol)","c":"rgba(180,100,220,.5)","bg":"rgba(180,100,220,.13)","type":"","room":"1","rot":0},{"floor":1,"x":28,"y":84,"w":250,"h":308,"l":"Vide","c":"rgba(255,255,255,.12)","bg":"rgba(255,255,255,.03)","type":"","room":"1","rot":0},{"floor":1,"x":282,"y":84,"w":274,"h":230,"l":"Magazijn","c":"rgba(180,100,220,.5)","bg":"rgba(180,100,220,.13)","type":"","room":"1","rot":0},{"floor":1,"x":345,"y":28,"w":48,"h":40,"l":"Trap","c":"rgba(180,140,80,.45)","bg":"rgba(180,140,80,.13)","type":"","room":"1","rot":0},{"floor":1,"x":478,"y":320,"w":78,"h":72,"l":"Overloop","c":"rgba(200,180,140,.5)","bg":"rgba(200,180,140,.13)","type":"","room":"1","rot":0},{"floor":1,"x":562,"y":290,"w":158,"h":102,"l":"Vide","c":"rgba(255,255,255,.12)","bg":"rgba(255,255,255,.03)","type":"","room":"1","rot":0},{"floor":2,"x":28,"y":18,"w":440,"h":374,"l":"Vide","c":"rgba(255,255,255,.12)","bg":"rgba(255,255,255,.03)","type":"","room":"1","rot":0},{"floor":2,"x":395,"y":22,"w":48,"h":40,"l":"Overloop","c":"rgba(200,180,140,.5)","bg":"rgba(200,180,140,.13)","type":"","room":"1","rot":0},{"floor":2,"x":345,"y":28,"w":46,"h":38,"l":"Trap","c":"rgba(180,140,80,.45)","bg":"rgba(180,140,80,.13)","type":"","room":"1","rot":0},{"floor":2,"x":472,"y":18,"w":86,"h":50,"l":"Kantoor","c":"rgba(110,150,220,.5)","bg":"rgba(110,150,220,.13)","type":"","room":"1","rot":0},{"floor":2,"x":472,"y":72,"w":86,"h":180,"l":"Kantoor","c":"rgba(110,150,220,.5)","bg":"rgba(110,150,220,.13)","type":"","room":"1","rot":0},{"floor":2,"x":472,"y":256,"w":58,"h":56,"l":"Berging","c":"rgba(160,140,120,.5)","bg":"rgba(160,140,120,.13)","type":"","room":"1","rot":0},{"floor":2,"x":534,"y":256,"w":24,"h":56,"l":"Keuken","c":"rgba(140,200,140,.5)","bg":"rgba(140,200,140,.13)","type":"","room":"1","rot":0},{"floor":2,"x":472,"y":316,"w":86,"h":76,"l":"Vide","c":"rgba(255,255,255,.12)","bg":"rgba(255,255,255,.03)","type":"","room":"1","rot":0},{"floor":2,"x":562,"y":290,"w":158,"h":102,"l":"Vide","c":"rgba(255,255,255,.12)","bg":"rgba(255,255,255,.03)","type":"","room":"1","rot":0}]};
 
 function generateJS(objs){
-  return '// Werkplaats17 -- Geplaatste objecten\n// Laatst gewijzigd: '+new Date().toISOString()+'\n// Gegenereerd via admin.html\n\nconst PLACED_OBJECTS = '+JSON.stringify(objs,null,2)+';\n';
+  return '// Werkplaats3b -- Geplaatste objecten\n// Laatst gewijzigd: '+new Date().toISOString()+'\n// Gegenereerd via admin.html\n\nconst PLACED_OBJECTS = '+JSON.stringify(objs,null,2)+';\n';
 }
 
 
@@ -1313,7 +1313,7 @@ function ceRenderField(f){
 
 function ceGenerateJS(){
   var lines=['// ╔══════════════════════════════════════════════════════════════╗'];
-  lines.push('// ║  WERKPLAATS17 — CONTENT CONFIGURATIE                       ║');
+  lines.push('// ║  WERKPLAATS3B — CONTENT CONFIGURATIE                       ║');
   lines.push('// ║  Pas hier alle teksten, prijzen en contactgegevens aan.    ║');
   lines.push('// ║  Na aanpassing: opslaan → site herlaadt automatisch.       ║');
   lines.push('// ╚══════════════════════════════════════════════════════════════╝');
@@ -1491,7 +1491,7 @@ window.pmSave=async function(){
 };
 
 function pmGenerateJS(){
-  return '// Werkplaats17 — Foto referenties\n// Laatst gewijzigd: '+new Date().toISOString()+'\n// Gegenereerd via admin.html\n\nconst PHOTOS = '+JSON.stringify(pmPhotos,null,2)+';\n';
+  return '// Werkplaats3b — Foto referenties\n// Laatst gewijzigd: '+new Date().toISOString()+'\n// Gegenereerd via admin.html\n\nconst PHOTOS = '+JSON.stringify(pmPhotos,null,2)+';\n';
 }
 
 // ╔════════════════════════════════════════════╗

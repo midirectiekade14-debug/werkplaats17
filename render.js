@@ -1,5 +1,5 @@
 // ╔══════════════════════════════════════════════════════════════╗
-// ║  WERKPLAATS17 — RENDER                                      ║
+// ║  WERKPLAATS3B — RENDER                                      ║
 // ║  Vult index.html met waarden uit CONTENT (content.js).      ║
 // ║  content.js = enige bron van waarheid voor de teksten.      ║
 // ╚══════════════════════════════════════════════════════════════╝
@@ -202,7 +202,7 @@
     }
     if (PHOTOS.hero) {
       var heroWrap = document.querySelector('.hero-image');
-      if (heroWrap) replaceChildren(heroWrap, imgFor(PHOTOS.hero, 'Werkplaats17'));
+      if (heroWrap) replaceChildren(heroWrap, imgFor(PHOTOS.hero, 'Werkplaats3b'));
     }
     if (Array.isArray(PHOTOS.strip)) {
       var strip = document.querySelectorAll('.photo-strip .photo-placeholder');

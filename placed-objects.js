@@ -1,4 +1,4 @@
-// Werkplaats17 -- Geplaatste objecten
+// Werkplaats3b -- Geplaatste objecten
 // Laatst gewijzigd: 2026-04-10T13:45:10.291Z
 // Gegenereerd via admin.html
 
