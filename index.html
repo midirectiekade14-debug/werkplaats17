@@ -367,28 +367,6 @@
     border-bottom: 1px solid var(--line);
     padding-bottom: 36px;
   }
-  .fp-location-tabs {
-    display: flex;
-    gap: 0;
-    margin-bottom: 16px;
-    border-bottom: 1px solid var(--line);
-  }
-  .fp-loc-tab {
-    padding: 8px 20px;
-    font-size: 10px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    border: none;
-    background: transparent;
-    color: var(--muted);
-    cursor: pointer;
-    font-family: 'DM Mono', monospace;
-    transition: all 0.15s;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -1px;
-  }
-  .fp-loc-tab:hover { color: var(--cream); }
-  .fp-loc-tab.on { color: var(--amber); border-bottom-color: var(--amber); }
   .fp-tabs {
     display: flex;
     gap: 2px;
@@ -1401,13 +1379,10 @@ window._initFloorplan=function(){
   var S=0.03, FPW=900, FPH=550;
   var cv=document.getElementById('cv');
   var fp=document.getElementById('fp');
-  var currentLocation='maasland';
   var maaslandObjects=typeof PLACED_OBJECTS!=='undefined'?PLACED_OBJECTS:[];
-  var rotterdamObjects=null;
 
   var FLOOR_TABS={
-    maasland:['Begane grond','1e verdieping','2e verdieping'],
-    rotterdam:['Begane grond']
+    maasland:['Begane grond','1e verdieping','2e verdieping']
   };
 
   function place(o){
@@ -1513,14 +1488,13 @@ window._initFloorplan=function(){
   }
 
   function getActiveObjects(){
-    if(currentLocation==='rotterdam') return rotterdamObjects||[];
     return maaslandObjects;
   }
 
   function updateFloorTabs(){
     var tabsContainer=document.querySelector('.fp-tabs');
     while(tabsContainer.firstChild) tabsContainer.removeChild(tabsContainer.firstChild);
-    var tabs=FLOOR_TABS[currentLocation];
+    var tabs=FLOOR_TABS.maasland;
     tabs.forEach(function(label,i){
       var btn=document.createElement('button');
       btn.className='fp-tab'+(i===0?' on':'');
@@ -1560,36 +1534,6 @@ window._initFloorplan=function(){
     fitToContent();
     buildLegend(floorObjs);
   }
-
-  function loadRotterdamData(cb){
-    if(rotterdamObjects){cb();return;}
-    var url='https://midirectiekade14-debug.github.io/werkplaats17-rotterdam/placed-objects.js';
-    var xhr=new XMLHttpRequest();
-    xhr.open('GET',url);
-    xhr.onload=function(){
-      if(xhr.status===200){
-        var match=xhr.responseText.match(/const\s+PLACED_OBJECTS\s*=\s*(\[[\s\S]*\]);/);
-        if(match){try{rotterdamObjects=JSON.parse(match[1]);}catch(e){rotterdamObjects=[];}}
-        else{rotterdamObjects=[];}
-      }else{rotterdamObjects=[];}
-      cb();
-    };
-    xhr.onerror=function(){rotterdamObjects=[];cb();};
-    xhr.send();
-  }
-
-  window.fpSwitchLocation=function(loc){
-    currentLocation=loc;
-    document.querySelectorAll('.fp-loc-tab').forEach(function(t){
-      t.classList.toggle('on',t.textContent.toLowerCase()===loc);
-    });
-    updateFloorTabs();
-    if(loc==='rotterdam'){
-      loadRotterdamData(function(){renderFloor(0);});
-    }else{
-      renderFloor(0);
-    }
-  };
 
   window.fpShow=function(f){renderFloor(f);};
   renderFloor(0);
