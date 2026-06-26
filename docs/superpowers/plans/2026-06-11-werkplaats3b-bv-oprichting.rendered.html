@@ -1,0 +1,910 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<title>Werkplaats3b BV — Oprichtingsplan</title>
+<style>
+
+@page {
+    size: A4;
+    margin: 28mm 22mm 18mm 22mm;
+}
+* { box-sizing: border-box; }
+html, body {
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    font-size: 11pt;
+    color: #000;
+    line-height: 1.42;
+    margin: 0;
+    padding: 0;
+}
+
+/* Document title */
+.doc-title {
+    font-size: 20pt;
+    font-weight: bold;
+    color: #1a1a1a;
+    margin: 0 0 4pt 0;
+    line-height: 1.15;
+}
+.doc-meta {
+    font-size: 10pt;
+    color: #555;
+    margin: 0 0 18pt 0;
+    border-bottom: 1pt solid #ccc;
+    padding-bottom: 10pt;
+}
+
+h1 {
+    font-size: 15pt;
+    font-weight: bold;
+    color: #1a1a1a;
+    margin: 18pt 0 8pt 0;
+    padding: 0 0 4pt 0;
+    border-bottom: 0.6pt solid #888;
+    line-height: 1.2;
+    page-break-after: avoid;
+}
+h2 {
+    font-size: 12pt;
+    font-weight: bold;
+    color: #1a1a1a;
+    margin: 12pt 0 4pt 0;
+    line-height: 1.25;
+    page-break-before: always;
+    page-break-after: avoid;
+}
+h3 {
+    font-size: 11pt;
+    font-weight: bold;
+    color: #1a1a1a;
+    margin: 10pt 0 3pt 0;
+    page-break-after: avoid;
+}
+
+p { margin: 0 0 6pt 0; }
+strong { font-weight: bold; }
+em { font-style: italic; }
+a { color: #1a5fa8; text-decoration: underline; }
+
+blockquote {
+    border-left: 3pt solid #888;
+    margin: 8pt 0 8pt 18pt;
+    padding: 4pt 10pt;
+    color: #333;
+    font-style: italic;
+}
+
+ul {
+    margin: 4pt 0 8pt 0;
+    padding-left: 18pt;
+    list-style: none;
+}
+ul li {
+    position: relative;
+    padding-left: 10pt;
+    margin: 2pt 0;
+}
+ul li::before {
+    content: "\25A0";
+    position: absolute;
+    left: -2pt;
+    top: 0;
+    font-size: 8.5pt;
+    color: #000;
+    line-height: 1.7;
+}
+ul ul {
+    margin-top: 2pt;
+    margin-bottom: 4pt;
+}
+ul ul li::before {
+    content: "\25AA";
+    font-size: 9pt;
+}
+ol {
+    margin: 4pt 0 8pt 0;
+    padding-left: 22pt;
+}
+ol li { margin: 2pt 0; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8pt 0 14pt 0;
+    font-size: 10.5pt;
+    page-break-inside: auto;
+}
+thead tr { background: #e8e8e8; }
+th {
+    text-align: left;
+    font-weight: bold;
+    padding: 5pt 7pt;
+    border: 0.5pt solid #888;
+    color: #1a1a1a;
+    background: #e8e8e8;
+}
+td {
+    padding: 5pt 7pt;
+    border: 0.5pt solid #aaa;
+    vertical-align: top;
+}
+tr { page-break-inside: avoid; }
+td:first-child { font-weight: bold; }
+
+code, pre {
+    font-family: Consolas, monospace;
+    font-size: 10pt;
+    background: #f5f5f5;
+    padding: 1pt 3pt;
+    border-radius: 2pt;
+}
+pre { padding: 8pt; display: block; overflow-x: auto; }
+
+hr {
+    border: none;
+    border-top: 0.5pt solid #bbb;
+    margin: 14pt 0;
+}
+
+.appendix-divider {
+    page-break-before: always;
+    border-top: 2pt solid #333;
+    margin: 0 0 16pt 0;
+    padding-top: 10pt;
+}
+.appendix-label {
+    font-size: 10pt;
+    font-weight: bold;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 4pt;
+}
+
+/* Footer — herhaalt op elke pagina via position:fixed bij print */
+.page-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 3pt 22mm 0 22mm;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 8pt;
+    color: #666;
+    display: flex;
+    justify-content: space-between;
+    border-top: 0.4pt solid #ccc;
+}
+
+</style>
+</head>
+<body>
+
+<div class="doc-title">Werkplaats3b BV — Oprichtingsplan</div>
+<div class="doc-meta">
+  Harm &middot; Matthijs &middot; Wesley &nbsp;|&nbsp; Oud Camp 3b, Maasland &nbsp;|&nbsp; 2026-06-11 &nbsp;|&nbsp; Versie 1.0
+</div>
+
+<div class="markdown-body">
+<blockquote>
+<p><strong>Voor uitvoering:</strong> Dit is een juridisch/organisatorisch procesplan. Volg de stappen in volgorde — elke taak heeft een verifieerbare uitkomst voor je verdergaat.</p>
+</blockquote>
+<p><strong>Doel:</strong> Werkplaats3b BV oprichten als exploitatie-entiteit voor drie gelijke partners (Harm, Matthijs, Wesley), inclusief huurcontract, machineoverdracht en sub-huurstructuur.</p>
+<p><strong>Aanpak:</strong> Lineaire oprichting in 8 taken. Stap 1-4 zijn parallel voorbereidbaar; stap 5-8 volgen na de notarispassering.</p>
+<p><strong>Referenties:</strong> Spec → <a href="#appendix-a">docs/2026-06-11-werkplaats3b-bv-opzet.md &darr; Aanhangsel&nbsp;A</a></p>
+<hr />
+<h2>Taak 1: Vennootschapsovereenkomst opstellen</h2>
+<p><strong>Doel:</strong> Schriftelijke afspraken tussen de drie partners vóór de notaris.</p>
+<p><strong>Benodigde info:</strong><br />
+- Volledige namen + BSN van alle drie partners<br />
+- Geboortedatums en adressen<br />
+- Overeengekomen verdeling: 33,33% / 33,33% / 33,33%<br />
+- Besluitvormingsregel: unanimiteit voor strategisch, 2/3 meerderheid operationeel<br />
+- Uittreedregeling (zie stap 1d)</p>
+<p><strong>Stappen:</strong></p>
+<ul>
+<li>
+<p>[ ] <strong>1a</strong> Verzamel van alle drie partners: volledige naam, BSN, geboortedatum, woonadres, kopie ID</p>
+</li>
+<li>
+<p>[ ] <strong>1b</strong> Stel de verdeling en besluitvormingsregels vast. Gebruik dit als uitgangspunt voor de statuten bij de notaris:</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Besluit</th>
+<th>Vereiste meerderheid</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nieuwe aandeelhouder toevoegen</td>
+<td>Unanimiteit</td>
+</tr>
+<tr>
+<td>Investering &gt; €5.000</td>
+<td>Unanimiteit</td>
+</tr>
+<tr>
+<td>Huurcontract pand aangaan/beëindigen</td>
+<td>Unanimiteit</td>
+</tr>
+<tr>
+<td>Dagelijkse exploitatie</td>
+<td>Enkelvoudige bestuurder</td>
+</tr>
+<tr>
+<td>Winstverdeling / dividend</td>
+<td>2/3 meerderheid</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p>[ ] <strong>1c</strong> Stel een intentieverklaring op (kan vrije tekst zijn) die alle drie partners tekenen vóór de notarisafspraak. Kerninhoud:</p>
+<blockquote>
+<p><em>"Ondergetekenden komen overeen gezamenlijk een BV op te richten onder de naam Werkplaats3b BV (of vergelijkbaar), met als doel de exploitatie van bedrijfsruimte op Oud Camp 3b te Maasland. De aandelen worden gelijkelijk verdeeld (33,33% per aandeelhouder). Alle drie treden op als bestuurder."</em></p>
+</blockquote>
+</li>
+<li>
+<p>[ ] <strong>1d</strong> Bespreek en leg schriftelijk vast: <strong>uittreedregeling</strong>. Minimale inhoud:</p>
+</li>
+<li>Bij uittreden: aandelen eerst aanbieden aan de andere twee partners (right of first refusal)</li>
+<li>Waardering: boekwaarde of onafhankelijke taxateur</li>
+<li>Opzegtermijn: minimaal 3 maanden</li>
+<li>
+<p>Wat er met de machinesinbreng gebeurt bij uittreden</p>
+</li>
+<li>
+<p>[ ] <strong>Verificatie:</strong> Alle drie partners hebben getekende intentieverklaring + uittreedafspraken op papier.</p>
+</li>
+</ul>
+<hr />
+<h2>Taak 2: Notaris — oprichtingsakte BV</h2>
+<p><strong>Doel:</strong> Rechtspersoon Werkplaats3b BV bestaat na passering.</p>
+<p><strong>Stappen:</strong></p>
+<ul>
+<li>[ ] <strong>2a</strong> Selecteer een notaris. Aanraders voor Rotterdam/Maasland-regio:</li>
+<li>Vergelijk via <a href="https://www.notaris.nl">notaris.nl</a> of vraag via KNB</li>
+<li>Vraag expliciet naar prijs voor "BV-oprichting 3 aandeelhouders, allen DGA"</li>
+<li>
+<p>Verwacht: €1.200-1.700 all-in</p>
+</li>
+<li>
+<p>[ ] <strong>2b</strong> Maak afspraak en lever aan:</p>
+</li>
+<li>Kopie ID alle drie partners</li>
+<li>Intentieverklaring uit taak 1</li>
+<li>Gewenste bedrijfsnaam: <strong>Werkplaats3b BV</strong> (check beschikbaarheid: <a href="https://www.kvk.nl/zoeken/">kvk.nl/zoeken</a>)</li>
+<li>Maatschappelijk doel (voor statuten): <em>"Het exploiteren van gedeelde bedrijfs- en werkruimte, het verhuren van units en het ter beschikking stellen van machines aan professionele gebruikers"</em></li>
+<li>
+<p>Startkapitaal: minimaal €0,01 wettelijk — breng praktisch €3.000-5.000 in (bankrekeningvereiste bij opening)</p>
+</li>
+<li>
+<p>[ ] <strong>2c</strong> Passeer de oprichtingsakte bij de notaris. Alle drie aanwezig of met volmacht.</p>
+</li>
+<li>
+<p>[ ] <strong>Verificatie:</strong> Je ontvangt de oprichtingsakte + KvK-uittreksel (volgt binnen 1-3 werkdagen automatisch).</p>
+</li>
+</ul>
+<hr />
+<h2>Taak 3: KvK-registratie bevestigen</h2>
+<p><strong>Doel:</strong> BV staat ingeschreven, KvK-nummer ontvangen.</p>
+<p><strong>Stappen:</strong></p>
+<ul>
+<li>
+<p>[ ] <strong>3a</strong> KvK-registratie verloopt automatisch na notarispassering. Controleer na 1-3 werkdagen via <a href="https://www.kvk.nl/zoeken/">kvk.nl/zoeken</a> op naam <strong>Werkplaats3b BV</strong>.</p>
+</li>
+<li>
+<p>[ ] <strong>3b</strong> Download het officiële KvK-uittreksel (PDF). Bewaar dit — je hebt het nodig voor de bank, verhuurder en verzekeraar.</p>
+</li>
+<li>
+<p>[ ] <strong>3c</strong> Belastingdienst stuurt binnen 2 weken automatisch:</p>
+</li>
+<li>BTW-nummer (OB-nummer): <code>NLxxxxxxxxxxxxxxxxB01</code></li>
+<li>
+<p>Loonheffingnummer (indien DGA-salaris wordt uitbetaald)</p>
+</li>
+<li>
+<p>[ ] <strong>Verificatie:</strong> KvK-uittreksel beschikbaar, BV-naam + KvK-nummer + vestigingsadres correct.</p>
+</li>
+</ul>
+<hr />
+<h2>Taak 4: Zakelijke bankrekening openen</h2>
+<p><strong>Doel:</strong> BV heeft een eigen IBAN waarop huur binnenkomt en betalingen uitgaan.</p>
+<p><strong>Stappen:</strong></p>
+<ul>
+<li>[ ] <strong>4a</strong> Kies een bank. Aanbevolen voor snelheid en lage kosten:</li>
+<li><strong>Bunq Business</strong> — volledig online, snel (~1-3 dagen), €9,99/mnd</li>
+<li><strong>KNAB Zakelijk</strong> — goede app, ~€9/mnd</li>
+<li>
+<p><em>Rabo/ING/ABN zijn trager (1-4 weken) maar hebben betere kredietmogelijkheden later</em></p>
+</li>
+<li>
+<p>[ ] <strong>4b</strong> Open rekening op naam van <strong>Werkplaats3b BV</strong>. Aanleveren:</p>
+</li>
+<li>KvK-uittreksel</li>
+<li>Oprichtingsakte</li>
+<li>Identiteitsbewijzen alle drie bestuurders</li>
+<li>
+<p>Startkapitaalstorting (minimaal wat in statuten staat, praktisch €3.000+)</p>
+</li>
+<li>
+<p>[ ] <strong>4c</strong> Stel direct in:</p>
+</li>
+<li>Machtiging (SEPA) voor maandelijkse huur aan verhuurder</li>
+<li>
+<p>Zakelijke betaalpas voor elk van de drie bestuurders</p>
+</li>
+<li>
+<p>[ ] <strong>Verificatie:</strong> IBAN van Werkplaats3b BV beschikbaar, storting verwerkt, alle drie bestuurders hebben toegang.</p>
+</li>
+</ul>
+<hr />
+<h2>Taak 5: Machineoverdracht</h2>
+<p><strong>Doel:</strong> Alle machines staan formeel op de balans van de BV.</p>
+<p><strong>Stappen:</strong></p>
+<ul>
+<li>[ ] <strong>5a</strong> Maak een <strong>inventarislijst</strong> van alle machines met getaxeerde marktwaarde:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Machine</th>
+<th>Eigenaar nu</th>
+<th>Getaxeerde waarde</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Formaatzaag</td>
+<td>[naam]</td>
+<td>€<strong><em>_</em></strong></td>
+</tr>
+<tr>
+<td>Vlak- &amp; vandiktebank</td>
+<td>[naam]</td>
+<td>€<strong><em>_</em></strong></td>
+</tr>
+<tr>
+<td>Rijgatenboormachine</td>
+<td>[naam]</td>
+<td>€<strong><em>_</em></strong></td>
+</tr>
+<tr>
+<td>Lintzaag</td>
+<td>[naam]</td>
+<td>€<strong><em>_</em></strong></td>
+</tr>
+<tr>
+<td>Afzuiging</td>
+<td>[naam]</td>
+<td>€<strong><em>_</em></strong></td>
+</tr>
+<tr>
+<td>Perslucht/compressor</td>
+<td>[naam]</td>
+<td>€<strong><em>_</em></strong></td>
+</tr>
+<tr>
+<td>Straalcabine</td>
+<td>[naam]</td>
+<td>€<strong><em>_</em></strong></td>
+</tr>
+<tr>
+<td>Shapertool + Benchpilot</td>
+<td>[naam]</td>
+<td>€<strong><em>_</em></strong></td>
+</tr>
+<tr>
+<td>Overige</td>
+<td>[naam]</td>
+<td>€<strong><em>_</em></strong></td>
+</tr>
+<tr>
+<td><strong>Totaal</strong></td>
+<td></td>
+<td><strong>€<strong><em>_</em></strong></strong></td>
+</tr>
+</tbody>
+</table>
+<p><em>De kantenbandmachine wordt na oprichting als lease aangeschaft door de BV (is momenteel geen bezit van de partners).</em></p>
+<ul>
+<li>[ ] <strong>5b</strong> Besluit de overdrachtswijze (kies één):</li>
+<li><strong>Verkoop aan BV</strong>: BV maakt bedrag over aan de betreffende partner(s) → clean, BTW-plichtig boven €350 drempel voor zakelijke handelaar</li>
+<li>
+<p><strong>Inbreng als kapitaal</strong>: notarieel, geen cash nodig, vereist formele inbrengbeschrijving</p>
+</li>
+<li>
+<p>[ ] <strong>5c</strong> Stel per machine (of als totaalbatch) een <strong>verkoopfactuur</strong> op van de partner aan de BV. Minimale inhoud:</p>
+</li>
+<li>Datum</li>
+<li>Verkoper: [naam partner], BSN/privéadres</li>
+<li>Koper: Werkplaats3b BV, KvK-nummer</li>
+<li>Omschrijving machine + serienummer indien beschikbaar</li>
+<li>Bedrag excl. BTW + BTW (21%)</li>
+<li>
+<p><em>Let op: particuliere verkoop = geen BTW verschuldigd als partner niet als ondernemer verkoopt</em></p>
+</li>
+<li>
+<p>[ ] <strong>5d</strong> BV activeert de machines op de balans. Vertel de accountant: afschrijvingstermijn 5 jaar voor machines, 10 jaar voor vaste installaties (afzuiging, perslucht).</p>
+</li>
+<li>
+<p>[ ] <strong>Verificatie:</strong> Alle machines hebben een eigendomsdocument (factuur of akte) op naam van Werkplaats3b BV.</p>
+</li>
+</ul>
+<hr />
+<h2>Taak 6: Verzekeringen afsluiten</h2>
+<p><strong>Doel:</strong> BV is gedekt vóór de eerste huurder de deur in loopt.</p>
+<p><strong>Stappen:</strong></p>
+<ul>
+<li>[ ] <strong>6a</strong> Vraag offertes aan voor een gecombineerde <strong>zakelijke verzekering</strong> bij minimaal 2 aanbieders:</li>
+<li>Aanbieders: Interpolis Zakelijk, Nationale-Nederlanden, Hiscox, of via Independer Zakelijk</li>
+<li>
+<p>Vraag om: Bedrijfsaansprakelijkheid (AVB) + Inventaris/Machines in één pakket</p>
+</li>
+<li>
+<p>[ ] <strong>6b</strong> Minimale dekking die je nodig hebt:</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Dekking</th>
+<th>Minimum</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bedrijfsaansprakelijkheid (AVB)</td>
+<td>€1.000.000 per gebeurtenis</td>
+</tr>
+<tr>
+<td>Inventaris + machines</td>
+<td>Nieuwwaarde of dagwaarde totaal inventaris</td>
+</tr>
+<tr>
+<td>Rechtsbijstand zakelijk</td>
+<td>Aanbevolen maar optioneel</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>[ ] <strong>6c</strong> Informeer de verzekeraar expliciet over:</li>
+<li>Gebruik van industriële houtbewerkingsmachines door derden (huurders)</li>
+<li>Publiek toegankelijke ruimte</li>
+<li>
+<p>Aanwezigheid afzuiging (brandrisico fijnstof)</p>
+</li>
+<li>
+<p>[ ] <strong>6d</strong> Sluit de verzekering af op naam van <strong>Werkplaats3b BV</strong>.</p>
+</li>
+<li>
+<p>[ ] <strong>Verificatie:</strong> Polis ontvangen, dekking ingegaan, AVB geldig vóór eerste huurder.</p>
+</li>
+</ul>
+<hr />
+<h2>Taak 7: BTW-administratie inrichten</h2>
+<p><strong>Doel:</strong> BV dient correct BTW-aangifte in voor de verhuurinkomsten.</p>
+<p><strong>Stappen:</strong></p>
+<ul>
+<li>
+<p>[ ] <strong>7a</strong> Ontvang BTW-nummer van Belastingdienst (automatisch na KvK, ~2 weken). Controleer via <a href="https://mijn.belastingdienst.nl/zakelijk/">Belastingdienst MijnBelastingdienst Zakelijk</a>.</p>
+</li>
+<li>
+<p>[ ] <strong>7b</strong> Bepaal BTW-behandeling verhuur:</p>
+</li>
+<li><strong>Kale huurinkomsten</strong> zijn in principe BTW-vrijgesteld (art. 11 Wet OB)</li>
+<li><strong>Tenzij</strong> huurder BTW-ondernemer is én je gezamenlijk opteert voor belaste verhuur (voordeel: je kunt BTW op kosten terugvorderen)</li>
+<li>
+<p>Beslis dit samen met de accountant — het maakt uit voor je energie/servicekosten-BTW-aftrek</p>
+</li>
+<li>
+<p>[ ] <strong>7c</strong> Schakel een accountant/boekhouder in voor de BV-administratie. Minimaal nodig:</p>
+</li>
+<li>Kwartaal BTW-aangifte</li>
+<li>Jaarlijkse VPB-aangifte</li>
+<li>Eventueel DGA-salarisadministratie</li>
+<li>
+<p>Kosten: €500-900/jaar bij een eenvoudige boekhouder</p>
+</li>
+<li>
+<p>[ ] <strong>Verificatie:</strong> BTW-nummer bekend, accountant gekozen, afspraken gemaakt over aangifte-frequentie.</p>
+</li>
+</ul>
+<hr />
+<h2>Taak 8: Sub-huurcontracten model opstellen</h2>
+<p><strong>Doel:</strong> Eén modelcontract voor alle huurders van de werkplaats (werkplek, kantoor of opslag).</p>
+<p><strong>Stappen:</strong></p>
+<ul>
+<li>[ ] <strong>8a</strong> Stel het modelcontract op. Verplichte secties:</li>
+</ul>
+<p><strong>HUUROVEREENKOMST BEDRIJFSRUIMTE</strong></p>
+<p><em>Verhuurder:</em> Werkplaats3b BV, KvK [nummer], Oud Camp 3b, Maasland<br />
+<em>Huurder:</em> [naam], KvK [nummer], [adres]</p>
+<table>
+<thead>
+<tr>
+<th>Artikel</th>
+<th>Inhoud</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Gehuurde</td>
+<td>Beschrijving (bijv. "werkplek hal ca. 15m², gebruik gedeelde machines")</td>
+</tr>
+<tr>
+<td>2. Huurprijs</td>
+<td>Bedrag excl. BTW + servicekosten</td>
+</tr>
+<tr>
+<td>3. Betaling</td>
+<td>Vooruitbetaling per maand, uiterlijk 1e van de maand</td>
+</tr>
+<tr>
+<td>4. Borg</td>
+<td>2 maanden huur, terugbetaling bij einde huur minus eventuele schade</td>
+</tr>
+<tr>
+<td>5. Duur + opzegging</td>
+<td>Onbepaalde tijd, opzegtermijn 1 kalendermaand</td>
+</tr>
+<tr>
+<td>6. Machinegebruik</td>
+<td>Gebruik uitsluitend na verplichte veiligheidsinstructie; huurder draagt eigen aansprakelijkheid bij ondeskundig gebruik</td>
+</tr>
+<tr>
+<td>7. KvK + verzekering</td>
+<td>Huurder toont KvK-uittreksel + bewijs bedrijfsaansprakelijkheidsverzekering bij aanvang</td>
+</tr>
+<tr>
+<td>8. Toegang</td>
+<td>24/7 met eigen sleutel/code; geen derden zonder toestemming</td>
+</tr>
+<tr>
+<td>9. Huisregels</td>
+<td>Afval scheiden, machines terugplaatsen en reinigen, geen gevaarlijke stoffen</td>
+</tr>
+<tr>
+<td>10. Aansprakelijkheid</td>
+<td>Verhuurder niet aansprakelijk voor schade aan eigendommen huurder; huurder aansprakelijk voor schade aan machines/pand</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p>[ ] <strong>8b</strong> Laat het modelcontract éénmalig checken door een jurist of notaris (~€150-250 voor review). Dit beschermt de BV bij eventuele geschillen.</p>
+</li>
+<li>
+<p>[ ] <strong>8c</strong> Sla het modelcontract op als Word/PDF-template. Voor elke nieuwe huurder: invullen, tweezijdig ondertekenen, archiveren.</p>
+</li>
+<li>
+<p>[ ] <strong>8d</strong> Stel een <strong>onboardingchecklist</strong> op per nieuwe huurder:</p>
+</li>
+<li>[ ] Contract getekend</li>
+<li>[ ] Borg ontvangen</li>
+<li>[ ] KvK-uittreksel ontvangen</li>
+<li>[ ] Bewijs AVB-verzekering ontvangen</li>
+<li>[ ] Veiligheidsinstructie machines gevolgd + getekend</li>
+<li>[ ] Sleutel/toegangscode verstrekt</li>
+<li>
+<p>[ ] In administratie opgenomen</p>
+</li>
+<li>
+<p>[ ] <strong>Verificatie:</strong> Modelcontract beschikbaar als template. Eerste huurder kan onboarden via de checklist.</p>
+</li>
+</ul>
+<hr />
+<h2>Samenvatting tijdlijn</h2>
+<table>
+<thead>
+<tr>
+<th>Taak</th>
+<th>Geschatte doorlooptijd</th>
+<th>Afhankelijk van</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 — Vennootschapsovereenkomst</td>
+<td>1 week</td>
+<td>Alle drie beschikbaar</td>
+</tr>
+<tr>
+<td>2 — Notaris oprichting</td>
+<td>1-2 weken na taak 1</td>
+<td>Notarisagenda</td>
+</tr>
+<tr>
+<td>3 — KvK bevestiging</td>
+<td>1-3 dagen na taak 2</td>
+<td>Automatisch</td>
+</tr>
+<tr>
+<td>4 — Bankrekening</td>
+<td>1-5 dagen na taak 3</td>
+<td>Bankverificatie</td>
+</tr>
+<tr>
+<td>5 — Machineoverdracht</td>
+<td>1 week</td>
+<td>Taxatie + accountant</td>
+</tr>
+<tr>
+<td>6 — Verzekeringen</td>
+<td>1-2 weken</td>
+<td>Offertes + beslissing</td>
+</tr>
+<tr>
+<td>7 — BTW-administratie</td>
+<td>2-3 weken</td>
+<td>Belastingdienst</td>
+</tr>
+<tr>
+<td>8 — Sub-huurcontracten</td>
+<td>1 week</td>
+<td>Juridische review</td>
+</tr>
+<tr>
+<td><strong>Totaal kritisch pad</strong></td>
+<td><strong>5-8 weken</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Eerste huurder kan pas instappen na:</strong> taak 6 (verzekering) + taak 8 (modelcontract).</p>
+</div>
+
+<div id="appendix-a" class="appendix-divider">
+  <div class="appendix-label">Aanhangsel A — Exploitatie-opzet (achtergrond &amp; onderbouwing)</div>
+</div>
+<div class="markdown-body">
+<h1>Werkplaats3b BV — Exploitatie-opzet</h1>
+<p><strong>Status:</strong> Ontwerp<br />
+<strong>Datum:</strong> 2026-06-11<br />
+<strong>Partijen:</strong> Harm · Matthijs · Wesley (elk 33,33%)<br />
+<strong>Locatie:</strong> Oud Camp 3b, Maasland (904 m²)</p>
+<hr />
+<h2>1. Juridische structuur</h2>
+<p><strong>Entiteit:</strong> Besloten Vennootschap (BV)</p>
+<p>Gekozen boven VOF vanwege:<br />
+- Actief machinegebruik door derden (formaatzaag, vlak-/vandiktebank, kantenbandmachine, rijgatenboormachine, afzuiging etc.)<br />
+- Huurders lopen zelf rond → aansprakelijkheidsrisico valt bij de BV, niet privé<br />
+- BV biedt de hardste schil: crediteuren/claimanten kunnen niet bij het privévermogen van de drie partners</p>
+<pre><code>Eigenaar Oud Camp 3b
+        │  huurcontract (€4.650/mnd kale huur)
+        ▼
+  Werkplaats3b BV
+  ─────────────────────────────────────────────
+  Aandeelhouders:  Harm 33,33%
+                   Matthijs 33,33%
+                   Wesley 33,33%
+  Bestuur: alle drie DGA
+  Machines: op balans van de BV
+        │
+        ├── sub-huurcontract → huurder A (werkplek hal)
+        ├── sub-huurcontract → huurder B (kantoor)
+        ├── sub-huurcontract → huurder C (opslag)
+        └── ...
+</code></pre>
+<p><strong>Besluitvorming:</strong> unanimiteit voor strategische besluiten (nieuw huurcontract pand, investeringen &gt;€5.000, partner toevoegen/uittreden). Gewone meerderheid (2/3) voor operationele besluiten. Vast te leggen in statuten bij oprichting.</p>
+<hr />
+<h2>2. Financiële onderbouwing</h2>
+<h3>Vaste lasten per maand</h3>
+<table>
+<thead>
+<tr>
+<th>Kostenpost</th>
+<th>/mnd</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Kale huur</td>
+<td>€4.650</td>
+</tr>
+<tr>
+<td>Servicekosten</td>
+<td>€450</td>
+</tr>
+<tr>
+<td>Elektriciteit</td>
+<td>€600</td>
+</tr>
+<tr>
+<td>Water</td>
+<td>€25</td>
+</tr>
+<tr>
+<td>OZB + rioolheffing</td>
+<td>€65</td>
+</tr>
+<tr>
+<td>Afvalverwerking (hout/rest)</td>
+<td>€225</td>
+</tr>
+<tr>
+<td>Verzekeringen (AVB + inventaris)</td>
+<td>€200</td>
+</tr>
+<tr>
+<td>Onderhoud + reservering machines</td>
+<td>€200</td>
+</tr>
+<tr>
+<td>Internet + alarm (Verisure) + koffie</td>
+<td>€175</td>
+</tr>
+<tr>
+<td>BV-administratie (accountant)</td>
+<td>€70</td>
+</tr>
+<tr>
+<td><strong>Totaal</strong></td>
+<td><strong>€6.660</strong></td>
+</tr>
+</tbody>
+</table>
+<h3>Inkomsten (tarieven website)</h3>
+<table>
+<thead>
+<tr>
+<th>Product</th>
+<th>Prijs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Werkplek hal (vaste plek)</td>
+<td>vanaf €850/mnd</td>
+</tr>
+<tr>
+<td>Kantoorruimte</td>
+<td>vanaf €650/mnd</td>
+</tr>
+<tr>
+<td>Opslagruimte</td>
+<td>vanaf €250/mnd</td>
+</tr>
+<tr>
+<td>Servicekosten per werkplek</td>
+<td>€95/mnd</td>
+</tr>
+<tr>
+<td>Machine-abonnement (toeslag)</td>
+<td>€200-300/mnd</td>
+</tr>
+</tbody>
+</table>
+<h3>Break-even</h3>
+<p><strong>8 werkplekken à €850 = €6.800</strong> — vaste lasten gedekt.<br />
+Volle bezetting (12-15 units): €10.000-12.750 bruto/mnd → netto na kosten ~€3.300-6.100 voor de BV, verdeeld via dividend of DGA-salaris.</p>
+<hr />
+<h2>3. Machineoverdracht</h2>
+<p>De machines bevinden zich nu buiten de BV. Zij moeten formeel naar de BV toe.</p>
+<p><strong>Aanbevolen: Verkoop aan BV (optie A)</strong></p>
+<ol>
+<li>Partners laten de marktwaarde van alle machines taxeren (formaatzaag, vlak-/vandiktebank, rijgatenboormachine, lintzaag, afzuiging, perslucht, straalcabine, shapertool, etc.)</li>
+<li>BV betaalt dit bedrag uit het startkapitaal aan de partners (of verrekent bij oprichting)</li>
+<li>De kantenbandmachine wordt na oprichting als lease aangeschaft door de BV (is momenteel geen bezit van de partners)</li>
+<li>BV activeert de machines op de balans (afschrijvingstermijn 5-10 jaar afhankelijk van type)</li>
+<li>Voordeel: schone lijn, machines zijn BV-eigendom, aansprakelijkheid volledig bij BV</li>
+</ol>
+<p>Alternatief: <strong>Inbreng als aandelenkapitaal</strong> — machines worden ingebracht als gestort kapitaal bij oprichting (notarieel). Geen cashflow nodig, maar vereist taxatierapport.</p>
+<p>Niet aanbevolen: bruikleen (machines blijven privé) → aansprakelijkheidsschil is dan onvolledig.</p>
+<hr />
+<h2>4. Huurcontract &amp; sub-verhuur</h2>
+<p>Het huurcontract met de eigenaar van Oud Camp 3b wordt direct op naam van de <strong>BV</strong> afgesloten.</p>
+<p>De sub-huurcontracten met huurders worden gesloten door de BV als verhuurder. Per huurder: beschrijving gehuurde ruimte, huurprijs, servicekosten, opzegtermijn (aanbevolen: 1 maand, per kwartaal), borgsom (2 maanden), KvK + verzekering verplicht gesteld.</p>
+<hr />
+<h2>5. Verzekeringen (via BV)</h2>
+<table>
+<thead>
+<tr>
+<th>Dekking</th>
+<th>Toelichting</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bedrijfsaansprakelijkheid (AVB)</td>
+<td>Letsel/schade door derden op het terrein, bij machinegebruik</td>
+</tr>
+<tr>
+<td>Inventaris &amp; machines</td>
+<td>Brand, diefstal, beschadiging van de machines</td>
+</tr>
+<tr>
+<td>Rechtsbijstand zakelijk</td>
+<td>Geschillen met huurders of verhuurder</td>
+</tr>
+</tbody>
+</table>
+<p>AVB is verplicht vóór de eerste huurder de deur in loopt.</p>
+<hr />
+<h2>6. Oprichtingsvolgorde</h2>
+<table>
+<thead>
+<tr>
+<th>Stap</th>
+<th>Actie</th>
+<th>Wie</th>
+<th>Kosten</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Vennootschapsovereenkomst opstellen (verdeling, besluitvorming, uittreedregeling)</td>
+<td>Notaris of modelovereenkomst</td>
+<td>€300-500</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Oprichtingsakte BV bij notaris</td>
+<td>Notaris</td>
+<td>€1.200-1.700</td>
+</tr>
+<tr>
+<td>3</td>
+<td>KvK-registratie</td>
+<td>Automatisch na notaris</td>
+<td>€50</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Zakelijke bankrekening openen</td>
+<td>Bunq Business / KNAB / Rabo</td>
+<td>€0-10/mnd</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Machineoverdracht formaliseren</td>
+<td>Factuur of inbrengakte</td>
+<td>—</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Verzekeringen afsluiten (AVB + inventaris)</td>
+<td>Via verzekeraar</td>
+<td>~€200/mnd</td>
+</tr>
+<tr>
+<td>7</td>
+<td>BTW-nummer ontvangen (Belastingdienst)</td>
+<td>Automatisch na KvK</td>
+<td>—</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Sub-huurcontracten opstellen (model)</td>
+<td>Notaris of modelcontract</td>
+<td>€200-400</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Totale oprichtingskosten: ~€1.750-2.650 eenmalig</strong></p>
+<hr />
+<h2>7. Openstaande punten</h2>
+<ul>
+<li>[ ] Machines laten taxeren (onafhankelijke taxateur of gezamenlijke waardering)</li>
+<li>[ ] Naam BV definitief vaststellen (Werkplaats3b BV of anders)</li>
+<li>[ ] Notaris selecteren</li>
+<li>[ ] Startkapitaal regelen (minimaal €0,01 wettelijk; praktisch €5.000-10.000 voor eerste maanden)</li>
+<li>[ ] Uittreedregeling: wat als een van de drie wil stoppen of zijn aandeel wil verkopen?</li>
+<li>[ ] Kantenbandmachine: lease-offerte opvragen na oprichting BV</li>
+</ul>
+<hr />
+<p><em>Bronnen: kostenspreadsheet werkplaats (okt 2025), content.js werkplaats17 website, WA-groep werkplaats-werkgroep.</em></p>
+</div>
+
+<div class="page-footer">
+  <span>Werkplaats3b BV &mdash; Oprichtingsplan</span>
+  <span>Vertrouwelijk &middot; 2026-06-11</span>
+</div>
+
+</body>
+</html>

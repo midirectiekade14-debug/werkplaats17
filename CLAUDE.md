@@ -1,11 +1,11 @@
-# Werkplaats17
+# Werkplaats3b
 
 Marketing website for a professional workspace/makerspace in Rotterdam. Static HTML site deployed via GitHub Pages.
 
 ## Stack
 
 - Plain HTML, CSS, JavaScript (no framework, no build step)
-- GitHub Pages deployment (gh-pages branch = production)
+- GitHub Pages vanaf master (push naar master = deploy)
 
 ## Key Commands
 
@@ -30,4 +30,4 @@ git add -A && git commit -m "update" && git push
 - Content changes go in `content.js` (structured as `CONTENT` object)
 - Dutch language site
 - Auto-deploy: any push triggers GitHub Pages update
-- Git remote: `https://github.com/midirectiekade14-debug/werkplaats17.git`
+- Git remote: `https://github.com/midirectiekade14-debug/werkplaats3b.git`

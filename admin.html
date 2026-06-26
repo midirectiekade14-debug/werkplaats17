@@ -533,7 +533,7 @@ textarea.ce-input{min-height:60px;resize:vertical}
   <div class="modal">
     <h2>GitHub Token</h2>
     <p>Eenmalige setup. Token wordt opgeslagen in je browser zodat Opslaan direct publiceert.</p>
-    <input type="text" id="gh-repo" placeholder="user/repo" value="midirectiekade14-debug/werkplaats17">
+    <input type="text" id="gh-repo" placeholder="user/repo" value="midirectiekade14-debug/werkplaats3b">
     <input type="password" id="gh-token" placeholder="GitHub token (gh auth token)">
     <p style="font-size:7px;color:var(--muted);margin-top:6px">Tip: run <code>gh auth token</code> in terminal voor een werkende token</p>
     <div class="modal-btns">
@@ -1120,7 +1120,7 @@ function ceInit(){
 function ghDecode(b64){return decodeURIComponent(escape(atob(b64.replace(/\s/g,''))));}
 
 async function ceLoadFromGitHub(){
-  var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats17';
+  var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats3b';
   var token=localStorage.getItem('w17-gh-token');
   document.getElementById('ce-status').textContent='Content laden...';
   try{
@@ -1370,7 +1370,7 @@ function pmInit(){
 }
 
 async function pmLoadFromGitHub(){
-  var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats17';
+  var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats3b';
   var token=localStorage.getItem('w17-gh-token');
   document.getElementById('pm-status').textContent='Foto\'s laden...';
   try{
@@ -1392,7 +1392,7 @@ async function pmLoadFromGitHub(){
 }
 
 function pmRenderSlots(){
-  var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats17';
+  var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats3b';
   // Hero
   var heroSlot=document.querySelector('[data-slot="hero"]');
   pmRenderSlot(heroSlot,pmPhotos.hero,'hero');
@@ -1409,7 +1409,7 @@ function pmRenderSlot(slot,photoPath,slotId){
   var pending=pmPendingUploads[slotId];
   function _ov(s,sid){var o=document.createElement('div');o.className='pm-overlay';var c=document.createElement('button');c.className='pm-overlay-btn change';c.textContent='Wijzig';c.onclick=function(e){e.stopPropagation();pmPick(sid);};var r=document.createElement('button');r.className='pm-overlay-btn remove';r.textContent='Verwijder';r.onclick=function(e){e.stopPropagation();pmRemove(sid);};o.appendChild(c);o.appendChild(r);s.appendChild(o);}
   if(pending){slot.classList.add('has-photo');var img=document.createElement('img');img.src=pending.dataUrl;img.alt='preview';slot.appendChild(img);_ov(slot,slotId);}
-  else if(photoPath){var url;if(pmLocalCache[photoPath]){url=pmLocalCache[photoPath];}else{var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats17';url='https://raw.githubusercontent.com/'+repo+'/master/'+photoPath+'?t='+Date.now();}slot.classList.add('has-photo');var img=document.createElement('img');img.src=url;img.alt='foto';slot.appendChild(img);_ov(slot,slotId);}
+  else if(photoPath){var url;if(pmLocalCache[photoPath]){url=pmLocalCache[photoPath];}else{var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats3b';url='https://raw.githubusercontent.com/'+repo+'/master/'+photoPath+'?t='+Date.now();}slot.classList.add('has-photo');var img=document.createElement('img');img.src=url;img.alt='foto';slot.appendChild(img);_ov(slot,slotId);}
   else{slot.classList.remove('has-photo');var ic=document.createElement('span');ic.className='pm-icon';ic.textContent='+';var lb=document.createElement('span');lb.className='pm-label';lb.textContent='Klik of sleep een foto';slot.appendChild(ic);slot.appendChild(lb);}
 }
 
@@ -1514,7 +1514,7 @@ function toast(msg,type){
 })();
 
 async function getGHConfig(){
-  var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats17';
+  var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats3b';
   var token=localStorage.getItem('w17-gh-token');
   if(!token){document.getElementById('token-modal').classList.add('show');return null;}
   return{repo:repo,token:token};
