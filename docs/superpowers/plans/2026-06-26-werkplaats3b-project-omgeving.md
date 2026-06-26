@@ -249,8 +249,12 @@ PROJECT_GRAPHS: dict[str, Path] = {
         "C--Users-midir-Documents-Claude-Projects-Dispuut-BMI-MVGM" / "memory" / "graphify-out" / "graph.json",
     "werkplaats3b": Path.home() / ".claude" / "projects" /
         "C--Users-midir-projects-werkplaats3b" / "memory" / "graphify-out" / "graph.json",
+    "werkplaats17": Path.home() / ".claude" / "projects" /
+        "C--Users-midir-projects-werkplaats3b" / "memory" / "graphify-out" / "graph.json",
 }
 ```
+
+> **Opmerking:** `"werkplaats17"` is een fallback voor zolang de lokale map nog niet hernoemd is. Na `ren werkplaats17 werkplaats3b` kan die regel verwijderd worden.
 
 - [ ] **Stap 2: Test de routing-logica**
 
