@@ -1,5 +1,5 @@
 // Werkplaats3b -- Geplaatste objecten
-// Laatst gewijzigd: 2026-04-10T13:45:10.291Z
+// Laatst gewijzigd: 2026-06-27T07:44:42.981Z
 // Gegenereerd via admin.html
 
 const PLACED_OBJECTS = [
@@ -560,6 +560,34 @@ const PLACED_OBJECTS = [
     "bg": "rgba(176,192,208,0.10)",
     "type": "door",
     "rot": "180",
+    "status": "",
+    "room": ""
+  },
+  {
+    "floor": 0,
+    "x": 618,
+    "y": 660,
+    "w": 30,
+    "h": 24,
+    "l": "",
+    "c": "#b0c0d0",
+    "bg": "rgba(176,192,208,0.10)",
+    "type": "door",
+    "rot": "0",
+    "status": "",
+    "room": ""
+  },
+  {
+    "floor": 0,
+    "x": 981,
+    "y": 660,
+    "w": 30,
+    "h": 24,
+    "l": "",
+    "c": "#b0c0d0",
+    "bg": "rgba(176,192,208,0.10)",
+    "type": "door",
+    "rot": "0",
     "status": "",
     "room": ""
   }
