@@ -5,13 +5,13 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 const CONTENT = {
-  "siteTitle": "Werkplaats3b — Professionele werkruimte Maasland",
-  "metaDescription": "Multifunctionele bedrijfsruimte voor vakmensen en kleine studio's. 904 m² met kantoren, bedrijfshal en machines. Oud Camp 3b, Maasland.",
-  "ogDescription": "Multifunctionele bedrijfsruimte voor vakmensen en kleine studio's. Bedrijfshal, kantoren, machines. Naast A20, Maasland.",
-  "eyebrow": "Beschikbaar · Maasland",
+  "siteTitle": "Werkplaats3b — Professionele werkruimte Rotterdam - Den Haag",
+  "metaDescription": "Multifunctionele bedrijfsruimte voor vakmensen en kleine studio's. 904 m² met kantoren, Huurbare werkruimte en machinale. Oud Camp 3b, Maasland.",
+  "ogDescription": "Multifunctionele bedrijfsruimte voor vakmensen en kleine studio's. Productieruimte, kantoren, machinale. Naast A20, Maasland.",
+  "eyebrow": "Beschikbaar · Oud Camp 3B · Maasland",
   "tagline": "Multifunctionele bedrijfsruimte voor professionele makers",
-  "locationText": "Oud Camp 3b · Maasland · Naast A20 · 15 min Den Haag / Rotterdam",
-  "introText": "Werkplaats3b is een <strong>multifunctionele bedrijfsruimte van 904 m²</strong> voor zelfstandige vakmensen en kleine studio's. <br>Hier werken professionele en ambitieuze makers samen onder 1 dak aan aan mooie projecten. Hier kommen kennis, kunde en ambitie samen en gaan we voor kwaliteit! <br>Herken jij je hierin dan wordt het tijd voor een kennismaking. <br><br>Stel het klikt en we zien elkaar wel zitten dan krijg je een contract wat per kwartaal opzegbaar is, betaal je 2 maanden huur als borg en kun je meteen aan de gang. <br>",
+  "locationText": "Oud Camp 3b · Maasland · Naast A20 · 15 minuten van Den Haag / Rotterdam / Delft",
+  "introText": "Werkplaats3b is een <strong>multifunctionele bedrijfsruimte van 904 m²</strong> voor zelfstandige vakmensen en kleine studio's. <br>Hier werken professionele en ambitieuze makers samen onder 1 dak aan aan mooie projecten. Hier kommen kennis, kunde en ambitie samen en gaan we voor kwaliteit! <br>Herken jij je hierin? Dan wordt het tijd voor een kennismaking. <br><br>Stel het klikt en we zien elkaar wel zitten dan krijg je een contract wat per kwartaal opzegbaar is, betaal je 2 maanden huur als borg en kun je meteen aan de gang. <br>",
   "accessItems": [
     "904 m² · hal 719 m² · kantoor 185 m²",
     "24/7 toegang"
@@ -19,19 +19,19 @@ const CONTENT = {
   "offers": [
     {
       "title": "Machinale en opslag",
-      "text": "400 m² begane grond. Vloerverwarming en LED-verlichting."
+      "text": "400 m² begane grond. Vloerverwarming, LED-verlichting, Krachtstroom"
     },
     {
-      "title": "Kantoren en verhuurbare werkruimtes",
-      "text": "Receptie en drie kantoorruimtes op de begane grond. Twee kantoren op de 2e verdieping met keukenblok."
+      "title": "Verhuurbare werkruimtes 25m2 met opslag.",
+      "text": "We hebben kant en klare werkplekken van 25m2 inclusief stroompunten, perslucht en verlichting. Past je project niet in je ruimte bouw je verder op de flexspace."
     },
     {
-      "title": "Verdiepingsvloer met verhuurbare ateliers",
-      "text": "221 m² op de eerste verdieping. Magazijn en opslagruimte op de begane grond."
+      "title": "Kantoren ",
+      "text": "220 m² op de eerste verdieping. Magazijn en opslagruimte op de begane grond."
     },
     {
       "title": "Faciliteiten",
-      "text": "Airco, glasvezel, alarmsysteem, keuken, elektrische overheaddeur, vloerverwarming."
+      "text": "Airco, glasvezel, alarmsysteem, keuken, elektrische overheaddeur, vloerverwarming, flexplekken, ontvangstruimte voor klanten"
     }
   ],
   "machines": [
