@@ -553,7 +553,7 @@ textarea.ce-input{min-height:60px;resize:vertical}
 // ╔════════════════════════════════════════════╗
 // ║  AUTH                                      ║
 // ╚════════════════════════════════════════════╝
-const PASS_HASH='0e122c4826c8a99766c3bdbeb89ba9e7446f9ff73b61996e5deed73c48fce803';
+const PASS_HASH='41ecb88113b15489abb689a2342ccb8cb15a823eeeb9729cff6061a3bc3fa7a4';
 async function sha256(m){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(m));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');}
 const authGate=document.getElementById('auth-gate');
 if(sessionStorage.getItem('w17auth')==='ok'){authGate.style.display='none';document.getElementById('editor').style.display='flex';setTimeout(init,0);}
