@@ -126,7 +126,7 @@ const CONTENT = {
   "contactLines": [
     "Oud Camp 3b, Maasland (naast A20)",
     "Beperkt aantal plekken beschikbaar",
-    "Rondleiding op afspraak"
+    "Bezichtiging op afspraak"
   ],
   "instagramHandle": "@werkplaats3b",
   "instagramUrl": "https://instagram.com/werkplaats3b",
