@@ -391,6 +391,7 @@
     width: 100%;
     overflow: hidden;
     border: 1px solid var(--line);
+    height: 420px;
   }
   .fp-canvas #fp {
     position: relative;
@@ -1475,13 +1476,13 @@ window._initFloorplan=function(){
     });
     var pad=40, bw=maxX-minX+pad*2, bh=maxY-minY+pad*2;
     var rect=cv.getBoundingClientRect();
-    var zoom=rect.width/bw;
-    var panX=-(minX-pad)*zoom;
-    var panY=-(minY-pad)*zoom;
+    var scaleX=rect.width/bw, scaleY=rect.height/bh;
+    var zoom=Math.min(scaleX,scaleY,2); zoom=Math.max(zoom,0.3);
+    var panX=-(minX-pad)*zoom+(rect.width-bw*zoom)/2;
+    var panY=-(minY-pad)*zoom+(rect.height-bh*zoom)/2;
     fp.style.width=FPW+'px';
     fp.style.height=FPH+'px';
     fp.style.transform='translate('+panX+'px,'+panY+'px) scale('+zoom+')';
-    cv.style.height=Math.ceil(bh*zoom)+'px';
     var g=fp.querySelector('.fp-grid');
     if(!g){g=document.createElement('div');g.className='fp-grid';fp.insertBefore(g,fp.firstChild);}
     g.style.cssText='position:absolute;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:'+S*1000+'px '+S*1000+'px';
@@ -1536,6 +1537,6 @@ window._initFloorplan=function(){
   }
 
   window.fpShow=function(f){renderFloor(f);};
-  renderFloor(0);
+  requestAnimationFrame(function(){renderFloor(0);});
 };
 </script>
