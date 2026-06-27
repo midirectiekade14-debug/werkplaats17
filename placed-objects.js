@@ -1,5 +1,5 @@
 // Werkplaats3b -- Geplaatste objecten
-// Laatst gewijzigd: 2026-06-27T07:44:42.981Z
+// Laatst gewijzigd: 2026-06-27T08:16:24.083Z
 // Gegenereerd via admin.html
 
 const PLACED_OBJECTS = [
@@ -201,9 +201,9 @@ const PLACED_OBJECTS = [
   },
   {
     "floor": 2,
-    "x": 837,
+    "x": 840,
     "y": 405,
-    "w": 60,
+    "w": 56,
     "h": 33,
     "l": "Keuken",
     "c": "#8cc88c",
@@ -217,7 +217,7 @@ const PLACED_OBJECTS = [
     "floor": 2,
     "x": 759,
     "y": 405,
-    "w": 78,
+    "w": 81,
     "h": 33,
     "l": "Berging",
     "c": "#a08c78",
@@ -231,8 +231,8 @@ const PLACED_OBJECTS = [
     "floor": 2,
     "x": 723,
     "y": 405,
-    "w": 35,
-    "h": 66,
+    "w": 36,
+    "h": 68,
     "l": "Trap",
     "c": "#b48c50",
     "bg": "rgba(180,140,80,0.30)",
@@ -509,10 +509,10 @@ const PLACED_OBJECTS = [
   },
   {
     "floor": 2,
-    "x": 717,
-    "y": 153,
+    "x": 714,
+    "y": 156,
     "w": 30,
-    "h": 21,
+    "h": 15,
     "l": "",
     "c": "#b0c0d0",
     "bg": "rgba(176,192,208,0.10)",
@@ -587,6 +587,62 @@ const PLACED_OBJECTS = [
     "c": "#b0c0d0",
     "bg": "rgba(176,192,208,0.10)",
     "type": "door",
+    "rot": "0",
+    "status": "",
+    "room": ""
+  },
+  {
+    "floor": 0,
+    "x": 423,
+    "y": 774,
+    "w": 210,
+    "h": 120,
+    "l": "Formaatzaag 700x400",
+    "c": "#E09A2F",
+    "bg": "rgba(224,154,47,.13)",
+    "type": "",
+    "rot": "0",
+    "status": "",
+    "room": ""
+  },
+  {
+    "floor": 0,
+    "x": 777,
+    "y": 849,
+    "w": 54,
+    "h": 30,
+    "l": "Vlak/Vandiktebank",
+    "c": "#E09A2F",
+    "bg": "rgba(224,154,47,.13)",
+    "type": "",
+    "rot": "0",
+    "status": "",
+    "room": ""
+  },
+  {
+    "floor": 0,
+    "x": 648,
+    "y": 735,
+    "w": 30,
+    "h": 54,
+    "l": "Lintzaag",
+    "c": "#E09A2F",
+    "bg": "rgba(224,154,47,.13)",
+    "type": "",
+    "rot": "0",
+    "status": "",
+    "room": ""
+  },
+  {
+    "floor": 0,
+    "x": 765,
+    "y": 777,
+    "w": 36,
+    "h": 24,
+    "l": "Metaalzaag",
+    "c": "#d07828",
+    "bg": "rgba(208,120,40,.13)",
+    "type": "",
     "rot": "0",
     "status": "",
     "room": ""
