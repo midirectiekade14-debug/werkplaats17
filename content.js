@@ -19,15 +19,15 @@ const CONTENT = {
   "offers": [
     {
       "title": "Machinale en opslag",
-      "text": "400 m² begane grond. Vloerverwarming, LED-verlichting, Krachtstroom"
+      "text": "250 m² begane grond. Vloerverwarming, LED-verlichting, Krachtstroom"
     },
     {
       "title": "Verhuurbare werkruimtes 25m2 met opslag.",
       "text": "We hebben kant en klare werkplekken van 25m2 inclusief stroompunten, perslucht en verlichting. Past je project niet in je ruimte bouw je verder op de flexspace."
     },
     {
-      "title": "Kantoren ",
-      "text": "220 m² op de eerste verdieping. Magazijn en opslagruimte op de begane grond."
+      "title": "Kantoren en ontvangstruimte",
+      "text": "150m2 op de begane grond. "
     },
     {
       "title": "Faciliteiten",
