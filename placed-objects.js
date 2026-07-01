@@ -1,5 +1,5 @@
 // Werkplaats3b -- Geplaatste objecten
-// Laatst gewijzigd: 2026-06-27T08:41:14.900Z
+// Laatst gewijzigd: 2026-07-01T15:15:01.729Z
 // Gegenereerd via admin.html
 
 const PLACED_OBJECTS = [
@@ -132,7 +132,7 @@ const PLACED_OBJECTS = [
   {
     "floor": 0,
     "x": 1140,
-    "y": 837,
+    "y": 861,
     "w": 81,
     "h": 65,
     "l": "Entree",
@@ -146,7 +146,7 @@ const PLACED_OBJECTS = [
   {
     "floor": 0,
     "x": 1047,
-    "y": 837,
+    "y": 861,
     "w": 93,
     "h": 65,
     "l": "Toiletgroep",
@@ -342,7 +342,7 @@ const PLACED_OBJECTS = [
   {
     "floor": 0,
     "x": 1140,
-    "y": 873,
+    "y": 897,
     "w": 45,
     "h": 29,
     "l": "Trap",
@@ -383,8 +383,8 @@ const PLACED_OBJECTS = [
   },
   {
     "floor": 0,
-    "x": 1155,
-    "y": 816,
+    "x": 1152,
+    "y": 840,
     "w": 30,
     "h": 24,
     "l": "",
@@ -482,7 +482,7 @@ const PLACED_OBJECTS = [
   {
     "floor": 0,
     "x": 1134,
-    "y": 843,
+    "y": 867,
     "w": 30,
     "h": 24,
     "l": "",
