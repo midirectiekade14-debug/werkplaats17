@@ -11,7 +11,7 @@ const CONTENT = {
   "eyebrow": "Beschikbaar",
   "tagline": "Voor makers met ambitie!",
   "locationText": "Oud Camp 3b · Maasland · Naast A20 · 15 minuten van Den Haag / Rotterdam / Delft",
-  "introText": "Werkplaats3b is een <strong>multifunctionele bedrijfsruimte van 904 m²</strong> voor zelfstandige vakmensen en kleine studio's. <br><br>Hier werken professionele en ambitieuze makers samen onder 1 dak aan aan mooie projecten. Hier kommen kennis, kunde en ambitie samen en gaan we voor kwaliteit! <br><br>Herken jij je hierin? Dan wordt het tijd voor een kennismaking. <br><br>Stel het klikt en we zien elkaar wel zitten dan krijg je een contract wat per kwartaal opzegbaar is, betaal je 2 maanden huur als borg en kun je meteen aan de gang. <br>",
+  "introText": "Werkplaats3b is een <strong>multifunctionele bedrijfsruimte van 904 m²</strong> voor zelfstandige vakmensen en kleine studio's. <br> <br><br>Hier werken professionele en ambitieuze makers samen onder 1 dak aan aan mooie projecten. Hier kommen kennis, kunde en ambitie samen en gaan we voor kwaliteit! <br> <br><br>Herken jij je hierin? Dan wordt het tijd voor een kennismaking. <br> <br><br>Stel het klikt en we zien elkaar wel zitten dan krijg je een contract wat per kwartaal opzegbaar is, betaal je 2 maanden huur als borg en kun je meteen aan de gang. <br>",
   "accessItems": [
     "904 m² · hal 719 m² · kantoor 185 m²",
     "24/7 toegang"
@@ -86,21 +86,21 @@ const CONTENT = {
   ],
   "pricing": [
     {
-      "label": "Werkplek in de hal",
+      "label": "Werkplek 25m2",
       "sub": "Eigen ruimte met flexspace voor de grotere projecten",
       "price": "Vanaf €850",
       "unit": "/mnd"
     },
     {
       "label": "Kantoorruimte",
-      "sub": "Eigen afgesloten kantoor · begane grond of 2e verdieping",
+      "sub": "Eigen afgesloten kantoorruimte · begane grond of 2e verdieping",
       "price": "Vanaf €650",
       "unit": "/mnd"
     },
     {
       "label": "Opslagruimte",
       "sub": "1e verdieping · flexibel in te delen",
-      "price": "Vanaf €250",
+      "price": "Vanaf €150",
       "unit": "/mnd"
     },
     {
