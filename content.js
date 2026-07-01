@@ -9,7 +9,7 @@ const CONTENT = {
   "metaDescription": "",
   "ogDescription": "Multifunctionele bedrijfsruimte voor vakmensen en kleine studio's. Productieruimte, kantoren, machinale. Naast A20, Maasland.",
   "eyebrow": "Beschikbaar",
-  "tagline": "Voor makers met ambitie!",
+  "tagline": "VOOR MAKERS MET AMBITIE!",
   "locationText": "Oud Camp 3b · Maasland · Naast A20 · 15 minuten van Den Haag / Rotterdam / Delft",
   "introText": "Werkplaats3b is een <strong>multifunctionele bedrijfsruimte van 904 m²</strong> voor zelfstandige vakmensen en kleine studio's. <br> <br><br>Hier werken professionele en ambitieuze makers samen onder 1 dak aan aan mooie projecten. Hier kommen kennis, kunde en ambitie samen en gaan we voor kwaliteit! <br> <br><br>Herken jij je hierin? Dan wordt het tijd voor een kennismaking. <br> <br><br>Stel het klikt en we zien elkaar wel zitten dan krijg je een contract wat per kwartaal opzegbaar is, betaal je 2 maanden huur als borg en kun je meteen aan de gang. <br>",
   "accessItems": [
