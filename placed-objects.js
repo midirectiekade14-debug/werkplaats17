@@ -1,5 +1,5 @@
 // Werkplaats3b -- Geplaatste objecten
-// Laatst gewijzigd: 2026-07-01T15:15:01.729Z
+// Laatst gewijzigd: 2026-07-01T17:43:58.600Z
 // Gegenereerd via admin.html
 
 const PLACED_OBJECTS = [
@@ -8,7 +8,7 @@ const PLACED_OBJECTS = [
     "x": 336,
     "y": 531,
     "w": 885,
-    "h": 394,
+    "h": 396,
     "l": "",
     "c": "#e09a2f",
     "bg": "rgba(224,154,47,0.13)",
