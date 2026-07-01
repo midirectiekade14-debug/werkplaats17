@@ -6,7 +6,7 @@
 
 const CONTENT = {
   "siteTitle": "Werkplaats3b — Professionele werkruimte Rotterdam - Den Haag",
-  "metaDescription": "Multifunctionele bedrijfsruimte voor vakmensen en kleine studio's. 904 m² met kantoren, Huurbare werkruimte en machinale. Oud Camp 3b, Maasland.",
+  "metaDescription": "Voor makers met ambitie!",
   "ogDescription": "Multifunctionele bedrijfsruimte voor vakmensen en kleine studio's. Productieruimte, kantoren, machinale. Naast A20, Maasland.",
   "eyebrow": "Beschikbaar",
   "tagline": "Multifunctionele bedrijfsruimte voor professionele makers",
