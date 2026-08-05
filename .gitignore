@@ -18,10 +18,10 @@ Thumbs.db
 dist/
 
 # Bedrijfsvoering-workspace (samengevoegd 2026-08-05, niet publiek)
-/Tekening werkplaats/
-/docs/
-/funda-fotos-nieuwe-locatie/
-/marketing/
+/bedrijfsvoering/
 /.claude/CLAUDE.md
 /.claude/INDEX.md
 /.claude/session_state.md
+
+# Stale duplicaat, vergrendeld tijdens verplaatsing 2026-08-05 -- handmatig opruimen zodra vrij
+/Tekening werkplaats/
