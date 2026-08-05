@@ -1,28 +1,15 @@
 # Werkplaats3b — website
 
-> ## ⚠ MAPNAAM ≠ PROJECTNAAM — dit is bewuste divergentie, niet hernoemen
->
-> Deze map heet `werkplaats17`, maar bevat de **werkplaats3b**-repo (Maasland).
-> Alles hieronder klopt; de mapnaam is historisch.
->
-> | | |
-> |---|---|
-> | Map | `~/projects/werkplaats17/` |
-> | Repo | `midirectiekade14-debug/werkplaats3b` |
-> | Site | werkplaats3b.nl (CNAME) · Pages vanaf `master` |
-> | Locatie | Oud Camp 3B, Maasland |
->
-> **Waarom niet hernoemd (besluit 2026-07-28):** `~/projects/werkplaats3b/` is al bezet
-> door de businesscase-workspace (huurcontract, BV, BAL) — hernoemen botst frontaal.
-> Een derde naam (`werkplaats3b-site`) zou de sessie-historie in
-> `~/.claude/projects/C--Users-midir-projects-werkplaats17/` (~5 MB transcripts) wezen
-> en 8+ harness-verwijzingen breken, tegenover nul functionele winst: routing dekt beide
-> namen al (`route-project-index.py` mapt `werkplaats17` én `werkplaats3b` op dezelfde graph).
->
-> **Zustermap** `~/projects/werkplaats17-rotterdam/` klopt wél — dat is écht werkplaats17
-> (Van Maasdijkweg 29, Rotterdam), repo `werkplaats17-rotterdam`, branch `main`.
+> **Geschiedenis mapnaam:** deze repo woonde t/m 2026-08-05 in `~/projects/werkplaats17/`
+> (bewuste divergentie, besluit 2026-07-28 — zie git-historie voor de volledige
+> kosten-afweging). Op 2026-08-05 samengevoegd met de businesscase-workspace in
+> `~/projects/werkplaats3b/`; deze map is nu zowel de site-repo (root) als de
+> businesscase-workspace (`.claude/CLAUDE.md`, `.claude/INDEX.md`, `.claude/session_state.md`
+> — gitignored, niet publiek). Zustermap `~/projects/werkplaats17-rotterdam/` is écht
+> werkplaats17 (Van Maasdijkweg 29, Rotterdam), repo `werkplaats17-rotterdam`, branch `main`.
 
-Deze repo = alleen de website (werkplaats3b.nl). Bedrijfsvoering, huurcontract, BV-oprichting, BAL → **workspace** `~/projects/werkplaats3b/` (eigen CLAUDE.md).
+Deze repo = de website (werkplaats3b.nl). Bedrijfsvoering, huurcontract, BV-oprichting, BAL
+→ zie `.claude/CLAUDE.md` in dezelfde map.
 
 Static HTML site deployed via GitHub Pages.
 

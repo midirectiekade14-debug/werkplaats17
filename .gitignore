@@ -16,3 +16,12 @@ Thumbs.db
 
 # Build
 dist/
+
+# Bedrijfsvoering-workspace (samengevoegd 2026-08-05, niet publiek)
+/Tekening werkplaats/
+/docs/
+/funda-fotos-nieuwe-locatie/
+/marketing/
+/.claude/CLAUDE.md
+/.claude/INDEX.md
+/.claude/session_state.md
