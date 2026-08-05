@@ -1561,12 +1561,13 @@ async function publishFile(path,content,message,btn){
     // Prefer cached SHA from last successful PUT (authoritative), fallback to fresh GET
     var sha=shaCache[path]||await freshSha();
     var r2=await attemptPut(sha);
-    // 409/422 = SHA conflict → retry once with freshly fetched SHA
+    // 409/422 = SHA conflict: iemand anders (git push, andere admin-tab) wijzigde dit bestand
+    // sinds deze tab laadde. NOOIT blind retrien met de verouderde inhoud van dit tabblad --
+    // dat overschrijft de tussentijdse wijziging stil (was de bug achter terugspringende
+    // content.js-velden bij plattegrond-only saves).
     if(r2.status===409||r2.status===422){
-      console.warn('[publishFile] SHA conflict, retrying with fresh SHA');
       delete shaCache[path];
-      var freshSha2=await freshSha();
-      r2=await attemptPut(freshSha2);
+      throw new Error(path+' is gewijzigd door iemand anders sinds je deze pagina laadde. Herlaad de pagina en breng je wijziging opnieuw aan -- er is niets gepubliceerd.');
     }
     if(!r2.ok){var err={};try{err=await r2.json();}catch(_){}if(r2.status===401||r2.status===403){localStorage.removeItem('w17-gh-token');document.getElementById('token-modal').classList.add('show');throw new Error('Token verlopen — voer een nieuwe token in');}throw new Error(err.message||'HTTP '+r2.status);}
     // Remember the new SHA from the PUT response for next save
@@ -1610,10 +1611,10 @@ async function publishBinary(path,b64Data,message){
     console.log('[publishBinary] start',path);
     var sha=shaCache[path]||await getSha();
     var r2=await attemptPut(sha);
+    // Zelfde conflict-regel als publishFile(): stoppen, niet blind overschrijven.
     if(r2.status===409||r2.status===422){
-      console.warn('[publishBinary] SHA conflict, retrying with fresh SHA');
       delete shaCache[path];
-      r2=await attemptPut(await getSha());
+      throw new Error(path+' is gewijzigd door iemand anders sinds je deze pagina laadde. Herlaad de pagina en probeer de upload opnieuw -- er is niets gepubliceerd.');
     }
     if(!r2.ok){var err={};try{err=await r2.json();}catch(_){}if(r2.status===401||r2.status===403){localStorage.removeItem('w17-gh-token');document.getElementById('token-modal').classList.add('show');}throw new Error(err.message||'HTTP '+r2.status);}
     var putData=await r2.json();
