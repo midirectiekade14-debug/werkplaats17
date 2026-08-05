@@ -1,5 +1,5 @@
 // Werkplaats3b -- Geplaatste objecten
-// Laatst gewijzigd: 2026-08-05T13:00:10.962Z
+// Laatst gewijzigd: 2026-08-05T13:02:58.125Z
 // Gegenereerd via admin.html
 
 const PLACED_OBJECTS = [
@@ -341,13 +341,13 @@ const PLACED_OBJECTS = [
   },
   {
     "floor": 0,
-    "x": 1140,
+    "x": 1047,
     "y": 897,
-    "w": 45,
+    "w": 93,
     "h": 29,
     "l": "Trap",
     "c": "#b48c50",
-    "bg": "rgba(180,140,80,0.30)",
+    "bg": "rgba(180,140,80,0.26)",
     "type": "",
     "rot": "0",
     "status": "",
@@ -622,10 +622,10 @@ const PLACED_OBJECTS = [
   {
     "floor": 0,
     "x": 921,
-    "y": 839,
+    "y": 840,
     "w": 126,
     "h": 87,
-    "l": "Platenstellingo",
+    "l": "Platenrekken",
     "c": "#a08060",
     "bg": "rgba(160,128,96,0.15)",
     "type": "",
@@ -688,5 +688,33 @@ const PLACED_OBJECTS = [
     "rot": "0",
     "status": "",
     "room": ""
+  },
+  {
+    "floor": 1,
+    "x": 669,
+    "y": 419,
+    "w": 110,
+    "h": 21,
+    "l": "Berging",
+    "c": "#a08c78",
+    "bg": "rgba(160,140,120,0.13)",
+    "type": "",
+    "rot": "0",
+    "status": "",
+    "room": "1"
+  },
+  {
+    "floor": 1,
+    "x": 669,
+    "y": 468,
+    "w": 110,
+    "h": 21,
+    "l": "Berging",
+    "c": "#a08c78",
+    "bg": "rgba(160,140,120,0.13)",
+    "type": "",
+    "rot": "0",
+    "status": "",
+    "room": "1"
   }
 ];
