@@ -18,10 +18,9 @@ Thumbs.db
 dist/
 
 # Bedrijfsvoering-workspace (samengevoegd 2026-08-05, niet publiek)
+# CLAUDE.md/INDEX.md/session_state.md wonen in bedrijfsvoering/, niet .claude/ --
+# .claude/ verloor stil alle eigen bestanden tijdens deze sessie (incident 2026-08-05).
 /bedrijfsvoering/
-/.claude/CLAUDE.md
-/.claude/INDEX.md
-/.claude/session_state.md
 
 # Stale duplicaat, vergrendeld tijdens verplaatsing 2026-08-05 -- handmatig opruimen zodra vrij
 /Tekening werkplaats/

@@ -1125,7 +1125,7 @@ async function ceLoadFromGitHub(){
   document.getElementById('ce-status').textContent='Content laden...';
   try{
     if(token){
-      var r=await fetch('https://api.github.com/repos/'+repo+'/contents/content.js',{headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github.v3+json'}});
+      var r=await fetch('https://api.github.com/repos/'+repo+'/contents/docs/content.js',{headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github.v3+json'}});
       if(r.ok){
         var data=await r.json();
         var raw=ghDecode(data.content);
@@ -1328,7 +1328,7 @@ window.ceSave=async function(){
     toast('Opslaan...');
     var js=ceGenerateJS();
     console.log('[ceSave] bytes:',js.length);
-    var ok=await publishFile('content.js',js,'Content bijgewerkt via admin ('+new Date().toLocaleString('nl-NL')+')',btn);
+    var ok=await publishFile('docs/content.js',js,'Content bijgewerkt via admin ('+new Date().toLocaleString('nl-NL')+')',btn);
     console.log('[ceSave] publishFile ok:',ok);
     if(ok){
       document.getElementById('ce-status').textContent='Gepubliceerd om '+new Date().toLocaleTimeString('nl-NL');
@@ -1375,7 +1375,7 @@ async function pmLoadFromGitHub(){
   document.getElementById('pm-status').textContent='Foto\'s laden...';
   try{
     if(token){
-      var r=await fetch('https://api.github.com/repos/'+repo+'/contents/photos.js',{headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github.v3+json'}});
+      var r=await fetch('https://api.github.com/repos/'+repo+'/contents/docs/photos.js',{headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github.v3+json'}});
       if(r.ok){
         var data=await r.json();
         var raw=ghDecode(data.content);
@@ -1409,7 +1409,7 @@ function pmRenderSlot(slot,photoPath,slotId){
   var pending=pmPendingUploads[slotId];
   function _ov(s,sid){var o=document.createElement('div');o.className='pm-overlay';var c=document.createElement('button');c.className='pm-overlay-btn change';c.textContent='Wijzig';c.onclick=function(e){e.stopPropagation();pmPick(sid);};var r=document.createElement('button');r.className='pm-overlay-btn remove';r.textContent='Verwijder';r.onclick=function(e){e.stopPropagation();pmRemove(sid);};o.appendChild(c);o.appendChild(r);s.appendChild(o);}
   if(pending){slot.classList.add('has-photo');var img=document.createElement('img');img.src=pending.dataUrl;img.alt='preview';slot.appendChild(img);_ov(slot,slotId);}
-  else if(photoPath){var url;if(pmLocalCache[photoPath]){url=pmLocalCache[photoPath];}else{var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats3b';url='https://raw.githubusercontent.com/'+repo+'/master/'+photoPath+'?t='+Date.now();}slot.classList.add('has-photo');var img=document.createElement('img');img.src=url;img.alt='foto';slot.appendChild(img);_ov(slot,slotId);}
+  else if(photoPath){var url;if(pmLocalCache[photoPath]){url=pmLocalCache[photoPath];}else{var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats3b';url='https://raw.githubusercontent.com/'+repo+'/master/docs/'+photoPath+'?t='+Date.now();}slot.classList.add('has-photo');var img=document.createElement('img');img.src=url;img.alt='foto';slot.appendChild(img);_ov(slot,slotId);}
   else{slot.classList.remove('has-photo');var ic=document.createElement('span');ic.className='pm-icon';ic.textContent='+';var lb=document.createElement('span');lb.className='pm-label';lb.textContent='Klik of sleep een foto';slot.appendChild(ic);slot.appendChild(lb);}
 }
 
@@ -1457,7 +1457,7 @@ window.pmSave=async function(){
   if(total===0){
     // Alleen photos.js updaten (voor verwijderingen)
     var js=pmGenerateJS();
-    await publishFile('photos.js',js,'Foto referenties bijgewerkt via admin',btn);
+    await publishFile('docs/photos.js',js,'Foto referenties bijgewerkt via admin',btn);
     btn.disabled=false;
     return;
   }
@@ -1465,14 +1465,17 @@ window.pmSave=async function(){
   for(var i=0;i<keys.length;i++){
     var slotId=keys[i];
     var up=pmPendingUploads[slotId];
-    var filepath='photos/'+up.filename;
+    var sitePath='photos/'+up.filename;
+    var apiPath='docs/'+sitePath;
     progress.textContent='('+(done+1)+'/'+total+') '+up.filename+'...';
-    var ok=await publishBinary(filepath,up.b64,'Foto upload: '+up.filename+' via admin');
+    var ok=await publishBinary(apiPath,up.b64,'Foto upload: '+up.filename+' via admin');
     if(ok){
       // Update photos reference + cache dataUrl voor preview (raw.githubusercontent cached agressief)
-      if(slotId==='hero')pmPhotos.hero=filepath;
-      else{var idx=parseInt(slotId.split('-')[1]);pmPhotos.strip[idx]=filepath;}
-      pmLocalCache[filepath]=up.dataUrl;
+      // pmPhotos slaat de SITE-relatieve waarde op (photos/...) -- dat is wat index.html/render.js
+      // als browser-relatief pad gebruiken en blijft ongewijzigd correct na de docs/-verhuizing.
+      if(slotId==='hero')pmPhotos.hero=sitePath;
+      else{var idx=parseInt(slotId.split('-')[1]);pmPhotos.strip[idx]=sitePath;}
+      pmLocalCache[sitePath]=up.dataUrl;
       delete pmPendingUploads[slotId];
       done++;
     }else{
@@ -1482,7 +1485,7 @@ window.pmSave=async function(){
   progress.textContent='';
   // Save photos.js
   var js=pmGenerateJS();
-  var ok=await publishFile('photos.js',js,'Foto referenties bijgewerkt via admin',btn);
+  var ok=await publishFile('docs/photos.js',js,'Foto referenties bijgewerkt via admin',btn);
   if(ok){
     document.getElementById('pm-status').textContent=done+' foto\'s geüpload om '+new Date().toLocaleTimeString('nl-NL');
     pmRenderSlots();
@@ -1635,7 +1638,7 @@ document.getElementById('btn-save').addEventListener('click',async function(){
   var objs=serializeObjects();
   localStorage.setItem('w17-objects',JSON.stringify(objs));
   var js=generateJS(objs);
-  await publishFile('placed-objects.js',js,'Plattegrond bijgewerkt via admin ('+new Date().toLocaleString('nl-NL')+')',btn);
+  await publishFile('docs/placed-objects.js',js,'Plattegrond bijgewerkt via admin ('+new Date().toLocaleString('nl-NL')+')',btn);
 });
 
 document.getElementById('btn-export').addEventListener('click',function(){
@@ -1698,7 +1701,7 @@ async function init(){
   try{
     var gh=await getGHConfig();
     if(gh){
-      var r=await fetch('https://api.github.com/repos/'+gh.repo+'/contents/placed-objects.js',{
+      var r=await fetch('https://api.github.com/repos/'+gh.repo+'/contents/docs/placed-objects.js',{
         headers:{'Authorization':'Bearer '+gh.token,'Accept':'application/vnd.github.v3+json'}
       });
       if(r.ok){
