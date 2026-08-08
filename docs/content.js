@@ -6,20 +6,20 @@
 
 const CONTENT = {
   "siteTitle": "Werkplaats3b — Professionele werkruimte Rotterdam - Den Haag",
-  "metaDescription": "Multifunctionele bedrijfsruimte voor vakmensen en kleine studio's. 904 m² met kantoren, Huurbare werkruimte en machinale. Oud Camp 3b, Maasland.",
+  "metaDescription": "Multifunctionele bedrijfsruimte voor vakmensen en kleine studio's. 850 m² met kantoren, Huurbare werkruimte en machinale. Oud Camp 3b, Maasland.",
   "ogDescription": "Multifunctionele bedrijfsruimte voor vakmensen en kleine studio's. Productieruimte, kantoren, machinale. Naast A20, Maasland.",
   "eyebrow": "Beschikbaar",
   "tagline": "Multifunctionele bedrijfsruimte voor professionele makers",
   "locationText": "Oud Camp 3b · Maasland · Naast A20 · 15 minuten van Den Haag / Rotterdam / Delft",
-  "introText": "Werkplaats3b is een <strong>multifunctionele bedrijfsruimte van 904 m²</strong> voor zelfstandige vakmensen en kleine studio's. <br>Hier werken professionele en ambitieuze makers samen onder 1 dak aan aan mooie projecten. Hier kommen kennis, kunde en ambitie samen en gaan we voor kwaliteit! <br>Herken jij je hierin? Dan wordt het tijd voor een kennismaking. <br><br>Stel het klikt en we zien elkaar wel zitten dan krijg je een contract wat per kwartaal opzegbaar is, betaal je 2 maanden huur als borg en kun je meteen aan de gang. <br>",
+  "introText": "Werkplaats3b is een <strong>multifunctionele bedrijfsruimte van 850 m²</strong> voor zelfstandige vakmensen en kleine studio's. <br>Hier werken professionele en ambitieuze makers samen onder 1 dak aan aan mooie projecten. Hier kommen kennis, kunde en ambitie samen en gaan we voor kwaliteit! <br>Herken jij je hierin? Dan wordt het tijd voor een kennismaking. <br><br>Stel het klikt en we zien elkaar wel zitten dan krijg je een contract wat per kwartaal opzegbaar is, betaal je 2 maanden huur als borg en kun je meteen aan de gang. <br>",
   "accessItems": [
-    "904 m² · hal 719 m² · kantoor 185 m²",
+    "850 m² · 300 m² machinale · 300 m² ruimte om te bouwen",
     "24/7 toegang"
   ],
   "offers": [
     {
       "title": "Machinale en opslag",
-      "text": "250 m² begane grond. Vloerverwarming, LED-verlichting, Krachtstroom"
+      "text": "300 m² begane grond. Vloerverwarming, LED-verlichting, Krachtstroom"
     },
     {
       "title": "Verhuurbare werkruimtes 25m2 met opslag.",
