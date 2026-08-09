@@ -6,14 +6,14 @@
 
 const CONTENT = {
   "siteTitle": "Werkplaats3b — Professionele werkruimte Rotterdam - Den Haag",
-  "metaDescription": "Multifunctionele bedrijfsruimte voor vakmensen en kleine studio's. 904 m² met kantoren, Huurbare werkruimte en machinale. Oud Camp 3b, Maasland.",
+  "metaDescription": "Multifunctionele bedrijfsruimte voor vakmensen en kleine studio's. 850 m² met kantoren, Huurbare werkruimte en machinale. Oud Camp 3b, Maasland.",
   "ogDescription": "Multifunctionele bedrijfsruimte voor vakmensen en kleine studio's. Productieruimte, kantoren, machinale. Naast A20, Maasland.",
   "eyebrow": "Beschikbaar",
   "tagline": "Multifunctionele bedrijfsruimte voor professionele makers",
   "locationText": "Oud Camp 3b · Maasland · Naast A20 · 15 minuten van Den Haag / Rotterdam / Delft",
-  "introText": "Werkplaats3b is een <strong>multifunctionele bedrijfsruimte van 904 m²</strong> voor zelfstandige vakmensen en kleine studio's. <br>Hier werken professionele en ambitieuze makers samen onder 1 dak aan aan mooie projecten. Hier kommen kennis, kunde en ambitie samen en gaan we voor kwaliteit! <br>Herken jij je hierin? Dan wordt het tijd voor een kennismaking. <br><br>Stel het klikt en we zien elkaar wel zitten dan krijg je een contract wat per kwartaal opzegbaar is, betaal je 2 maanden huur als borg en kun je meteen aan de gang. <br>",
+  "introText": "Werkplaats3b is een <strong>multifunctionele bedrijfsruimte van 850 m²</strong> voor zelfstandige vakmensen en kleine studio's. <br>Hier werken professionele en ambitieuze makers samen onder 1 dak aan aan mooie projecten. Hier kommen kennis, kunde en ambitie samen en gaan we voor kwaliteit! <br>Herken jij je hierin en heb je ruimte nodig voor je ambities en projecten? Dan wordt het tijd voor een kennismaking. <br><br>Stel het klikt en we zien elkaar wel zitten dan krijg je een contract wat per kwartaal opzegbaar is, betaal je 2 maanden huur als borg en kun je meteen aan de gang. <br>",
   "accessItems": [
-    "904 m² · hal 719 m² · kantoor 185 m²",
+    "850 m² · Machinale 300m² · Assemblageruimte 300m² · kantoren met airco en werkplekken 185 m²",
     "24/7 toegang"
   ],
   "offers": [
@@ -22,8 +22,8 @@ const CONTENT = {
       "text": "250 m² begane grond. Vloerverwarming, LED-verlichting, Krachtstroom"
     },
     {
-      "title": "Verhuurbare werkruimtes 25m2 met opslag.",
-      "text": "We hebben kant en klare werkplekken van 25m2 inclusief stroompunten, perslucht en verlichting. Past je project niet in je ruimte bouw je verder op de flexspace."
+      "title": "Verhuurbare werkruimtes 25m2 met opslag op entresol en platenrek.",
+      "text": "We hebben kant en klare werkplekken van 25m2 inclusief stroompunten, perslucht en verlichting. Past je project niet in je ruimte bouw je verder op de flexspace voor je unit."
     },
     {
       "title": "Kantoren en ontvangstruimte",
@@ -31,12 +31,12 @@ const CONTENT = {
     },
     {
       "title": "Faciliteiten",
-      "text": "Airco, glasvezel, alarmsysteem, keuken, elektrische overheaddeur, vloerverwarming, flexplekken, ontvangstruimte voor klanten"
+      "text": "Airco, glasvezel, alarmsysteem, keuken, overheaddeur, vloerverwarming, flexplekken, ontvangstruimte voor klanten, gesloten en open aanhanger, reachtruck"
     }
   ],
   "machines": [
     {
-      "name": "Formaatzaag",
+      "name": "F45 Formaatzaag",
       "highlight": true
     },
     {
@@ -94,13 +94,13 @@ const CONTENT = {
     {
       "label": "Kantoorruimte",
       "sub": "Eigen afgesloten kantoor · begane grond of 2e verdieping",
-      "price": "Vanaf €650",
+      "price": "Vanaf €450",
       "unit": "/mnd"
     },
     {
       "label": "Opslagruimte",
-      "sub": "1e verdieping · flexibel in te delen",
-      "price": "Vanaf €250",
+      "sub": "1e verdieping of platenrek · flexibel in te delen",
+      "price": "Vanaf €75",
       "unit": "/mnd"
     },
     {
@@ -110,7 +110,7 @@ const CONTENT = {
       "unit": "/mnd"
     }
   ],
-  "pricingNote": "Alle prijzen excl. BTW. Lijkt het je wat? Neem dan contact op voor een rondleiding en beschikbare units.",
+  "pricingNote": "Alle prijzen excl. BTW en 95,- servicekosten. De units van 25m2 zijn uitbreidbaar met (tijdelijke) opslagmogelijkheden en vaste werkplek in kantoor. Lijkt het je wat? Neem dan contact op voor een rondleiding en beschikbare units.",
   "targetAudience": [
     "Zelfstandig meubelmaker of restaurateur",
     "Interieurontwerper die zelf prototypes bouwt",
