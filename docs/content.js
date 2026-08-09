@@ -121,7 +121,7 @@ const CONTENT = {
   "notForText": "<strong>KvK-inschrijving en verzekering verplicht.</strong> Werkplaats3b is uitsluitend voor professionele gebruikers. Particulieren en hobbyisten kunnen hier niet terecht.",
   "ctaHeading": "Interesse?<br>Kom <em>kijken.</em>",
   "email": "info@werkplaats3b.nl",
-  "whatsappNumber": "31612345678",
+  "whatsappNumber": "31681689278",
   "whatsappText": "Hoi, ik heb interesse in een werkplek bij Werkplaats3b.",
   "contactLines": [
     "Oud Camp 3b, Maasland (naast A20)",
