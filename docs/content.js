@@ -27,7 +27,7 @@ const CONTENT = {
     },
     {
       "title": "Kantoren en ontvangstruimte",
-      "text": "100 m² op 2e verdieping op de begane grond en 85 m² op 2e verdieping."
+      "text": "100 m² op de begane grond en 85 m² op 2e verdieping."
     },
     {
       "title": "Faciliteiten",
@@ -111,7 +111,7 @@ const CONTENT = {
     },
     {
       "label": "Servicekosten",
-      "sub": "Energie, schoonmaak en afvalcontainers inbegrepen · unit werkvloer €120 · kantoor €95",
+      "sub": "Energie, schoonmaak en afvalcontainers inbegrepen · unit werkvloer €120 · overige ruimtes €95",
       "price": "Vanaf €95",
       "unit": "/mnd"
     }
