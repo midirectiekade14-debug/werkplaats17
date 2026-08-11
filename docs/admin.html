@@ -533,7 +533,7 @@ textarea.ce-input{min-height:60px;resize:vertical}
   <div class="modal">
     <h2>GitHub Token</h2>
     <p>Eenmalige setup. Token wordt opgeslagen in je browser zodat Opslaan direct publiceert.</p>
-    <input type="text" id="gh-repo" placeholder="user/repo" value="midirectiekade14-debug/werkplaats3b">
+    <input type="text" id="gh-repo" value="midirectiekade14-debug/werkplaats3b" readonly title="Vast ingesteld">
     <input type="password" id="gh-token" placeholder="GitHub token (gh auth token)">
     <p style="font-size:7px;color:var(--muted);margin-top:6px">Tip: run <code>gh auth token</code> in terminal voor een werkende token</p>
     <div class="modal-btns">
@@ -550,6 +550,13 @@ textarea.ce-input{min-height:60px;resize:vertical}
 <script src="content.js"></script>
 <script src="photos.js"></script>
 <script>
+// Token/repo-injectie via de URL-hash is verwijderd (security-audit 2026-08-06).
+// Een link als admin.html#token=xxx&repo=aanvaller/repo zette ongefilterd zowel
+// het token als de doel-repo in localStorage, waarna elke publicatie met JOUW
+// token naar de repo van de afzender ging. Het token komt nu uitsluitend binnen
+// via het bestaande token-modaal, en de repo staat vast.
+const GH_REPO = 'midirectiekade14-debug/werkplaats3b';
+
 // ╔════════════════════════════════════════════╗
 // ║  AUTH                                      ║
 // ╚════════════════════════════════════════════╝
@@ -1120,7 +1127,7 @@ function ceInit(){
 function ghDecode(b64){return decodeURIComponent(escape(atob(b64.replace(/\s/g,''))));}
 
 async function ceLoadFromGitHub(){
-  var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats3b';
+  var repo=GH_REPO;
   var token=localStorage.getItem('w17-gh-token');
   document.getElementById('ce-status').textContent='Content laden...';
   try{
@@ -1370,7 +1377,7 @@ function pmInit(){
 }
 
 async function pmLoadFromGitHub(){
-  var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats3b';
+  var repo=GH_REPO;
   var token=localStorage.getItem('w17-gh-token');
   document.getElementById('pm-status').textContent='Foto\'s laden...';
   try{
@@ -1392,7 +1399,7 @@ async function pmLoadFromGitHub(){
 }
 
 function pmRenderSlots(){
-  var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats3b';
+  var repo=GH_REPO;
   // Hero
   var heroSlot=document.querySelector('[data-slot="hero"]');
   pmRenderSlot(heroSlot,pmPhotos.hero,'hero');
@@ -1409,7 +1416,7 @@ function pmRenderSlot(slot,photoPath,slotId){
   var pending=pmPendingUploads[slotId];
   function _ov(s,sid){var o=document.createElement('div');o.className='pm-overlay';var c=document.createElement('button');c.className='pm-overlay-btn change';c.textContent='Wijzig';c.onclick=function(e){e.stopPropagation();pmPick(sid);};var r=document.createElement('button');r.className='pm-overlay-btn remove';r.textContent='Verwijder';r.onclick=function(e){e.stopPropagation();pmRemove(sid);};o.appendChild(c);o.appendChild(r);s.appendChild(o);}
   if(pending){slot.classList.add('has-photo');var img=document.createElement('img');img.src=pending.dataUrl;img.alt='preview';slot.appendChild(img);_ov(slot,slotId);}
-  else if(photoPath){var url;if(pmLocalCache[photoPath]){url=pmLocalCache[photoPath];}else{var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats3b';url='https://raw.githubusercontent.com/'+repo+'/master/docs/'+photoPath+'?t='+Date.now();}slot.classList.add('has-photo');var img=document.createElement('img');img.src=url;img.alt='foto';slot.appendChild(img);_ov(slot,slotId);}
+  else if(photoPath){var url;if(pmLocalCache[photoPath]){url=pmLocalCache[photoPath];}else{var repo=GH_REPO;url='https://raw.githubusercontent.com/'+repo+'/master/docs/'+photoPath+'?t='+Date.now();}slot.classList.add('has-photo');var img=document.createElement('img');img.src=url;img.alt='foto';slot.appendChild(img);_ov(slot,slotId);}
   else{slot.classList.remove('has-photo');var ic=document.createElement('span');ic.className='pm-icon';ic.textContent='+';var lb=document.createElement('span');lb.className='pm-label';lb.textContent='Klik of sleep een foto';slot.appendChild(ic);slot.appendChild(lb);}
 }
 
@@ -1510,14 +1517,9 @@ function toast(msg,type){
 // ╔════════════════════════════════════════════╗
 // ║  GITHUB PUBLISH                            ║
 // ╚════════════════════════════════════════════╝
-// Auto-inject token from URL hash: admin.html#token=xxx or #token=xxx&repo=user/repo
-(function(){
-  var h=window.location.hash;if(!h)return;
-  var m=h.match(/token=([^&]+)/);if(m){localStorage.setItem('w17-gh-token',m[1]);var r=h.match(/repo=([^&]+)/);if(r)localStorage.setItem('w17-gh-repo',decodeURIComponent(r[1]));history.replaceState(null,'',window.location.pathname+window.location.search);toast('GitHub token bijgewerkt');}
-})();
 
 async function getGHConfig(){
-  var repo=localStorage.getItem('w17-gh-repo')||'midirectiekade14-debug/werkplaats3b';
+  var repo=GH_REPO;
   var token=localStorage.getItem('w17-gh-token');
   if(!token){document.getElementById('token-modal').classList.add('show');return null;}
   return{repo:repo,token:token};
@@ -1683,10 +1685,10 @@ document.getElementById('file-import').addEventListener('change',function(e){
 // ║  TOKEN MODAL                               ║
 // ╚════════════════════════════════════════════╝
 document.getElementById('token-save').addEventListener('click',function(){
-  var repo=document.getElementById('gh-repo').value.trim();
   var token=document.getElementById('gh-token').value.trim();
-  if(!repo||!token){document.getElementById('pub-status').textContent='Vul beide velden in';document.getElementById('pub-status').className='pub-status err';return;}
-  localStorage.setItem('w17-gh-repo',repo);
+  if(!token){document.getElementById('pub-status').textContent='Vul een token in';document.getElementById('pub-status').className='pub-status err';return;}
+  // De repo staat vast in GH_REPO. Een eerder geinjecteerde waarde wordt hier opgeruimd.
+  localStorage.removeItem('w17-gh-repo');
   localStorage.setItem('w17-gh-token',token);
   document.getElementById('token-modal').classList.remove('show');
   toast('GitHub token opgeslagen');

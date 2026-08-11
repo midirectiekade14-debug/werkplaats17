@@ -1,5 +1,5 @@
 // Werkplaats3b -- Geplaatste objecten
-// Laatst gewijzigd: 2026-08-05T13:17:44.935Z
+// Laatst gewijzigd: 2026-08-07T08:11:18.900Z
 // Gegenereerd via admin.html
 
 const PLACED_OBJECTS = [
@@ -159,8 +159,8 @@ const PLACED_OBJECTS = [
   },
   {
     "floor": 2,
-    "x": 36,
-    "y": 81,
+    "x": 11,
+    "y": 79,
     "w": 885,
     "h": 394,
     "l": "Magazijn",
@@ -174,9 +174,9 @@ const PLACED_OBJECTS = [
   {
     "floor": 2,
     "x": 723,
-    "y": 102,
+    "y": 79,
     "w": 173,
-    "h": 132,
+    "h": 156,
     "l": "Kantoor",
     "c": "#6e96dc",
     "bg": "rgba(110,150,220,0.30)",
@@ -481,20 +481,6 @@ const PLACED_OBJECTS = [
   },
   {
     "floor": 2,
-    "x": 36,
-    "y": 81,
-    "w": 885,
-    "h": 131,
-    "l": "Vloer",
-    "c": "#b464dc",
-    "bg": "rgba(180,100,220,0.05)",
-    "type": "",
-    "rot": "0",
-    "status": "",
-    "room": "1"
-  },
-  {
-    "floor": 2,
     "x": 714,
     "y": 156,
     "w": 30,
@@ -691,8 +677,8 @@ const PLACED_OBJECTS = [
   },
   {
     "floor": 1,
-    "x": 669,
-    "y": 419,
+    "x": 819,
+    "y": 177,
     "w": 110,
     "h": 21,
     "l": "Stellingrek",
@@ -705,8 +691,8 @@ const PLACED_OBJECTS = [
   },
   {
     "floor": 1,
-    "x": 669,
-    "y": 468,
+    "x": 825,
+    "y": 96,
     "w": 110,
     "h": 21,
     "l": "Stellinrek",
@@ -719,10 +705,10 @@ const PLACED_OBJECTS = [
   },
   {
     "floor": 1,
-    "x": 120,
-    "y": 324,
-    "w": 24,
-    "h": 72,
+    "x": 105,
+    "y": 387,
+    "w": 72,
+    "h": 24,
     "l": "Werkbank 2.4m",
     "c": "#70b080",
     "bg": "rgba(112,176,128,.13)",
@@ -733,10 +719,10 @@ const PLACED_OBJECTS = [
   },
   {
     "floor": 1,
-    "x": 432,
-    "y": 324,
-    "w": 24,
-    "h": 72,
+    "x": 408,
+    "y": 387,
+    "w": 72,
+    "h": 24,
     "l": "Werkbank 2.4m",
     "c": "#70b080",
     "bg": "rgba(112,176,128,.13)",
@@ -747,10 +733,10 @@ const PLACED_OBJECTS = [
   },
   {
     "floor": 1,
-    "x": 282,
-    "y": 324,
-    "w": 24,
-    "h": 72,
+    "x": 258,
+    "y": 387,
+    "w": 72,
+    "h": 24,
     "l": "Werkbank 2.4m",
     "c": "#70b080",
     "bg": "rgba(112,176,128,.13)",
@@ -761,10 +747,10 @@ const PLACED_OBJECTS = [
   },
   {
     "floor": 1,
-    "x": 69,
-    "y": 99,
-    "w": 27,
-    "h": 234,
+    "x": 537,
+    "y": 462,
+    "w": 234,
+    "h": 27,
     "l": "Rijgatenboormachine",
     "c": "#E09A2F",
     "bg": "rgba(224,154,47,.13)",

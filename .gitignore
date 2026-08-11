@@ -24,3 +24,10 @@ dist/
 
 # Stale duplicaat, vergrendeld tijdens verplaatsing 2026-08-05 -- handmatig opruimen zodra vrij
 /Tekening werkplaats/
+
+# Cold-email campagne: leadlijsten met bedrijfs-e-mailadressen.
+# Deze repo is PUBLIEK (GitHub Pages) -- deze map mag er nooit in.
+/Cold Email Campaign Werkplaats3B/
+
+# Playwright MCP-artefacten (screenshots, traces)
+.playwright-mcp/
