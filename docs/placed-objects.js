@@ -1,5 +1,5 @@
 // Werkplaats3b -- Geplaatste objecten
-// Laatst gewijzigd: 2026-08-11T18:18:11.079Z
+// Laatst gewijzigd: 2026-08-11T18:21:22.211Z
 // Gegenereerd via admin.html
 
 const PLACED_OBJECTS = [
@@ -159,8 +159,8 @@ const PLACED_OBJECTS = [
   },
   {
     "floor": 2,
-    "x": 11,
-    "y": 79,
+    "x": 12,
+    "y": 78,
     "w": 885,
     "h": 394,
     "l": "Magazijn",
@@ -177,10 +177,10 @@ const PLACED_OBJECTS = [
     "y": 79,
     "w": 173,
     "h": 156,
-    "l": "Kantoor",
+    "l": "Werkruimte",
     "c": "#6e96dc",
     "bg": "rgba(110,150,220,0.30)",
-    "type": "",
+    "type": "werkplek",
     "rot": "0",
     "status": "",
     "room": "1"
@@ -191,7 +191,7 @@ const PLACED_OBJECTS = [
     "y": 234,
     "w": 173,
     "h": 171,
-    "l": "Kantoor",
+    "l": "Kantine",
     "c": "#6e96dc",
     "bg": "rgba(110,150,220,0.30)",
     "type": "",
@@ -300,7 +300,7 @@ const PLACED_OBJECTS = [
   {
     "floor": 1,
     "x": 69,
-    "y": 227,
+    "y": 225,
     "w": 600,
     "h": 263,
     "l": "",
@@ -644,7 +644,7 @@ const PLACED_OBJECTS = [
     "bg": "rgba(80,180,120,0.10)",
     "type": "huurunit",
     "rot": "0",
-    "status": "",
+    "status": "beschikbaar",
     "room": ""
   },
   {
@@ -658,7 +658,7 @@ const PLACED_OBJECTS = [
     "bg": "rgba(80,180,120,0.10)",
     "type": "huurunit",
     "rot": "0",
-    "status": "",
+    "status": "beschikbaar",
     "room": ""
   },
   {
@@ -783,6 +783,62 @@ const PLACED_OBJECTS = [
     "c": "#50b478",
     "bg": "rgba(80,180,120,0.10)",
     "type": "huurunit",
+    "rot": "0",
+    "status": "",
+    "room": ""
+  },
+  {
+    "floor": 1,
+    "x": 69,
+    "y": 249,
+    "w": 36,
+    "h": 21,
+    "l": "Lintzaag",
+    "c": "#e09a2f",
+    "bg": "rgba(224,154,47,0.13)",
+    "type": "",
+    "rot": "0",
+    "status": "",
+    "room": ""
+  },
+  {
+    "floor": 1,
+    "x": 171,
+    "y": 183,
+    "w": 24,
+    "h": 72,
+    "l": "Werkbank 2.4m",
+    "c": "#70b080",
+    "bg": "rgba(112,176,128,.13)",
+    "type": "",
+    "rot": "0",
+    "status": "",
+    "room": ""
+  },
+  {
+    "floor": 1,
+    "x": 318,
+    "y": 183,
+    "w": 24,
+    "h": 72,
+    "l": "Werkbank 2.4m",
+    "c": "#70b080",
+    "bg": "rgba(112,176,128,.13)",
+    "type": "",
+    "rot": "0",
+    "status": "",
+    "room": ""
+  },
+  {
+    "floor": 1,
+    "x": 465,
+    "y": 186,
+    "w": 24,
+    "h": 72,
+    "l": "Werkbank 2.4m",
+    "c": "#70b080",
+    "bg": "rgba(112,176,128,.13)",
+    "type": "",
     "rot": "0",
     "status": "",
     "room": ""
