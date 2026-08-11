@@ -1,5 +1,5 @@
 // Werkplaats3b -- Geplaatste objecten
-// Laatst gewijzigd: 2026-08-11T18:21:22.211Z
+// Laatst gewijzigd: 2026-08-11T18:25:28.588Z
 // Gegenereerd via admin.html
 
 const PLACED_OBJECTS = [
@@ -117,9 +117,9 @@ const PLACED_OBJECTS = [
   },
   {
     "floor": 0,
-    "x": 723,
+    "x": 684,
     "y": 531,
-    "w": 114,
+    "w": 153,
     "h": 45,
     "l": "Berging",
     "c": "#a08c78",
@@ -566,9 +566,9 @@ const PLACED_OBJECTS = [
   {
     "floor": 0,
     "x": 336,
-    "y": 717,
-    "w": 120,
-    "h": 210,
+    "y": 729,
+    "w": 81,
+    "h": 141,
     "l": "Altendorf Formaatzaag",
     "c": "#e09a2f",
     "bg": "rgba(224,154,47,0.13)",
@@ -838,6 +838,20 @@ const PLACED_OBJECTS = [
     "l": "Werkbank 2.4m",
     "c": "#70b080",
     "bg": "rgba(112,176,128,.13)",
+    "type": "",
+    "rot": "0",
+    "status": "",
+    "room": ""
+  },
+  {
+    "floor": 0,
+    "x": 339,
+    "y": 552,
+    "w": 48,
+    "h": 15,
+    "l": "Compressor",
+    "c": "#607080",
+    "bg": "rgba(96,112,128,.15)",
     "type": "",
     "rot": "0",
     "status": "",
