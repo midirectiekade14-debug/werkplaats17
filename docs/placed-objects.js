@@ -1,5 +1,5 @@
 // Werkplaats3b -- Geplaatste objecten
-// Laatst gewijzigd: 2026-08-07T08:11:18.900Z
+// Laatst gewijzigd: 2026-08-11T18:25:28.588Z
 // Gegenereerd via admin.html
 
 const PLACED_OBJECTS = [
@@ -117,9 +117,9 @@ const PLACED_OBJECTS = [
   },
   {
     "floor": 0,
-    "x": 723,
+    "x": 684,
     "y": 531,
-    "w": 114,
+    "w": 153,
     "h": 45,
     "l": "Berging",
     "c": "#a08c78",
@@ -159,8 +159,8 @@ const PLACED_OBJECTS = [
   },
   {
     "floor": 2,
-    "x": 11,
-    "y": 79,
+    "x": 12,
+    "y": 78,
     "w": 885,
     "h": 394,
     "l": "Magazijn",
@@ -177,10 +177,10 @@ const PLACED_OBJECTS = [
     "y": 79,
     "w": 173,
     "h": 156,
-    "l": "Kantoor",
+    "l": "Werkruimte",
     "c": "#6e96dc",
     "bg": "rgba(110,150,220,0.30)",
-    "type": "",
+    "type": "werkplek",
     "rot": "0",
     "status": "",
     "room": "1"
@@ -191,7 +191,7 @@ const PLACED_OBJECTS = [
     "y": 234,
     "w": 173,
     "h": 171,
-    "l": "Kantoor",
+    "l": "Kantine",
     "c": "#6e96dc",
     "bg": "rgba(110,150,220,0.30)",
     "type": "",
@@ -300,7 +300,7 @@ const PLACED_OBJECTS = [
   {
     "floor": 1,
     "x": 69,
-    "y": 227,
+    "y": 225,
     "w": 600,
     "h": 263,
     "l": "",
@@ -566,9 +566,9 @@ const PLACED_OBJECTS = [
   {
     "floor": 0,
     "x": 336,
-    "y": 717,
-    "w": 120,
-    "h": 210,
+    "y": 729,
+    "w": 81,
+    "h": 141,
     "l": "Altendorf Formaatzaag",
     "c": "#e09a2f",
     "bg": "rgba(224,154,47,0.13)",
@@ -622,10 +622,10 @@ const PLACED_OBJECTS = [
   {
     "floor": 1,
     "x": 69,
-    "y": 369,
+    "y": 339,
     "w": 150,
-    "h": 120,
-    "l": "Huurunit ~20m²",
+    "h": 150,
+    "l": "Huurunit ~25m²",
     "c": "#50b478",
     "bg": "rgba(80,180,120,0.10)",
     "type": "huurunit",
@@ -636,29 +636,29 @@ const PLACED_OBJECTS = [
   {
     "floor": 1,
     "x": 219,
-    "y": 369,
+    "y": 339,
     "w": 150,
-    "h": 120,
-    "l": "Huurunit ~20m²",
+    "h": 150,
+    "l": "Huurunit ~25m²",
     "c": "#50b478",
     "bg": "rgba(80,180,120,0.10)",
     "type": "huurunit",
     "rot": "0",
-    "status": "",
+    "status": "beschikbaar",
     "room": ""
   },
   {
     "floor": 1,
     "x": 369,
-    "y": 369,
+    "y": 339,
     "w": 150,
-    "h": 120,
-    "l": "Huurunit ~20m²",
+    "h": 150,
+    "l": "Huurunit ~25m²",
     "c": "#50b478",
     "bg": "rgba(80,180,120,0.10)",
     "type": "huurunit",
     "rot": "0",
-    "status": "",
+    "status": "beschikbaar",
     "room": ""
   },
   {
@@ -677,8 +677,8 @@ const PLACED_OBJECTS = [
   },
   {
     "floor": 1,
-    "x": 819,
-    "y": 177,
+    "x": 825,
+    "y": 207,
     "w": 110,
     "h": 21,
     "l": "Stellingrek",
@@ -706,7 +706,7 @@ const PLACED_OBJECTS = [
   {
     "floor": 1,
     "x": 105,
-    "y": 387,
+    "y": 372,
     "w": 72,
     "h": 24,
     "l": "Werkbank 2.4m",
@@ -720,7 +720,7 @@ const PLACED_OBJECTS = [
   {
     "floor": 1,
     "x": 408,
-    "y": 387,
+    "y": 372,
     "w": 72,
     "h": 24,
     "l": "Werkbank 2.4m",
@@ -734,7 +734,7 @@ const PLACED_OBJECTS = [
   {
     "floor": 1,
     "x": 258,
-    "y": 387,
+    "y": 372,
     "w": 72,
     "h": 24,
     "l": "Werkbank 2.4m",
@@ -772,5 +772,89 @@ const PLACED_OBJECTS = [
     "rot": "0",
     "status": "",
     "room": "1"
+  },
+  {
+    "floor": 1,
+    "x": 69,
+    "y": 96,
+    "w": 711,
+    "h": 132,
+    "l": "Werkplek",
+    "c": "#50b478",
+    "bg": "rgba(80,180,120,0.10)",
+    "type": "huurunit",
+    "rot": "0",
+    "status": "",
+    "room": ""
+  },
+  {
+    "floor": 1,
+    "x": 69,
+    "y": 249,
+    "w": 36,
+    "h": 21,
+    "l": "Lintzaag",
+    "c": "#e09a2f",
+    "bg": "rgba(224,154,47,0.13)",
+    "type": "",
+    "rot": "0",
+    "status": "",
+    "room": ""
+  },
+  {
+    "floor": 1,
+    "x": 171,
+    "y": 183,
+    "w": 24,
+    "h": 72,
+    "l": "Werkbank 2.4m",
+    "c": "#70b080",
+    "bg": "rgba(112,176,128,.13)",
+    "type": "",
+    "rot": "0",
+    "status": "",
+    "room": ""
+  },
+  {
+    "floor": 1,
+    "x": 318,
+    "y": 183,
+    "w": 24,
+    "h": 72,
+    "l": "Werkbank 2.4m",
+    "c": "#70b080",
+    "bg": "rgba(112,176,128,.13)",
+    "type": "",
+    "rot": "0",
+    "status": "",
+    "room": ""
+  },
+  {
+    "floor": 1,
+    "x": 465,
+    "y": 186,
+    "w": 24,
+    "h": 72,
+    "l": "Werkbank 2.4m",
+    "c": "#70b080",
+    "bg": "rgba(112,176,128,.13)",
+    "type": "",
+    "rot": "0",
+    "status": "",
+    "room": ""
+  },
+  {
+    "floor": 0,
+    "x": 339,
+    "y": 552,
+    "w": 48,
+    "h": 15,
+    "l": "Compressor",
+    "c": "#607080",
+    "bg": "rgba(96,112,128,.15)",
+    "type": "",
+    "rot": "0",
+    "status": "",
+    "room": ""
   }
 ];
