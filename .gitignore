@@ -31,3 +31,6 @@ dist/
 
 # Playwright MCP-artefacten (screenshots, traces)
 .playwright-mcp/
+
+# Lokaal Astro-experiment (kopie van de site, niet de bron) -- niet publiceren
+/astro/

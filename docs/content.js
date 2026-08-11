@@ -86,31 +86,37 @@ const CONTENT = {
   ],
   "pricing": [
     {
-      "label": "Werkplek in de hal",
-      "sub": "Eigen ruimte met flexspace voor de grotere projecten",
+      "label": "Werkplek 1e verdieping",
+      "sub": "25 m² + opslagruimte + werkbank + machinetoegang",
       "price": "€945",
       "unit": "/mnd"
     },
     {
-      "label": "Kantoorruimte",
-      "sub": "Eigen afgesloten kantoor · begane grond of 2e verdieping",
-      "price": "Vanaf €450",
+      "label": "Kantoor begane grond",
+      "sub": "Klein, eigen afsluitbare ruimte",
+      "price": "€450",
+      "unit": "/mnd"
+    },
+    {
+      "label": "Werkruimte 2e verdieping",
+      "sub": "Grote afsluitbare ruimte met eigen opgang",
+      "price": "€650",
       "unit": "/mnd"
     },
     {
       "label": "Opslagruimte",
-      "sub": "1e verdieping of platenrek · flexibel in te delen",
+      "sub": "Begane grond of 1e verdieping · flexibel in te delen",
       "price": "Vanaf €75",
       "unit": "/mnd"
     },
     {
       "label": "Servicekosten",
-      "sub": "Energie, onderhoud en afvalcontainer inbegrepen · werkplek €120 · kantoor €95 of €130",
+      "sub": "Energie, schoonmaak en afvalcontainers inbegrepen · unit werkvloer €120 · kantoor €95",
       "price": "Vanaf €95",
       "unit": "/mnd"
     }
   ],
-  "pricingNote": "Alle prijzen excl. BTW en servicekosten. Een werkplek in de hal komt daarmee op 1.065,- per maand. De units van 25m2 zijn uitbreidbaar met (tijdelijke) opslagmogelijkheden en vaste werkplek in kantoor. Lijkt het je wat? Neem dan contact op voor een rondleiding en beschikbare units.",
+  "pricingNote": "Alle prijzen excl. BTW en servicekosten. Een werkplek op de 1e verdieping komt daarmee op 1.065,- per maand. De units van 25m2 zijn uitbreidbaar met (tijdelijke) opslagmogelijkheden en vaste werkplek in kantoor. Lijkt het je wat? Neem dan contact op voor een rondleiding en beschikbare units.",
   "targetAudience": [
     "Zelfstandig meubelmaker of restaurateur",
     "Interieurontwerper die zelf prototypes bouwt",
