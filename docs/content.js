@@ -92,13 +92,13 @@ const CONTENT = {
       "unit": "/mnd"
     },
     {
-      "label": "Kantoor begane grond",
-      "sub": "Klein, eigen afsluitbare ruimte",
+      "label": "Werkruimte/Atelier begane grond",
+      "sub": "Eigen afsluitbare ruimte",
       "price": "€450",
       "unit": "/mnd"
     },
     {
-      "label": "Werkruimte 2e verdieping",
+      "label": "Werkruimte/Atelier 2e verdieping",
       "sub": "Grote afsluitbare ruimte met eigen opgang",
       "price": "€650",
       "unit": "/mnd"
@@ -111,7 +111,7 @@ const CONTENT = {
     },
     {
       "label": "Servicekosten",
-      "sub": "Energie, schoonmaak en afvalcontainers inbegrepen · unit werkvloer €120 · overige ruimtes €95",
+      "sub": "Energie, schoonmaak en afvalcontainers inbegrepen · unit 25m2 €120 · werkruimte/atelier €95",
       "price": "Vanaf €95",
       "unit": "/mnd"
     }
