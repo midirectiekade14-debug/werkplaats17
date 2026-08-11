@@ -725,6 +725,58 @@
 </head>
 <body>
 
+<!-- ENTREE-CARROUSEL — boot. Alleen mechaniek: de slide-inhoud staat in
+     entree-slides.js en de beelden in photos/entree/, dus de HTML-bron
+     blijft vrij van campagne-inhoud (zoekmachines zien de gewone site).
+     Lege slides-lijst in entree-slides.js = geen carrousel, gewone site.
+     Alles laadt async: een hangend of missend script kan de site nooit
+     gijzelen. De dekklaag komt er alleen als de vorige load hier liet
+     weten dat er een ongeziene campagne loopt (wp3b-entree-actief), of
+     bij een allereerste bezoek; het vangnet haalt hem na 4 s hoe dan
+     ook weg. Is de cache stale (nieuwe campagne op de server), dan
+     verschijnt de carrousel die ene keer zonder dekklaag vooraf. -->
+<script>
+(function(){
+  var gezien=0,actief=-1; // actief: -1 = config nog nooit geladen, 0 = geen campagne, N = campagneversie
+  try{
+    gezien=parseInt(window.localStorage.getItem('wp3b-entree-gezien'),10)||0;
+    var a=window.localStorage.getItem('wp3b-entree-actief');
+    if(a!==null)actief=parseInt(a,10)||0;
+  }catch(e){gezien=0;actief=0;} // localStorage stuk: geen dekklaag, entree.js beslist zelf
+  window._entreeWeg=function(){
+    var l=document.getElementById('entree-laag');
+    if(l&&l.parentNode)l.parentNode.removeChild(l);
+    document.body.style.overflow='';
+  };
+  if(actief===-1||actief>gezien){
+    var laag=document.createElement('div');
+    laag.id='entree-laag';
+    laag.style.cssText='position:fixed;inset:0;z-index:9000;background:#161412';
+    document.body.appendChild(laag);
+    document.body.style.overflow='hidden';
+    window._entreeVangnet=setTimeout(function(){if(!window._entreeActief)window._entreeWeg();},4000);
+  }
+  var c=document.createElement('script');
+  c.src='entree-slides.js';
+  c.async=true;
+  c.onerror=function(){window._entreeWeg();};
+  c.onload=function(){
+    try{
+      var cfg=(typeof ENTREE!=='undefined'&&ENTREE)||null;
+      var v=(cfg&&cfg.slides&&cfg.slides.length)?(cfg.versie||1):0;
+      try{window.localStorage.setItem('wp3b-entree-actief',String(v));}catch(e){}
+      if(!v||v<=gezien){window._entreeWeg();return;}
+      var s=document.createElement('script');
+      s.src='entree.js';
+      s.async=true;
+      s.onerror=function(){window._entreeWeg();};
+      document.body.appendChild(s);
+    }catch(e){window._entreeWeg();}
+  };
+  document.body.appendChild(c);
+})();
+</script>
+
 <!-- STICKY NAV -->
 <nav class="sticky-nav" id="stickyNav">
   <div class="sticky-nav-inner">
