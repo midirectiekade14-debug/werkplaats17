@@ -105,12 +105,12 @@ const CONTENT = {
     },
     {
       "label": "Servicekosten",
-      "sub": "Energie, onderhoud en afvalcontainer inbegrepen · per werkplek",
-      "price": "€120",
+      "sub": "Energie, onderhoud en afvalcontainer inbegrepen · werkplek €120 · kantoor €95 of €130",
+      "price": "Vanaf €95",
       "unit": "/mnd"
     }
   ],
-  "pricingNote": "Alle prijzen excl. BTW en 120,- servicekosten. De units van 25m2 zijn uitbreidbaar met (tijdelijke) opslagmogelijkheden en vaste werkplek in kantoor. Lijkt het je wat? Neem dan contact op voor een rondleiding en beschikbare units.",
+  "pricingNote": "Alle prijzen excl. BTW en servicekosten. Een werkplek in de hal komt daarmee op 1.065,- per maand. De units van 25m2 zijn uitbreidbaar met (tijdelijke) opslagmogelijkheden en vaste werkplek in kantoor. Lijkt het je wat? Neem dan contact op voor een rondleiding en beschikbare units.",
   "targetAudience": [
     "Zelfstandig meubelmaker of restaurateur",
     "Interieurontwerper die zelf prototypes bouwt",
