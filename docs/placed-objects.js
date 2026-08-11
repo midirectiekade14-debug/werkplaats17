@@ -1,5 +1,5 @@
 // Werkplaats3b -- Geplaatste objecten
-// Laatst gewijzigd: 2026-08-07T08:11:18.900Z
+// Laatst gewijzigd: 2026-08-11T18:18:11.079Z
 // Gegenereerd via admin.html
 
 const PLACED_OBJECTS = [
@@ -622,10 +622,10 @@ const PLACED_OBJECTS = [
   {
     "floor": 1,
     "x": 69,
-    "y": 369,
+    "y": 339,
     "w": 150,
-    "h": 120,
-    "l": "Huurunit ~20m²",
+    "h": 150,
+    "l": "Huurunit ~25m²",
     "c": "#50b478",
     "bg": "rgba(80,180,120,0.10)",
     "type": "huurunit",
@@ -636,10 +636,10 @@ const PLACED_OBJECTS = [
   {
     "floor": 1,
     "x": 219,
-    "y": 369,
+    "y": 339,
     "w": 150,
-    "h": 120,
-    "l": "Huurunit ~20m²",
+    "h": 150,
+    "l": "Huurunit ~25m²",
     "c": "#50b478",
     "bg": "rgba(80,180,120,0.10)",
     "type": "huurunit",
@@ -650,10 +650,10 @@ const PLACED_OBJECTS = [
   {
     "floor": 1,
     "x": 369,
-    "y": 369,
+    "y": 339,
     "w": 150,
-    "h": 120,
-    "l": "Huurunit ~20m²",
+    "h": 150,
+    "l": "Huurunit ~25m²",
     "c": "#50b478",
     "bg": "rgba(80,180,120,0.10)",
     "type": "huurunit",
@@ -677,8 +677,8 @@ const PLACED_OBJECTS = [
   },
   {
     "floor": 1,
-    "x": 819,
-    "y": 177,
+    "x": 825,
+    "y": 207,
     "w": 110,
     "h": 21,
     "l": "Stellingrek",
@@ -706,7 +706,7 @@ const PLACED_OBJECTS = [
   {
     "floor": 1,
     "x": 105,
-    "y": 387,
+    "y": 372,
     "w": 72,
     "h": 24,
     "l": "Werkbank 2.4m",
@@ -720,7 +720,7 @@ const PLACED_OBJECTS = [
   {
     "floor": 1,
     "x": 408,
-    "y": 387,
+    "y": 372,
     "w": 72,
     "h": 24,
     "l": "Werkbank 2.4m",
@@ -734,7 +734,7 @@ const PLACED_OBJECTS = [
   {
     "floor": 1,
     "x": 258,
-    "y": 387,
+    "y": 372,
     "w": 72,
     "h": 24,
     "l": "Werkbank 2.4m",
@@ -772,5 +772,19 @@ const PLACED_OBJECTS = [
     "rot": "0",
     "status": "",
     "room": "1"
+  },
+  {
+    "floor": 1,
+    "x": 69,
+    "y": 96,
+    "w": 711,
+    "h": 132,
+    "l": "Werkplek",
+    "c": "#50b478",
+    "bg": "rgba(80,180,120,0.10)",
+    "type": "huurunit",
+    "rot": "0",
+    "status": "",
+    "room": ""
   }
 ];
