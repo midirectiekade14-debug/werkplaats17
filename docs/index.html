@@ -28,6 +28,26 @@
     --cream: #F0EAE0;
     --muted: #7a7060;
     --line: #2e2920;
+
+    /* ── TYPOGRAFIE-SCHAAL ──
+       Eén set variabelen voor de hele site. Desktop houdt de oorspronkelijke
+       compacte maten; smallere schermen krijgen verderop (media queries)
+       grotere waarden, zodat er nergens per element gesleuteld hoeft te
+       worden. In rem zodat de systeem-lettergrootte van de bezoeker
+       meeschaalt. */
+    --fs-micro: 0.5625rem;  /*  9px — maatvoering, copyright, tooltips   */
+    --fs-small: 0.625rem;   /* 10px — tags, legenda, voetnoten           */
+    --fs-body:  0.6875rem;  /* 11px — lopende UI-tekst, knoppen, labels  */
+    --fs-lead:  0.8125rem;  /* 13px — intro, tagline                     */
+    --fs-eyebrow: 0.75rem;  /* 12px — eyebrow, locatiebalk               */
+    --fs-h3:    1.25rem;    /* 20px — kaartkoppen                        */
+    --fs-price: 1.375rem;   /* 22px — prijzen                            */
+    --fs-h2:    2.625rem;   /* 42px — CTA-kop                            */
+    /* Plattegrond-typografie: staat in het geschaalde canvas, dus deze
+       waarden worden nog met de zoomfactor vermenigvuldigd. */
+    --fs-fp-label: 7px;
+    --fs-fp-dim: 5.5px;
+    --fs-fp-door: 6px;
   }
 
   html { scroll-behavior: smooth; }
@@ -90,7 +110,7 @@
     list-style: none;
   }
   .sticky-nav .nav-links a {
-    font-size: 10px;
+    font-size: var(--fs-small);
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--muted);
@@ -129,20 +149,27 @@
     user-select: none;
   }
   .eyebrow {
-    font-size: 12px;
+    font-size: var(--fs-eyebrow);
     font-weight: 500;
     letter-spacing: 0.25em;
     text-transform: uppercase;
     color: var(--amber);
     margin-bottom: 16px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 8px;
+    line-height: 1.5;
+    /* Voor de decoratieve "3b" langs, net als h1 en tagline — anders loopt
+       de regel er op een smal scherm doorheen. */
+    position: relative;
+    z-index: 1;
   }
   .eyebrow::before {
     content: '';
     width: 8px;
     height: 8px;
+    flex-shrink: 0;
+    margin-top: 0.32em;
     border-radius: 50%;
     background: #34d399;
     box-shadow: 0 0 6px rgba(52,211,153,0.5);
@@ -154,7 +181,9 @@
   }
   h1 {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(72px, 15vw, 112px);
+    /* De 19vw-bovengrens houdt "Werkplaats" binnen de kolom op telefoons
+       smaller dan 375px; daarboven blijft de oorspronkelijke schaal staan. */
+    font-size: min(clamp(72px, 15vw, 112px), 19vw);
     line-height: 0.9;
     letter-spacing: 2px;
     color: var(--cream);
@@ -163,11 +192,10 @@
   }
   h1 span { color: var(--amber); }
   .tagline {
-    font-size: 13px;
+    font-size: var(--fs-lead);
     color: var(--muted);
     margin-top: 20px;
     line-height: 1.5;
-    white-space: nowrap;
     position: relative;
     z-index: 1;
   }
@@ -192,19 +220,21 @@
   .location-bar {
     margin: 28px 40px 0;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
     animation: fadeUp 0.8s 0.1s ease both;
   }
   .location-bar .pin {
     width: 6px; height: 6px;
+    margin-top: 0.5em;
     border-radius: 50%;
     background: var(--amber);
     flex-shrink: 0;
   }
   .location-bar span {
-    font-size: 12px;
+    font-size: var(--fs-eyebrow);
     letter-spacing: 0.2em;
+    line-height: 1.6;
     text-transform: uppercase;
     color: var(--muted);
   }
@@ -216,7 +246,7 @@
     animation: fadeUp 0.8s 0.15s ease both;
   }
   .intro p {
-    font-size: 13px;
+    font-size: var(--fs-lead);
     line-height: 1.85;
     color: var(--cream);
     font-weight: 300;
@@ -234,15 +264,18 @@
   }
   .access-item {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 8px;
-    font-size: 11px;
+    font-size: var(--fs-body);
+    line-height: 1.6;
     color: var(--muted);
     letter-spacing: 0.05em;
   }
   .access-item .ico {
     color: var(--amber);
     font-size: 14px;
+    line-height: 1;
+    margin-top: 0.2em;
     flex-shrink: 0;
     opacity: 0.8;
   }
@@ -276,7 +309,7 @@
     position: absolute;
     bottom: 12px;
     left: 12px;
-    font-size: 9px;
+    font-size: var(--fs-micro);
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--muted);
@@ -288,7 +321,7 @@
   /* ── SECTION LABELS ── */
   .section-label {
     padding: 32px 40px 16px;
-    font-size: 11px;
+    font-size: var(--fs-body);
     letter-spacing: 0.3em;
     text-transform: uppercase;
     color: var(--amber);
@@ -319,13 +352,14 @@
   }
   .offer-card h3 {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 20px;
+    font-size: var(--fs-h3);
+    line-height: 1.15;
     letter-spacing: 1px;
     color: var(--cream);
     margin-bottom: 8px;
   }
   .offer-card p {
-    font-size: 11px;
+    font-size: var(--fs-body);
     line-height: 1.7;
     color: var(--muted);
     font-weight: 300;
@@ -341,7 +375,7 @@
     border-bottom: 1px solid var(--line);
   }
   .machine-tag {
-    font-size: 10px;
+    font-size: var(--fs-small);
     letter-spacing: 0.12em;
     text-transform: uppercase;
     padding: 6px 12px;
@@ -369,12 +403,13 @@
   }
   .fp-tabs {
     display: flex;
+    flex-wrap: wrap;
     gap: 2px;
     margin-bottom: 12px;
   }
   .fp-tab {
     padding: 6px 16px;
-    font-size: 9px;
+    font-size: var(--fs-micro);
     letter-spacing: 0.14em;
     text-transform: uppercase;
     border: 1px solid var(--line);
@@ -393,19 +428,38 @@
     border: 1px solid var(--line);
     height: 420px;
   }
-  .fp-canvas #fp {
+  /* #fp-stage draagt de gescháálde afmeting van de plattegrond; #fp zelf
+     houdt zijn eigen 900x550-coordinatenstelsel en wordt erin geschaald.
+     Zonder die tussenlaag weet een scrollende canvas niet hoe breed de
+     inhoud werkelijk is (een transform verandert de layout-grootte niet). */
+  .fp-canvas #fp-stage {
     position: relative;
+  }
+  .fp-canvas #fp {
+    position: absolute;
+    top: 0;
+    left: 0;
     transform-origin: 0 0;
   }
+  /* Verschijnt alleen als de plattegrond breder is dan het venster. */
+  .fp-hint {
+    display: none;
+    margin: -4px 0 10px;
+    font-size: var(--fs-micro);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .fp-hint.on { display: block; }
   .pl { position: absolute; user-select: none; z-index: 10; }
   .pl.room-pl { z-index: 5; }
   .rm { width: 100%; height: 100%; border: 1px solid; display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; overflow: hidden; padding: 4px 5px; }
-  .rl { font-size: 7px; letter-spacing: 0.09em; text-transform: uppercase; font-weight: bold; pointer-events: none; }
-  .ra { font-size: 5.5px; color: rgba(255,255,255,0.22); pointer-events: none; position: absolute; bottom: 3px; right: 5px; }
+  .rl { font-size: var(--fs-fp-label); letter-spacing: 0.09em; text-transform: uppercase; font-weight: bold; pointer-events: none; }
+  .ra { font-size: var(--fs-fp-dim); color: rgba(255,255,255,0.22); pointer-events: none; position: absolute; bottom: 3px; right: 5px; }
   .ib { width: 100%; height: 100%; border: 1.5px solid; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
-  .il { font-size: 7px; letter-spacing: 0.05em; text-align: center; padding: 1px; line-height: 1.3; text-transform: uppercase; pointer-events: none; }
-  .id { position: absolute; bottom: -10px; left: 0; right: 0; font-size: 5.5px; color: rgba(255,255,255,0.35); pointer-events: none; text-align: center; white-space: nowrap; }
-  .dl { position: absolute; bottom: 2px; left: 0; right: 0; text-align: center; font-size: 6px; pointer-events: none; }
+  .il { font-size: var(--fs-fp-label); letter-spacing: 0.05em; text-align: center; padding: 1px; line-height: 1.3; text-transform: uppercase; pointer-events: none; }
+  .id { position: absolute; bottom: -10px; left: 0; right: 0; font-size: var(--fs-fp-dim); color: rgba(255,255,255,0.35); pointer-events: none; text-align: center; white-space: nowrap; }
+  .dl { position: absolute; bottom: 2px; left: 0; right: 0; text-align: center; font-size: var(--fs-fp-door); pointer-events: none; }
   .pl[data-status="beschikbaar"] .ib { border-color: #4CAF50 !important; background: rgba(76,175,80,0.12) !important; box-shadow: 0 0 6px rgba(76,175,80,0.3); }
   .pl[data-status="bezet"] .ib { border-color: #666 !important; background: rgba(120,120,120,0.08) !important; }
   .pl[data-status="gereserveerd"] .ib { border-color: #FF9800 !important; background: rgba(255,152,0,0.12) !important; box-shadow: 0 0 6px rgba(255,152,0,0.2); }
@@ -419,7 +473,7 @@
     background: var(--surface);
     border: 1px solid var(--line);
     padding: 4px 8px;
-    font-size: 8px;
+    font-size: var(--fs-micro);
     color: var(--cream);
     white-space: nowrap;
     pointer-events: none;
@@ -436,7 +490,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 10px;
+    font-size: var(--fs-small);
     color: var(--muted);
     letter-spacing: 0.08em;
   }
@@ -456,33 +510,35 @@
   }
   .pricing-row:last-child { border-bottom: none; }
   .pricing-row .label {
-    font-size: 11px;
+    font-size: var(--fs-body);
     color: var(--cream);
     font-weight: 400;
+    line-height: 1.5;
     letter-spacing: 0.05em;
   }
   .pricing-row .sub {
-    font-size: 9px;
+    font-size: var(--fs-micro);
     color: var(--muted);
     margin-top: 3px;
+    line-height: 1.6;
     letter-spacing: 0.1em;
   }
   .pricing-row .price {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
+    font-size: var(--fs-price);
     letter-spacing: 1px;
     color: var(--amber);
     white-space: nowrap;
   }
   .pricing-row .price small {
     font-family: 'DM Mono', monospace;
-    font-size: 10px;
+    font-size: var(--fs-small);
     color: var(--muted);
     margin-left: 4px;
     letter-spacing: 0.1em;
   }
   .pricing-note {
-    font-size: 10px;
+    font-size: var(--fs-small);
     color: var(--muted);
     padding: 10px 40px 0;
     letter-spacing: 0.04em;
@@ -506,7 +562,7 @@
     display: flex;
     align-items: flex-start;
     gap: 14px;
-    font-size: 11px;
+    font-size: var(--fs-body);
     color: var(--cream);
     line-height: 1.6;
     font-weight: 300;
@@ -515,13 +571,13 @@
     color: var(--amber);
     flex-shrink: 0;
     margin-top: 1px;
-    font-size: 12px;
+    font-size: var(--fs-eyebrow);
   }
   .not-for {
     margin-top: 16px;
     padding: 14px 16px;
     border-left: 2px solid var(--line);
-    font-size: 10px;
+    font-size: var(--fs-small);
     color: var(--muted);
     line-height: 1.7;
     letter-spacing: 0.04em;
@@ -537,7 +593,7 @@
   }
   .cta-block h2 {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 42px;
+    font-size: var(--fs-h2);
     line-height: 1;
     letter-spacing: 1px;
     margin-bottom: 24px;
@@ -557,8 +613,9 @@
     align-items: center;
     gap: 8px;
     padding: 12px 24px;
+    min-height: 44px;
     font-family: 'DM Mono', monospace;
-    font-size: 11px;
+    font-size: var(--fs-body);
     font-weight: 500;
     letter-spacing: 0.15em;
     text-transform: uppercase;
@@ -578,8 +635,9 @@
     align-items: center;
     gap: 8px;
     padding: 12px 24px;
+    min-height: 44px;
     font-family: 'DM Mono', monospace;
-    font-size: 11px;
+    font-size: var(--fs-body);
     font-weight: 400;
     letter-spacing: 0.15em;
     text-transform: uppercase;
@@ -602,17 +660,20 @@
   .cta-line {
     display: flex;
     gap: 10px;
-    align-items: center;
-    font-size: 11px;
+    align-items: flex-start;
+    font-size: var(--fs-body);
+    line-height: 1.6;
     color: var(--muted);
     font-weight: 300;
   }
   .cta-line .dot {
     width: 4px; height: 4px;
+    margin-top: 0.6em;
     border-radius: 50%;
     background: var(--amber);
     flex-shrink: 0;
   }
+  .cta-line span { overflow-wrap: anywhere; }
   .cta-line a {
     color: var(--cream);
     text-decoration: none;
@@ -653,7 +714,9 @@
     text-align: center;
   }
   .insta-handle a {
-    font-size: 11px;
+    display: inline-block;
+    padding: 10px 4px;
+    font-size: var(--fs-body);
     letter-spacing: 0.15em;
     color: var(--muted);
     text-decoration: none;
@@ -680,13 +743,13 @@
     text-align: right;
   }
   footer .hashtags {
-    font-size: 9px;
+    font-size: var(--fs-micro);
     letter-spacing: 0.15em;
     color: var(--muted);
     line-height: 1.8;
   }
   footer .copy {
-    font-size: 9px;
+    font-size: var(--fs-micro);
     color: var(--line);
     margin-top: 8px;
     letter-spacing: 0.1em;
@@ -698,8 +761,80 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  /* ── RESPONSIVE ── */
+  /* ══ RESPONSIVE ══
+     De typografie schuift mee via de :root-variabelen: hoe smaller het
+     scherm, hoe groter de tekst. Dat is omgekeerd aan wat je gewend bent,
+     maar op een telefoon lees je van 30 cm en niet van 60, en de
+     oorspronkelijke 9-13px-schaal is daar simpelweg te fijn. */
+
+  /* ── TABLET / KLEIN LAPTOPSCHERM ── */
+  @media (max-width: 900px) {
+    :root {
+      --fs-micro: 0.6875rem;  /* 11px */
+      --fs-small: 0.75rem;    /* 12px */
+      --fs-body:  0.8125rem;  /* 13px */
+      --fs-lead:  0.9375rem;  /* 15px */
+      --fs-eyebrow: 0.75rem;  /* 12px */
+      --fs-h3:    1.3125rem;  /* 21px */
+      --fs-price: 1.5rem;     /* 24px */
+      --fs-fp-label: 8.5px;
+      --fs-fp-dim: 6.5px;
+      --fs-fp-door: 7px;
+    }
+    header { padding: 48px 32px 36px; }
+    .location-bar { margin: 24px 32px 0; }
+    .intro { padding: 36px 32px 32px; }
+    .section-label { padding: 30px 32px 15px; }
+    .machines-block,
+    .pricing-block { padding: 0 32px; }
+    .pricing-note { padding: 10px 32px 0; }
+    .for-who,
+    .insta-section,
+    footer { margin: 0 32px; }
+    .cta-block { padding: 36px 32px 0; }
+    .floorplan-block { padding: 0 32px 36px; }
+    .insta-grid { grid-template-columns: repeat(3, 1fr); }
+
+    /* Plattegrond: hoogte-passend renderen en horizontaal laten slepen.
+       Verticaal blijft dicht, zodat een veeg omhoog gewoon de pagina
+       scrollt in plaats van vast te lopen in het kaartje. Deze grens moet
+       gelijk blijven aan SMAL in _initFloorplan verderop — anders schaalt
+       de plattegrond breder dan de canvas zonder dat je kunt schuiven. */
+    .fp-canvas {
+      height: clamp(420px, 55vh, 520px);
+      overflow-x: auto;
+      overflow-y: hidden;
+      touch-action: pan-x pan-y;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
+    }
+    .fp-tab { min-height: 40px; padding: 8px 14px; }
+    .floorplan-legend { gap: 12px 16px; }
+
+    /* Vingerformaat: op een tablet zijn die links anders 16px hoog. */
+    .sticky-nav .nav-links a {
+      display: flex;
+      align-items: center;
+      height: 48px;
+    }
+    .insta-handle a { display: inline-block; padding: 14px 8px; }
+  }
+
+  /* ── TELEFOON ── */
   @media (max-width: 600px) {
+    :root {
+      --fs-micro: 0.75rem;    /* 12px */
+      --fs-small: 0.8125rem;  /* 13px */
+      --fs-body:  0.875rem;   /* 14px */
+      --fs-lead:  1rem;       /* 16px */
+      --fs-eyebrow: 0.8125rem;/* 13px */
+      --fs-h3:    1.375rem;   /* 22px */
+      --fs-price: 1.625rem;   /* 26px */
+      --fs-h2:    2.25rem;    /* 36px */
+      --fs-fp-label: 10px;
+      --fs-fp-dim: 8px;
+      --fs-fp-door: 8px;
+    }
     header { padding: 40px 24px 32px; }
     .location-bar { margin: 20px 24px 0; }
     .intro { padding: 32px 24px 28px; }
@@ -717,9 +852,59 @@
     .insta-grid { grid-template-columns: repeat(2, 1fr); }
     .cta-actions { flex-direction: column; }
     .btn-primary, .btn-secondary { justify-content: center; }
-    .sticky-nav .nav-links { gap: 14px; }
-    .sticky-nav .nav-links a { font-size: 9px; letter-spacing: 0.12em; }
     .access-detail { gap: 12px; }
+    .hero-image { aspect-ratio: 2 / 1; }
+    /* Ruime letterafstand kost op een smal scherm hele regels. */
+    .eyebrow { letter-spacing: 0.14em; }
+    .location-bar span { letter-spacing: 0.12em; }
+    .section-label { letter-spacing: 0.2em; }
+
+    /* Sticky nav: het merk staat al bovenaan de pagina, dus op een telefoon
+       geven we die ruimte aan de vier links — anders vallen ze eraf. */
+    .sticky-nav { padding: 0 16px; }
+    .sticky-nav .nav-brand { display: none; }
+    .sticky-nav-inner { justify-content: center; }
+    .sticky-nav .nav-links { gap: 4px; }
+    .sticky-nav .nav-links a {
+      display: flex;
+      align-items: center;
+      height: 48px;
+      padding: 0 8px;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+    }
+
+    /* Prijsregel: label en bedrag onder elkaar in plaats van tegen elkaar
+       aan geperst. */
+    .pricing-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+      padding: 16px 0;
+    }
+
+    /* De canvashoogte bepaalt de schaal en dus de leesbaarheid van de
+       ruimtenamen; 420px houdt die ook op een kort scherm boven ~8px. */
+    .fp-canvas { height: clamp(420px, 58vh, 520px); }
+
+    /* Footer onder elkaar: naast elkaar wordt het op 14px-tekst te krap. */
+    footer {
+      flex-direction: column;
+      gap: 18px;
+      padding: 28px 0 56px;
+    }
+    footer .footer-right { text-align: left; }
+  }
+
+  /* ── KLEINE TELEFOON (320-360px) ── */
+  @media (max-width: 360px) {
+    :root {
+      --fs-h2: 2rem;          /* 32px */
+      --fs-price: 1.5rem;     /* 24px */
+    }
+    .sticky-nav { padding: 0 8px; }
+    .sticky-nav .nav-links a { padding: 0 5px; letter-spacing: 0.04em; }
+    .machine-tag { padding: 6px 10px; }
   }
 </style>
 </head>
@@ -1314,7 +1499,8 @@
       <button class="fp-tab" onclick="fpShow(1)">1e verdieping</button>
       <button class="fp-tab" onclick="fpShow(2)">2e verdieping</button>
     </div>
-    <div class="fp-canvas" id="cv"><div id="fp"></div></div>
+    <p class="fp-hint" id="fp-hint">← Sleep de plattegrond opzij →</p>
+    <div class="fp-canvas" id="cv"><div id="fp-stage"><div id="fp"></div></div></div>
     <div class="floorplan-legend" id="fp-legend"></div>
   </div>
 
@@ -1523,6 +1709,17 @@ window._initFloorplan=function(){
     fp.appendChild(d);
   }
 
+  // Mag de canvas horizontaal scrollen, dan renderen we hoogte-passend en
+  // schuift de bezoeker de plattegrond opzij — liever slepen dan turen,
+  // want "alles passend" drukt de ruimtenamen op een telefoon terug tot
+  // ~2px. De stylesheet beslist (mediaquery op .fp-canvas); door dat hier
+  // uit te lezen in plaats van een eigen breedtedrempel aan te houden
+  // kunnen de twee niet uit de pas gaan lopen.
+  function magSlepen(){
+    var ox=getComputedStyle(cv).overflowX;
+    return ox==='auto'||ox==='scroll';
+  }
+
   function fitToContent(){
     var els=fp.querySelectorAll('.pl');
     if(!els.length) return;
@@ -1533,14 +1730,28 @@ window._initFloorplan=function(){
       if(x+w>maxX) maxX=x+w; if(y+h>maxY) maxY=y+h;
     });
     var pad=40, bw=maxX-minX+pad*2, bh=maxY-minY+pad*2;
-    var rect=cv.getBoundingClientRect();
-    var scaleX=rect.width/bw, scaleY=rect.height/bh;
-    var zoom=Math.min(scaleX,scaleY,2); zoom=Math.max(zoom,0.3);
-    var panX=-(minX-pad)*zoom+(rect.width-bw*zoom)/2;
-    var panY=-(minY-pad)*zoom+(rect.height-bh*zoom)/2;
+    var stage=document.getElementById('fp-stage');
+    var vw=cv.clientWidth, vh=cv.clientHeight;
+    var scaleX=vw/bw, scaleY=vh/bh;
+    var zoom=magSlepen()?Math.min(scaleY,2):Math.min(scaleX,scaleY,2);
+    zoom=Math.max(zoom,0.3);
+    var sw=bw*zoom, sh=bh*zoom;
+
+    // De stage draagt de geschaalde maat, zodat de canvas weet hoe ver hij
+    // mag scrollen; #fp houdt zijn eigen coordinatenstelsel.
+    stage.style.width=sw+'px';
+    stage.style.height=sh+'px';
+    stage.style.marginLeft=sw<vw?((vw-sw)/2)+'px':'0';
+    stage.style.marginTop=sh<vh?((vh-sh)/2)+'px':'0';
+
     fp.style.width=FPW+'px';
     fp.style.height=FPH+'px';
-    fp.style.transform='translate('+panX+'px,'+panY+'px) scale('+zoom+')';
+    fp.style.transform='translate('+(-(minX-pad)*zoom)+'px,'+(-(minY-pad)*zoom)+'px) scale('+zoom+')';
+
+    var hint=document.getElementById('fp-hint');
+    if(hint) hint.classList.toggle('on',sw>vw+2);
+    cv.scrollLeft=0;
+
     var g=fp.querySelector('.fp-grid');
     if(!g){g=document.createElement('div');g.className='fp-grid';fp.insertBefore(g,fp.firstChild);}
     g.style.cssText='position:absolute;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:'+S*1000+'px '+S*1000+'px';
@@ -1595,6 +1806,23 @@ window._initFloorplan=function(){
   }
 
   window.fpShow=function(f){renderFloor(f);};
+
+  // Kantelen, in- of uitzoomen, of een adresbalk die weg schuift: de
+  // objecten blijven staan, alleen de schaal klopt niet meer. Zonder deze
+  // herberekening valt de onderkant van de plattegrond weg, want verticaal
+  // scrollen staat bewust uit. Een ResizeObserver op de canvas zelf vangt
+  // meer gevallen dan window.resize (die mist bijvoorbeeld een canvas die
+  // van maat verandert zonder dat het venster dat doet).
+  var hertekenTimer=null;
+  function hertekenStraks(){
+    clearTimeout(hertekenTimer);
+    hertekenTimer=setTimeout(fitToContent,150);
+  }
+  window.addEventListener('resize',hertekenStraks);
+  if(typeof ResizeObserver!=='undefined'){
+    new ResizeObserver(hertekenStraks).observe(cv);
+  }
+
   requestAnimationFrame(function(){renderFloor(0);});
 };
 </script>
