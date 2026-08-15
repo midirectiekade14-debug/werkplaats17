@@ -310,7 +310,7 @@ textarea.ce-input{min-height:60px;resize:vertical}
   <div class="sb-h">Objecten</div>
   <div class="sb-s">
     <div class="cat">Zones</div>
-    <div class="item" draggable="true" data-w="300" data-h="200" data-l="Magazijn" data-c="rgba(224,154,47,.5)" data-bg="rgba(224,154,47,.13)" data-room="1"><div class="sw" style="background:rgba(224,154,47,.5)"></div>Magazijn</div>
+    <div class="item" draggable="true" data-w="300" data-h="200" data-l="Opslag" data-c="rgba(224,154,47,.5)" data-bg="rgba(224,154,47,.13)" data-room="1"><div class="sw" style="background:rgba(224,154,47,.5)"></div>Opslag</div>
     <div class="item" draggable="true" data-w="120" data-h="90" data-l="Kantoor" data-c="rgba(110,150,220,.5)" data-bg="rgba(110,150,220,.13)" data-room="1"><div class="sw" style="background:rgba(110,150,220,.5)"></div>Kantoor</div>
     <div class="item" draggable="true" data-w="60" data-h="60" data-l="Keuken" data-c="rgba(140,200,140,.5)" data-bg="rgba(140,200,140,.13)" data-room="1"><div class="sw" style="background:rgba(140,200,140,.5)"></div>Keuken</div>
     <div class="item" draggable="true" data-w="45" data-h="60" data-l="Trap" data-c="rgba(180,140,80,.45)" data-bg="rgba(180,140,80,.13)" data-room="1"><div class="sw" style="background:rgba(180,140,80,.45)"></div>Trap</div>
@@ -714,7 +714,7 @@ document.getElementById('scanBtn').addEventListener('click',async function(){
     var text=data.content.map(function(c){return c.text||''}).join('');
     var rooms=JSON.parse(text.replace(/```json|```/g,'').trim());
     if(!Array.isArray(rooms)||!rooms.length){status.textContent='Geen ruimtes gevonden';status.style.color='#a03030';btn.disabled=false;return;}
-    var colors={'magazijn':{c:'rgba(224,154,47,.5)',bg:'rgba(224,154,47,.13)'},'kantoor':{c:'rgba(110,150,220,.5)',bg:'rgba(110,150,220,.13)'},'keuken':{c:'rgba(140,200,140,.5)',bg:'rgba(140,200,140,.13)'},'trap':{c:'rgba(180,140,80,.45)',bg:'rgba(180,140,80,.13)'},'entree':{c:'rgba(100,180,220,.5)',bg:'rgba(100,180,220,.13)'},'toilet':{c:'rgba(120,160,220,.5)',bg:'rgba(120,160,220,.18)'},'berging':{c:'rgba(160,140,120,.5)',bg:'rgba(160,140,120,.13)'},'overloop':{c:'rgba(200,180,140,.5)',bg:'rgba(200,180,140,.13)'},'vide':{c:'rgba(255,255,255,.12)',bg:'rgba(255,255,255,.03)'},'vloer':{c:'rgba(180,100,220,.5)',bg:'rgba(180,100,220,.13)'}};
+    var colors={'machinale':{c:'rgba(224,154,47,.5)',bg:'rgba(224,154,47,.13)'},'assemblage':{c:'rgba(224,154,47,.5)',bg:'rgba(224,154,47,.13)'},'opslag':{c:'rgba(224,154,47,.5)',bg:'rgba(224,154,47,.13)'},'kantoor':{c:'rgba(110,150,220,.5)',bg:'rgba(110,150,220,.13)'},'keuken':{c:'rgba(140,200,140,.5)',bg:'rgba(140,200,140,.13)'},'trap':{c:'rgba(180,140,80,.45)',bg:'rgba(180,140,80,.13)'},'entree':{c:'rgba(100,180,220,.5)',bg:'rgba(100,180,220,.13)'},'toilet':{c:'rgba(120,160,220,.5)',bg:'rgba(120,160,220,.18)'},'berging':{c:'rgba(160,140,120,.5)',bg:'rgba(160,140,120,.13)'},'overloop':{c:'rgba(200,180,140,.5)',bg:'rgba(200,180,140,.13)'},'vide':{c:'rgba(255,255,255,.12)',bg:'rgba(255,255,255,.03)'},'vloer':{c:'rgba(180,100,220,.5)',bg:'rgba(180,100,220,.13)'}};
     var defCol={c:'rgba(200,180,140,.5)',bg:'rgba(200,180,140,.13)'};
     rooms.forEach(function(rm){
       var x=Math.round(rm.x_pct/100*FPW),y=Math.round(rm.y_pct/100*FPH);

@@ -163,7 +163,7 @@ const PLACED_OBJECTS = [
     "y": 78,
     "w": 885,
     "h": 394,
-    "l": "Magazijn",
+    "l": "Opslag",
     "c": "#e09a2f",
     "bg": "rgba(224,154,47,0.02)",
     "type": "",
