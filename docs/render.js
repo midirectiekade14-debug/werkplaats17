@@ -143,8 +143,9 @@
   }
   setHTML('.for-who .not-for', C.notForText);
 
-  // Wie zijn wij — sectielabel, intro, personen, noot
+  // Wie zijn wij — sectielabel, menulabel, intro, personen, noot
   setText('#wij', C.aboutLabel);
+  setText('.nav-links a[href="#wij"]', C.aboutNavLabel);
   setHTML('.about-block .about-lead', C.aboutLead);
   setHTML('.about-block .about-note', C.aboutNote);
 
