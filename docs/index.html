@@ -2026,15 +2026,23 @@ window._initFloorplan=function(){
     while(legend.firstChild) legend.removeChild(legend.firstChild);
     var seen={};
     objs.forEach(function(o){
-      if(!o.room||seen[o.l]) return;
-      seen[o.l]=1;
+      // Een vorm zonder naam hoort niet in de legenda: dat werd een zwevend
+      // kleurblokje zonder bijschrift. Het gaat om achtergrondvormen die onder
+      // items liggen die zelf al een naam dragen -- op de 1e verdieping liggen
+      // er drie onder Werkplek, Berging en de huurunits. Die verklaren niets,
+      // dus die horen er niet bij te staan. De plattegrond-data komt uit de
+      // admin en kan morgen weer een naamloze vorm bevatten; deze controle
+      // hoort daarom hier, niet in het databestand.
+      var naam=(o.l||'').trim();
+      if(!o.room||!naam||seen[naam]) return;
+      seen[naam]=1;
       var item=document.createElement('div');
       item.className='legend-item';
       var sw=document.createElement('div');
       sw.className='legend-swatch';
       sw.style.background=o.bg;
       sw.style.borderColor=o.c;
-      var txt=document.createTextNode(' '+o.l);
+      var txt=document.createTextNode(' '+naam);
       item.appendChild(sw);
       item.appendChild(txt);
       legend.appendChild(item);
