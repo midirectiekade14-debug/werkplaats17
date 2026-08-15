@@ -1765,15 +1765,32 @@
   // draait die door een oude renderer — met een lege of half gevulde sectie
   // als gevolg. Alle vier de bestanden nu gelijk behandelen.
   var q=['content.js'+t,'photos.js'+t,'render.js'+t,'placed-objects.js'+t,'instagram-feed.js'+t];
+  function klaar(){
+    // Instagram-strip vóór de plattegrond: faalt hij, dan blijven de
+    // placeholder-tegels staan en start de plattegrond alsnog.
+    try{ window._renderInstagram && window._renderInstagram(); }
+    catch(e){ console.warn('Instagram-strip overgeslagen:', e); }
+    window._initFloorplan();
+  }
   function next(){
     if(!q.length){
-      // Instagram-strip vóór de plattegrond: faalt hij, dan blijven de
-      // placeholder-tegels staan en start de plattegrond alsnog.
-      try{ window._renderInstagram && window._renderInstagram(); }
-      catch(e){ console.warn('Instagram-strip overgeslagen:', e); }
-      window._initFloorplan();return;
+      // Deze lader staat in het bestand vóór de blokken die _renderInstagram
+      // en _initFloorplan definiëren. Scripts die je zo aanhangt laden async,
+      // dus de laatste onload kan vallen voordat de parser die blokken heeft
+      // gezien — uit de cache of over localhost is dat geen theorie. Is het
+      // bestand nog niet uitgelezen, dan wachten we op DOMContentLoaded.
+      if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',klaar);
+      else klaar();
+      return;
     }
-    var s=document.createElement('script');s.src=q.shift();s.onload=next;document.body.appendChild(s);
+    // Een script dat niet binnenkomt (404, netwerkfout) mag de ketting niet
+    // laten hangen: zonder onerror wacht next() eeuwig op een onload die nooit
+    // komt en blijft de plattegrond leeg. Doorlopen en het gemis melden.
+    var s=document.createElement('script');
+    s.src=q.shift();
+    s.onload=next;
+    s.onerror=function(){ console.warn('Script niet geladen, overgeslagen:', s.src); next(); };
+    document.body.appendChild(s);
   }
   next();
 })();
@@ -2036,7 +2053,17 @@ window._initFloorplan=function(){
     new ResizeObserver(hertekenStraks).observe(cv);
   }
 
-  requestAnimationFrame(function(){renderFloor(0);});
+  // Direct tekenen, niet via requestAnimationFrame. Laadt de pagina terwijl
+  // het document verborgen is -- achtergrondtabblad, geminimaliseerd venster,
+  // hersteld tabblad na een browserstart -- dan houdt de browser rAF tegen tot
+  // de bezoeker het tabblad naar voren haalt. De plattegrond bleef dan leeg
+  // zonder ook maar een foutmelding: PLACED_OBJECTS geladen, _initFloorplan
+  // gedefinieerd, nul objecten geplaatst.
+  // De maten die fitToContent nodig heeft liggen hier al vast (#fp-canvas is
+  // 100% breed en 420px hoog uit de stylesheet, dit script staat onderaan de
+  // body). Blijkt de layout tegen verwachting in nog niet klaar, dan herstelt
+  // de ResizeObserver hierboven de schaal alsnog.
+  renderFloor(0);
 };
 </script>
 
