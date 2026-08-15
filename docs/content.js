@@ -6,9 +6,9 @@
 
 const CONTENT = {
   "siteTitle": "Werkplaats3b — Professionele werkruimte Rotterdam - Den Haag",
-  "metaDescription": "Multifunctionele bedrijfsruimte voor vakmensen en kleine studio's. 850 m² met kantoren, Huurbare werkruimte en machinale. Oud Camp 3b, Maasland.",
-  "ogDescription": "Multifunctionele bedrijfsruimte voor vakmensen en kleine studio's. Productieruimte, kantoren, machinale. Naast A20, Maasland.",
-  "eyebrow": "Nog 3 units - Beschikbaar per 1 september",
+  "metaDescription": "Multifunctionele bedrijfsruimte voor vakmensen en kleine studio's. 850 m² met kantoren, ateliers, afgesloten werkruimtes en machinale. Oud Camp 3b, Maasland.",
+  "ogDescription": "Multifunctionele bedrijfsruimte voor vakmensen en kleine studio's. Op 20 minuten afstand van Rotetrdam-Delft-Den Haag. Naast A20, Maasland.",
+  "eyebrow": "Nog 3 units - Per 1 september",
   "tagline": "Multifunctionele bedrijfsruimte voor professionele makers",
   "locationText": "Oud Camp 3b · Maasland · Naast A20 · 15-20 minuten van Den Haag / Rotterdam / Delft",
   "introText": "Werkplaats3b is een <strong>multifunctionele bedrijfsruimte van 850 m²</strong> voor zelfstandige vakmensen en kleine studio's. <br>Hier werken professionele en ambitieuze makers samen onder 1 dak aan aan mooie projecten. Hier kommen kennis, kunde en ambitie samen en gaan we voor kwaliteit! <br><br>Herken jij je hierin en heb je ruimte nodig voor je ambities en projecten? Dan wordt het tijd voor een kennismaking. <br><br>Is dit wat je zoekt dan krijg je een contract wat per kwartaal opzegbaar is, betaal je 2 maanden huur als borg en kun je meteen aan de gang. <br>",
@@ -19,19 +19,19 @@ const CONTENT = {
   "offers": [
     {
       "title": "Machinale en opslag",
-      "text": "300 m² begane grond. Vloerverwarming, LED-verlichting, Krachtstroom"
+      "text": "300 m² op de begane grond."
     },
     {
       "title": "Verhuurbare werkruimtes 25m2 met opslag op entresol en platenrek.",
-      "text": "We hebben kant en klare werkplekken van 25m2 inclusief stroompunten, perslucht en verlichting. Past je project niet in je ruimte bouw je verder op de flexspace voor je unit."
+      "text": "We hebben kant en klare werkplekken voor meubelmakers en interieurbouwers van 25m2 inclusief stroompunten, perslucht en verlichting. Past je project niet in je ruimte bouw je verder op de flexspace voor je unit."
     },
     {
-      "title": "Kantoren en ontvangstruimte",
+      "title": "Kantoren, ateliers en ontvangstruimte",
       "text": "100 m² op de begane grond en 85 m² op 2e verdieping."
     },
     {
       "title": "Faciliteiten",
-      "text": "Airco, glasvezel, alarmsysteem, keuken, overheaddeur, vloerverwarming, flexplekken, ontvangstruimte voor klanten, gesloten en open aanhanger, reachtruck"
+      "text": "Airco, glasvezel, alarmsysteem, keuken, overheaddeur, vloerverwarming, bureauplekken, ontvangstruimte voor klanten, gesloten en open aanhanger, reachtruck"
     }
   ],
   "machines": [
@@ -128,7 +128,7 @@ const CONTENT = {
   "ctaHeading": "Interesse?<br>Kom <em>kijken.</em>",
   "email": "info@werkplaats3b.nl",
   "whatsappNumber": "31681689278",
-  "whatsappText": "Hoi, ik heb interesse in een werkplek bij Werkplaats3b.",
+  "whatsappText": "Hey, ik heb interesse in een werkplek bij Werkplaats3b.",
   "contactLines": [
     "Oud Camp 3b, Maasland (naast A20)",
     "Beperkt aantal plekken beschikbaar",
