@@ -7,7 +7,7 @@
 const CONTENT = {
   "siteTitle": "Werkplaats3b — Professionele werkruimte Rotterdam - Den Haag",
   "metaDescription": "Multifunctionele bedrijfsruimte voor vakmensen en kleine studio's. 850 m² met kantoren, ateliers, afgesloten werkruimtes en machinale. Oud Camp 3b, Maasland.",
-  "ogDescription": "Multifunctionele bedrijfsruimte voor vakmensen en kleine studio's. Op 20 minuten afstand van Rotetrdam-Delft-Den Haag. Naast A20, Maasland.",
+  "ogDescription": "Multifunctionele bedrijfsruimte voor vakmensen en kleine studio's. Op 20 minuten afstand van Rotterdam-Delft-Den Haag. Naast A20, Maasland.",
   "eyebrow": "Nog 3 units - Per 1 september",
   "tagline": "Multifunctionele bedrijfsruimte voor professionele makers",
   "locationText": "Oud Camp 3b · Maasland · Naast A20 · 15-20 minuten van Den Haag / Rotterdam / Delft",
