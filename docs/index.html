@@ -587,6 +587,92 @@
     font-weight: 500;
   }
 
+  /* ── WIE ZIJN WIJ ──
+     Zelfde ritme als .for-who: marge links/rechts gelijk aan de andere
+     tekstblokken, afsluitende lijn onderaan. De drie kaarten delen de
+     1px-rasteropzet van .offer-grid, zodat de sectie visueel bij de rest
+     van de pagina hoort en niet als los kader leest. */
+  .about-block {
+    margin: 0 40px;
+    padding: 32px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .about-lead {
+    font-size: var(--fs-lead);
+    line-height: 1.8;
+    color: var(--cream);
+    font-weight: 300;
+    letter-spacing: 0.02em;
+    max-width: 68ch;
+  }
+  .about-lead strong {
+    color: var(--amber);
+    font-weight: 400;
+  }
+  .about-people {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin-top: 26px;
+  }
+  .person {
+    background: var(--surface);
+    padding: 22px 22px 20px;
+    transition: background 0.25s;
+  }
+  .person:hover { background: var(--surface2); }
+  .person .initial {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: var(--fs-h3);
+    line-height: 1;
+    letter-spacing: 2px;
+    color: var(--amber);
+    display: inline-block;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 14px;
+    min-width: 26px;
+  }
+  .person h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: var(--fs-h3);
+    line-height: 1.15;
+    letter-spacing: 1px;
+    color: var(--cream);
+    margin-bottom: 6px;
+  }
+  .person .role {
+    font-size: var(--fs-small);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--amber);
+    display: block;
+    margin-bottom: 10px;
+  }
+  .person p {
+    font-size: var(--fs-body);
+    line-height: 1.7;
+    color: var(--muted);
+    font-weight: 300;
+  }
+  .person p:empty { display: none; }
+  .about-note {
+    margin-top: 20px;
+    max-width: 88ch;
+    padding: 14px 16px;
+    border-left: 2px solid var(--amber);
+    font-size: var(--fs-small);
+    color: var(--muted);
+    line-height: 1.7;
+    letter-spacing: 0.04em;
+  }
+  .about-note strong {
+    color: var(--cream);
+    font-weight: 500;
+  }
+
   /* ── CTA ── */
   .cta-block {
     padding: 40px 40px 0;
@@ -789,8 +875,10 @@
     .pricing-block { padding: 0 32px; }
     .pricing-note { padding: 10px 32px 0; }
     .for-who,
+    .about-block,
     .insta-section,
     footer { margin: 0 32px; }
+    .about-people { grid-template-columns: repeat(3, 1fr); }
     .cta-block { padding: 36px 32px 0; }
     .floorplan-block { padding: 0 32px 36px; }
     .insta-grid { grid-template-columns: repeat(3, 1fr); }
@@ -843,6 +931,8 @@
     .pricing-block { padding: 0 24px; }
     .pricing-note { padding: 10px 24px 0; }
     .for-who { margin: 0 24px; }
+    .about-block { margin: 0 24px; }
+    .about-people { grid-template-columns: 1fr; }
     .cta-block { padding: 32px 24px 0; }
     .insta-section { margin: 0 24px; }
     footer { margin: 0 24px; }
@@ -860,18 +950,21 @@
     .section-label { letter-spacing: 0.2em; }
 
     /* Sticky nav: het merk staat al bovenaan de pagina, dus op een telefoon
-       geven we die ruimte aan de vier links — anders vallen ze eraf. */
-    .sticky-nav { padding: 0 16px; }
+       geven we die ruimte aan de vijf links — anders vallen ze eraf. Sinds
+       "Over ons" erbij kwam is het krap: padding, gap en letterafstand zijn
+       gemeten op 360px, waar de rij precies binnen de rand blijft. */
+    .sticky-nav { padding: 0 10px; }
     .sticky-nav .nav-brand { display: none; }
     .sticky-nav-inner { justify-content: center; }
-    .sticky-nav .nav-links { gap: 4px; }
+    .sticky-nav .nav-links { gap: 2px; }
     .sticky-nav .nav-links a {
       display: flex;
       align-items: center;
       height: 48px;
-      padding: 0 8px;
-      font-size: 0.75rem;
-      letter-spacing: 0.08em;
+      padding: 0 5px;
+      font-size: 0.6875rem;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
     }
 
     /* Prijsregel: label en bedrag onder elkaar in plaats van tegen elkaar
@@ -902,8 +995,11 @@
       --fs-h2: 2rem;          /* 32px */
       --fs-price: 1.5rem;     /* 24px */
     }
-    .sticky-nav { padding: 0 8px; }
-    .sticky-nav .nav-links a { padding: 0 5px; letter-spacing: 0.04em; }
+    /* Vijf links op een 320px-scherm: zonder deze krimp valt "Aanbod" links
+       buiten beeld. Gemeten op 320px — de rij past er dan net binnen. */
+    .sticky-nav { padding: 0 6px; }
+    .sticky-nav .nav-links { gap: 0; }
+    .sticky-nav .nav-links a { padding: 0 4px; font-size: 0.625rem; letter-spacing: 0.02em; }
     .machine-tag { padding: 6px 10px; }
   }
 </style>
@@ -970,6 +1066,7 @@
       <li><a href="#aanbod">Aanbod</a></li>
       <li><a href="#indeling">Indeling</a></li>
       <li><a href="#tarieven">Tarieven</a></li>
+      <li><a href="#wij">Over ons</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
   </div>
@@ -1560,6 +1657,35 @@
     </div>
   </div>
 
+  <!-- WIE ZIJN WIJ -->
+  <p class="section-label" id="wij">Wie zijn wij</p>
+  <div class="about-block">
+    <p class="about-lead">Werkplaats3b is opgezet door drie zelfstandige makers die hier zelf werken. We huren het pand samen en verhuren de plekken die we niet zelf gebruiken. <strong>De verhuurder staat naast je aan de zaag.</strong></p>
+    <div class="about-people">
+      <div class="person">
+        <span class="initial">H</span>
+        <h3>Harm</h3>
+        <span class="role">Meubelmaker · mede-eigenaar</span>
+        <p>Bracht het machinepark in dat in de machinale staat.</p>
+      </div>
+      <div class="person">
+        <span class="initial">M</span>
+        <h3>Matthijs</h3>
+        <span class="role">Mede-eigenaar</span>
+        <p></p>
+      </div>
+      <div class="person">
+        <span class="initial">W</span>
+        <h3>Wesley</h3>
+        <span class="role">Mede-eigenaar</span>
+        <p></p>
+      </div>
+    </div>
+    <div class="about-note">
+      <strong>Je huurt bij de mensen die er zelf werken.</strong> Geen beheerder op afstand: wie je aan de telefoon krijgt over een machine, een levering of je contract, staat hier zelf in de hal.
+    </div>
+  </div>
+
   <!-- CTA -->
   <div class="cta-block" id="contact">
     <h2>Interesse?<br>Kom <em>kijken.</em></h2>
@@ -1611,7 +1737,12 @@
 <script>
 (function(){
   var t='?t='+Date.now();
-  var q=['content.js'+t,'photos.js'+t,'render.js','placed-objects.js'+t];
+  // render.js kreeg als enige geen cache-buster mee. Zolang alleen content.js
+  // veranderde viel dat niet op, maar zodra de renderer zelf wijzigt (nieuw
+  // blok, nieuw veld) haalt een terugkerende bezoeker verse content op en
+  // draait die door een oude renderer — met een lege of half gevulde sectie
+  // als gevolg. Alle vier de bestanden nu gelijk behandelen.
+  var q=['content.js'+t,'photos.js'+t,'render.js'+t,'placed-objects.js'+t];
   function next(){
     if(!q.length){window._initFloorplan();return;}
     var s=document.createElement('script');s.src=q.shift();s.onload=next;document.body.appendChild(s);

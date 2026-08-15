@@ -1101,6 +1101,12 @@ var CE_SCHEMA=[
     {key:'targetAudience',label:'Doelgroep items',type:'array-text'},
     {key:'notForText',label:'Niet voor',type:'html'},
   ]},
+  {id:'wij',title:'Wie zijn wij',fields:[
+    {key:'aboutLabel',label:'Sectiekop',type:'text'},
+    {key:'aboutLead',label:'Intro tekst',type:'html'},
+    {key:'team',label:'Personen (naam / rol / zin — zin mag leeg)',type:'array-obj',objFields:['name','role','text']},
+    {key:'aboutNote',label:'Slotnoot',type:'html'},
+  ]},
   {id:'contact',title:'Contact',fields:[
     {key:'ctaHeading',label:'CTA heading',type:'html'},
     {key:'email',label:'E-mailadres',type:'text'},

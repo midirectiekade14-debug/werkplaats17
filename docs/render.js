@@ -143,6 +143,44 @@
   }
   setHTML('.for-who .not-for', C.notForText);
 
+  // Wie zijn wij — sectielabel, intro, personen, noot
+  setText('#wij', C.aboutLabel);
+  setHTML('.about-block .about-lead', C.aboutLead);
+  setHTML('.about-block .about-note', C.aboutNote);
+
+  // Personen opnieuw opbouwen: het aantal is niet vast, admin kan er een
+  // toevoegen of weghalen. Een lege tekstregel levert geen lege <p> op.
+  if (Array.isArray(C.team)) {
+    var people = document.querySelector('.about-people');
+    if (people) {
+      replaceChildren(people, null);
+      C.team.forEach(function (p) {
+        if (!p || !p.name) return;
+        var card = document.createElement('div');
+        card.className = 'person';
+        var ini = document.createElement('span');
+        ini.className = 'initial';
+        ini.textContent = String(p.name).trim().charAt(0).toUpperCase();
+        card.appendChild(ini);
+        var h3 = document.createElement('h3');
+        h3.textContent = p.name;
+        card.appendChild(h3);
+        if (p.role) {
+          var role = document.createElement('span');
+          role.className = 'role';
+          role.textContent = p.role;
+          card.appendChild(role);
+        }
+        if (p.text) {
+          var txt = document.createElement('p');
+          txt.appendChild(parseHTML(p.text));
+          card.appendChild(txt);
+        }
+        people.appendChild(card);
+      });
+    }
+  }
+
   // CTA heading
   setHTML('.cta-block h2', C.ctaHeading);
 

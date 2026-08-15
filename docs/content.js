@@ -125,6 +125,26 @@ const CONTENT = {
     "Maker die meer ruimte en machines nodig heeft"
   ],
   "notForText": "<strong>KvK-inschrijving en verzekering verplicht.</strong> Werkplaats3b is uitsluitend voor professionele gebruikers. Particulieren en hobbyisten kunnen hier niet terecht.",
+  "aboutLabel": "Wie zijn wij",
+  "aboutLead": "Werkplaats3b is opgezet door drie zelfstandige makers die hier zelf werken. We huren het pand samen en verhuren de plekken die we niet zelf gebruiken. <strong>De verhuurder staat naast je aan de zaag.</strong>",
+  "team": [
+    {
+      "name": "Harm",
+      "role": "Meubelmaker · mede-eigenaar",
+      "text": "Bracht het machinepark in dat in de machinale staat."
+    },
+    {
+      "name": "Matthijs",
+      "role": "Mede-eigenaar",
+      "text": ""
+    },
+    {
+      "name": "Wesley",
+      "role": "Mede-eigenaar",
+      "text": ""
+    }
+  ],
+  "aboutNote": "<strong>Je huurt bij de mensen die er zelf werken.</strong> Geen beheerder op afstand: wie je aan de telefoon krijgt over een machine, een levering of je contract, staat hier zelf in de hal.",
   "ctaHeading": "Interesse?<br>Kom <em>kijken.</em>",
   "email": "info@werkplaats3b.nl",
   "whatsappNumber": "31681689278",
