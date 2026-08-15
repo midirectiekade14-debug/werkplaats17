@@ -795,6 +795,24 @@
     transition: color 0.3s;
   }
   .insta-tile:hover .insta-icon { color: var(--muted); }
+  /* Gevulde tegel: de <a> vult de tegel volledig, zodat het hele vlak
+     klikbaar is en niet alleen de afbeelding. De tegels blijven vierkant
+     (aspect-ratio hierboven); slides zijn 1080x1080, dus object-fit: cover
+     snijdt niets weg. Bij een afwijkend formaat wint het midden. */
+  .insta-tile > a {
+    position: absolute;
+    inset: 0;
+    display: block;
+    line-height: 0;
+  }
+  .insta-tile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: opacity 0.3s, transform 0.4s;
+  }
+  .insta-tile:hover img { opacity: 0.82; transform: scale(1.03); }
   .insta-handle {
     margin-top: 14px;
     text-align: center;
@@ -881,7 +899,11 @@
     .about-people { grid-template-columns: repeat(3, 1fr); }
     .cta-block { padding: 36px 32px 0; }
     .floorplan-block { padding: 0 32px 36px; }
+    /* Drie kolommen: een vierde tegel zou alleen op een tweede rij landen
+       en dat leest als een renderfout. De strip is een teaser naar het
+       Instagram-account, geen archief — dus de vierde valt hier weg. */
     .insta-grid { grid-template-columns: repeat(3, 1fr); }
+    .insta-grid > :nth-child(n+4) { display: none; }
 
     /* Plattegrond: hoogte-passend renderen en horizontaal laten slepen.
        Verticaal blijft dicht, zodat een veeg omhoog gewoon de pagina
@@ -1742,13 +1764,73 @@
   // blok, nieuw veld) haalt een terugkerende bezoeker verse content op en
   // draait die door een oude renderer — met een lege of half gevulde sectie
   // als gevolg. Alle vier de bestanden nu gelijk behandelen.
-  var q=['content.js'+t,'photos.js'+t,'render.js'+t,'placed-objects.js'+t];
+  var q=['content.js'+t,'photos.js'+t,'render.js'+t,'placed-objects.js'+t,'instagram-feed.js'+t];
   function next(){
-    if(!q.length){window._initFloorplan();return;}
+    if(!q.length){
+      // Instagram-strip vóór de plattegrond: faalt hij, dan blijven de
+      // placeholder-tegels staan en start de plattegrond alsnog.
+      try{ window._renderInstagram && window._renderInstagram(); }
+      catch(e){ console.warn('Instagram-strip overgeslagen:', e); }
+      window._initFloorplan();return;
+    }
     var s=document.createElement('script');s.src=q.shift();s.onload=next;document.body.appendChild(s);
   }
   next();
 })();
+</script>
+<script>
+/* ── INSTAGRAM-STRIP ──
+   Vult de vier placeholder-tegels met de nieuwste posts uit
+   instagram-feed.js. Die feed wordt geschreven door
+   bedrijfsvoering/marketing/scripts/instagram_publish.py (subcommando
+   add-to-site), nooit met de hand.
+
+   Bewust géén live Instagram-embed: die vereist een ingelogde bezoeker,
+   laadt trackers van Meta en breekt zodra een token verloopt. Deze strip
+   is statisch en blijft staan.
+
+   Faalt er iets — feed leeg, bestand mist, entry zonder src — dan blijven
+   de bestaande placeholder-tegels gewoon staan. Nooit een half gevulde rij. */
+window._renderInstagram=function(){
+  if(typeof INSTAGRAM_FEED==='undefined'||!Array.isArray(INSTAGRAM_FEED)) return;
+  var posts=INSTAGRAM_FEED.filter(function(p){return p&&p.src;}).slice(0,4);
+  if(!posts.length) return;
+
+  var grid=document.querySelector('.insta-grid');
+  if(!grid) return;
+
+  var profiel='https://instagram.com/werkplaats3b';
+  /* replaceChildren i.p.v. innerHTML='': leegmaken zonder de HTML-parser
+     aan te roepen. Alle tegelinhoud hieronder gaat via createElement en
+     property-toewijzing, dus er wordt nergens tekst als HTML geparsed. */
+  grid.replaceChildren();
+  posts.forEach(function(p){
+    var tile=document.createElement('div');
+    tile.className='insta-tile';
+
+    var link=document.createElement('a');
+    link.href=profiel;
+    link.target='_blank';
+    link.rel='noopener';
+    /* Eerste regel van de caption als tooltip; de hashtag-staart hoort
+       daar niet in. */
+    var kop=String(p.caption||'');
+    var br=kop.indexOf(String.fromCharCode(10));
+    if(br>-1) kop=kop.slice(0,br);
+    kop=kop.trim();
+    if(kop) link.title=kop;
+
+    var img=document.createElement('img');
+    img.src=p.src;
+    img.alt=p.alt||kop||'Instagram-post van Werkplaats3b';
+    img.loading='lazy';
+    img.decoding='async';
+
+    link.appendChild(img);
+    tile.appendChild(link);
+    grid.appendChild(tile);
+  });
+};
 </script>
 <script>
 window._initFloorplan=function(){
