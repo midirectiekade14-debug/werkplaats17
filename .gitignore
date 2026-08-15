@@ -34,3 +34,8 @@ dist/
 
 # Lokaal Astro-experiment (kopie van de site, niet de bron) -- niet publiceren
 /astro/
+
+# Interne bouwvoorbereiding (elektraplan, machinelijst, plattegronden met groepen).
+# Stond untracked in deze PUBLIEKE repo, 2026-08-15 afgedekt. Geen site-content:
+# alles wat de site serveert staat in docs/. Wil je het toch publiceren -> regel weg.
+/elektraplan/
