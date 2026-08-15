@@ -131,17 +131,17 @@ const CONTENT = {
   "team": [
     {
       "name": "Harm",
-      "role": "Meubelmaker · mede-eigenaar",
-      "text": "Bracht het machinepark in dat in de machinale staat."
+      "role": "Meubelmaker ",
+      "text": ""
     },
     {
       "name": "Matthijs",
-      "role": "Mede-eigenaar",
+      "role": "Meubelmaker",
       "text": ""
     },
     {
       "name": "Wesley",
-      "role": "Mede-eigenaar",
+      "role": "Meubelmaker",
       "text": ""
     }
   ],
