@@ -9,7 +9,7 @@ const INSTAGRAM_FEED = [
   {
     "src": "photos/instagram/p04.webp",
     "alt": "Maker aan een formaatzaag in de werkplaats, met de tekst Ruimte voor ambitie",
-    "caption": "Ruimte voor ambitie.\n\n850 m2 werkplaats in Maasland. Je eigen unit met opslag, een gedeeld machinepark, werkbanken en bureaus — tussen makers die het vak serieus nemen.\n\nNog 3 units vrij.\n\n#werkplaats3b #meubelmaker #interieurbouw #vakmanschap #maasland #westland #zzp #houtbewerking #atelier #bedrijfsruimte",
+    "caption": "Ruimte voor ambitie.\n\n850 m² werkplaats in Maasland. Je eigen unit met opslag, een gedeeld machinepark, werkbanken en bureaus — tussen makers die het vak serieus nemen.\n\nNog 3 units vrij.\n\n#werkplaats3b #meubelmaker #interieurbouw #vakmanschap #maasland #westland #zzp #houtbewerking #atelier #bedrijfsruimte",
     "datum": "2026-08-15"
   },
   {
@@ -21,7 +21,7 @@ const INSTAGRAM_FEED = [
   {
     "src": "photos/instagram/p02.webp",
     "alt": "Tarievenoverzicht Werkplaats3b: werkplek 945 euro, werkruimte vanaf 450 euro, opslag vanaf 75 euro per maand",
-    "caption": "Geen verrassingen achteraf.\n\nWerkplek 1e verdieping: € 945 per maand. 25 m2 met opslag, eigen werkbank en toegang tot het machinepark. Servicekosten € 120 — daar zitten energie, schoonmaak en afvalcontainers al in.\n\nEigen afsluitbare werkruimte vanaf € 450. Losse opslag vanaf € 75. Alles excl. btw.\n\n#werkplaats3b #meubelmaker #interieurbouw #vakmanschap #maasland #westland #zzp #houtbewerking #atelier #bedrijfsruimte",
+    "caption": "Geen verrassingen achteraf.\n\nWerkplek 1e verdieping: € 945 per maand. 25 m² met opslag, eigen werkbank en toegang tot het machinepark. Servicekosten € 120 — daar zitten energie, schoonmaak en afvalcontainers al in.\n\nEigen afsluitbare werkruimte vanaf € 450. Losse opslag vanaf € 75. Alles excl. btw.\n\n#werkplaats3b #meubelmaker #interieurbouw #vakmanschap #maasland #westland #zzp #houtbewerking #atelier #bedrijfsruimte",
     "datum": "2026-08-15"
   },
   {
