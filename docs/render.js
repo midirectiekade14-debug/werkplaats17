@@ -159,10 +159,23 @@
         if (!p || !p.name) return;
         var card = document.createElement('div');
         card.className = 'person';
-        var ini = document.createElement('span');
-        ini.className = 'initial';
-        ini.textContent = String(p.name).trim().charAt(0).toUpperCase();
-        card.appendChild(ini);
+        if (p.photo) {
+          var fig = document.createElement('div');
+          fig.className = 'person-photo';
+          var foto = document.createElement('img');
+          foto.src = p.photo + (p.photo.indexOf('?') === -1 ? '?t=' + Date.now() : '');
+          foto.alt = p.name;
+          foto.loading = 'lazy';
+          fig.appendChild(foto);
+          card.appendChild(fig);
+        } else {
+          // Geen foto: de beginletter houdt de kaart in balans naast een
+          // buurman die er wel een heeft.
+          var ini = document.createElement('span');
+          ini.className = 'initial';
+          ini.textContent = String(p.name).trim().charAt(0).toUpperCase();
+          card.appendChild(ini);
+        }
         var h3 = document.createElement('h3');
         h3.textContent = p.name;
         card.appendChild(h3);

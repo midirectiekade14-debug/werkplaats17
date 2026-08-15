@@ -623,6 +623,23 @@
     transition: background 0.25s;
   }
   .person:hover { background: var(--surface2); }
+  /* Portret loopt tot de rand van de kaart — de negatieve marges compenseren
+     de padding van .person. Uitsnede iets boven het midden, want bij een
+     staande foto zit het hoofd zelden in het geometrische midden. */
+  .person-photo {
+    margin: -22px -22px 16px;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--line);
+  }
+  .person-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+    display: block;
+  }
   .person .initial {
     font-family: 'Bebas Neue', sans-serif;
     font-size: var(--fs-h3);

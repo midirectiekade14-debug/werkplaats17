@@ -216,6 +216,14 @@ textarea.ce-input{min-height:60px;resize:vertical}
 .ce-array-rm:hover{filter:brightness(1.2)}
 .ce-array-add{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:8px;font-family:inherit;letter-spacing:.08em;text-transform:uppercase;background:var(--surface2);border:1px solid var(--border);color:var(--amber);cursor:pointer;margin-top:4px}
 .ce-array-add:hover{border-color:var(--amber)}
+.ce-person-row{align-items:stretch}
+.ce-person-fields{flex:1;display:flex;flex-direction:column}
+.ce-person-photo{position:relative;width:64px;height:64px;flex-shrink:0;background:var(--surface2);border:2px dashed var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;transition:border-color .2s}
+.ce-person-photo:hover{border-color:var(--amber)}
+.ce-person-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ce-person-photo-plus{color:var(--muted);font-size:18px;line-height:1}
+.ce-person-photo-hint{font-size:7px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+.ce-person-photo-rm{position:absolute;top:2px;right:2px;width:16px;height:16px;border:none;background:var(--red);color:#fff;font-size:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;padding:0}
 .ce-check{display:flex;align-items:center;gap:6px}
 .ce-check input[type=checkbox]{accent-color:var(--amber);width:14px;height:14px}
 
@@ -1070,6 +1078,58 @@ window.switchView=function(view){
 // ╚════════════════════════════════════════════╝
 var ceInitialized=false;
 var ceData={};
+// Portretfoto's van de personen: nog niet geüpload (index → {b64,dataUrl}) en
+// een cache van net geüploade dataUrls, want raw.githubusercontent cachet hard
+// en toont anders minutenlang de vorige foto.
+var ceTeamPending={};
+var ceTeamCache={};
+
+// Persoon i weggehaald: alle wachtende foto's daarboven schuiven een plek op,
+// anders plakt een geüploade foto aan de verkeerde naam.
+function ceShiftPending(verwijderdeIndex){
+  delete ceTeamPending[verwijderdeIndex];
+  var nieuw={};
+  Object.keys(ceTeamPending).forEach(function(k){
+    var i=parseInt(k,10);
+    nieuw[i>verwijderdeIndex?i-1:i]=ceTeamPending[k];
+  });
+  ceTeamPending=nieuw;
+}
+
+function ceSlug(naam){
+  var s=String(naam||'').toLowerCase()
+    .replace(/[àáâäã]/g,'a').replace(/[èéêë]/g,'e').replace(/[ìíîï]/g,'i')
+    .replace(/[òóôöõ]/g,'o').replace(/[ùúûü]/g,'u').replace(/[ç]/g,'c')
+    .replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  return s||'persoon';
+}
+
+window.cePickPhoto=function(index,herteken){
+  var inp=document.createElement('input');inp.type='file';inp.accept='image/*';
+  inp.onchange=function(){
+    var file=this.files[0];if(!file)return;
+    var reader=new FileReader();
+    reader.onload=function(e){
+      var img=new Image();
+      img.onload=function(){
+        // Portret op de site is ± 350 px breed; 900 px geeft ruimte voor
+        // retina zonder de repo vol te laden met telefoonfoto's van 4 MB.
+        var canvas=document.createElement('canvas');
+        var maxW=900,w=img.width,h=img.height;
+        if(w>maxW){h=Math.round(h*(maxW/w));w=maxW;}
+        canvas.width=w;canvas.height=h;
+        canvas.getContext('2d').drawImage(img,0,0,w,h);
+        var dataUrl=canvas.toDataURL('image/jpeg',0.82);
+        ceTeamPending[index]={b64:dataUrl.split(',')[1],dataUrl:dataUrl};
+        document.getElementById('ce-status').textContent='Foto klaar — druk op Opslaan & Publiceer';
+        if(herteken)herteken();
+      };
+      img.src=e.target.result;
+    };
+    reader.readAsDataURL(file);
+  };
+  inp.click();
+};
 
 // Schema voor de content editor
 var CE_SCHEMA=[
@@ -1105,7 +1165,7 @@ var CE_SCHEMA=[
     {key:'aboutLabel',label:'Sectiekop',type:'text'},
     {key:'aboutNavLabel',label:'Label in de menubalk (kort houden — vijf links moeten op een telefoon passen)',type:'text'},
     {key:'aboutLead',label:'Intro tekst',type:'html'},
-    {key:'team',label:'Personen (naam / rol / zin — zin mag leeg)',type:'array-obj',objFields:['name','role','text']},
+    {key:'team',label:'Personen (foto / naam / rol / zin — foto en zin mogen leeg)',type:'array-person'},
     {key:'aboutNote',label:'Slotnoot',type:'html'},
   ]},
   {id:'contact',title:'Contact',fields:[
@@ -1270,6 +1330,54 @@ function ceRenderField(f){
     var addBtn=document.createElement('button');addBtn.className='ce-array-add';addBtn.textContent='+ Toevoegen';
     addBtn.onclick=function(){if(!ceData[f.key])ceData[f.key]=[];var obj={};f.objFields.forEach(function(k){obj[k]='';});ceData[f.key].push(obj);renderArrayObj();};
     wrap.appendChild(addBtn);
+  }else if(f.type==='array-person'){
+    // Personen met portretfoto. De foto hoort bij de persoon zelf (pad in
+    // ceData.team[i].photo), niet bij een vast genummerd slot zoals de
+    // fotomanager gebruikt — anders wijst een foto naar de verkeerde persoon
+    // zodra je er iemand tussenuit haalt.
+    var _lb=document.createElement('div');_lb.className='ce-label';_lb.textContent=f.label;wrap.appendChild(_lb);
+    var list=document.createElement('div');list.dataset.key=f.key;
+    function renderPersons(){
+      while(list.firstChild)list.removeChild(list.firstChild);
+      (ceData[f.key]||[]).forEach(function(item,i){
+        var row=document.createElement('div');row.className='ce-array-item ce-person-row';
+        // Fotoslot
+        var slot=document.createElement('div');slot.className='ce-person-photo';
+        var pending=ceTeamPending[i];
+        if(pending||item.photo){
+          var img=document.createElement('img');
+          img.src=pending?pending.dataUrl:(ceTeamCache[item.photo]||'https://raw.githubusercontent.com/'+GH_REPO+'/master/docs/'+item.photo+'?t='+Date.now());
+          img.alt=item.name||'portret';
+          slot.appendChild(img);
+          var del=document.createElement('button');del.className='ce-person-photo-rm';del.type='button';del.textContent='✕';del.title='Foto weghalen';
+          del.onclick=function(e){e.stopPropagation();delete ceTeamPending[i];ceData[f.key][i].photo='';renderPersons();};
+          slot.appendChild(del);
+        }else{
+          var plus=document.createElement('span');plus.className='ce-person-photo-plus';plus.textContent='+';slot.appendChild(plus);
+          var hint=document.createElement('span');hint.className='ce-person-photo-hint';hint.textContent='Foto';slot.appendChild(hint);
+        }
+        slot.onclick=function(){cePickPhoto(i,renderPersons);};
+        row.appendChild(slot);
+        // Tekstvelden
+        var velden=document.createElement('div');velden.className='ce-person-fields';
+        [['name','naam'],['role','rol — bijv. Meubelmaker · mede-eigenaar'],['text','zin (mag leeg)']].forEach(function(pair){
+          var inp=document.createElement('input');inp.className='ce-input';inp.type='text';inp.value=item[pair[0]]||'';
+          inp.placeholder=pair[1];inp.style.marginBottom='4px';
+          inp.oninput=function(){ceData[f.key][i][pair[0]]=this.value;};
+          velden.appendChild(inp);
+        });
+        row.appendChild(velden);
+        var rm=document.createElement('button');rm.className='ce-array-rm';rm.textContent='✕';
+        rm.onclick=function(){ceData[f.key].splice(i,1);ceShiftPending(i);renderPersons();};
+        row.appendChild(rm);
+        list.appendChild(row);
+      });
+    }
+    renderPersons();
+    wrap.appendChild(list);
+    var addBtn=document.createElement('button');addBtn.className='ce-array-add';addBtn.textContent='+ Persoon toevoegen';
+    addBtn.onclick=function(){if(!ceData[f.key])ceData[f.key]=[];ceData[f.key].push({name:'',role:'',text:'',photo:''});renderPersons();};
+    wrap.appendChild(addBtn);
   }else if(f.type==='array-machine'){
     var _lb=document.createElement('div');_lb.className='ce-label';_lb.textContent=f.label;wrap.appendChild(_lb);
     var list=document.createElement('div');list.dataset.key=f.key;
@@ -1340,6 +1448,24 @@ window.ceSave=async function(){
   var btn=document.getElementById('ce-save');
   try{
     toast('Opslaan...');
+    // Eerst de portretfoto's, want content.js moet naar een pad wijzen dat
+    // al bestaat. Mislukt een upload, dan stoppen we: liever niets gepubliceerd
+    // dan een verwijzing naar een foto die er niet is.
+    var wachtenden=Object.keys(ceTeamPending);
+    for(var n=0;n<wachtenden.length;n++){
+      var idx=parseInt(wachtenden[n],10);
+      var persoon=(ceData.team||[])[idx];
+      if(!persoon){delete ceTeamPending[wachtenden[n]];continue;}
+      var up=ceTeamPending[wachtenden[n]];
+      var sitePath='photos/team-'+idx+'-'+ceSlug(persoon.name)+'.jpg';
+      document.getElementById('ce-status').textContent='Foto uploaden ('+(n+1)+'/'+wachtenden.length+')...';
+      var okFoto=await publishBinary('docs/'+sitePath,up.b64,'Portretfoto '+(persoon.name||'persoon')+' via admin');
+      if(!okFoto){toast('Foto-upload mislukt — niets gepubliceerd','err');btn.disabled=false;btn.textContent='Opslaan & Publiceer';return;}
+      persoon.photo=sitePath;
+      ceTeamCache[sitePath]=up.dataUrl;
+      delete ceTeamPending[wachtenden[n]];
+    }
+    if(wachtenden.length)ceBuild();
     var js=ceGenerateJS();
     console.log('[ceSave] bytes:',js.length);
     var ok=await publishFile('docs/content.js',js,'Content bijgewerkt via admin ('+new Date().toLocaleString('nl-NL')+')',btn);
