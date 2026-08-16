@@ -67,13 +67,16 @@
     });
   }
 
-  // Photo labels
-  if (Array.isArray(C.photoLabels)) {
+  // Photo labels. Als functie, want de fotosectie verderop kan extra vakjes
+  // aanmaken; die hebben hun bijschrift dan nog niet gehad.
+  function zetFotoBijschriften() {
+    if (!Array.isArray(C.photoLabels)) return;
     var phLabels = document.querySelectorAll('.photo-strip .ph-label');
     C.photoLabels.forEach(function (txt, i) {
       if (phLabels[i]) phLabels[i].textContent = txt;
     });
   }
+  zetFotoBijschriften();
 
   // Offers
   if (Array.isArray(C.offers)) {
@@ -264,6 +267,21 @@
       if (heroWrap) replaceChildren(heroWrap, imgFor(PHOTOS.hero, 'Werkplaats3b', 'hero'));
     }
     if (Array.isArray(PHOTOS.strip)) {
+      // De pagina heeft drie vakjes met een getekende placeholder erin. Zijn er
+      // meer foto's dan dat, dan maken we er vakjes bij -- de slider schuift ze
+      // vanzelf mee. Zo kunnen er foto's bij zonder de pagina aan te raken.
+      var baan = document.querySelector('.photo-strip');
+      if (baan) {
+        var vakjes = baan.querySelectorAll('.photo-placeholder');
+        for (var n = vakjes.length; n < PHOTOS.strip.length; n++) {
+          var extra = document.createElement('div');
+          extra.className = 'photo-placeholder';
+          var bijschrift = document.createElement('span');
+          bijschrift.className = 'ph-label';
+          extra.appendChild(bijschrift);
+          baan.appendChild(extra);
+        }
+      }
       var strip = document.querySelectorAll('.photo-strip .photo-placeholder');
       PHOTOS.strip.forEach(function (p, i) {
         if (!p || !strip[i]) return;
@@ -272,6 +290,7 @@
         if (label) strip[i].appendChild(label);
         strip[i].classList.add('has-photo');
       });
+      zetFotoBijschriften();
     }
   }
 
@@ -329,6 +348,12 @@
   function applyStyles() {
     var st = C.styles;
     if (!st) return;
+    // De grootte is één getal voor de hele site, maar een telefoon heeft zijn
+    // eigen, al ruimere basismaten. 200% op een kop werd daar 28px met brede
+    // letterafstand: twee regels per kop en een pagina die uit elkaar valt.
+    // Op een telefoon houden we daarom de maten van de stylesheet aan. Kleur
+    // en vet gelden wel overal -- die kosten geen ruimte.
+    var telefoon = window.matchMedia && window.matchMedia('(max-width: 600px)').matches;
     Object.keys(STYLE_TARGETS).forEach(function (key) {
       var regels = st[key];
       var els = document.querySelectorAll(STYLE_TARGETS[key]);
@@ -344,7 +369,7 @@
         // moeten blijven werken. Eerst onze eigen inline-waarde weghalen,
         // anders meten we onze vorige uitkomst in plaats van de basis.
         el.style.fontSize = '';
-        if (regels && regels.size && regels.size !== 100) {
+        if (!telefoon && regels && regels.size && regels.size !== 100) {
           var basis = parseFloat(window.getComputedStyle(el).fontSize);
           if (basis) el.style.fontSize = (basis * regels.size / 100).toFixed(2) + 'px';
         }

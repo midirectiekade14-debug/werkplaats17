@@ -280,16 +280,29 @@
     opacity: 0.8;
   }
 
-  /* ── PHOTO STRIP ── */
+  /* ── PHOTO SLIDER ──
+     Was een vast raster van drie. Nu een veegbare rij: op een breed scherm
+     staan er drie naast elkaar (identiek aan vroeger zolang het er drie zijn),
+     op een telefoon één per keer met de volgende half in beeld -- dat randje
+     is wat verraadt dat je kunt vegen. Meer foto's toevoegen kan zonder de
+     opmaak aan te raken: er schuiven er simpelweg meer in de rij. */
+  .photo-slider { position: relative; }
   .photo-strip {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    display: flex;
     gap: 1px;
     background: var(--line);
     border-top: 1px solid var(--line);
     border-bottom: 1px solid var(--line);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
   }
+  .photo-strip::-webkit-scrollbar { display: none; }
   .photo-placeholder {
+    flex: 0 0 calc((100% - 2px) / 3);
+    scroll-snap-align: start;
     aspect-ratio: 4 / 3;
     background: var(--surface);
     position: relative;
@@ -317,6 +330,101 @@
     transition: opacity 0.3s;
   }
   .photo-placeholder:hover .ph-label { opacity: 1; }
+  /* Pijlen alleen als er echt iets te schuiven valt; JS zet .kan-schuiven. */
+  .ps-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(22, 20, 18, 0.72);
+    border: 1px solid var(--line);
+    color: var(--cream);
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 2;
+  }
+  .ps-nav:hover { background: var(--amber); color: var(--bg); border-color: var(--amber); }
+  .ps-prev { left: 10px; }
+  .ps-next { right: 10px; }
+  .photo-slider.kan-schuiven .ps-nav { display: flex; }
+  .ps-dots {
+    display: none;
+    justify-content: center;
+    gap: 2px;
+    padding: 2px 0;
+  }
+  .photo-slider.kan-schuiven .ps-dots { display: flex; }
+  /* Het streepje blijft 3px hoog, maar de knop eromheen is 35x36 -- anders is
+     dit met een duim niet te raken. background-clip houdt de kleur binnen het
+     streepje, de padding eromheen is puur raakvlak. */
+  .ps-dot {
+    box-sizing: content-box;
+    width: 22px;
+    height: 3px;
+    padding: 16px 6px;
+    background: var(--line);
+    background-clip: content-box;
+    border: none;
+    cursor: pointer;
+  }
+  .ps-dot.on { background: var(--amber); background-clip: content-box; }
+  /* Vegen is de enige bediening op een telefoon: pijlen zouden daar over de
+     foto vallen en zijn met een duim toch lastiger dan de veeg zelf. */
+  @media (max-width: 600px) {
+    .photo-placeholder { flex: 0 0 88%; }
+    .photo-slider .ps-nav { display: none !important; }
+    /* Op een aanraakscherm is er geen hover, dus zou het bijschrift nooit
+       verschijnen. */
+    .photo-placeholder .ph-label { opacity: 1; }
+  }
+
+  /* ── INKLAPBLOKKEN ──
+     Alleen actief op een telefoon; de klasse .inklapbaar wordt daar door JS
+     gezet. Zonder JS blijft alles gewoon openstaan -- de tekst is dan hooguit
+     lang, nooit onbereikbaar. */
+  .inklap-knop {
+    display: block;
+    width: calc(100% - 48px);
+    margin: 14px 24px 0;
+    padding: 13px 16px;
+    font-family: inherit;
+    font-size: var(--fs-micro);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--amber);
+    cursor: pointer;
+    min-height: 44px;
+  }
+  .inklap-knop:hover { border-color: var(--amber); }
+  .inklapbaar {
+    max-height: var(--inklap-h, 240px);
+    overflow: hidden;
+    position: relative;
+  }
+  /* Het verloop maakt zichtbaar dát er meer is; een harde afsnijding leest
+     als een afgelopen alinea. */
+  .inklapbaar::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 80px;
+    background: linear-gradient(to bottom, rgba(22, 20, 18, 0), var(--inklap-fade, var(--bg)));
+    pointer-events: none;
+  }
+  .inklapbaar.open { max-height: none; }
+  .inklapbaar.open::after { display: none; }
+
+  /* De contactbalk hoort alleen op een telefoon. Zonder deze regel valt hij
+     buiten dat breekpunt terug op display:block en staan er twee losse
+     knoppen onder de voettekst. */
+  .mob-cta { display: none; }
 
   /* ── SECTION LABELS ── */
   .section-label {
@@ -994,7 +1102,6 @@
     footer { margin: 0 24px; }
     .floorplan-block { padding: 0 24px; padding-bottom: 36px; }
     .offer-grid { grid-template-columns: 1fr; }
-    .photo-strip { grid-template-columns: 1fr; }
     .insta-grid { grid-template-columns: repeat(2, 1fr); }
     .cta-actions { flex-direction: column; }
     .btn-primary, .btn-secondary { justify-content: center; }
@@ -1004,6 +1111,70 @@
     .eyebrow { letter-spacing: 0.14em; }
     .location-bar span { letter-spacing: 0.12em; }
     .section-label { letter-spacing: 0.2em; }
+
+    /* ── Hoeveel er van een ingeklapt blok blijft staan ──
+       Steeds net genoeg dat de eerste gedachte af is: bij het aanbod anderhalve
+       kaart (die halve verraadt dat er meer is), bij de profielen drie regels. */
+    #intro-tekst { --inklap-h: 200px; }
+    #aanbod-grid { --inklap-h: 290px; --inklap-fade: var(--surface); }
+    #voor-wie    { --inklap-h: 170px; }
+    #prijs-notitie { --inklap-h: 84px; }
+
+    /* ── Wie zijn wij: drie naast elkaar in plaats van onder elkaar ──
+       Gestapeld kostte dit blok 1,75 scherm voor 52 woorden. Als rij van drie
+       portretten is het in één blik te vatten en blijven de gezichten -- het
+       punt van de sectie -- gewoon zichtbaar. */
+    .about-people { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .about-people .person { padding: 14px 6px; text-align: center; }
+    .about-people .person h3 { font-size: var(--fs-small); }
+    .about-people .person .role { font-size: 10px; letter-spacing: 0.08em; }
+    .about-people .person p { display: none; }
+    .about-people .person .photo,
+    .about-people .person img { aspect-ratio: 1 / 1; }
+
+    /* ── Contact binnen duimbereik ──
+       Het echte contactblok staat ruim tien schermen naar beneden. Deze balk
+       verschijnt zodra de bezoeker voorbij de kop is en verdwijnt weer als het
+       echte blok in beeld komt -- twee keer dezelfde knop naast elkaar leest
+       als een fout. */
+    .mob-cta {
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      z-index: 60;
+      display: flex;
+      gap: 1px;
+      background: var(--line);
+      border-top: 1px solid var(--line);
+      transform: translateY(110%);
+      transition: transform 0.25s ease;
+    }
+    .mob-cta.on { transform: translateY(0); }
+    .mob-cta a {
+      flex: 1;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: var(--fs-micro);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+    .mob-cta .m-mail { background: var(--amber); color: var(--bg); }
+    .mob-cta .m-wa { background: var(--surface2); color: var(--cream); }
+    /* Anders valt de balk over de laatste regel van de voettekst. */
+    body.heeft-mobcta { padding-bottom: 54px; }
+
+    /* ── Leesbaarheid ──
+       Deze drie stonden op --muted (3,8:1). Dat haalt de norm van 4,5 niet, en
+       juist op een telefoon -- buiten, schuin licht -- valt dat om. */
+    .pricing-row .sub,
+    .legend-item,
+    .sticky-nav .nav-links a,
+    footer .copy { color: #9d9484; }
+    /* Tikdoelen van 40px zijn net te klein voor een duim; 44 is de ondergrens. */
+    .fp-tab { min-height: 44px; }
 
     /* Sticky nav: het merk staat al bovenaan de pagina, dus op een telefoon
        geven we die ruimte aan de vijf links — anders vallen ze eraf. Sinds
@@ -1490,7 +1661,7 @@
 
   <!-- INTRO -->
   <div class="intro">
-    <p>
+    <p id="intro-tekst" data-inklap="Lees het hele verhaal" data-inklap-minder="Minder tonen">
       Werkplaats3b is een <strong>multifunctionele bedrijfsruimte van 850 m²</strong> voor zelfstandige vakmensen en kleine studio's. <br>Hier werken professionele en ambitieuze makers samen onder 1 dak aan aan mooie projecten. Hier kommen kennis, kunde en ambitie samen en gaan we voor kwaliteit! <br><br>Herken jij je hierin en heb je ruimte nodig voor je ambities en projecten? Dan wordt het tijd voor een kennismaking. <br><br>Is dit wat je zoekt dan krijg je een contract wat per kwartaal opzegbaar is, betaal je 2 maanden huur als borg en kun je meteen aan de gang. <br>
     </p>
     <div class="access-detail">
@@ -1511,6 +1682,7 @@
 
   <!-- SFEERBEELDEN -->
   <p class="section-label">De werkplaats</p>
+  <div class="photo-slider">
   <div class="photo-strip">
     <div class="photo-placeholder">
       <svg class="ph-icon" width="100%" height="100%" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
@@ -1601,10 +1773,14 @@
       <span class="ph-label">Verdieping</span>
     </div>
   </div>
+    <button class="ps-nav ps-prev" type="button" aria-label="Vorige foto">&#8249;</button>
+    <button class="ps-nav ps-next" type="button" aria-label="Volgende foto">&#8250;</button>
+    <div class="ps-dots" role="tablist" aria-label="Foto kiezen"></div>
+  </div>
 
   <!-- AANBOD -->
   <p class="section-label" id="aanbod">Wat je krijgt</p>
-  <div class="offer-grid">
+  <div class="offer-grid" id="aanbod-grid" data-inklap="Toon alles wat je krijgt" data-inklap-minder="Minder tonen">
     <div class="offer-card">
       <span class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="1"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></span>
       <h3>Machinale en opslag</h3>
@@ -1696,11 +1872,11 @@
       <div class="price">Vanaf €95<small>/mnd</small></div>
     </div>
   </div>
-  <p class="pricing-note">Alle prijzen excl. BTW en servicekosten. Een werkplek op de 1e verdieping komt daarmee op 1.065,- per maand. De units van 25m2 zijn uitbreidbaar met (tijdelijke) opslagmogelijkheden en vaste werkplek in kantoor. Lijkt het je wat? Neem dan contact op voor een rondleiding en beschikbare units.</p>
+  <p class="pricing-note" id="prijs-notitie" data-inklap="Voorwaarden en toelichting" data-inklap-minder="Minder tonen">Alle prijzen excl. BTW en servicekosten. Een werkplek op de 1e verdieping komt daarmee op 1.065,- per maand. De units van 25m2 zijn uitbreidbaar met (tijdelijke) opslagmogelijkheden en vaste werkplek in kantoor. Lijkt het je wat? Neem dan contact op voor een rondleiding en beschikbare units.</p>
 
   <!-- VOOR WIE -->
   <p class="section-label">Voor wie</p>
-  <div class="for-who">
+  <div class="for-who" id="voor-wie" data-inklap="Alle profielen bekijken" data-inklap-minder="Minder tonen">
     <ul class="criteria-list">
       <li><span class="check">✦</span> Zelfstandig meubelmaker of restaurateur</li>
       <li><span class="check">✦</span> Interieurontwerper die zelf prototypes bouwt</li>
@@ -1790,6 +1966,47 @@
   </footer>
 
 </div>
+
+<!-- Contactbalk voor telefoons; CSS laat hem alleen daar zien. -->
+<div class="mob-cta" id="mob-cta">
+  <a class="m-mail" href="mailto:info@werkplaats3b.nl">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+    Mail ons
+  </a>
+  <a class="m-wa" href="https://wa.me/31681689278?text=Hoi%2C%20ik%20heb%20interesse%20in%20een%20werkplek%20bij%20Werkplaats3b." target="_blank" rel="noopener">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+    WhatsApp
+  </a>
+</div>
+<script>
+/* ── CONTACTBALK (telefoon) ──
+   Verschijnt zodra de bezoeker de kop voorbij is, verdwijnt weer zodra het
+   echte contactblok in beeld komt. */
+(function(){
+  var balk=document.getElementById('mob-cta');
+  if(!balk)return;
+  var mq=window.matchMedia('(max-width: 600px)');
+  var cta=document.getElementById('contact');
+  // Bewust uitgerekend uit de positie en niet via een waarnemer: dit moet ook
+  // kloppen op het moment dat we het uitlezen, niet pas als de browser weer
+  // een beeld tekent.
+  function ctaInBeeld(){
+    if(!cta)return false;
+    var r=cta.getBoundingClientRect();
+    return r.top<window.innerHeight*0.85&&r.bottom>0;
+  }
+  function pas(){
+    var aan=mq.matches&&window.scrollY>320&&!ctaInBeeld();
+    balk.classList.toggle('on',aan);
+    // De onderrand alleen vrijhouden als de balk er ook echt is.
+    document.body.classList.toggle('heeft-mobcta',mq.matches);
+  }
+  window.addEventListener('scroll',pas,{passive:true});
+  if(mq.addEventListener)mq.addEventListener('change',pas);
+  else if(mq.addListener)mq.addListener(pas);
+  pas();
+})();
+</script>
 <script>
 (function(){
   var t='?t='+Date.now();
@@ -1804,6 +2021,11 @@
     // placeholder-tegels staan en start de plattegrond alsnog.
     try{ window._renderInstagram && window._renderInstagram(); }
     catch(e){ console.warn('Instagram-strip overgeslagen:', e); }
+    // Na render.js: dán pas staat vast hoeveel foto's er in de rij zitten.
+    try{ window._initPhotoSlider && window._initPhotoSlider(); }
+    catch(e){ console.warn('Fotoslider overgeslagen:', e); }
+    try{ window._initInklap && window._initInklap(); }
+    catch(e){ console.warn('Inklapblokken overgeslagen:', e); }
     window._initFloorplan();
   }
   function next(){
@@ -1828,6 +2050,124 @@
   }
   next();
 })();
+</script>
+<script>
+/* ── FOTOSLIDER ──
+   De rij foto's onder "De werkplaats". Het schuiven zelf doet de browser
+   (scroll-snap); dit script doet alleen de bediening eromheen: bolletjes,
+   pijlen, en de vraag óf er iets te schuiven valt. Bij drie foto's op een
+   breed scherm is dat niet zo -- dan blijft alles verborgen en ziet de
+   sectie eruit als het oude vaste raster. */
+window._initPhotoSlider=function(){
+  var slider=document.querySelector('.photo-slider');
+  if(!slider)return;
+  var strip=slider.querySelector('.photo-strip');
+  var dots=slider.querySelector('.ps-dots');
+  var prev=slider.querySelector('.ps-prev');
+  var next=slider.querySelector('.ps-next');
+  if(!strip||!dots)return;
+  var slides=[].slice.call(strip.querySelectorAll('.photo-placeholder'));
+  if(!slides.length)return;
+
+  function stap(){
+    // Eén slide plus de tussenruimte; los uitrekenen want de breedte hangt
+    // van het breekpunt af (drie naast elkaar, of 88% op een telefoon).
+    var r=slides[0].getBoundingClientRect();
+    return r.width+1;
+  }
+  function schuifbaar(){ return strip.scrollWidth-strip.clientWidth>2; }
+  function actief(){
+    var s=stap();
+    return s?Math.round(strip.scrollLeft/s):0;
+  }
+
+  function bouwBolletjes(){
+    dots.textContent='';
+    // Eén bolletje per positie waar je naartoe kunt schuiven, niet per foto:
+    // staan er drie tegelijk in beeld van de vijf, dan zijn er drie posities.
+    var perBeeld=Math.max(1,Math.round(strip.clientWidth/stap()));
+    var posities=Math.max(1,slides.length-perBeeld+1);
+    for(var i=0;i<posities;i++){
+      (function(i){
+        var b=document.createElement('button');
+        b.type='button';b.className='ps-dot';
+        b.setAttribute('aria-label','Naar foto '+(i+1));
+        b.onclick=function(){ strip.scrollLeft=i*stap(); };
+        dots.appendChild(b);
+      })(i);
+    }
+  }
+  function markeer(){
+    var i=actief();
+    [].forEach.call(dots.children,function(b,j){ b.classList.toggle('on',j===i); });
+  }
+  function ververs(){
+    slider.classList.toggle('kan-schuiven',schuifbaar());
+    bouwBolletjes();
+    markeer();
+  }
+
+  if(prev)prev.onclick=function(){ strip.scrollLeft-=stap(); };
+  if(next)next.onclick=function(){ strip.scrollLeft+=stap(); };
+  strip.addEventListener('scroll',markeer,{passive:true});
+
+  var tmr=null;
+  window.addEventListener('resize',function(){ clearTimeout(tmr);tmr=setTimeout(ververs,150); });
+  ververs();
+  // De foto's laden na dit script; zolang ze er niet zijn klopt scrollWidth
+  // nog niet, en zou de slider zichzelf onterecht als "past precies" zien.
+  window.addEventListener('load',ververs);
+};
+
+/* ── INKLAPBLOKKEN ──
+   Alleen op een telefoon. Een lang tekstblok krijgt daar een deksel: je ziet
+   het begin, de rest komt met één tik. Op een breed scherm bestaat de knop
+   niet en staat alles gewoon open -- daar is de ruimte er wel. */
+window._initInklap=function(){
+  var mq=window.matchMedia('(max-width: 600px)');
+  var blokken=[].slice.call(document.querySelectorAll('[data-inklap]'));
+  if(!blokken.length)return;
+
+  blokken.forEach(function(blok){
+    if(blok.__knop)return;
+    var knop=document.createElement('button');
+    knop.type='button';knop.className='inklap-knop';
+    knop.setAttribute('aria-expanded','false');
+    if(blok.id)knop.setAttribute('aria-controls',blok.id);
+    knop.onclick=function(){
+      var open=blok.classList.toggle('open');
+      knop.setAttribute('aria-expanded',open?'true':'false');
+      knop.textContent=open?(blok.dataset.inklapMinder||'Minder tonen'):(blok.dataset.inklap||'Lees meer');
+      // Dichtklappen vanaf onderin het blok laat je in het niets staan; terug
+      // naar de bovenkant zodat je ziet wát er dichtging.
+      if(!open){
+        var y=blok.getBoundingClientRect().top+window.scrollY-90;
+        window.scrollTo({top:y,behavior:'smooth'});
+      }
+    };
+    blok.__knop=knop;
+    blok.parentNode.insertBefore(knop,blok.nextSibling);
+  });
+
+  function pas(){
+    blokken.forEach(function(blok){
+      if(mq.matches){
+        blok.classList.add('inklapbaar');
+        blok.__knop.style.display='';
+        if(!blok.classList.contains('open'))blok.__knop.textContent=blok.dataset.inklap||'Lees meer';
+      }else{
+        // Op breed: geen deksel, geen knop, en de open-stand schoon achterlaten
+        // zodat een terugkeer naar smal weer dicht begint.
+        blok.classList.remove('inklapbaar','open');
+        blok.__knop.style.display='none';
+        blok.__knop.setAttribute('aria-expanded','false');
+      }
+    });
+  }
+  if(mq.addEventListener)mq.addEventListener('change',pas);
+  else if(mq.addListener)mq.addListener(pas);
+  pas();
+};
 </script>
 <script>
 /* ── INSTAGRAM-STRIP ──
