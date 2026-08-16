@@ -127,7 +127,7 @@ const CONTENT = {
   "notForText": "<strong>KvK-inschrijving en verzekering verplicht.</strong> Werkplaats3b is uitsluitend voor professionele gebruikers. Particulieren en hobbyisten kunnen hier niet terecht.",
   "aboutLabel": "Wie zijn wij",
   "aboutNavLabel": "Over ons",
-  "aboutLead": "Werkplaats3b is opgezet door Matthijs, Harm en Wesley. <br>We huren het pand samen en verhuren de plekken die we niet zelf gebruiken.",
+  "aboutLead": "Werkplaats3b is opgezet door Matthijs, Harm en Wesley. We huren het pand samen en verhuren de plekken die we niet zelf gebruiken.",
   "team": [
     {
       "name": "Harm",
@@ -139,8 +139,7 @@ const CONTENT = {
     {
       "name": "Matthijs",
       "role": "Meubelmaker",
-      "text": "",
-      "photo": "photos/team-1-matthijs.jpg"
+      "text": ""
     },
     {
       "name": "Wesley",
@@ -162,11 +161,7 @@ const CONTENT = {
   ],
   "instagramHandle": "@werkplaats3b",
   "instagramUrl": "https://instagram.com/werkplaats3b",
-  "photoLabels": [
-    "",
-    "",
-    ""
-  ],
+  "photoLabels": [],
   "hashtags": "#werkplaats3b #maasland<br>#bedrijfsruimte #meubelmaker<br>#vakman #werkruimte",
   "copyright": "© 2026 Werkplaats3b",
   "styles": {
@@ -184,15 +179,16 @@ const CONTENT = {
       "color": "#E09A2F"
     },
     "offerText": {
-      "color": "#E09A2F",
+      "color": "#F0EAE0",
       "size": 120
     },
     "pricingLabel": {
-      "size": 130
+      "size": 130,
+      "color": "#F5B040"
     },
     "pricingPrice": {
       "size": 130,
-      "color": "#E09A2F"
+      "color": "#F0EAE0"
     },
     "pricingNote": {
       "color": "#F0EAE0"
@@ -200,20 +196,8 @@ const CONTENT = {
     "tagline": {
       "color": "#F0EAE0"
     },
-    "photoLabels": {
-      "color": "#E09A2F"
-    },
-    "ctaHeading": {
-      "color": "#F5B040",
-      "size": 130
-    },
-    "contactLines": {
-      "color": "#F0EAE0",
-      "size": 130
-    },
-    "sectionLabels": {
-      "size": 200,
-      "bold": true
+    "offerTitle": {
+      "color": "#F5B040"
     }
   }
 };
