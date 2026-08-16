@@ -909,21 +909,24 @@
   }
 
   /* ── NADRUK ──
-     <strong> haalde zijn nadruk vrijwel helemaal uit kleur: crème of amber
-     tegen een grijzere alinea. Sinds die alineakleur instelbaar is kan hij
-     exact de kleur krijgen die de strong al had -- en dan is er geen nadruk
-     meer over. Gewicht is de tweede as en die schuift niet mee met een
-     kleurkeuze. DM Mono kent geen vet (alleen 300/400/500), dus de browser
-     maakt het zelf aan; dat is een duidelijke stap boven de 300/400 van de
-     lopende tekst. Deze regel staat ná de regels hierboven en wint daarom
-     van hun font-weight, terwijl hun kleuren blijven staan. */
+     Nadruk is overal hetzelfde: amber én vet. Dat was het niet -- twee plekken
+     stonden op crème, dezelfde kleur als hun alinea, dus daar viel niets op.
+     Sinds de alineakleuren instelbaar zijn kan élke alinea de kleur van zijn
+     eigen strong krijgen, dus kleur alleen is geen betrouwbare nadruk meer.
+     Vandaar allebei de assen: amber-light is de helderste van de twee accenten
+     en houdt op #161412 een ruime leescontrast; DM Mono kent geen vet (alleen
+     300/400/500), dus de browser maakt het zelf aan -- dat meet 90,2% meer inkt
+     dan 300 en is dus onmiskenbaar. Deze regel staat ná de losse strong-regels
+     hierboven en overschrijft daarom hun kleur en gewicht.
+     Wil je een andere nadrukkleur, dan kan dat in de admin onder "Nadruk in
+     teksten"; die zet een inline-kleur en wint hiervan. */
   .intro strong,
   .offer-card p strong,
   .not-for strong,
   .about-lead strong,
   .about-note strong,
   .pricing-note strong,
-  .cta-info strong { font-weight: 700; }
+  .cta-info strong { color: var(--amber-light); font-weight: 700; }
 
   /* ── CTA ── */
   .cta-block {
