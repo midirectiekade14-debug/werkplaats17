@@ -1,5 +1,5 @@
 // Werkplaats3b — Foto referenties
-// Laatst gewijzigd: 2026-08-16T20:06:22.628Z
+// Laatst gewijzigd: 2026-08-16T20:08:54.357Z
 // Gegenereerd via admin.html
 
 const PHOTOS = {
@@ -28,7 +28,7 @@ const PHOTOS = {
   },
   "stripFormaat": {
     "ratio": "1/1",
-    "perBeeld": 5,
+    "perBeeld": 4,
     "autoplay": 0
   }
 };
