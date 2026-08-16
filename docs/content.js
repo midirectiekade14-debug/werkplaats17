@@ -132,7 +132,8 @@ const CONTENT = {
     {
       "name": "Harm",
       "role": "Meubelmaker ",
-      "text": ""
+      "text": "",
+      "photo": "photos/team-0-harm.jpg"
     },
     {
       "name": "Matthijs",
@@ -142,7 +143,8 @@ const CONTENT = {
     {
       "name": "Wesley",
       "role": "Meubelmaker",
-      "text": ""
+      "text": "",
+      "photo": "photos/team-2-wesley.jpg"
     }
   ],
   "aboutNote": "<strong>Je huurt bij de mensen die er zelf werken.</strong> Geen beheerder op afstand: wie je aan de telefoon krijgt over een machine, een levering of je contract, staat hier zelf in de hal.",
