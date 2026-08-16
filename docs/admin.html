@@ -310,13 +310,29 @@ textarea.ce-input{min-height:60px;resize:vertical}
 .pm-section{margin-bottom:24px}
 .pm-section h3{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);margin-bottom:10px}
 .pm-grid{display:grid;gap:12px}
-.pm-grid.strip{grid-template-columns:1fr 1fr 1fr}
+.pm-grid.strip{grid-template-columns:repeat(3,1fr)}
 .pm-grid.hero{grid-template-columns:1fr}
+/* Vanaf de vierde foto past een rij van drie niet meer prettig: dan liever
+   vier kleinere naast elkaar dan een halflege tweede rij. */
+.pm-grid.strip.veel{grid-template-columns:repeat(4,1fr)}
 .pm-slot{aspect-ratio:16/9;background:var(--surface);border:2px dashed var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;transition:border-color .2s}
+/* De strip-slots tonen de verhouding die de bezoeker straks ziet -- dan is de
+   formaatkeuze hierboven meteen zichtbaar in plaats van een abstract getal. */
+.pm-grid.strip .pm-slot{aspect-ratio:var(--pm-strip-ratio,4/3)}
+.pm-slot .pm-nr{position:absolute;top:6px;left:6px;z-index:2;font-size:7px;letter-spacing:.1em;padding:2px 6px;background:rgba(0,0,0,.6);color:var(--cream);pointer-events:none}
+.pm-add{border-style:dashed;color:var(--muted)}
+.pm-add:hover{border-color:var(--amber);color:var(--amber)}
+/* ── Formaat van de fotostrip ── */
+.pm-fmt{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start;background:var(--surface);border:1px solid var(--border);padding:12px 14px;margin-bottom:12px}
+.pm-fmt-groep{display:flex;flex-direction:column;gap:6px}
+.pm-fmt-groep>span{font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.pm-fmt-knoppen{display:flex;gap:6px;flex-wrap:wrap}
+.pm-fmt-knoppen .hbtn.aan{background:var(--amber);color:var(--bg);border-color:var(--amber);font-weight:bold}
+.pm-fmt-uitleg{font-size:8px;color:var(--muted);line-height:1.6;flex:1 1 200px;min-width:180px}
 .pm-slot:hover{border-color:var(--amber)}
 .pm-slot.has-photo{border-style:solid}
 .pm-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.pm-slot .pm-overlay{position:absolute;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;gap:8px}
+.pm-slot .pm-overlay{position:absolute;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;padding:8px}
 .pm-slot:hover .pm-overlay{display:flex}
 .pm-slot .pm-icon{color:var(--muted);font-size:24px}
 .pm-slot .pm-label{font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:6px}
@@ -325,6 +341,7 @@ textarea.ce-input{min-height:60px;resize:vertical}
 .pm-overlay-btn.change{background:var(--amber);color:var(--bg);border-color:var(--amber)}
 .pm-overlay-btn.remove{background:transparent;color:var(--red);border-color:var(--red)}
 .pm-overlay-btn.crop{background:transparent;color:var(--cream);border-color:var(--cream)}
+.pm-overlay-btn.move{background:transparent;color:var(--cream);border-color:var(--border);padding:4px 8px;font-size:11px;line-height:1}
 /* ── Uitsnede-editor ──────────────────────────────────────────────────
    Het voorbeeldkader krijgt de verhouding van de ECHTE plek op de site
    (hero 3:1, strip en portret 4:3), niet die van het admin-slot (16:9).
@@ -631,21 +648,38 @@ textarea.ce-input{min-height:60px;resize:vertical}
     </div>
   </div>
   <div class="pm-section">
-    <h3>Fotostrip (3 foto's)</h3>
-    <div class="pm-grid strip">
-      <div class="pm-slot" data-slot="strip-0" onclick="pmPick('strip-0')">
-        <span class="pm-icon">📷</span>
-        <span class="pm-label" id="pm-label-0">Werkvloer</span>
+    <h3>Fotostrip <span id="pm-strip-telling" style="color:var(--muted);letter-spacing:.1em"></span></h3>
+    <div class="pm-fmt">
+      <div class="pm-fmt-groep">
+        <span>Formaat</span>
+        <div class="pm-fmt-knoppen" id="pm-fmt-ratio">
+          <button class="hbtn" type="button" data-ratio="4/3">Breed 4:3</button>
+          <button class="hbtn" type="button" data-ratio="1/1">Vierkant</button>
+          <button class="hbtn" type="button" data-ratio="4/5">Staand 4:5</button>
+          <button class="hbtn" type="button" data-ratio="9/16">Reel 9:16</button>
+        </div>
       </div>
-      <div class="pm-slot" data-slot="strip-1" onclick="pmPick('strip-1')">
-        <span class="pm-icon">📷</span>
-        <span class="pm-label" id="pm-label-1">Machines</span>
+      <div class="pm-fmt-groep">
+        <span>Naast elkaar</span>
+        <div class="pm-fmt-knoppen" id="pm-fmt-per">
+          <button class="hbtn" type="button" data-per="2">2</button>
+          <button class="hbtn" type="button" data-per="3">3</button>
+          <button class="hbtn" type="button" data-per="4">4</button>
+          <button class="hbtn" type="button" data-per="5">5</button>
+        </div>
       </div>
-      <div class="pm-slot" data-slot="strip-2" onclick="pmPick('strip-2')">
-        <span class="pm-icon">📷</span>
-        <span class="pm-label" id="pm-label-2">Entresol</span>
+      <div class="pm-fmt-groep">
+        <span>Vanzelf doorschuiven</span>
+        <div class="pm-fmt-knoppen" id="pm-fmt-auto">
+          <button class="hbtn" type="button" data-auto="0">Uit</button>
+          <button class="hbtn" type="button" data-auto="3">Snel</button>
+          <button class="hbtn" type="button" data-auto="5">Rustig</button>
+          <button class="hbtn" type="button" data-auto="8">Traag</button>
+        </div>
       </div>
+      <p class="pm-fmt-uitleg">Geldt voor de hele rij op de site. "Naast elkaar" telt alleen op een breed scherm — op een telefoon zie je er altijd één per keer, met de volgende half in beeld. Doorschuiven stopt zodra de bezoeker zelf veegt of met de muis op de foto's staat.</p>
     </div>
+    <div class="pm-grid strip" id="pm-strip-grid"></div>
   </div>
 </div>
 <div class="pm-save-bar">
@@ -2303,23 +2337,73 @@ window.ceReset=function(){
 // ║  FOTO MANAGER                              ║
 // ╚════════════════════════════════════════════╝
 var pmInitialized=false;
-var pmPhotos={hero:null,strip:[null,null,null],pos:{}};
+var PM_FORMAAT_STANDAARD={ratio:'4/3',perBeeld:3,autoplay:0};
+var pmPhotos={hero:null,strip:[null,null,null],pos:{},stripFormaat:Object.assign({},PM_FORMAAT_STANDAARD)};
 var pmPendingUploads={};
 var pmLocalCache={};
 
 function pmInit(){
   pmInitialized=true;
   pmLoadFromGitHub();
-  // Drag & drop op slots
-  document.querySelectorAll('.pm-slot').forEach(function(slot){
-    slot.addEventListener('dragover',function(e){e.preventDefault();slot.style.borderColor='var(--amber)';});
-    slot.addEventListener('dragleave',function(){slot.style.borderColor='';});
-    slot.addEventListener('drop',function(e){
+  // Drag & drop. Via de omhullende laag en niet per slot: de strip-slots worden
+  // nu opnieuw opgebouwd zodra er een foto bij komt of af gaat, en een luisteraar
+  // die op het oude vakje zat verdwijnt daarmee.
+  var wrap=document.querySelector('.pm-wrap');
+  if(wrap){
+    wrap.addEventListener('dragover',function(e){
+      var slot=e.target.closest&&e.target.closest('.pm-slot[data-slot]');
+      if(!slot)return;
+      e.preventDefault();slot.style.borderColor='var(--amber)';
+    });
+    wrap.addEventListener('dragleave',function(e){
+      var slot=e.target.closest&&e.target.closest('.pm-slot[data-slot]');
+      if(slot)slot.style.borderColor='';
+    });
+    wrap.addEventListener('drop',function(e){
+      var slot=e.target.closest&&e.target.closest('.pm-slot[data-slot]');
+      if(!slot)return;
       e.preventDefault();slot.style.borderColor='';
       var file=e.dataTransfer.files[0];
       if(file&&file.type.startsWith('image/'))pmProcessFile(slot.dataset.slot,file);
     });
+  }
+  pmBindFormaat();
+}
+
+// ── Formaat van de fotostrip ──
+// Drie rijtjes knoppen; de aangeklikte krijgt .aan. De waarden landen in
+// pmPhotos.stripFormaat en gaan met dezelfde publiceerknop mee als de foto's.
+function pmBindFormaat(){
+  [['pm-fmt-ratio','ratio','ratio',String],
+   ['pm-fmt-per','per','perBeeld',Number],
+   ['pm-fmt-auto','auto','autoplay',Number]].forEach(function(r){
+    var doos=document.getElementById(r[0]);
+    if(!doos)return;
+    doos.addEventListener('click',function(e){
+      var knop=e.target.closest('button[data-'+r[1]+']');
+      if(!knop)return;
+      pmFormaat()[r[2]]=r[3](knop.dataset[r[1]]);
+      pmRenderFormaat();
+      pmRenderSlots();
+      document.getElementById('pm-status').textContent='Formaat aangepast — nog niet gepubliceerd';
+    });
   });
+}
+function pmFormaat(){
+  if(!pmPhotos.stripFormaat)pmPhotos.stripFormaat=Object.assign({},PM_FORMAAT_STANDAARD);
+  return pmPhotos.stripFormaat;
+}
+function pmRenderFormaat(){
+  var f=pmFormaat();
+  [['pm-fmt-ratio','ratio',f.ratio],['pm-fmt-per','per',f.perBeeld],['pm-fmt-auto','auto',f.autoplay]].forEach(function(r){
+    var doos=document.getElementById(r[0]);
+    if(!doos)return;
+    [].forEach.call(doos.querySelectorAll('button'),function(b){
+      b.classList.toggle('aan',String(b.dataset[r[1]])===String(r[2]));
+    });
+  });
+  var grid=document.getElementById('pm-strip-grid');
+  if(grid)grid.style.setProperty('--pm-strip-ratio',f.ratio);
 }
 
 // ╔════════════════════════════════════════════╗
@@ -2467,12 +2551,36 @@ function pmNormaliseer(o){
   // pos is later toegevoegd; een photos.js van vóór die tijd mist het veld en
   // hoort gewoon te werken (alles valt dan terug op het midden).
   if(!o.pos||typeof o.pos!=='object'||Array.isArray(o.pos))o.pos={};
+  // stripFormaat idem: ontbreekt het, dan is dat de oude vaste maatvoering.
+  // Elk veld apart toetsen, want een half ingevuld object hoort niet stilletjes
+  // een lege verhouding of nul foto's naast elkaar op te leveren.
+  var f=(o.stripFormaat&&typeof o.stripFormaat==='object'&&!Array.isArray(o.stripFormaat))?o.stripFormaat:{};
+  o.stripFormaat={
+    ratio:/^\d+(\.\d+)?\s*\/\s*\d+(\.\d+)?$/.test(f.ratio)?f.ratio:PM_FORMAAT_STANDAARD.ratio,
+    perBeeld:Math.max(1,Math.min(6,parseInt(f.perBeeld,10)||PM_FORMAAT_STANDAARD.perBeeld)),
+    autoplay:Math.max(0,Math.min(30,parseFloat(f.autoplay)||0))
+  };
   return o;
 }
 
-// De verhouding van de plek op de site, niet die van het admin-slot.
-var PM_RATIO={hero:3/1,'strip-0':4/3,'strip-1':4/3,'strip-2':4/3};
-var PM_TITEL={hero:'Uitsnede — grote foto bovenaan','strip-0':'Uitsnede — sfeerbeeld 1','strip-1':'Uitsnede — sfeerbeeld 2','strip-2':'Uitsnede — sfeerbeeld 3'};
+// De verhouding van de plek op de site, niet die van het admin-slot. Voor de
+// strip is die niet meer vast: hij volgt de formaatkeuze hierboven, zodat het
+// sleepkader in de uitsnede-editor toont wat de bezoeker straks ziet.
+var PM_RATIO={hero:3/1};
+function pmRatioVan(slotId){
+  if(PM_RATIO[slotId])return PM_RATIO[slotId];
+  if(slotId.indexOf('strip-')===0){
+    var d=String(pmFormaat().ratio).split('/');
+    var r=parseFloat(d[0])/parseFloat(d[1]);
+    return r>0?r:4/3;
+  }
+  return 4/3;
+}
+function pmTitelVan(slotId){
+  if(slotId==='hero')return 'Uitsnede — grote foto bovenaan';
+  if(slotId.indexOf('strip-')===0)return 'Uitsnede — sfeerbeeld '+(parseInt(slotId.split('-')[1],10)+1);
+  return 'Uitsnede';
+}
 
 function pmBron(slotId){
   var pending=pmPendingUploads[slotId];
@@ -2487,7 +2595,7 @@ window.pmUitsnede=function(slotId){
   var src=pmBron(slotId);
   if(!src){toast('Er staat nog geen foto in dit vak','err');return;}
   openUitsnede({
-    src:src,ratio:PM_RATIO[slotId]||4/3,titel:PM_TITEL[slotId]||'Uitsnede',
+    src:src,ratio:pmRatioVan(slotId),titel:pmTitelVan(slotId),
     pos:pmPhotos.pos[slotId],
     onOk:function(waarde){
       if(waarde==='50% 50%')delete pmPhotos.pos[slotId];
@@ -2530,7 +2638,7 @@ async function pmLoadFromGitHub(){
     pmFallbackSnapshot=null;
     hidePhotosWarn();
     setPhotosPublishEnabled(true);
-    document.getElementById('pm-status').textContent='Foto\'s geladen ('+pmAantal(pmPhotos)+' van 4 slots gevuld)';
+    document.getElementById('pm-status').textContent='Foto\'s geladen ('+pmAantal(pmPhotos)+' in gebruik)';
   }catch(e){
     console.warn('Photos laden mislukt:',e);
     photosLoaded=false;
@@ -2539,7 +2647,7 @@ async function pmLoadFromGitHub(){
       pmPhotos=pmNormaliseer(JSON.parse(JSON.stringify(PHOTOS)));
       bron='Je ziet nu de <em>meegeleverde kopie van de site</em> ('+pmAantal(pmPhotos)+' foto\'s, kan verouderd zijn).';
     }else{
-      pmPhotos={hero:null,strip:[null,null,null],pos:{}};
+      pmPhotos=pmNormaliseer({hero:null,strip:[null,null,null],pos:{}});
       bron='Er is geen kopie om te tonen — de slots zijn leeg.';
     }
     pmRenderSlots();
@@ -2570,22 +2678,105 @@ async function reloadPhotos(){
 document.getElementById('btn-reload-photos').addEventListener('click',reloadPhotos);
 
 function pmRenderSlots(){
-  var repo=GH_REPO;
   // Hero
   var heroSlot=document.querySelector('[data-slot="hero"]');
   pmRenderSlot(heroSlot,pmPhotos.hero,'hero');
-  // Strip
-  for(var i=0;i<3;i++){
-    var slot=document.querySelector('[data-slot="strip-'+i+'"]');
-    pmRenderSlot(slot,pmPhotos.strip[i],'strip-'+i);
+  pmRenderFormaat();
+
+  // Strip. Het aantal vakjes ligt niet meer vast in de HTML: het volgt de
+  // lijst, met achteraan altijd één vak om er eentje bij te zetten.
+  var grid=document.getElementById('pm-strip-grid');
+  if(!grid)return;
+  while(grid.firstChild)grid.removeChild(grid.firstChild);
+  grid.classList.toggle('veel',pmPhotos.strip.length>3);
+  pmPhotos.strip.forEach(function(pad,i){
+    var slotId='strip-'+i;
+    var slot=document.createElement('div');
+    slot.className='pm-slot';
+    slot.dataset.slot=slotId;
+    slot.onclick=function(){pmPick(slotId);};
+    grid.appendChild(slot);
+    pmRenderSlot(slot,pad,slotId);
+    var nr=document.createElement('span');
+    nr.className='pm-nr';
+    nr.textContent=(i+1)+' / '+pmPhotos.strip.length;
+    slot.insertBefore(nr,slot.firstChild);
+  });
+  var bij=document.createElement('div');
+  bij.className='pm-slot pm-add';
+  bij.onclick=function(){pmVoegToe();};
+  var ic=document.createElement('span');ic.className='pm-icon';ic.textContent='+';
+  var lb=document.createElement('span');lb.className='pm-label';lb.textContent='Foto toevoegen';
+  bij.appendChild(ic);bij.appendChild(lb);
+  grid.appendChild(bij);
+
+  var telling=document.getElementById('pm-strip-telling');
+  if(telling){
+    var gevuld=pmPhotos.strip.filter(function(p,i){return p||pmPendingUploads['strip-'+i];}).length;
+    telling.textContent='('+gevuld+' foto'+(gevuld===1?'':'’s')+
+      (gevuld===pmPhotos.strip.length?'':' in '+pmPhotos.strip.length+' vakjes')+')';
   }
 }
+
+// Volgorde en aantal veranderen betekent hernummeren: pmPhotos.pos en de nog
+// niet geüploade foto's hangen aan "strip-<index>", en die index verschuift mee.
+// Eén doorgang op basis van de nieuwe volgorde is minder foutgevoelig dan bij
+// elke bewerking los sleutels verschuiven.
+// volgorde = lijst met OUDE posities; null betekent een nieuw, leeg vak.
+function pmHerordenStrip(volgorde){
+  var oudePos=pmPhotos.pos||{},oudePend=pmPendingUploads;
+  var strip=[],pos={},pend={};
+  Object.keys(oudePos).forEach(function(k){ if(k.indexOf('strip-')!==0)pos[k]=oudePos[k]; });
+  Object.keys(oudePend).forEach(function(k){ if(k.indexOf('strip-')!==0)pend[k]=oudePend[k]; });
+  volgorde.forEach(function(oud,nieuw){
+    if(oud===null||oud===undefined){strip.push(null);return;}
+    strip.push(pmPhotos.strip[oud]||null);
+    if(oudePos['strip-'+oud])pos['strip-'+nieuw]=oudePos['strip-'+oud];
+    if(oudePend['strip-'+oud])pend['strip-'+nieuw]=oudePend['strip-'+oud];
+  });
+  pmPhotos.strip=strip;pmPhotos.pos=pos;pmPendingUploads=pend;
+  pmRenderSlots();
+}
+
+window.pmVoegToe=function(){
+  var volgorde=pmPhotos.strip.map(function(_,i){return i;});
+  volgorde.push(null);
+  pmHerordenStrip(volgorde);
+  // Meteen de fotokiezer openen: een leeg vak toevoegen is nooit het doel.
+  pmPick('strip-'+(pmPhotos.strip.length-1));
+};
+
+window.pmVerplaats=function(i,richting){
+  var j=i+richting;
+  if(j<0||j>=pmPhotos.strip.length)return;
+  var volgorde=pmPhotos.strip.map(function(_,k){return k;});
+  volgorde[i]=j;volgorde[j]=i;
+  pmHerordenStrip(volgorde);
+  document.getElementById('pm-status').textContent='Volgorde aangepast — nog niet gepubliceerd';
+};
 
 function pmRenderSlot(slot,photoPath,slotId){
   if(!slot)return;
   while(slot.firstChild)slot.removeChild(slot.firstChild);
   var pending=pmPendingUploads[slotId];
-  function _ov(s,sid){var o=document.createElement('div');o.className='pm-overlay';var c=document.createElement('button');c.className='pm-overlay-btn change';c.textContent='Wijzig';c.onclick=function(e){e.stopPropagation();pmPick(sid);};var u=document.createElement('button');u.className='pm-overlay-btn crop';u.textContent='Uitsnede';u.onclick=function(e){e.stopPropagation();pmUitsnede(sid);};var r=document.createElement('button');r.className='pm-overlay-btn remove';r.textContent='Verwijder';r.onclick=function(e){e.stopPropagation();pmRemove(sid);};o.appendChild(c);o.appendChild(u);o.appendChild(r);s.appendChild(o);}
+  function _ov(s,sid){
+    var o=document.createElement('div');o.className='pm-overlay';
+    function knop(klasse,tekst,doe){
+      var b=document.createElement('button');b.type='button';b.className='pm-overlay-btn '+klasse;b.textContent=tekst;
+      b.onclick=function(e){e.stopPropagation();doe();};
+      return b;
+    }
+    o.appendChild(knop('change','Wijzig',function(){pmPick(sid);}));
+    o.appendChild(knop('crop','Uitsnede',function(){pmUitsnede(sid);}));
+    o.appendChild(knop('remove','Verwijder',function(){pmRemove(sid);}));
+    // Volgorde alleen bij de strip: de hero staat nergens in een rij.
+    if(sid.indexOf('strip-')===0){
+      var i=parseInt(sid.split('-')[1],10);
+      if(i>0)o.appendChild(knop('move','‹',function(){pmVerplaats(i,-1);}));
+      if(i<pmPhotos.strip.length-1)o.appendChild(knop('move','›',function(){pmVerplaats(i,1);}));
+    }
+    s.appendChild(o);
+  }
   // Het admin-slot is 16:9 en de plek op de site niet; de preview toont hier
   // dus wel de gekozen uitsnede, maar het is geen 1-op-1 voorbeeld. Daarvoor
   // is de uitsnede-editor, die het kader op de echte verhouding zet.
@@ -2610,10 +2801,37 @@ window.pmPick=function(slotId,evt){
 window.pmRemove=function(slotId){
   delete pmPendingUploads[slotId];
   if(pmPhotos.pos)delete pmPhotos.pos[slotId];
-  if(slotId==='hero')pmPhotos.hero=null;
-  else{var idx=parseInt(slotId.split('-')[1]);pmPhotos.strip[idx]=null;}
-  pmRenderSlots();
+  if(slotId==='hero'){pmPhotos.hero=null;pmRenderSlots();return;}
+  // Bij de strip verdwijnt het hele vakje, niet alleen de foto erin: een leeg
+  // gat middenin de rij is op de site een grijs vlak waar niemand om vroeg.
+  var idx=parseInt(slotId.split('-')[1],10);
+  pmHerordenStrip(pmPhotos.strip.map(function(_,i){return i;}).filter(function(i){return i!==idx;}));
 };
+
+// Onder welke naam een nieuwe foto de repo in gaat.
+// Vroeger was dat strip<slotnummer>.jpg, en dat kon zolang er precies drie
+// vaste vakjes waren. Nu de rij kan groeien en schuiven wijst dat nummer niet
+// meer naar één en dezelfde foto: verwijder vakje 1 en de foto uit vakje 2
+// schuift op, waarna een nieuwe foto in dat vakje strip2.jpg zou overschrijven
+// — een bestand dat nog gewoon op de site staat. Vandaar:
+//   vervang je een foto, dan mag zijn eigen bestand overschreven worden;
+//   is het vakje leeg, dan pakken we het laagste nummer dat NIEMAND gebruikt,
+//   ook niet als nog-niet-gepubliceerde upload.
+function pmVrijeNaam(slotId){
+  if(slotId==='hero')return 'hero.jpg';
+  var idx=parseInt(slotId.split('-')[1],10);
+  var huidig=pmPhotos.strip[idx];
+  if(huidig&&/^photos\/[A-Za-z0-9._-]+$/.test(huidig))return huidig.slice('photos/'.length);
+  var bezet={};
+  (pmPhotos.strip||[]).forEach(function(p){ if(p)bezet[p]=1; });
+  Object.keys(pmPendingUploads).forEach(function(k){
+    if(k!==slotId&&pmPendingUploads[k])bezet['photos/'+pmPendingUploads[k].filename]=1;
+  });
+  for(var n=0;n<500;n++){
+    if(!bezet['photos/strip'+n+'.jpg'])return 'strip'+n+'.jpg';
+  }
+  return 'strip-'+Date.now()+'.jpg';
+}
 
 function pmProcessFile(slotId,file){
   var reader=new FileReader();
@@ -2634,7 +2852,7 @@ function pmProcessDataUrl(slotId,dataUrlIn){
     ctx.drawImage(img,0,0,w,h);
     var dataUrl=canvas.toDataURL('image/jpeg',0.82);
     var b64=dataUrl.split(',')[1];
-    pmPendingUploads[slotId]={b64:b64,dataUrl:dataUrl,filename:slotId.replace('strip-','strip')+'.jpg'};
+    pmPendingUploads[slotId]={b64:b64,dataUrl:dataUrl,filename:pmVrijeNaam(slotId)};
     // Andere foto, dus de oude uitsnede slaat nergens meer op: terug naar het
     // midden. Wie een specifiek deel wil, zet dat opnieuw via "Uitsnede".
     if(pmPhotos.pos)delete pmPhotos.pos[slotId];
@@ -2699,17 +2917,21 @@ window.pmSave=async function(){
 };
 
 function pmGenerateJS(){
-  // Alleen afwijkingen bewaren. Een uitsnede voor een leeg vak, of een die
-  // toch op het midden staat, hoort niet in photos.js -- anders groeit het
-  // bestand vol met regels die niets doen.
-  var uit={hero:pmPhotos.hero,strip:pmPhotos.strip},pos={};
-  Object.keys(pmPhotos.pos||{}).forEach(function(k){
-    var w=pmPhotos.pos[k];
-    if(!w||w==='50% 50%')return;
-    var heeftFoto=k==='hero'?!!pmPhotos.hero:!!pmPhotos.strip[parseInt(k.split('-')[1])];
-    if(heeftFoto)pos[k]=w;
+  // Lege vakjes gaan er niet in. Ze bestaan alleen in het paneel, als plek waar
+  // nog een foto in moet; op de site zou zo'n vakje een grijs vlak in de rij
+  // zijn. De uitsnedes schuiven mee met de nummers die daardoor verspringen.
+  var stripUit=[],posOud=pmPhotos.pos||{},pos={};
+  pmPhotos.strip.forEach(function(pad,oud){
+    if(!pad)return;
+    var nieuw=stripUit.length;
+    stripUit.push(pad);
+    var w=posOud['strip-'+oud];
+    if(w&&w!=='50% 50%')pos['strip-'+nieuw]=w;
   });
+  if(posOud.hero&&posOud.hero!=='50% 50%'&&pmPhotos.hero)pos.hero=posOud.hero;
+  var uit={hero:pmPhotos.hero,strip:stripUit};
   if(Object.keys(pos).length)uit.pos=pos;
+  uit.stripFormaat=pmFormaat();
   return '// Werkplaats3b — Foto referenties\n// Laatst gewijzigd: '+new Date().toISOString()+'\n// Gegenereerd via admin.html\n\nconst PHOTOS = '+JSON.stringify(uit,null,2)+';\n';
 }
 

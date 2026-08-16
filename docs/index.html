@@ -282,10 +282,16 @@
 
   /* ── PHOTO SLIDER ──
      Was een vast raster van drie. Nu een veegbare rij: op een breed scherm
-     staan er drie naast elkaar (identiek aan vroeger zolang het er drie zijn),
-     op een telefoon één per keer met de volgende half in beeld -- dat randje
-     is wat verraadt dat je kunt vegen. Meer foto's toevoegen kan zonder de
-     opmaak aan te raken: er schuiven er simpelweg meer in de rij. */
+     staan er er standaard drie naast elkaar (identiek aan vroeger zolang het
+     er drie zijn), op een telefoon één per keer met de volgende half in beeld
+     -- dat randje is wat verraadt dat je kunt vegen. Meer foto's toevoegen kan
+     zonder de opmaak aan te raken: er schuiven er simpelweg meer in de rij.
+
+     Verhouding en aantal-naast-elkaar zijn instelbaar in het admin-paneel
+     (Foto's → Formaat). Dat komt hier binnen als drie variabelen die render.js
+     op .photo-strip zet. De waarden hieronder zijn de terugval: publiceert een
+     ouder admin-tabblad photos.js zonder die instelling, dan staat er weer
+     precies wat er vóór deze regels stond. */
   .photo-slider { position: relative; }
   .photo-strip {
     display: flex;
@@ -301,9 +307,9 @@
   }
   .photo-strip::-webkit-scrollbar { display: none; }
   .photo-placeholder {
-    flex: 0 0 calc((100% - 2px) / 3);
+    flex: 0 0 var(--strip-basis, calc((100% - 2px) / 3));
     scroll-snap-align: start;
-    aspect-ratio: 4 / 3;
+    aspect-ratio: var(--strip-ratio, 4 / 3);
     background: var(--surface);
     position: relative;
     overflow: hidden;
@@ -376,7 +382,10 @@
   /* Vegen is de enige bediening op een telefoon: pijlen zouden daar over de
      foto vallen en zijn met een duim toch lastiger dan de veeg zelf. */
   @media (max-width: 600px) {
-    .photo-placeholder { flex: 0 0 88%; }
+    /* Bij een staande verhouding (reel) zou 88% breedte een foto van ruim een
+       heel telefoonscherm hoog opleveren; render.js zet daarom een smallere
+       basis mee. Ligt de foto, dan blijft het gewoon 88%. */
+    .photo-placeholder { flex: 0 0 var(--strip-basis-mob, 88%); }
     .photo-slider .ps-nav { display: none !important; }
     /* Op een aanraakscherm is er geen hover, dus zou het bijschrift nooit
        verschijnen. */
@@ -427,21 +436,17 @@
   .mob-cta { display: none; }
 
   /* ── SECTION LABELS ── */
-  /* Dubbele grootte en vet is de gekozen huisstijl voor sectiekoppen, dus staat
-     dat hier en niet als instelling in content.js. Daar stond het eerder wel, en
+  /* Staat hier en niet als instelling in content.js. Daar stond het eerder wel, en
      dat ging drie keer mis op één avond: een admin-tabblad dat nog uit een oudere
      versie werkt, publiceert die sleutel eruit. Wat in de stylesheet staat kan
-     geen enkele publicatie wissen. De regel in de admin blijft werken en rekent
-     nu vanaf deze grootte: 100% = wat je hier ziet.
-     Op de telefoon niet verdubbelen -- render.js laat de groottefactor daar met
-     opzet los, anders duwen de koppen de rest van het scherm weg. */
+     geen enkele publicatie wissen. */
   .section-label {
     padding: 32px 40px 16px;
-    font-size: calc(var(--fs-body) * 2);
+    font-size: var(--fs-body);
     letter-spacing: 0.3em;
     text-transform: uppercase;
     color: var(--amber);
-    font-weight: 700;
+    font-weight: 500;
   }
 
   /* ── OFFER GRID ── */
@@ -1211,8 +1216,7 @@
     header { padding: 40px 24px 32px; }
     .location-bar { margin: 20px 24px 0; }
     .intro { padding: 32px 24px 28px; }
-    /* Wel vet, niet verdubbeld -- zie de toelichting bij .section-label. */
-    .section-label { padding: 28px 24px 14px; font-size: var(--fs-body); }
+    .section-label { padding: 28px 24px 14px; }
     .machines-block { padding: 0 24px; }
     .pricing-block { padding: 0 24px; }
     .pricing-note { padding: 10px 24px 0; }
@@ -2221,7 +2225,7 @@ window._initPhotoSlider=function(){
         var b=document.createElement('button');
         b.type='button';b.className='ps-dot';
         b.setAttribute('aria-label','Naar foto '+(i+1));
-        b.onclick=function(){ strip.scrollLeft=i*stap(); };
+        b.onclick=function(){ strip.scrollLeft=i*stap();pauzeer(); };
         dots.appendChild(b);
       })(i);
     }
@@ -2236,9 +2240,43 @@ window._initPhotoSlider=function(){
     markeer();
   }
 
-  if(prev)prev.onclick=function(){ strip.scrollLeft-=stap(); };
-  if(next)next.onclick=function(){ strip.scrollLeft+=stap(); };
+  if(prev)prev.onclick=function(){ strip.scrollLeft-=stap();pauzeer(); };
+  if(next)next.onclick=function(){ strip.scrollLeft+=stap();pauzeer(); };
   strip.addEventListener('scroll',markeer,{passive:true});
+
+  // ── Vanzelf doorschuiven ──
+  // Staat uit tenzij het admin-paneel het aanzet (data-autoplay op de strip,
+  // gezet door render.js). Drie dingen zetten hem stil: de bezoeker die zelf
+  // bedient, een muis die op de foto's rust, en een tabblad dat niet in beeld
+  // is -- dat laatste omdat een onzichtbare timer alleen maar doorschuift naar
+  // een positie die niemand gekozen heeft.
+  var autoMs=parseInt(strip.dataset.autoplay||'0',10)||0;
+  var klok=null,hervat=null;
+  function volgende(){
+    if(!schuifbaar())return;
+    // Aan het eind terug naar het begin; anders blijft hij tegen de rand duwen.
+    var eind=strip.scrollWidth-strip.clientWidth-2;
+    if(strip.scrollLeft>=eind)strip.scrollLeft=0;
+    else strip.scrollLeft+=stap();
+  }
+  function start(){ if(autoMs&&!klok)klok=setInterval(volgende,autoMs); }
+  function stop(){ if(klok){clearInterval(klok);klok=null;} }
+  function pauzeer(){
+    // Na eigen bediening even niets: meteen weer doorschuiven voelt alsof de
+    // pagina je klik ongedaan maakt.
+    stop();clearTimeout(hervat);
+    if(autoMs)hervat=setTimeout(start,Math.max(autoMs,6000));
+  }
+  if(autoMs){
+    strip.addEventListener('pointerdown',pauzeer);
+    strip.addEventListener('wheel',pauzeer,{passive:true});
+    slider.addEventListener('mouseenter',stop);
+    slider.addEventListener('mouseleave',start);
+    document.addEventListener('visibilitychange',function(){
+      if(document.visibilityState==='visible')start();else stop();
+    });
+    start();
+  }
 
   var tmr=null;
   window.addEventListener('resize',function(){ clearTimeout(tmr);tmr=setTimeout(ververs,150); });

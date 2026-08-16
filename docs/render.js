@@ -78,6 +78,31 @@
   }
   zetFotoBijschriften();
 
+  // De maatvoering van de fotorij, ingesteld in het admin-paneel en opgeslagen
+  // in photos.js als {ratio:"4/3", perBeeld:3, autoplay:0}. De stylesheet houdt
+  // dezelfde waarden als terugval aan, dus een photos.js zonder deze sleutel
+  // laat de rij er precies zo uitzien als voordat dit bestond.
+  //
+  // perBeeld is hoeveel foto's er op een breed scherm naast elkaar staan; de
+  // 1px-naadjes tussen de vakjes moeten van de breedte af, vandaar de aftrek.
+  // Op een telefoon telt perBeeld niet mee -- daar is één foto per keer het
+  // enige dat leesbaar is, alleen wordt een staande foto smaller gehouden
+  // omdat hij anders langer wordt dan het scherm hoog is.
+  function zetStripFormaat(baan, opties) {
+    var o = opties || {};
+    var ratio = typeof o.ratio === 'string' && /^\d+(\.\d+)?\s*\/\s*\d+(\.\d+)?$/.test(o.ratio) ? o.ratio : '4/3';
+    var per = Math.max(1, Math.min(6, parseInt(o.perBeeld, 10) || 3));
+    var delen = ratio.split('/');
+    var staand = parseFloat(delen[0]) / parseFloat(delen[1]) < 1;
+    baan.style.setProperty('--strip-ratio', ratio);
+    baan.style.setProperty('--strip-basis', 'calc((100% - ' + (per - 1) + 'px) / ' + per + ')');
+    baan.style.setProperty('--strip-basis-mob', staand ? '62%' : '88%');
+    // Seconden in de admin, milliseconden voor de timer in index.html.
+    var auto = Math.max(0, parseFloat(o.autoplay) || 0);
+    if (auto) baan.dataset.autoplay = Math.round(auto * 1000);
+    else delete baan.dataset.autoplay;
+  }
+
   // Offers
   if (Array.isArray(C.offers)) {
     var offerCards = document.querySelectorAll('.offer-grid .offer-card');
@@ -271,7 +296,9 @@
       // meer foto's dan dat, dan maken we er vakjes bij -- de slider schuift ze
       // vanzelf mee. Zo kunnen er foto's bij zonder de pagina aan te raken.
       var baan = document.querySelector('.photo-strip');
+      var echteFotos = PHOTOS.strip.filter(Boolean).length;
       if (baan) {
+        zetStripFormaat(baan, PHOTOS.stripFormaat);
         var vakjes = baan.querySelectorAll('.photo-placeholder');
         for (var n = vakjes.length; n < PHOTOS.strip.length; n++) {
           var extra = document.createElement('div');
@@ -280,6 +307,15 @@
           bijschrift.className = 'ph-label';
           extra.appendChild(bijschrift);
           baan.appendChild(extra);
+        }
+        // Minder foto's dan vakjes: de overtollige weg. Alleen als er ECHT
+        // foto's staan -- op een verse site zonder photos.js-inhoud horen de
+        // drie getekende placeholders gewoon te blijven staan.
+        if (echteFotos) {
+          var over = baan.querySelectorAll('.photo-placeholder');
+          for (var m = over.length - 1; m >= PHOTOS.strip.length; m--) {
+            over[m].parentNode.removeChild(over[m]);
+          }
         }
       }
       var strip = document.querySelectorAll('.photo-strip .photo-placeholder');
