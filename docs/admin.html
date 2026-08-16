@@ -341,7 +341,11 @@ textarea.ce-input{min-height:60px;resize:vertical}
 .pm-overlay-btn.change{background:var(--amber);color:var(--bg);border-color:var(--amber)}
 .pm-overlay-btn.remove{background:transparent;color:var(--red);border-color:var(--red)}
 .pm-overlay-btn.crop{background:transparent;color:var(--cream);border-color:var(--cream)}
-.pm-overlay-btn.move{background:transparent;color:var(--cream);border-color:var(--border);padding:4px 8px;font-size:11px;line-height:1}
+/* De volgorde-pijlen staan in de onderhoeken en niet in de rij ernaast: bij een
+   staand vakje is die rij te smal en viel de laatste pijl half buiten beeld. */
+.pm-overlay-btn.move{position:absolute;bottom:8px;background:rgba(0,0,0,.55);color:var(--cream);border-color:var(--border);padding:3px 9px;font-size:12px;line-height:1}
+.pm-overlay-btn.move.links{left:8px}
+.pm-overlay-btn.move.rechts{right:8px}
 /* ── Uitsnede-editor ──────────────────────────────────────────────────
    Het voorbeeldkader krijgt de verhouding van de ECHTE plek op de site
    (hero 3:1, strip en portret 4:3), niet die van het admin-slot (16:9).
@@ -2772,8 +2776,8 @@ function pmRenderSlot(slot,photoPath,slotId){
     // Volgorde alleen bij de strip: de hero staat nergens in een rij.
     if(sid.indexOf('strip-')===0){
       var i=parseInt(sid.split('-')[1],10);
-      if(i>0)o.appendChild(knop('move','‹',function(){pmVerplaats(i,-1);}));
-      if(i<pmPhotos.strip.length-1)o.appendChild(knop('move','›',function(){pmVerplaats(i,1);}));
+      if(i>0)o.appendChild(knop('move links','‹',function(){pmVerplaats(i,-1);}));
+      if(i<pmPhotos.strip.length-1)o.appendChild(knop('move rechts','›',function(){pmVerplaats(i,1);}));
     }
     s.appendChild(o);
   }
