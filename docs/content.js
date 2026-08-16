@@ -139,7 +139,7 @@ const CONTENT = {
     {
       "name": "Matthijs",
       "role": "Meubelmaker",
-      "text": "40 jaar. Maakte een carrière switch van horecameubels naar maatwerk meubilair. Niet om aan te schuiven maar om het zelf te maken. ",
+      "text": "Matthijs (39) maakte de overstap van horecamanagement naar maatwerkmeubilair. Als zelfstandig meubelmaker werkt hij met veel passie aan uiteenlopende projecten voor horecazaken, kantoren en particulieren. Zag zijn werkplaats in 5 jaar uitgroeien van garagebox tot volledig uitgeruste machinehal.",
       "photo": "photos/team-1-matthijs.jpg"
     },
     {
@@ -203,10 +203,6 @@ const CONTENT = {
     },
     "teamRole": {
       "color": "#F0EAE0"
-    },
-    "sectionLabels": {
-      "size": 200,
-      "bold": true
     }
   }
 };
