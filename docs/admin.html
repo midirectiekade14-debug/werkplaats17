@@ -122,12 +122,14 @@ body{background:var(--bg);color:var(--cream);font-family:'Courier New',monospace
 /* Vaste plattegrond-kleuren in plaats van een vrije kiezer. De kleur zegt hier
    wát iets is (amber = houtmachine, groen = werkbank, bruin = opslag); een
    zelfverzonnen tint zegt niets en breekt die afspraak. */
+/* Twee klassen diep, want de zijbalk heeft een eigen `.sb-add button{width:100%}`
+   die anders van elk staal een balk over de volle breedte maakt. */
 .pf-swatches{display:flex;flex-wrap:wrap;gap:3px}
-.pf-swatch{width:18px;height:18px;padding:0;border:1px solid var(--border);cursor:pointer;position:relative;flex-shrink:0}
-.pf-swatch:hover{border-color:var(--amber)}
-.pf-swatch.on{border-color:var(--amber);box-shadow:0 0 0 1px var(--bg),0 0 0 2px var(--amber)}
-.pf-swatch-vreemd{border-color:var(--red);border-width:2px}
-.pf-swatch-vreemd::after{content:'!';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:bold;color:var(--red);text-shadow:0 0 3px var(--bg),0 0 3px var(--bg)}
+.pf-swatches .pf-swatch{width:18px;height:18px;min-width:0;margin:0;padding:0;border:1px solid var(--border);cursor:pointer;position:relative;flex-shrink:0;flex-grow:0}
+.pf-swatches .pf-swatch:hover{border-color:var(--amber)}
+.pf-swatches .pf-swatch.on{border-color:var(--amber);box-shadow:0 0 0 1px var(--bg),0 0 0 2px var(--amber)}
+.pf-swatches .pf-swatch-vreemd{border-color:var(--red);border-width:2px}
+.pf-swatches .pf-swatch-vreemd::after{content:'!';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:bold;color:var(--red);text-shadow:0 0 3px var(--bg),0 0 3px var(--bg)}
 .pf-btn{width:100%;padding:5px;font-size:8px;font-family:inherit;letter-spacing:.1em;text-transform:uppercase;border:none;cursor:pointer;margin-top:4px}
 .pf-btn-del{background:#a03030;color:#fff}
 .pf-btn-del:hover{filter:brightness(1.2)}
@@ -457,7 +459,7 @@ textarea.ce-input{min-height:60px;resize:vertical}
       <span style="color:var(--muted);font-size:8px">×</span>
       <input type="number" id="addD" placeholder="D cm" min="1">
     </div>
-    <span style="color:var(--muted);font-size:7px">Kleur</span>
+    <div style="color:var(--muted);font-size:7px;letter-spacing:.1em;text-transform:uppercase;margin:4px 0 3px">Kleur</div>
     <input type="hidden" id="addC" value="#a08060">
     <div class="pf-swatches" id="addC-stalen"></div>
     <button id="addBtn">Toevoegen</button>
