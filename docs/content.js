@@ -179,8 +179,8 @@ const CONTENT = {
       "color": "#E09A2F"
     },
     "offerText": {
-      "color": "#F0EAE0",
-      "size": 120
+      "color": "#F5B040",
+      "size": 130
     },
     "pricingLabel": {
       "size": 130,
@@ -197,7 +197,7 @@ const CONTENT = {
       "color": "#F0EAE0"
     },
     "offerTitle": {
-      "color": "#F5B040"
+      "color": "#F0EAE0"
     }
   }
 };
