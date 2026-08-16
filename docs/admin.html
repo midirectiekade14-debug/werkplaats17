@@ -248,6 +248,10 @@ textarea.ce-input{min-height:60px;resize:vertical}
 /* Het "standaard"-staal toont geen kleur maar een streep: de site bepaalt hem zelf. */
 .ce-swatch-std{background:var(--bg);overflow:hidden}
 .ce-swatch-std::after{content:'';position:absolute;left:-4px;right:-4px;top:50%;height:1px;background:var(--muted);transform:rotate(-45deg)}
+/* Kleur van buiten de huisstijl: rood omrand en met een uitroepteken, zodat je
+   ziet dat er iets afwijkends staat in plaats van dat er niets lijkt te staan. */
+.ce-swatch-vreemd{border-color:var(--red);border-width:2px}
+.ce-swatch-vreemd::after{content:'!';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:bold;color:var(--red);text-shadow:0 0 3px var(--bg),0 0 3px var(--bg)}
 .ce-style-size{width:54px;padding:3px 5px;font-size:9px;font-family:inherit;background:var(--bg);border:1px solid var(--border);color:var(--cream);outline:none}
 .ce-style-size:focus{border-color:var(--amber)}
 .ce-style-rst{padding:3px 8px;font-size:7px;font-family:inherit;letter-spacing:.08em;text-transform:uppercase;background:var(--surface2);border:1px solid var(--border);color:var(--muted);cursor:pointer}
@@ -1741,6 +1745,12 @@ function ceStijlBalk(defs){
     if(def.label){var nm=document.createElement('span');nm.className='ce-style-name';nm.textContent=def.label;rij.appendChild(nm);}
     var demo=document.createElement('span');demo.className='ce-style-demo';demo.textContent='Aa';
     var kl=document.createElement('div');kl.className='ce-swatches';
+    // Een kleur die de oude vrije kiezer heeft achtergelaten (bv. #f0e9e0 --
+    // net geen creme) hoort niet stil te verdwijnen: dan lijkt er niets
+    // ingesteld terwijl de site wel afwijkt. Dit staal verschijnt alleen dan.
+    var vreemd=document.createElement('button');vreemd.type='button';
+    vreemd.className='ce-swatch ce-swatch-vreemd';vreemd.style.display='none';
+    vreemd.onclick=function(){schrijf('color',null);};
     var stalen=HUISSTIJL_KLEUREN.map(function(k){
       var b=document.createElement('button');b.type='button';
       b.className='ce-swatch'+(k.hex?'':' ce-swatch-std');
@@ -1750,15 +1760,29 @@ function ceStijlBalk(defs){
       kl.appendChild(b);
       return b;
     });
+    kl.appendChild(vreemd);
     var gr=document.createElement('input');gr.type='number';gr.className='ce-style-size';
     gr.min='60';gr.max='200';gr.step='5';gr.title='Grootte in % van de standaard';
     var rst=document.createElement('button');rst.type='button';rst.className='ce-style-rst';rst.textContent='Herstel alles';
 
     function toon(){
       var s=(ceData.styles&&ceData.styles[def.key])||{};
+      // Hex uit content.js kan in willekeurige schrijfwijze staan (#F0EAE0 of
+      // #f0eae0); zonder normaliseren licht het juiste staal niet op.
+      var huidig=(s.color||'').toLowerCase()||null;
+      var bekend=false;
       stalen.forEach(function(b,i){
-        b.classList.toggle('on',(HUISSTIJL_KLEUREN[i].hex||null)===(s.color||null));
+        var hex=(HUISSTIJL_KLEUREN[i].hex||'').toLowerCase()||null;
+        var actief=hex===huidig;
+        if(actief)bekend=true;
+        b.classList.toggle('on',actief);
       });
+      vreemd.style.display=bekend?'none':'';
+      if(!bekend){
+        vreemd.style.background=s.color;
+        vreemd.classList.add('on');
+        vreemd.title='Deze kleur ('+s.color+') zit niet in de huisstijl. Klik om hem te verwijderen, of kies hiernaast een huisstijlkleur.';
+      }
       gr.value=s.size||100;
       // Zonder eigen kleur weten we hier niet welke kleur de site zelf pakt --
       // die staat in de stylesheet, niet in content.js. De demo toont dan de
