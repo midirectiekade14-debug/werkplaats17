@@ -1722,12 +1722,16 @@ function ceWrapSelection(ta,tag){
 // tinten op die nergens anders op werkplaats3b.nl voorkomen; deze vijf zijn
 // exact de waarden uit :root in index.html. Wijzigt de huisstijl daar, dan
 // hoort deze lijst mee te wijzigen.
+// De stalen tonen de hex zelf, niet een var(): de admin heeft zijn eigen set
+// CSS-variabelen en die dekt de site-huisstijl niet volledig (--amber-light
+// bestaat hier niet en gaf een doorzichtig staal). Zo toont het staal exact
+// de waarde die in content.js belandt.
 var HUISSTIJL_KLEUREN=[
-  {naam:'Standaard',hex:null,  css:null,             uitleg:'Kleur die de site zelf al gebruikt'},
-  {naam:'Créme',    hex:'#F0EAE0',css:'var(--cream)',      uitleg:'Lopende tekst'},
-  {naam:'Amber',    hex:'#E09A2F',css:'var(--amber)',      uitleg:'Accentkleur'},
-  {naam:'Amber licht',hex:'#F5B040',css:'var(--amber-light)',uitleg:'Lichter accent, voor nadruk'},
-  {naam:'Gedempt',  hex:'#7a7060',css:'var(--muted)',      uitleg:'Bijzaken en voetnoten'}
+  {naam:'Standaard',  hex:null,     uitleg:'Kleur die de site zelf al gebruikt'},
+  {naam:'Créme',      hex:'#F0EAE0',uitleg:'Lopende tekst'},
+  {naam:'Amber',      hex:'#E09A2F',uitleg:'Accentkleur'},
+  {naam:'Amber licht',hex:'#F5B040',uitleg:'Lichter accent, voor nadruk'},
+  {naam:'Gedempt',    hex:'#7a7060',uitleg:'Bijzaken en voetnoten'}
 ];
 
 function ceStijlBalk(defs){
@@ -1740,7 +1744,7 @@ function ceStijlBalk(defs){
     var stalen=HUISSTIJL_KLEUREN.map(function(k){
       var b=document.createElement('button');b.type='button';
       b.className='ce-swatch'+(k.hex?'':' ce-swatch-std');
-      if(k.hex)b.style.background=k.css;
+      if(k.hex)b.style.background=k.hex;
       b.title=k.naam+' — '+k.uitleg;
       b.onclick=function(){schrijf('color',k.hex);};
       kl.appendChild(b);
@@ -1760,7 +1764,7 @@ function ceStijlBalk(defs){
       // die staat in de stylesheet, niet in content.js. De demo toont dan de
       // meest voorkomende (creme) en zegt er in de tooltip bij dat het een
       // benadering is; het gekozen staal blijft de waarheid.
-      demo.style.color=s.color||'var(--cream)';
+      demo.style.color=s.color||'#F0EAE0';
       demo.title=s.color?('Kleur: '+s.color):'Zonder eigen kleur bepaalt de site deze zelf';
       demo.style.fontSize=Math.round(12*((s.size||100)/100))+'px';
     }
