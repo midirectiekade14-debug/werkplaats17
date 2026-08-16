@@ -239,7 +239,15 @@ textarea.ce-input{min-height:60px;resize:vertical}
 .ce-style-name{font-size:7px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);min-width:48px}
 .ce-style-lbl{font-size:7px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .ce-style-demo{font-size:12px;line-height:1;padding:2px 7px;border:1px dashed var(--border);color:var(--cream);min-width:30px;text-align:center}
-.ce-style-color{width:28px;height:20px;padding:1px;background:var(--bg);border:1px solid var(--border);cursor:pointer}
+/* Vaste huisstijlstalen in plaats van een vrije kleurenkiezer: elke andere
+   kleur valt uit de toon op deze site, dus die bieden we niet aan. */
+.ce-swatches{display:flex;gap:4px;align-items:center}
+.ce-swatch{width:20px;height:20px;padding:0;border:1px solid var(--border);cursor:pointer;position:relative;flex-shrink:0}
+.ce-swatch:hover{border-color:var(--amber)}
+.ce-swatch.on{border-color:var(--amber);box-shadow:0 0 0 2px var(--bg),0 0 0 3px var(--amber)}
+/* Het "standaard"-staal toont geen kleur maar een streep: de site bepaalt hem zelf. */
+.ce-swatch-std{background:var(--bg);overflow:hidden}
+.ce-swatch-std::after{content:'';position:absolute;left:-4px;right:-4px;top:50%;height:1px;background:var(--muted);transform:rotate(-45deg)}
 .ce-style-size{width:54px;padding:3px 5px;font-size:9px;font-family:inherit;background:var(--bg);border:1px solid var(--border);color:var(--cream);outline:none}
 .ce-style-size:focus{border-color:var(--amber)}
 .ce-style-rst{padding:3px 8px;font-size:7px;font-family:inherit;letter-spacing:.08em;text-transform:uppercase;background:var(--surface2);border:1px solid var(--border);color:var(--muted);cursor:pointer}
@@ -398,6 +406,7 @@ textarea.ce-input{min-height:60px;resize:vertical}
     <div class="item" draggable="true" data-w="30" data-h="54" data-l="Lintzaag" data-c="#E09A2F" data-bg="rgba(224,154,47,.13)"><div class="sw" style="background:#E09A2F"></div>Lintzaag</div>
     <div class="item" draggable="true" data-w="135" data-h="24" data-l="Kantenaanlijmer" data-c="#E09A2F" data-bg="rgba(224,154,47,.13)"><div class="sw" style="background:#E09A2F"></div>Kantenaanlijmer</div>
     <div class="item" draggable="true" data-w="120" data-h="21" data-l="Wandzaag" data-c="#E09A2F" data-bg="rgba(224,154,47,.13)"><div class="sw" style="background:#E09A2F"></div>Wandzaag</div>
+    <div class="item" draggable="true" data-w="42" data-h="36" data-l="Stationaire frees" data-c="#E09A2F" data-bg="rgba(224,154,47,.13)"><div class="sw" style="background:#E09A2F"></div>Stationaire frees</div>
     <div class="item" draggable="true" data-w="36" data-h="24" data-l="Metaalzaag" data-c="#d07828" data-bg="rgba(208,120,40,.13)"><div class="sw" style="background:#d07828"></div>Metaalzaag</div>
     <div class="item" draggable="true" data-w="42" data-h="42" data-l="Straalcabine" data-c="#d07828" data-bg="rgba(208,120,40,.13)"><div class="sw" style="background:#d07828"></div>Straalcabine</div>
     <div class="item" draggable="true" data-w="18" data-h="18" data-l="3D printer" data-c="#80a0d0" data-bg="rgba(128,160,208,.13)"><div class="sw" style="background:#80a0d0"></div>3D printer</div>
@@ -1038,18 +1047,30 @@ cv.addEventListener('drop',function(e){
   place(x,y,drag);drag=null;
 });
 
-// Bovenaanzicht van de machine in het object tekenen, en de naam rechtop
-// zetten zodra het object dieper is dan breed. Beide volgen dezelfde regel
-// (machine-shapes.js beslist wanneer iets "staand" is), zodat tekening en
-// tekst nooit los van elkaar draaien.
+// Bovenaanzicht van de machine in het object tekenen en de naam meedraaien.
+// De hoek komt uit dataset.rot (0/90/180/270), met één uitzondering die
+// machine-shapes.js afhandelt: een object dat rechtop in de plattegrond ligt
+// maar rot 0 heeft, is van vóór de vier-standen-knop en krijgt alsnog een
+// kwartslag. Zo blijft een bestaande plattegrond er hetzelfde uitzien.
 // Wordt aangeroepen vanuit updateArea(): elke maatwijziging -- slepen aan een
 // handvat, de edit-popup, het eigenschappenpaneel, de draaiknop -- loopt daar
 // langs, dus de vorm blijft vanzelf kloppen.
+// De stand waar dit object NU in staat, in graden. Voor een deur is dat de
+// opgeslagen waarde; voor de rest de hoek waaronder de tekening staat, want
+// die telt de kwartslag mee die oude objecten in hun breedte/hoogte hebben
+// zitten in plaats van in rot. Zonder dat verschil springt zo'n object bij de
+// eerste druk op de draaiknop een slag de verkeerde kant op.
+function huidigeHoek(d){
+  var rot=parseInt(d.dataset.rot||'0',10)||0;
+  if(d.dataset.type==='door'||d.dataset.type==='overhead'||typeof MACHINE_SHAPES==='undefined')return ((rot%360)+360)%360;
+  return MACHINE_SHAPES.tekenHoek(parseFloat(d.style.width),parseFloat(d.style.height),rot);
+}
+
 function pasVormToe(d){
   if(typeof MACHINE_SHAPES==='undefined')return;
   if(d.dataset.room||d.dataset.type==='overhead'||d.dataset.type==='door')return;
   var ib=d.querySelector('.ib');if(!ib)return;
-  var staand=MACHINE_SHAPES.isStaand(parseFloat(d.style.width),parseFloat(d.style.height));
+  var hoek=MACHINE_SHAPES.tekenHoek(parseFloat(d.style.width),parseFloat(d.style.height),d.dataset.rot);
   var sleutel=MACHINE_SHAPES.sleutelVoor(d.dataset.l,d.dataset.type,d.dataset.shape||'');
   var laag=ib.querySelector('.ms');
   if(sleutel){
@@ -1057,9 +1078,9 @@ function pasVormToe(d){
     laag.style.color=d.dataset.c||'';
     // Alleen hertekenen als er iets aan de tekening verandert; anders bouwt
     // elke muisbeweging tijdens het slepen de SVG opnieuw op.
-    var stempel=sleutel+(staand?'|v':'|h');
+    var stempel=sleutel+'|'+hoek;
     if(laag.dataset.stempel!==stempel){
-      var tekening=MACHINE_SHAPES.elementVoor(sleutel,staand);
+      var tekening=MACHINE_SHAPES.elementVoor(sleutel,hoek);
       while(laag.firstChild)laag.removeChild(laag.firstChild);
       if(tekening)laag.appendChild(tekening);
       laag.dataset.stempel=stempel;
@@ -1067,7 +1088,7 @@ function pasVormToe(d){
   }else if(laag){laag.remove();}
   ib.classList.toggle('heeft-vorm',!!sleutel);
   var il=ib.querySelector('.il');
-  if(il)il.classList.toggle('vert',staand);
+  if(il)il.classList.toggle('vert',MACHINE_SHAPES.labelStaat(hoek));
 }
 
 // PLACE OBJECT (Oud Camp style with rooms, resize handles, edit popups)
@@ -1159,7 +1180,18 @@ function place(x,y,data){
   dbtn.addEventListener('click',function(e){e.stopPropagation();pushUndo();d.remove();if(sel===d){sel=null;hideProps();}});
   // Rotate (not for rooms)
   var rBtn=d.querySelector('.rb');
-  if(rBtn) rBtn.addEventListener('click',function(e){e.stopPropagation();if(isDoor){var r=(parseInt(d.dataset.rot||'0')+90)%360;d.dataset.rot=r.toString();d.lastElementChild.style.transform='rotate('+r+'deg)';}else{var ow=d.style.width,oh=d.style.height;d.style.width=oh;d.style.height=ow;updateArea();}if(sel===d)populateProps(d);});
+  // Vier standen, niet twee. Elke druk is een kwartslag: de doos wisselt van
+  // breedte en hoogte (dat gebeurde al) EN de tekening draait mee, zodat een
+  // machine ook ondersteboven of andersom rechtop kan staan. Na vier keer
+  // drukken sta je weer waar je begon.
+  if(rBtn) rBtn.addEventListener('click',function(e){
+    e.stopPropagation();
+    var r=(huidigeHoek(d)+90)%360;
+    d.dataset.rot=r.toString();
+    if(isDoor){d.lastElementChild.style.transform='rotate('+r+'deg)';}
+    else{var ow=d.style.width,oh=d.style.height;d.style.width=oh;d.style.height=ow;updateArea();}
+    if(sel===d)populateProps(d);
+  });
   // Edit popup
   ebtn.addEventListener('click',function(e){e.stopPropagation();if(epop.classList.contains('on')){epop.classList.remove('on');return;}enInp.value=d.dataset.l;ewInp.value=Math.round(parseFloat(d.style.width)/S/10);ehInp.value=Math.round(parseFloat(d.style.height)/S/10);epop.classList.add('on');enInp.focus();});
   epop.addEventListener('mousedown',function(e){e.stopPropagation()});
@@ -1236,7 +1268,9 @@ function populateProps(d){
   pfFloor.value=d.dataset.floor||'0';
   pfW.value=Math.round(parseFloat(d.style.width)/S/10);pfH.value=Math.round(parseFloat(d.style.height)/S/10);
   pfX.value=parseInt(d.style.left);pfY.value=parseInt(d.style.top);
-  pfRot.value=d.dataset.rot||'0';pfColor.value=hexFromAny(d.dataset.c);
+  // De stand die je ZIET, niet de rauwe opgeslagen waarde: bij een object van
+  // vóór de vier-standen-knop lopen die uiteen, en dan liegt het paneel.
+  pfRot.value=huidigeHoek(d).toString();pfColor.value=hexFromAny(d.dataset.c);
   pfBgColor.value=hexFromAny(d.dataset.bg);pfBgOpacity.value=opacityFromBg(d.dataset.bg);
   document.getElementById('pf-bgopacity-val').textContent=pfBgOpacity.value+'%';
   document.getElementById('pf-status-wrap').style.display=(d.dataset.type==='huurunit')?'':'none';
@@ -1332,7 +1366,7 @@ function loadObjects(objs){
   objs.forEach(function(o){
     var savedFloor=floor;floor=o.floor;
     place(o.x,o.y,{w:o.w,h:o.h,l:o.l,c:o.c,bg:o.bg,type:o.type||'',status:o.status||'',room:o.room||'',shape:o.shape||''});
-    if(o.rot&&o.rot!=='0'){var d=fp.lastElementChild;if(d&&d.classList.contains('pl')){d.dataset.rot=o.rot.toString();if((o.type==='overhead'||o.type==='door')&&d.lastElementChild)d.lastElementChild.style.transform='rotate('+o.rot+'deg)';}}
+    if(o.rot&&o.rot!=='0'){var d=fp.lastElementChild;if(d&&d.classList.contains('pl')){d.dataset.rot=o.rot.toString();if((o.type==='overhead'||o.type==='door')&&d.lastElementChild)d.lastElementChild.style.transform='rotate('+o.rot+'deg)';else pasVormToe(d);}}
     floor=savedFloor;
   });
   if(sel){sel.classList.remove('sel');sel=null;hideProps();}
@@ -1684,13 +1718,34 @@ function ceWrapSelection(ta,tag){
 // ongewijzigd), zodat de tekst op een telefoon niet zijn eigen schaal
 // verliest. Alleen afwijkingen belanden in content.js: op standaard zetten
 // haalt de sleutel er weer uit.
+// De kleuren van de site, en niets anders. Een vrije kleurenkiezer leverde
+// tinten op die nergens anders op werkplaats3b.nl voorkomen; deze vijf zijn
+// exact de waarden uit :root in index.html. Wijzigt de huisstijl daar, dan
+// hoort deze lijst mee te wijzigen.
+var HUISSTIJL_KLEUREN=[
+  {naam:'Standaard',hex:null,  css:null,             uitleg:'Kleur die de site zelf al gebruikt'},
+  {naam:'Créme',    hex:'#F0EAE0',css:'var(--cream)',      uitleg:'Lopende tekst'},
+  {naam:'Amber',    hex:'#E09A2F',css:'var(--amber)',      uitleg:'Accentkleur'},
+  {naam:'Amber licht',hex:'#F5B040',css:'var(--amber-light)',uitleg:'Lichter accent, voor nadruk'},
+  {naam:'Gedempt',  hex:'#7a7060',css:'var(--muted)',      uitleg:'Bijzaken en voetnoten'}
+];
+
 function ceStijlBalk(defs){
   var balk=document.createElement('div');balk.className='ce-style';
   defs.forEach(function(def){
     var rij=document.createElement('div');rij.className='ce-style-row';
     if(def.label){var nm=document.createElement('span');nm.className='ce-style-name';nm.textContent=def.label;rij.appendChild(nm);}
     var demo=document.createElement('span');demo.className='ce-style-demo';demo.textContent='Aa';
-    var kl=document.createElement('input');kl.type='color';kl.className='ce-style-color';kl.title='Tekstkleur';
+    var kl=document.createElement('div');kl.className='ce-swatches';
+    var stalen=HUISSTIJL_KLEUREN.map(function(k){
+      var b=document.createElement('button');b.type='button';
+      b.className='ce-swatch'+(k.hex?'':' ce-swatch-std');
+      if(k.hex)b.style.background=k.css;
+      b.title=k.naam+' — '+k.uitleg;
+      b.onclick=function(){schrijf('color',k.hex);};
+      kl.appendChild(b);
+      return b;
+    });
     var gr=document.createElement('input');gr.type='number';gr.className='ce-style-size';
     gr.min='60';gr.max='200';gr.step='5';gr.title='Grootte in % van de standaard';
     var rst=document.createElement('button');rst.type='button';rst.className='ce-style-rst';rst.textContent='Standaard';

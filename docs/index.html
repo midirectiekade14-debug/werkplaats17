@@ -1948,15 +1948,18 @@ window._initFloorplan=function(){
       ib.className='ib';
       ib.style.borderColor=o.c;
       ib.style.background=o.bg;
-      // Bovenaanzicht van de machine, plus de bijbehorende leesrichting:
-      // staat het object rechtop, dan draaien tekening en naam samen mee.
-      var staand=false,vormSleutel='';
+      // Bovenaanzicht van de machine, plus de bijbehorende leesrichting. De
+      // hoek komt uit o.rot (0/90/180/270); een object van vóór de vier-
+      // standen-knop heeft daar 0 staan terwijl het rechtop ligt, en krijgt
+      // van tekenHoek alsnog zijn kwartslag.
+      var hoek=0,staand=false,vormSleutel='';
       if(typeof MACHINE_SHAPES!=='undefined'){
-        staand=MACHINE_SHAPES.isStaand(o.w,o.h);
+        hoek=MACHINE_SHAPES.tekenHoek(o.w,o.h,o.rot);
+        staand=MACHINE_SHAPES.labelStaat(hoek);
         vormSleutel=MACHINE_SHAPES.sleutelVoor(o.l,o.type,o.shape||'');
       }
       if(vormSleutel){
-        var tekening=MACHINE_SHAPES.elementVoor(vormSleutel,staand);
+        var tekening=MACHINE_SHAPES.elementVoor(vormSleutel,hoek);
         if(tekening){
           var ms=document.createElement('div');
           ms.className='ms';

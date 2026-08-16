@@ -153,13 +153,21 @@
            '<line class="d" x1="46" y1="24" x2="46" y2="76"/>'
     },
 
+    // Stationaire frees (toupie): gietijzeren tafel met de spil links van het
+    // midden, een tweedelige aanslag die dwars over de tafel loopt met een
+    // opening rond de freeskop, en een schuiftafel langs de voorkant waarop
+    // het werkstuk langs de kop gaat.
     freesmachine: {
-      naam: 'Tafelfrees',
-      svg: '<rect class="b" x="4" y="10" width="92" height="78"/>' +           // tafel
-           '<circle class="s" cx="46" cy="50" r="10"/>' +                      // freesspil
-           '<rect class="f" x="4" y="44" width="32" height="6"/>' +            // aanslag links
-           '<rect class="f" x="56" y="44" width="40" height="6"/>' +           // aanslag rechts
-           '<line class="d" x1="4" y1="80" x2="96" y2="80"/>'                  // schuifslede
+      naam: 'Stationaire frees (toupie)',
+      svg: '<rect class="b" x="10" y="12" width="78" height="62"/>' +          // gietijzeren tafel
+           '<rect class="b" x="4" y="76" width="92" height="12"/>' +           // schuiftafel
+           '<rect class="f" x="10" y="38" width="26" height="7"/>' +           // aanslag links
+           '<rect class="f" x="58" y="38" width="30" height="7"/>' +           // aanslag rechts
+           '<circle class="s" cx="47" cy="45" r="11"/>' +                      // freeskop
+           '<circle class="f" cx="47" cy="45" r="3.5"/>' +                     // spil
+           '<line class="d" x1="10" y1="60" x2="88" y2="60"/>' +               // tafelgleuf
+           '<line class="d" x1="20" y1="76" x2="20" y2="88"/>' +
+           '<line class="d" x1="76" y1="76" x2="76" y2="88"/>'                 // slede-eindaanslagen
     },
 
     bandschuur: {
@@ -309,7 +317,7 @@
     [/metaalzaag|afkortzaag|afkorter|verstekzaag/, 'metaalzaag'],
     [/straalcabine|spuitcabine|spuitruimte|straalruimte/, 'straalcabine'],
     [/3dprinter|3d.?printer|printer/, 'printer3d'],
-    [/frees|toupie/, 'freesmachine'],
+    [/stationair|tafelfrees|freesmachine|frees|toupie|spindel/, 'freesmachine'],
     [/schuur|bandschuur|kantenschuur/, 'bandschuur'],
     [/afzuig|stofafzuig|cycloon/, 'afzuiging'],
     [/compressor|perslucht/, 'compressor'],
@@ -352,12 +360,18 @@
     return '';
   }
 
-  // De <svg> als tekst. `staand` draait de tekening een kwartslag: het
-  // object is dan dieper dan breed en de machine staat dus rechtop.
-  function svgVoor(sleutel, staand) {
+  // De <svg> als tekst. De tweede parameter is de hoek in graden (0, 90, 180
+  // of 270). `true`/`false` mag ook nog: dat betekende "rechtop" en komt
+  // overeen met 90 graden.
+  //
+  // De draaiing zit op de <g> BINNEN de viewBox, dus vóór het uitrekken naar
+  // de maat van het object. Een machine die rechtop staat krijgt daardoor een
+  // tekening met de juiste verhoudingen, niet een uitgerekt liggend plaatje.
+  function svgVoor(sleutel, hoek) {
     var vorm = SHAPES[sleutel];
     if (!vorm) return '';
-    var draai = staand ? ' transform="rotate(-90 50 50)"' : '';
+    var g = normaliseerHoek(hoek);
+    var draai = g ? ' transform="rotate(' + (-g) + ' 50 50)"' : '';
     return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" ' +
            'preserveAspectRatio="none" focusable="false" aria-hidden="true">' +
            '<g' + draai + '>' + vorm.svg + '</g></svg>';
@@ -367,8 +381,8 @@
   // tabel hierboven en er komt geen ingevoerde waarde in voor, maar de rest
   // van de site bouwt zijn DOM ook zonder innerHTML — dat houden we hier vol,
   // dan kan het later niet alsnog een injectiepad worden.
-  function elementVoor(sleutel, staand) {
-    var tekst = svgVoor(sleutel, staand);
+  function elementVoor(sleutel, hoek) {
+    var tekst = svgVoor(sleutel, hoek);
     if (!tekst) return null;
     var doc = new DOMParser().parseFromString(tekst, 'image/svg+xml');
     var svg = doc.documentElement;
@@ -376,11 +390,41 @@
     return document.importNode(svg, true);
   }
 
+  // Alles wat binnenkomt terugbrengen tot 0, 90, 180 of 270.
+  function normaliseerHoek(hoek) {
+    if (hoek === true) return 90;
+    if (!hoek) return 0;
+    var g = parseFloat(hoek);
+    if (!isFinite(g)) return 0;
+    g = Math.round(g / 90) * 90;
+    return ((g % 360) + 360) % 360;
+  }
+
   // Staat het object rechtop? De marge van 15% houdt bijna-vierkante
   // dingen (straalcabine, 3D-printer) met rust: die hebben geen lange as,
   // en meedraaien op een verschil van een paar centimeter oogt willekeurig.
   function isStaand(breedte, hoogte) {
     return hoogte > breedte * 1.15;
+  }
+
+  // De hoek waaronder de tekening moet staan.
+  //
+  // Objecten van vóór de vier-standen-knop hebben rot 0 staan terwijl ze wel
+  // rechtop in de plattegrond liggen: die kregen hun stand door breedte en
+  // hoogte om te wisselen, niet door rot te verhogen. Zulke objecten hoort de
+  // tekening alsnog een kwartslag te krijgen. Bij rot 90 of 270 is de doos per
+  // definitie al meegedraaid, dus daar telt de vorm van de doos niet mee.
+  function tekenHoek(breedte, hoogte, rot) {
+    var g = normaliseerHoek(rot);
+    if ((g === 0 || g === 180) && isStaand(breedte, hoogte)) g = (g + 90) % 360;
+    return g;
+  }
+
+  // Ligt de naam op zijn kant? Bij 180 graden niet: een label ondersteboven
+  // lezen is erger dan een label dat niet met de machine meedraait.
+  function labelStaat(hoek) {
+    var g = normaliseerHoek(hoek);
+    return g === 90 || g === 270;
   }
 
   // Voor de keuzelijst in het eigenschappenpaneel.
@@ -395,6 +439,9 @@
     svgVoor: svgVoor,
     elementVoor: elementVoor,
     isStaand: isStaand,
+    normaliseerHoek: normaliseerHoek,
+    tekenHoek: tekenHoek,
+    labelStaat: labelStaat,
     lijst: lijst,
     vormen: SHAPES
   };
