@@ -127,24 +127,25 @@ const CONTENT = {
   "notForText": "<strong>KvK-inschrijving en verzekering verplicht.</strong> Werkplaats3b is uitsluitend voor professionele gebruikers. Particulieren en hobbyisten kunnen hier niet terecht.",
   "aboutLabel": "Wie zijn wij",
   "aboutNavLabel": "Over ons",
-  "aboutLead": "Werkplaats3b is opgezet door Matthijs, Harm en Wesley. We huren het pand samen en verhuren de plekken die we niet zelf gebruiken.",
+  "aboutLead": "Werkplaats3b is opgezet door Matthijs, Harm en Wesley. We huren het pand samen en verhuren de plekken die we niet zelf gebruiken. Eerder huurde Matthijs en Wesley een unit bij Harm maar deze nieuwe plek geven we met zijn drieën vorm. Hoe wij gestart zijn? Vanuit een garagebox natuurlijk. ",
   "team": [
     {
       "name": "Harm",
-      "role": "Meubelmaker, 47 jaar en al 22 jaar druk met mooie projecten. ",
-      "text": "",
+      "role": "Meubelmaker",
+      "text": "47 jaar en al 22 jaar druk met mooie projecten. Rondde nooit een opleiding af dus werd ondernemer. Bouwde in 10 jaar tijd z'n bedrijf op tot wat het nu is.",
       "photo": "photos/team-0-harm.jpg",
       "pos": "50% 11.9%"
     },
     {
       "name": "Matthijs",
       "role": "Meubelmaker",
-      "text": ""
+      "text": "40 jaar. Maakte een carrière switch van horecameubels naar maatwerk meubilair. Niet om aan te schuiven maar om het zelf te maken. ",
+      "photo": "photos/team-1-matthijs.jpg"
     },
     {
       "name": "Wesley",
       "role": "Meubelmaker",
-      "text": "",
+      "text": "23 jaar. Timmerde op z'n 3e al zijn eigen speelgoed in elkaar. Na de opleiding meteen als ondernemer aan de slag gegaan en sindsdien veel klanten blij gemaakt met maatmeunilar",
       "photo": "photos/team-2-wesley.jpg",
       "pos": "50% 7.8%"
     }
@@ -166,7 +167,7 @@ const CONTENT = {
   "copyright": "© 2026 Werkplaats3b",
   "styles": {
     "aboutNote": {
-      "color": "#f0e9e0",
+      "color": "#F0EAE0",
       "size": 130
     },
     "introText": {
@@ -200,9 +201,8 @@ const CONTENT = {
       "color": "#F5B040",
       "size": 105
     },
-    "sectionLabels": {
-      "size": 200,
-      "bold": true
+    "teamRole": {
+      "color": "#F0EAE0"
     }
   }
 };
