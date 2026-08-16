@@ -342,7 +342,12 @@
     brandName:      '.nav-brand, footer .brand',
     pricingSub:     '.pricing-block .pricing-row .sub',
     floorplanText:  '.fp-tab, .legend-item, #fp-hint',
-    buttons:        '.btn-primary, .btn-secondary'
+    buttons:        '.btn-primary, .btn-secondary',
+    // Dikgedrukte woorden binnen een tekst. Zonder eigen instelling houden ze
+    // de kleur die per sectie in de stylesheet staat (crème, amber). Zet je
+    // hier wél een kleur, dan geldt die overal -- handig juist wanneer je een
+    // alinea de kleur geeft die zijn nadruk al had.
+    emphasis:       '.page strong'
   };
 
   function applyStyles() {

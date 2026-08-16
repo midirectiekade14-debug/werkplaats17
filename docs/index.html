@@ -908,6 +908,23 @@
     font-weight: 500;
   }
 
+  /* ── NADRUK ──
+     <strong> haalde zijn nadruk vrijwel helemaal uit kleur: crème of amber
+     tegen een grijzere alinea. Sinds die alineakleur instelbaar is kan hij
+     exact de kleur krijgen die de strong al had -- en dan is er geen nadruk
+     meer over. Gewicht is de tweede as en die schuift niet mee met een
+     kleurkeuze. DM Mono kent geen vet (alleen 300/400/500), dus de browser
+     maakt het zelf aan; dat is een duidelijke stap boven de 300/400 van de
+     lopende tekst. Deze regel staat ná de regels hierboven en wint daarom
+     van hun font-weight, terwijl hun kleuren blijven staan. */
+  .intro strong,
+  .offer-card p strong,
+  .not-for strong,
+  .about-lead strong,
+  .about-note strong,
+  .pricing-note strong,
+  .cta-info strong { font-weight: 700; }
+
   /* ── CTA ── */
   .cta-block {
     padding: 40px 40px 0;
