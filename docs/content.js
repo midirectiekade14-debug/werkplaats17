@@ -80,6 +80,10 @@ const CONTENT = {
       "highlight": true
     },
     {
+      "name": "Reachtruck",
+      "highlight": true
+    },
+    {
       "name": "en nog veel meer!",
       "highlight": false
     }
