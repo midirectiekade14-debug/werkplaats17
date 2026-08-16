@@ -163,9 +163,9 @@ const CONTENT = {
   "instagramHandle": "@werkplaats3b",
   "instagramUrl": "https://instagram.com/werkplaats3b",
   "photoLabels": [
-    "Bedrijfshal",
-    "Kantoren",
-    "Verdieping"
+    "",
+    "",
+    ""
   ],
   "hashtags": "#werkplaats3b #maasland<br>#bedrijfsruimte #meubelmaker<br>#vakman #werkruimte",
   "copyright": "© 2026 Werkplaats3b",
