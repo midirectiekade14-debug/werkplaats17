@@ -149,7 +149,7 @@ const CONTENT = {
       "pos": "50% 7.8%"
     }
   ],
-  "aboutNote": "<strong>Korte lijnen:</strong> Korte lijnen: wij zijn er iedere dag en staan naast je aan de werkbank.",
+  "aboutNote": "<strong>Korte lijnen:</strong> wij zijn er iedere dag en staan naast je aan de werkbank.",
   "ctaHeading": "Interesse?<br>Kom <em>kijken.</em>",
   "email": "info@werkplaats3b.nl",
   "whatsappNumber": "31681689278",
