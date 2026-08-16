@@ -1,5 +1,5 @@
 // Werkplaats3b -- Geplaatste objecten
-// Laatst gewijzigd: 2026-08-16T15:36:14.630Z
+// Laatst gewijzigd: 2026-08-16T15:38:17.818Z
 // Gegenereerd via admin.html
 
 const PLACED_OBJECTS = [
@@ -980,13 +980,28 @@ const PLACED_OBJECTS = [
   },
   {
     "floor": 0,
-    "x": 597,
-    "y": 594,
+    "x": 576,
+    "y": 564,
     "w": 42,
     "h": 54,
     "l": "Bureau met stoel",
     "c": "#7090a0",
     "bg": "rgba(112,144,160,.13)",
+    "type": "",
+    "rot": "0",
+    "status": "",
+    "room": "",
+    "shape": ""
+  },
+  {
+    "floor": 0,
+    "x": 435,
+    "y": 531,
+    "w": 24,
+    "h": 48,
+    "l": "Werkbank 1.6m",
+    "c": "#70b080",
+    "bg": "rgba(112,176,128,.13)",
     "type": "",
     "rot": "0",
     "status": "",
