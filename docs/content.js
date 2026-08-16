@@ -185,6 +185,13 @@ const CONTENT = {
     "offerText": {
       "color": "#E09A2F",
       "size": 120
+    },
+    "pricingLabel": {
+      "size": 130
+    },
+    "pricingPrice": {
+      "size": 130,
+      "color": "#E09A2F"
     }
   }
 };
