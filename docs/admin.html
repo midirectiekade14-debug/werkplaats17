@@ -778,7 +778,7 @@ const GH_REPO = 'midirectiekade14-debug/werkplaats3b';
 var GDRIVE = {
   get clientId(){ return localStorage.getItem('w3b-gdrive-client') || ''; },
   get apiKey(){ return localStorage.getItem('w3b-gdrive-key') || ''; },
-  scope: 'https://www.googleapis.com/auth/drive.file'
+  scope: 'https://www.googleapis.com/auth/drive.readonly'
 };
 // Het projectnummer zit vooraan in de client-ID; de Picker heeft het nodig om
 // een gekozen bestand aan dit project te koppelen.
