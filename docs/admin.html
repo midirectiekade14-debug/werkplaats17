@@ -1748,13 +1748,20 @@ function ceStijlBalk(defs){
     });
     var gr=document.createElement('input');gr.type='number';gr.className='ce-style-size';
     gr.min='60';gr.max='200';gr.step='5';gr.title='Grootte in % van de standaard';
-    var rst=document.createElement('button');rst.type='button';rst.className='ce-style-rst';rst.textContent='Standaard';
+    var rst=document.createElement('button');rst.type='button';rst.className='ce-style-rst';rst.textContent='Herstel alles';
 
     function toon(){
       var s=(ceData.styles&&ceData.styles[def.key])||{};
-      kl.value=s.color||'#F0EAE0';
+      stalen.forEach(function(b,i){
+        b.classList.toggle('on',(HUISSTIJL_KLEUREN[i].hex||null)===(s.color||null));
+      });
       gr.value=s.size||100;
+      // Zonder eigen kleur weten we hier niet welke kleur de site zelf pakt --
+      // die staat in de stylesheet, niet in content.js. De demo toont dan de
+      // meest voorkomende (creme) en zegt er in de tooltip bij dat het een
+      // benadering is; het gekozen staal blijft de waarheid.
       demo.style.color=s.color||'var(--cream)';
+      demo.title=s.color?('Kleur: '+s.color):'Zonder eigen kleur bepaalt de site deze zelf';
       demo.style.fontSize=Math.round(12*((s.size||100)/100))+'px';
     }
     // Niets meer ingesteld? Dan hoort de sleutel ook uit content.js te
@@ -1774,7 +1781,6 @@ function ceStijlBalk(defs){
       ruimOp();
       toon();
     }
-    kl.oninput=function(){schrijf('color',this.value);};
     gr.oninput=function(){
       var v=parseInt(this.value,10);
       if(isNaN(v))return;
