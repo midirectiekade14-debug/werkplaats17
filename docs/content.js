@@ -178,6 +178,13 @@ const CONTENT = {
     },
     "accessItems": {
       "color": "#E09A2F"
+    },
+    "locationText": {
+      "color": "#E09A2F"
+    },
+    "offerText": {
+      "color": "#E09A2F",
+      "size": 120
     }
   }
 };
