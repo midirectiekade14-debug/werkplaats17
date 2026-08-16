@@ -199,6 +199,9 @@ const CONTENT = {
     },
     "tagline": {
       "color": "#F0EAE0"
+    },
+    "photoLabels": {
+      "color": "#E09A2F"
     }
   }
 };
