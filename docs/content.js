@@ -167,5 +167,11 @@ const CONTENT = {
     "Verdieping"
   ],
   "hashtags": "#werkplaats3b #maasland<br>#bedrijfsruimte #meubelmaker<br>#vakman #werkruimte",
-  "copyright": "© 2026 Werkplaats3b"
+  "copyright": "© 2026 Werkplaats3b",
+  "styles": {
+    "aboutNote": {
+      "color": "#f0e9e0",
+      "size": 130
+    }
+  }
 };
