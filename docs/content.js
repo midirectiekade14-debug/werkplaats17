@@ -195,6 +195,9 @@ const CONTENT = {
     },
     "pricingNote": {
       "color": "#F0EAE0"
+    },
+    "tagline": {
+      "color": "#F0EAE0"
     }
   }
 };
