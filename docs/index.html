@@ -135,20 +135,19 @@
     overflow: hidden;
     animation: fadeUp 0.8s ease both;
   }
-  .corner-mark {
+  header::after {
+    content: '3b';
     position: absolute;
     right: -10px;
     top: -30px;
     font-family: 'Bebas Neue', sans-serif;
     font-size: min(260px, 42vw);
     line-height: 1;
+    color: var(--surface2);
     letter-spacing: -8px;
-    opacity: 0.1;
     pointer-events: none;
     user-select: none;
   }
-  .corner-mark span:first-child { color: var(--cream); }
-  .corner-mark span:last-child { color: var(--amber); }
   .eyebrow {
     font-size: var(--fs-eyebrow);
     font-weight: 500;
@@ -1430,7 +1429,6 @@
 
   <!-- HEADER -->
   <header>
-    <span class="corner-mark" aria-hidden="true"><span>WP</span><span>3B</span></span>
     <p class="eyebrow">Beschikbaar · Maasland</p>
     <h1>Werk<span>plaats</span></h1>
     <p class="tagline">Multifunctionele bedrijfsruimte voor professionele makers</p>
