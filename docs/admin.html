@@ -44,6 +44,16 @@ body{background:var(--bg);color:var(--cream);font-family:'Courier New',monospace
 .hbtn:hover{border-color:var(--amber);color:var(--amber)}
 .hbtn-pub{background:var(--amber);color:var(--bg);border-color:var(--amber);font-weight:bold}
 .hbtn-pub:hover{filter:brightness(1.15)}
+.hbtn:disabled,.hbtn-pub:disabled{background:var(--surface2);color:var(--muted);border-color:var(--border);cursor:not-allowed;font-weight:normal}
+.hbtn:disabled:hover,.hbtn-pub:disabled:hover{filter:none;border-color:var(--border);color:var(--muted)}
+
+/* Laadwaarschuwing plattegrond: zichtbaar zolang de gepubliceerde plattegrond
+   niet gelezen kon worden. Publiceren staat dan uit -- zie planLoaded. */
+.loadbar{display:none;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 12px;background:rgba(229,57,53,.12);border-bottom:1px solid var(--red);font-size:10px;line-height:1.5;color:var(--cream)}
+.loadbar.show{display:flex}
+.loadbar strong{color:var(--red);letter-spacing:.08em;text-transform:uppercase;font-size:9px}
+.loadbar .lb-msg{flex:1;min-width:220px;color:var(--cream)}
+.loadbar .lb-msg em{color:var(--muted);font-style:normal}
 
 /* layout */
 .wrap{display:flex;flex:1;overflow:hidden}
@@ -233,6 +243,8 @@ textarea.ce-input{min-height:60px;resize:vertical}
 .ce-btn{padding:6px 18px;font-size:9px;font-family:inherit;letter-spacing:.1em;text-transform:uppercase;border:none;cursor:pointer}
 .ce-btn-save{background:var(--amber);color:var(--bg);font-weight:bold}
 .ce-btn-save:hover{filter:brightness(1.15)}
+.ce-btn:disabled{background:var(--surface2);color:var(--muted);border:1px solid var(--border);cursor:not-allowed;font-weight:normal}
+.ce-btn:disabled:hover{filter:none}
 .ce-btn-reset{background:var(--bg);color:var(--muted);border:1px solid var(--border)}
 .ce-btn-reset:hover{border-color:var(--amber);color:var(--amber)}
 
@@ -300,6 +312,11 @@ textarea.ce-input{min-height:60px;resize:vertical}
 </div>
 <!-- ═══ VIEW: PLATTEGROND ═══ -->
 <div id="view-plattegrond" class="view-panel active" style="display:flex;flex-direction:column;flex:1;overflow:hidden">
+<div class="loadbar" id="load-warn">
+  <strong>Niet geladen</strong>
+  <span class="lb-msg" id="load-warn-msg"></span>
+  <button class="hbtn" id="btn-reload-plan">Opnieuw proberen</button>
+</div>
 <div class="wrap">
 <div class="sb">
   <div style="padding:5px 5px 0;display:flex;gap:2px">
@@ -489,16 +506,27 @@ textarea.ce-input{min-height:60px;resize:vertical}
 
 <!-- ═══ VIEW: CONTENT ═══ -->
 <div id="view-content">
+<div class="loadbar" id="ce-load-warn">
+  <strong>Niet geladen</strong>
+  <span class="lb-msg" id="ce-load-warn-msg"></span>
+  <button class="hbtn" id="btn-reload-content">Opnieuw proberen</button>
+</div>
 <div class="ce-wrap" id="ce-form"></div>
 <div class="ce-save-bar">
   <span class="ce-status" id="ce-status"></span>
   <button class="ce-btn ce-btn-reset" onclick="ceReset()">Reset</button>
-  <button class="ce-btn ce-btn-save" id="ce-save" onclick="ceSave()">Opslaan &amp; Publiceer</button>
+  <!-- Staat uit tot ceLoadFromGitHub() de gepubliceerde content gelezen heeft; zie contentLoaded -->
+  <button class="ce-btn ce-btn-save" id="ce-save" onclick="ceSave()" disabled>Opslaan &amp; Publiceer</button>
 </div>
 </div>
 
 <!-- ═══ VIEW: FOTO'S ═══ -->
 <div id="view-photos">
+<div class="loadbar" id="pm-load-warn">
+  <strong>Niet geladen</strong>
+  <span class="lb-msg" id="pm-load-warn-msg"></span>
+  <button class="hbtn" id="btn-reload-photos">Opnieuw proberen</button>
+</div>
 <div class="pm-wrap">
   <div class="pm-section">
     <h3>Hero afbeelding</h3>
@@ -530,7 +558,8 @@ textarea.ce-input{min-height:60px;resize:vertical}
 <div class="pm-save-bar">
   <span class="pm-status" id="pm-status"></span>
   <span class="pm-progress" id="pm-progress"></span>
-  <button class="ce-btn ce-btn-save" id="pm-save" onclick="pmSave()">Opslaan &amp; Publiceer</button>
+  <!-- Staat uit tot pmLoadFromGitHub() de gepubliceerde photos.js gelezen heeft; zie photosLoaded -->
+  <button class="ce-btn ce-btn-save" id="pm-save" onclick="pmSave()" disabled>Opslaan &amp; Publiceer</button>
 </div>
 </div>
 
@@ -557,6 +586,10 @@ textarea.ce-input{min-height:60px;resize:vertical}
 
 <script src="content.js"></script>
 <script src="photos.js"></script>
+<!-- De gepubliceerde plattegrond, mee-geserveerd naast admin.html. Dient alleen als
+     KIJK-fallback als de Contents API onbereikbaar is; publiceren blijft dan uit
+     (deze kopie kan verouderd zijn t.o.v. de repo). Zelfde patroon als content.js. -->
+<script src="placed-objects.js"></script>
 <script>
 // Token/repo-injectie via de URL-hash is verwijderd (security-audit 2026-08-06).
 // Een link als admin.html#token=xxx&repo=aanvaller/repo zette ongefilterd zowel
@@ -1017,7 +1050,12 @@ function loadObjects(objs){
 // ║  UNDO / REDO                               ║
 // ╚════════════════════════════════════════════╝
 var undoStack=[],redoStack=[],undoMax=50;
+// Elke wijziging aan het canvas loopt hierlangs (plaatsen, slepen, verwijderen,
+// props, import). Dat maakt dit de plek om te onthouden dat wat op het scherm
+// staat eigen werk is en niet zomaar door een herlaadpoging vervangen mag worden.
+var canvasTouched=false;
 function pushUndo(){
+  canvasTouched=true;
   undoStack.push(JSON.stringify(serializeObjects()));
   if(undoStack.length>undoMax)undoStack.shift();
   redoStack=[];
@@ -1047,7 +1085,6 @@ function updateUndoBtns(){
 document.getElementById('btn-undo').addEventListener('click',doUndo);
 document.getElementById('btn-redo').addEventListener('click',doRedo);
 
-var DEFAULT_OBJECTS={"v":3,"floor":0,"zoom":1,"items":[{"floor":0,"x":28,"y":18,"w":36,"h":56,"l":"K","c":"rgba(140,200,140,.5)","bg":"rgba(140,200,140,.13)","type":"","room":"1","rot":0},{"floor":0,"x":68,"y":18,"w":78,"h":56,"l":"Kantoor","c":"rgba(110,150,220,.5)","bg":"rgba(110,150,220,.13)","type":"","room":"1","rot":0},{"floor":0,"x":150,"y":18,"w":48,"h":56,"l":"Kantoor","c":"rgba(110,150,220,.5)","bg":"rgba(110,150,220,.13)","type":"","room":"1","rot":0},{"floor":0,"x":202,"y":12,"w":42,"h":68,"l":"K","c":"rgba(140,200,140,.5)","bg":"rgba(140,200,140,.13)","type":"","room":"1","rot":0},{"floor":0,"x":248,"y":18,"w":50,"h":56,"l":"Kantoor","c":"rgba(110,150,220,.5)","bg":"rgba(110,150,220,.13)","type":"","room":"1","rot":0},{"floor":0,"x":302,"y":12,"w":48,"h":68,"l":"Trap","c":"rgba(180,140,80,.45)","bg":"rgba(180,140,80,.13)","type":"","room":"1","rot":0},{"floor":0,"x":354,"y":18,"w":200,"h":56,"l":"Kantoor","c":"rgba(110,150,220,.5)","bg":"rgba(110,150,220,.13)","type":"","room":"1","rot":0},{"floor":0,"x":28,"y":80,"w":528,"h":310,"l":"Magazijn","c":"rgba(224,154,47,.5)","bg":"rgba(224,154,47,.13)","type":"","room":"1","rot":0},{"floor":0,"x":562,"y":290,"w":66,"h":100,"l":"Toilet","c":"rgba(120,160,220,.5)","bg":"rgba(120,160,220,.18)","type":"","room":"1","rot":0},{"floor":0,"x":632,"y":290,"w":88,"h":100,"l":"Entree","c":"rgba(100,180,220,.5)","bg":"rgba(100,180,220,.13)","type":"","room":"1","rot":0},{"floor":1,"x":28,"y":18,"w":528,"h":62,"l":"Magazijn (entresol)","c":"rgba(180,100,220,.5)","bg":"rgba(180,100,220,.13)","type":"","room":"1","rot":0},{"floor":1,"x":28,"y":84,"w":250,"h":308,"l":"Vide","c":"rgba(255,255,255,.12)","bg":"rgba(255,255,255,.03)","type":"","room":"1","rot":0},{"floor":1,"x":282,"y":84,"w":274,"h":230,"l":"Magazijn","c":"rgba(180,100,220,.5)","bg":"rgba(180,100,220,.13)","type":"","room":"1","rot":0},{"floor":1,"x":345,"y":28,"w":48,"h":40,"l":"Trap","c":"rgba(180,140,80,.45)","bg":"rgba(180,140,80,.13)","type":"","room":"1","rot":0},{"floor":1,"x":478,"y":320,"w":78,"h":72,"l":"Overloop","c":"rgba(200,180,140,.5)","bg":"rgba(200,180,140,.13)","type":"","room":"1","rot":0},{"floor":1,"x":562,"y":290,"w":158,"h":102,"l":"Vide","c":"rgba(255,255,255,.12)","bg":"rgba(255,255,255,.03)","type":"","room":"1","rot":0},{"floor":2,"x":28,"y":18,"w":440,"h":374,"l":"Vide","c":"rgba(255,255,255,.12)","bg":"rgba(255,255,255,.03)","type":"","room":"1","rot":0},{"floor":2,"x":395,"y":22,"w":48,"h":40,"l":"Overloop","c":"rgba(200,180,140,.5)","bg":"rgba(200,180,140,.13)","type":"","room":"1","rot":0},{"floor":2,"x":345,"y":28,"w":46,"h":38,"l":"Trap","c":"rgba(180,140,80,.45)","bg":"rgba(180,140,80,.13)","type":"","room":"1","rot":0},{"floor":2,"x":472,"y":18,"w":86,"h":50,"l":"Kantoor","c":"rgba(110,150,220,.5)","bg":"rgba(110,150,220,.13)","type":"","room":"1","rot":0},{"floor":2,"x":472,"y":72,"w":86,"h":180,"l":"Kantoor","c":"rgba(110,150,220,.5)","bg":"rgba(110,150,220,.13)","type":"","room":"1","rot":0},{"floor":2,"x":472,"y":256,"w":58,"h":56,"l":"Berging","c":"rgba(160,140,120,.5)","bg":"rgba(160,140,120,.13)","type":"","room":"1","rot":0},{"floor":2,"x":534,"y":256,"w":24,"h":56,"l":"Keuken","c":"rgba(140,200,140,.5)","bg":"rgba(140,200,140,.13)","type":"","room":"1","rot":0},{"floor":2,"x":472,"y":316,"w":86,"h":76,"l":"Vide","c":"rgba(255,255,255,.12)","bg":"rgba(255,255,255,.03)","type":"","room":"1","rot":0},{"floor":2,"x":562,"y":290,"w":158,"h":102,"l":"Vide","c":"rgba(255,255,255,.12)","bg":"rgba(255,255,255,.03)","type":"","room":"1","rot":0}]};
 
 function generateJS(objs){
   return '// Werkplaats3b -- Geplaatste objecten\n// Laatst gewijzigd: '+new Date().toISOString()+'\n// Gegenereerd via admin.html\n\nconst PLACED_OBJECTS = '+JSON.stringify(objs,null,2)+';\n';
@@ -1193,27 +1230,110 @@ function ceInit(){
 // Decode base64 van GitHub (bevat newlines die atob niet accepteert)
 function ghDecode(b64){return decodeURIComponent(escape(atob(b64.replace(/\s/g,''))));}
 
-async function ceLoadFromGitHub(){
-  var repo=GH_REPO;
-  var token=localStorage.getItem('w17-gh-token');
-  document.getElementById('ce-status').textContent='Content laden...';
-  try{
-    if(token){
-      var r=await fetch('https://api.github.com/repos/'+repo+'/contents/docs/content.js',{headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github.v3+json'}});
-      if(r.ok){
-        var data=await r.json();
-        var raw=ghDecode(data.content);
-        var cm=raw.match(/(?:const|var|let)\s+CONTENT\s*=\s*/);if(cm){var js=raw.substring(cm.index+cm[0].length).replace(/;\s*$/,'').trim();ceData=JSON.parse(js);}
-        ceBuild();
-        document.getElementById('ce-status').textContent='Content geladen van GitHub';
-        return;
-      }
-    }
-  }catch(e){console.warn('GitHub content laden mislukt:',e);}
-  // Fallback: lokaal geladen content.js
-  if(typeof CONTENT!=='undefined'){ceData=JSON.parse(JSON.stringify(CONTENT));ceBuild();document.getElementById('ce-status').textContent='Content geladen (lokaal)';}
-  else{document.getElementById('ce-status').textContent='Kon content niet laden';toast('Content laden mislukt','err');}
+// ── Publiceer-grendel content ────────────────────────────────────────
+// Zelfde regel als bij de plattegrond (planLoaded): publiceren mag alleen als
+// de gepubliceerde content.js in deze sessie echt gelezen en geparsed is.
+// Anders wordt een fallback -- de meegeleverde CONTENT, of erger: een leeg
+// object -- als volledige site-inhoud weggeschreven.
+var contentLoaded=false;
+var CONTENT_PATH='docs/content.js';
+// Momentopname van wat er na een mislukte load in beeld gezet is. Wijkt ceData
+// daarvan af, dan heeft Harm intussen getypt en mag een herlaadpoging dat niet
+// stilzwijgend wegvagen -- zelfde regel als bij de plattegrond (canvasTouched).
+var ceFallbackSnapshot=null;
+
+function setContentPublishEnabled(ok,reason){
+  var btn=document.getElementById('ce-save');
+  if(!btn)return;
+  btn.disabled=!ok;
+  btn.title=ok?'':(reason||'Publiceren staat uit tot de content geladen is');
 }
+function showContentWarn(msg){
+  document.getElementById('ce-load-warn-msg').innerHTML=msg;
+  document.getElementById('ce-load-warn').classList.add('show');
+}
+function hideContentWarn(){
+  document.getElementById('ce-load-warn').classList.remove('show');
+}
+
+// Leest docs/content.js via de Contents API. Gooit met een leesbare reden als
+// er iets niet klopt -- ook als het bestand wel binnenkomt maar onleesbaar is.
+// Dat laatste ging eerder stil mis: zonder CONTENT-match bleef ceData {} staan
+// terwijl de status "geladen van GitHub" meldde.
+async function fetchPublishedContent(){
+  var gh=await getGHConfig();
+  if(!gh)throw new Error('geen GitHub-token in deze browser');
+  var r=await fetchT('https://api.github.com/repos/'+gh.repo+'/contents/'+CONTENT_PATH+'?ref=master&_t='+Date.now(),{
+    headers:{'Authorization':'Bearer '+gh.token,'Accept':'application/vnd.github.v3+json'}
+  },15000);
+  if(r.status===401||r.status===403)throw new Error('token geweigerd of rate limit (HTTP '+r.status+')');
+  if(!r.ok)throw new Error('GitHub gaf HTTP '+r.status);
+  var d=await r.json();
+  var raw=ghDecode(d.content);
+  var cm=raw.match(/(?:const|var|let)\s+CONTENT\s*=\s*/);
+  if(!cm)throw new Error(CONTENT_PATH+' heeft een onverwacht formaat');
+  var js=raw.substring(cm.index+cm[0].length).replace(/;\s*$/,'').trim();
+  var data=JSON.parse(js);
+  if(!data||typeof data!=='object'||!Object.keys(data).length)throw new Error(CONTENT_PATH+' leverde lege content op');
+  return{data:data,sha:d.sha,velden:Object.keys(data).length};
+}
+
+async function ceLoadFromGitHub(){
+  document.getElementById('ce-status').textContent='Content laden...';
+  setContentPublishEnabled(false,'Content nog niet geladen');
+  try{
+    var res=await fetchPublishedContent();
+    ceData=res.data;
+    ceBuild();
+    shaCache[CONTENT_PATH]=res.sha;
+    contentLoaded=true;
+    ceFallbackSnapshot=null;
+    hideContentWarn();
+    setContentPublishEnabled(true);
+    document.getElementById('ce-status').textContent='Content geladen van GitHub ('+res.velden+' velden)';
+  }catch(e){
+    console.warn('GitHub content laden mislukt:',e);
+    contentLoaded=false;
+    var reden=leesbareFout(e),bron;
+    // Wel iets tonen zodat de velden niet leeg blijven, maar duidelijk gelabeld
+    // en met publiceren uit: deze kopie kan achterlopen op de repo.
+    if(typeof CONTENT!=='undefined'&&CONTENT&&Object.keys(CONTENT).length){
+      ceData=JSON.parse(JSON.stringify(CONTENT));
+      ceBuild();
+      bron='Je ziet nu de <em>meegeleverde kopie van de site</em> ('+Object.keys(CONTENT).length+' velden, kan verouderd zijn).';
+      document.getElementById('ce-status').textContent='Content geladen (lokale kopie) — publiceren staat uit';
+    }else{
+      ceData={};ceBuild();
+      bron='Er is geen kopie om te tonen — de velden zijn leeg.';
+      document.getElementById('ce-status').textContent='Kon content niet laden — publiceren staat uit';
+    }
+    ceFallbackSnapshot=JSON.stringify(ceData);
+    showContentWarn('De gepubliceerde content kon niet gelezen worden: <em>'+esc(reden)+'</em>. '+bron+' <strong style="display:inline">Publiceren staat uit</strong> tot dit lukt, anders overschrijf je de teksten van de site.');
+    setContentPublishEnabled(false,'Content kon niet geladen worden — publiceren geblokkeerd');
+  }
+}
+
+// Heeft Harm sinds de mislukte load zelf iets veranderd?
+function ceHeeftEigenWijzigingen(){
+  if(Object.keys(ceTeamPending).length)return true;
+  return ceFallbackSnapshot!==null&&JSON.stringify(ceData)!==ceFallbackSnapshot;
+}
+
+// "Opnieuw proberen" naast de waarschuwing. Pas na een geslaagde load gaat de
+// publiceerknop aan; ceLoadFromGitHub regelt dat allemaal zelf.
+async function reloadContent(){
+  var btn=document.getElementById('btn-reload-content');
+  if(ceHeeftEigenWijzigingen()&&!confirm('Je hebt wijzigingen gemaakt sinds de mislukte load. Opnieuw laden haalt de gepubliceerde content op en gooit die wijzigingen weg. Doorgaan?'))return;
+  var oud=btn.textContent;btn.disabled=true;btn.textContent='Laden...';
+  try{
+    await ceLoadFromGitHub();
+    if(contentLoaded)toast('Content geladen vanuit GitHub');
+    else toast('Nog steeds niet gelukt — zie de melding bovenaan','err');
+  }finally{
+    btn.disabled=false;btn.textContent=oud;
+  }
+}
+document.getElementById('btn-reload-content').addEventListener('click',reloadContent);
 
 function ceBuild(){
   var form=document.getElementById('ce-form');
@@ -1446,6 +1566,16 @@ function ceGenerateJS(){
 
 window.ceSave=async function(){
   var btn=document.getElementById('ce-save');
+  // Harde grendel, los van de disabled-state van de knop. Vóór de foto-uploads,
+  // want die schrijven al naar de repo.
+  if(!contentLoaded){
+    toast('Publiceren geblokkeerd: de gepubliceerde content is niet gelezen. Gebruik "Opnieuw proberen".','err');
+    return;
+  }
+  if(!ceData||!Object.keys(ceData).length){
+    toast('Publiceren geblokkeerd: lege content wist alle teksten van de site','err');
+    return;
+  }
   try{
     toast('Opslaan...');
     // Eerst de portretfoto's, want content.js moet naar een pad wijzen dat
@@ -1460,7 +1590,7 @@ window.ceSave=async function(){
       var sitePath='photos/team-'+idx+'-'+ceSlug(persoon.name)+'.jpg';
       document.getElementById('ce-status').textContent='Foto uploaden ('+(n+1)+'/'+wachtenden.length+')...';
       var okFoto=await publishBinary('docs/'+sitePath,up.b64,'Portretfoto '+(persoon.name||'persoon')+' via admin');
-      if(!okFoto){toast('Foto-upload mislukt — niets gepubliceerd','err');btn.disabled=false;btn.textContent='Opslaan & Publiceer';return;}
+      if(!okFoto){toast('Foto-upload mislukt — niets gepubliceerd','err');btn.textContent='Opslaan & Publiceer';setContentPublishEnabled(contentLoaded);return;}
       persoon.photo=sitePath;
       ceTeamCache[sitePath]=up.dataUrl;
       delete ceTeamPending[wachtenden[n]];
@@ -1477,7 +1607,7 @@ window.ceSave=async function(){
     console.error('[ceSave] error:',e);
     toast('Opslaan mislukt: '+e.message,'err');
   }finally{
-    if(btn){btn.disabled=false;btn.textContent='Opslaan & Publiceer';}
+    if(btn){btn.textContent='Opslaan & Publiceer';setContentPublishEnabled(contentLoaded);}
   }
 };
 
@@ -1509,27 +1639,108 @@ function pmInit(){
   });
 }
 
-async function pmLoadFromGitHub(){
-  var repo=GH_REPO;
-  var token=localStorage.getItem('w17-gh-token');
-  document.getElementById('pm-status').textContent='Foto\'s laden...';
-  try{
-    if(token){
-      var r=await fetch('https://api.github.com/repos/'+repo+'/contents/docs/photos.js',{headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github.v3+json'}});
-      if(r.ok){
-        var data=await r.json();
-        var raw=ghDecode(data.content);
-        var pm=raw.match(/(?:const|var|let)\s+PHOTOS\s*=\s*/);if(pm){var js=raw.substring(pm.index+pm[0].length).replace(/;\s*$/,'').trim();pmPhotos=JSON.parse(js);}
-        if(!pmPhotos.strip)pmPhotos.strip=[null,null,null];
-        pmRenderSlots();
-        document.getElementById('pm-status').textContent='Foto\'s geladen';
-        return;
-      }
-    }
-  }catch(e){console.warn('Photos laden mislukt:',e);}
-  pmRenderSlots();
-  document.getElementById('pm-status').textContent='Geen foto\'s gevonden';
+// ── Publiceer-grendel foto's ─────────────────────────────────────────
+// Zelfde regel als planLoaded/contentLoaded. Let op het verschil met content:
+// een photos.js waarin alles null is, is een GELDIGE toestand (site zonder
+// foto's). De waarde zegt dus niets; alleen of het lezen gelukt is telt.
+// Precies daarom ging het eerder mis: de beginwaarde van pmPhotos is óók
+// "alles null", en die werd bij een mislukte load gepubliceerd onder de
+// geruststellende melding "Geen foto's gevonden".
+var photosLoaded=false;
+var PHOTOS_PATH='docs/photos.js';
+var pmFallbackSnapshot=null;
+
+function setPhotosPublishEnabled(ok,reason){
+  var btn=document.getElementById('pm-save');
+  if(!btn)return;
+  btn.disabled=!ok;
+  btn.title=ok?'':(reason||'Publiceren staat uit tot de foto\'s geladen zijn');
 }
+function showPhotosWarn(msg){
+  document.getElementById('pm-load-warn-msg').innerHTML=msg;
+  document.getElementById('pm-load-warn').classList.add('show');
+}
+function hidePhotosWarn(){
+  document.getElementById('pm-load-warn').classList.remove('show');
+}
+
+function pmNormaliseer(o){
+  if(!o||typeof o!=='object'||Array.isArray(o))throw new Error(PHOTOS_PATH+' leverde geen fotolijst op');
+  if(!Array.isArray(o.strip))o.strip=[null,null,null];
+  if(!('hero'in o))o.hero=null;
+  return o;
+}
+
+async function fetchPublishedPhotos(){
+  var gh=await getGHConfig();
+  if(!gh)throw new Error('geen GitHub-token in deze browser');
+  var r=await fetchT('https://api.github.com/repos/'+gh.repo+'/contents/'+PHOTOS_PATH+'?ref=master&_t='+Date.now(),{
+    headers:{'Authorization':'Bearer '+gh.token,'Accept':'application/vnd.github.v3+json'}
+  },15000);
+  if(r.status===401||r.status===403)throw new Error('token geweigerd of rate limit (HTTP '+r.status+')');
+  if(!r.ok)throw new Error('GitHub gaf HTTP '+r.status);
+  var d=await r.json();
+  var raw=ghDecode(d.content);
+  var pm=raw.match(/(?:const|var|let)\s+PHOTOS\s*=\s*/);
+  if(!pm)throw new Error(PHOTOS_PATH+' heeft een onverwacht formaat');
+  var js=raw.substring(pm.index+pm[0].length).replace(/;\s*$/,'').trim();
+  return{data:pmNormaliseer(JSON.parse(js)),sha:d.sha};
+}
+
+function pmAantal(o){
+  return (o.hero?1:0)+(o.strip||[]).filter(Boolean).length;
+}
+
+async function pmLoadFromGitHub(){
+  document.getElementById('pm-status').textContent='Foto\'s laden...';
+  setPhotosPublishEnabled(false,'Foto\'s nog niet geladen');
+  try{
+    var res=await fetchPublishedPhotos();
+    pmPhotos=res.data;
+    pmRenderSlots();
+    shaCache[PHOTOS_PATH]=res.sha;
+    photosLoaded=true;
+    pmFallbackSnapshot=null;
+    hidePhotosWarn();
+    setPhotosPublishEnabled(true);
+    document.getElementById('pm-status').textContent='Foto\'s geladen ('+pmAantal(pmPhotos)+' van 4 slots gevuld)';
+  }catch(e){
+    console.warn('Photos laden mislukt:',e);
+    photosLoaded=false;
+    var reden=leesbareFout(e),bron;
+    if(typeof PHOTOS!=='undefined'&&PHOTOS&&typeof PHOTOS==='object'){
+      pmPhotos=pmNormaliseer(JSON.parse(JSON.stringify(PHOTOS)));
+      bron='Je ziet nu de <em>meegeleverde kopie van de site</em> ('+pmAantal(pmPhotos)+' foto\'s, kan verouderd zijn).';
+    }else{
+      pmPhotos={hero:null,strip:[null,null,null]};
+      bron='Er is geen kopie om te tonen — de slots zijn leeg.';
+    }
+    pmRenderSlots();
+    pmFallbackSnapshot=JSON.stringify(pmPhotos);
+    document.getElementById('pm-status').textContent='Foto\'s niet geladen — publiceren staat uit';
+    showPhotosWarn('De gepubliceerde fotolijst kon niet gelezen worden: <em>'+esc(reden)+'</em>. '+bron+' <strong style="display:inline">Publiceren staat uit</strong> tot dit lukt, anders ontkoppel je alle foto\'s van de site.');
+    setPhotosPublishEnabled(false,'Foto\'s konden niet geladen worden — publiceren geblokkeerd');
+  }
+}
+
+function pmHeeftEigenWijzigingen(){
+  if(Object.keys(pmPendingUploads).length)return true;
+  return pmFallbackSnapshot!==null&&JSON.stringify(pmPhotos)!==pmFallbackSnapshot;
+}
+
+async function reloadPhotos(){
+  var btn=document.getElementById('btn-reload-photos');
+  if(pmHeeftEigenWijzigingen()&&!confirm('Je hebt wijzigingen gemaakt sinds de mislukte load. Opnieuw laden haalt de gepubliceerde fotolijst op en gooit die wijzigingen weg. Doorgaan?'))return;
+  var oud=btn.textContent;btn.disabled=true;btn.textContent='Laden...';
+  try{
+    await pmLoadFromGitHub();
+    if(photosLoaded)toast('Foto\'s geladen vanuit GitHub');
+    else toast('Nog steeds niet gelukt — zie de melding bovenaan','err');
+  }finally{
+    btn.disabled=false;btn.textContent=oud;
+  }
+}
+document.getElementById('btn-reload-photos').addEventListener('click',reloadPhotos);
 
 function pmRenderSlots(){
   var repo=GH_REPO;
@@ -1591,14 +1802,21 @@ function pmProcessFile(slotId,file){
 window.pmSave=async function(){
   var btn=document.getElementById('pm-save');
   var progress=document.getElementById('pm-progress');
+  // Harde grendel, vóór de uploads: zonder geslaagde load staat pmPhotos op zijn
+  // beginwaarde (alles null) en ontkoppelt publiceren elke foto van de site.
+  if(!photosLoaded){
+    toast('Publiceren geblokkeerd: de gepubliceerde fotolijst is niet gelezen. Gebruik "Opnieuw proberen".','err');
+    return;
+  }
   btn.disabled=true;btn.textContent='Uploaden...';
   var keys=Object.keys(pmPendingUploads);
   var total=keys.length;
   if(total===0){
     // Alleen photos.js updaten (voor verwijderingen)
     var js=pmGenerateJS();
-    await publishFile('docs/photos.js',js,'Foto referenties bijgewerkt via admin',btn);
-    btn.disabled=false;
+    await publishFile(PHOTOS_PATH,js,'Foto referenties bijgewerkt via admin',btn);
+    btn.textContent='Opslaan & Publiceer';
+    setPhotosPublishEnabled(photosLoaded);
     return;
   }
   var done=0;
@@ -1625,12 +1843,13 @@ window.pmSave=async function(){
   progress.textContent='';
   // Save photos.js
   var js=pmGenerateJS();
-  var ok=await publishFile('docs/photos.js',js,'Foto referenties bijgewerkt via admin',btn);
+  var ok=await publishFile(PHOTOS_PATH,js,'Foto referenties bijgewerkt via admin',btn);
   if(ok){
     document.getElementById('pm-status').textContent=done+' foto\'s geüpload om '+new Date().toLocaleTimeString('nl-NL');
     pmRenderSlots();
   }
-  btn.disabled=false;
+  btn.textContent='Opslaan & Publiceer';
+  setPhotosPublishEnabled(photosLoaded);
 };
 
 function pmGenerateJS(){
@@ -1771,10 +1990,20 @@ async function publishBinary(path,b64Data,message){
 // ╚════════════════════════════════════════════╝
 document.getElementById('btn-save').addEventListener('click',async function(){
   var btn=this;
+  // Harde grendel, los van de disabled-state van de knop: zonder geslaagde load
+  // weten we niet wat er gepubliceerd staat en zou dit blind overschrijven.
+  if(!planLoaded){
+    toast('Publiceren geblokkeerd: de gepubliceerde plattegrond is niet gelezen. Gebruik "Opnieuw proberen".','err');
+    return;
+  }
   var objs=serializeObjects();
+  if(!objs.length){
+    toast('Publiceren geblokkeerd: een lege plattegrond wist alle objecten van de site','err');
+    return;
+  }
   localStorage.setItem('w17-objects',JSON.stringify(objs));
   var js=generateJS(objs);
-  await publishFile('docs/placed-objects.js',js,'Plattegrond bijgewerkt via admin ('+new Date().toLocaleString('nl-NL')+')',btn);
+  await publishFile(PLAN_PATH,js,'Plattegrond bijgewerkt via admin ('+new Date().toLocaleString('nl-NL')+')',btn);
 });
 
 document.getElementById('btn-export').addEventListener('click',function(){
@@ -1825,44 +2054,149 @@ document.getElementById('token-save').addEventListener('click',function(){
   localStorage.setItem('w17-gh-token',token);
   document.getElementById('token-modal').classList.remove('show');
   toast('GitHub token opgeslagen');
+  // Zonder token faalde de eerste load; nu meteen opnieuw proberen, anders blijft
+  // de editor op een fallback staan terwijl alles weer werkt.
+  if(!planLoaded)reloadPlan();
+  if(ceInitialized&&!contentLoaded)ceLoadFromGitHub();
+  if(pmInitialized&&!photosLoaded)pmLoadFromGitHub();
 });
 
 // ╔════════════════════════════════════════════╗
 // ║  INIT                                      ║
 // ╚════════════════════════════════════════════╝
-async function init(){
-  draw();applyTransform();
-  // Always try to load from GitHub first (single source of truth)
-  var loaded=false;
+// ── Publiceer-grendel ────────────────────────────────────────────────
+// planLoaded is alleen true als de gepubliceerde plattegrond in deze sessie
+// daadwerkelijk via de Contents API gelezen en geparsed is. Zolang dat niet
+// gelukt is, weten we niet WAT we zouden overschrijven -- en publiceren van
+// een fallback (lokale kopie, oude localStorage, leeg canvas) wist stil de
+// echte plattegrond. Daarom: geen geslaagde load = geen publiceerknop.
+var planLoaded=false;
+var PLAN_PATH='docs/placed-objects.js';
+
+function setPublishEnabled(ok,reason){
+  var btn=document.getElementById('btn-save');
+  if(!btn)return;
+  btn.disabled=!ok;
+  btn.title=ok?'':(reason||'Publiceren staat uit tot de plattegrond geladen is');
+}
+function showLoadWarn(msg){
+  document.getElementById('load-warn-msg').innerHTML=msg;
+  document.getElementById('load-warn').classList.add('show');
+}
+function hideLoadWarn(){
+  document.getElementById('load-warn').classList.remove('show');
+}
+
+// Leest docs/placed-objects.js via de Contents API. Geeft de objecten + sha terug,
+// of gooit met een leesbare reden. Geen fallback hier -- de aanroeper beslist.
+async function fetchPublishedPlan(){
+  var gh=await getGHConfig();
+  if(!gh)throw new Error('geen GitHub-token in deze browser');
+  var r=await fetchT('https://api.github.com/repos/'+gh.repo+'/contents/'+PLAN_PATH+'?ref=master&_t='+Date.now(),{
+    headers:{'Authorization':'Bearer '+gh.token,'Accept':'application/vnd.github.v3+json'}
+  },15000);
+  if(r.status===401||r.status===403)throw new Error('token geweigerd of rate limit (HTTP '+r.status+')');
+  if(!r.ok)throw new Error('GitHub gaf HTTP '+r.status);
+  var d=await r.json();
+  var js=decodeURIComponent(escape(atob(d.content)));
+  var m=js.match(/const PLACED_OBJECTS\s*=\s*(\[[\s\S]*\]);/);
+  if(!m)throw new Error(PLAN_PATH+' heeft een onverwacht formaat');
+  return{objs:JSON.parse(m[1]),sha:d.sha};
+}
+
+// Markeert een geslaagde load: sha vastleggen zodat de eerste publish van deze
+// sessie ook echt op conflict botst als iemand anders intussen pushte.
+function acceptLoadedPlan(sha){
+  shaCache[PLAN_PATH]=sha;
+  planLoaded=true;
+  hideLoadWarn();
+  setPublishEnabled(true);
+}
+
+// "Opnieuw proberen" na een mislukte load. Vervangt het canvas alleen als er
+// niets op staat -- anders zou een herstelde of geimporteerde plattegrond
+// zonder waarschuwing verdwijnen.
+async function reloadPlan(){
+  var btn=document.getElementById('btn-reload-plan');
+  var oud=btn.textContent;btn.disabled=true;btn.textContent='Laden...';
   try{
-    var gh=await getGHConfig();
-    if(gh){
-      var r=await fetch('https://api.github.com/repos/'+gh.repo+'/contents/docs/placed-objects.js',{
-        headers:{'Authorization':'Bearer '+gh.token,'Accept':'application/vnd.github.v3+json'}
-      });
-      if(r.ok){
-        var d=await r.json();
-        var js=decodeURIComponent(escape(atob(d.content)));
-        var m=js.match(/const PLACED_OBJECTS\s*=\s*(\[[\s\S]*\]);/);
-        if(m){
-          var objs=JSON.parse(m[1]);
-          loadObjects(objs);
-          localStorage.setItem('w17-objects',JSON.stringify(objs));
-          toast('Geladen vanuit GitHub');
-          loaded=true;
-        }
+    var res=await fetchPublishedPlan();
+    var huidig=serializeObjects();
+    // Alleen eigen werk is heilig. Een fallback die init neerzette is dat niet:
+    // die mag stil wijken voor de echte, zojuist gelezen plattegrond.
+    if(!huidig.length||!canvasTouched){
+      loadObjects(res.objs);
+      canvasTouched=false;
+      localStorage.setItem('w17-objects',JSON.stringify(res.objs));
+      acceptLoadedPlan(res.sha);
+      setTimeout(fitToContent,100);
+      toast('Geladen vanuit GitHub ('+res.objs.length+' objecten)');
+    }else{
+      acceptLoadedPlan(res.sha);
+      if(JSON.stringify(huidig)===JSON.stringify(res.objs)){
+        toast('Gelezen vanuit GitHub — canvas is gelijk ('+res.objs.length+' objecten)');
+      }else{
+        toast('Gelezen vanuit GitHub: gepubliceerd '+res.objs.length+' objecten, jouw canvas '+huidig.length+' — publiceren vervangt de gepubliceerde versie','err');
       }
     }
-  }catch(e){console.warn('GitHub load failed:',e);}
-  // Fallback to localStorage, then defaults
-  if(!loaded){
+  }catch(e){
+    toast('Nog steeds niet gelukt: '+leesbareFout(e),'err');
+  }finally{
+    btn.disabled=false;btn.textContent=oud;
+  }
+}
+document.getElementById('btn-reload-plan').addEventListener('click',reloadPlan);
+
+// De waarschuwingsbalken zetten opgemaakte tekst via innerHTML. Foutmeldingen
+// die daarin belanden komen deels uit JSON.parse, en die nemen brokjes van het
+// gelezen bestand mee -- dus escapen voor ze de HTML in gaan.
+function esc(s){
+  return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});
+}
+
+function leesbareFout(e){
+  var msg=e&&e.message?e.message:String(e);
+  if(e&&e.name==='AbortError')return'timeout (15s) — netwerk/VPN blokkeert GitHub API?';
+  if(msg==='Failed to fetch')return'netwerk geblokkeerd — check VPN / adblocker / extensies';
+  return msg;
+}
+
+async function init(){
+  draw();applyTransform();
+  setPublishEnabled(false,'Plattegrond nog niet geladen');
+  // De gepubliceerde plattegrond is de enige bron waar we overheen mogen schrijven.
+  try{
+    var res=await fetchPublishedPlan();
+    loadObjects(res.objs);
+    localStorage.setItem('w17-objects',JSON.stringify(res.objs));
+    acceptLoadedPlan(res.sha);
+    toast('Geladen vanuit GitHub ('+res.objs.length+' objecten)');
+  }catch(e){
+    console.warn('GitHub load failed:',e);
+    // NIET publiceren vanaf een fallback. Wel iets laten zien, duidelijk gelabeld.
+    var reden=leesbareFout(e),bron='';
     var saved=localStorage.getItem('w17-objects');
-    if(saved){try{loadObjects(JSON.parse(saved));toast('Hersteld vanuit opslag');}catch(e){loadObjects(DEFAULT_OBJECTS.items);}}
-    else{loadObjects(DEFAULT_OBJECTS.items);}
+    if(saved){
+      try{
+        var lokaal=JSON.parse(saved);
+        if(Array.isArray(lokaal)&&lokaal.length){loadObjects(lokaal);bron='Je ziet nu de <em>lokale kopie uit deze browser</em> ('+lokaal.length+' objecten).';}
+      }catch(err){console.warn('Lokale kopie in localStorage is onleesbaar:',err);}
+    }
+    if(!bron&&typeof PLACED_OBJECTS!=='undefined'&&Array.isArray(PLACED_OBJECTS)&&PLACED_OBJECTS.length){
+      loadObjects(PLACED_OBJECTS);
+      bron='Je ziet nu de <em>meegeleverde kopie van de site</em> ('+PLACED_OBJECTS.length+' objecten, kan verouderd zijn).';
+    }
+    if(!bron)bron='Er is geen kopie om te tonen — het canvas is leeg.';
+    showLoadWarn('De gepubliceerde plattegrond kon niet gelezen worden: <em>'+esc(reden)+'</em>. '+bron+' <strong style="display:inline">Publiceren staat uit</strong> tot dit lukt, anders overschrijf je de echte plattegrond.');
+    setPublishEnabled(false,'Plattegrond kon niet geladen worden — publiceren geblokkeerd');
   }
   setTimeout(fitToContent,100);
-  // Auto-save every 30s
-  setInterval(function(){localStorage.setItem('w17-objects',JSON.stringify(serializeObjects()));},30000);
+  // Auto-save every 30s -- alleen als het canvas van de echte plattegrond afstamt.
+  // Anders schrijft een mislukte load de lokale reservekopie stil kapot.
+  setInterval(function(){
+    if(!planLoaded)return;
+    localStorage.setItem('w17-objects',JSON.stringify(serializeObjects()));
+  },30000);
 }
 </script>
 </body>
