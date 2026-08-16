@@ -170,7 +170,7 @@ const CONTENT = {
       "size": 130
     },
     "introText": {
-      "size": 130
+      "size": 120
     },
     "accessItems": {
       "color": "#E09A2F"
