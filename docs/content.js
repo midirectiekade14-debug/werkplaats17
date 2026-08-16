@@ -23,7 +23,7 @@ const CONTENT = {
     },
     {
       "title": "Verhuurbare werkruimtes 25m2 met opslag op entresol en platenrek.",
-      "text": "We hebben kant en klare werkplekken voor meubelmakers en interieurbouwers van 25m2 inclusief stroompunten, perslucht en verlichting. Past je project niet in je ruimte bouw je verder op de flexspace voor je unit."
+      "text": "We hebben kant en klare <strong>werkplekken</strong> voor meubelmakers en interieurbouwers van 25m2 inclusief stroompunten, perslucht en verlichting. Past je project niet in je ruimte bouw je verder op de flexspace voor je unit."
     },
     {
       "title": "Kantoren, ateliers en ontvangstruimte",
