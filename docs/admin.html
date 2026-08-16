@@ -119,8 +119,15 @@ body{background:var(--bg);color:var(--cream);font-family:'Courier New',monospace
 .pf-row span{font-size:8px;color:var(--muted)}
 .pf-select{width:100%;padding:4px 6px;font-size:9px;font-family:inherit;background:var(--bg);border:1px solid var(--border);color:var(--cream);outline:none;-webkit-appearance:none}
 .pf-select:focus{border-color:var(--amber)}
-.pf-color{width:100%;height:24px;padding:1px;background:var(--bg);border:1px solid var(--border);cursor:pointer}
-.pf-color:focus{border-color:var(--amber)}
+/* Vaste plattegrond-kleuren in plaats van een vrije kiezer. De kleur zegt hier
+   wát iets is (amber = houtmachine, groen = werkbank, bruin = opslag); een
+   zelfverzonnen tint zegt niets en breekt die afspraak. */
+.pf-swatches{display:flex;flex-wrap:wrap;gap:3px}
+.pf-swatch{width:18px;height:18px;padding:0;border:1px solid var(--border);cursor:pointer;position:relative;flex-shrink:0}
+.pf-swatch:hover{border-color:var(--amber)}
+.pf-swatch.on{border-color:var(--amber);box-shadow:0 0 0 1px var(--bg),0 0 0 2px var(--amber)}
+.pf-swatch-vreemd{border-color:var(--red);border-width:2px}
+.pf-swatch-vreemd::after{content:'!';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:bold;color:var(--red);text-shadow:0 0 3px var(--bg),0 0 3px var(--bg)}
 .pf-btn{width:100%;padding:5px;font-size:8px;font-family:inherit;letter-spacing:.1em;text-transform:uppercase;border:none;cursor:pointer;margin-top:4px}
 .pf-btn-del{background:#a03030;color:#fff}
 .pf-btn-del:hover{filter:brightness(1.2)}
@@ -450,10 +457,9 @@ textarea.ce-input{min-height:60px;resize:vertical}
       <span style="color:var(--muted);font-size:8px">×</span>
       <input type="number" id="addD" placeholder="D cm" min="1">
     </div>
-    <div class="sb-row">
-      <span style="color:var(--muted);font-size:7px">Kleur</span>
-      <input type="color" id="addC" value="#c0a070" style="width:24px;height:18px;padding:0;border:1px solid var(--border);background:var(--bg);cursor:pointer;flex-shrink:0">
-    </div>
+    <span style="color:var(--muted);font-size:7px">Kleur</span>
+    <input type="hidden" id="addC" value="#a08060">
+    <div class="pf-swatches" id="addC-stalen"></div>
     <button id="addBtn">Toevoegen</button>
   </div>
   <div class="bgctl" style="border-top:1px solid var(--border)">
@@ -545,13 +551,17 @@ textarea.ce-input{min-height:60px;resize:vertical}
       </select>
     </div>
     <div class="pf-divider"></div>
+    <!-- De kleur zit in een verborgen veld; de stalen eronder zetten hem. Zo
+         blijft alle bestaande code die pf-color.value leest ongewijzigd. -->
     <div class="pf">
       <div class="pf-label">Randkleur</div>
-      <input class="pf-color" id="pf-color" type="color" value="#E09A2F">
+      <input id="pf-color" type="hidden" value="#E09A2F">
+      <div class="pf-swatches" id="pf-color-stalen"></div>
     </div>
     <div class="pf">
       <div class="pf-label">Achtergrondkleur</div>
-      <input class="pf-color" id="pf-bgcolor" type="color" value="#2e2920">
+      <input id="pf-bgcolor" type="hidden" value="#2e2920">
+      <div class="pf-swatches" id="pf-bgcolor-stalen"></div>
     </div>
     <div class="pf">
       <div class="pf-label">Achtergrond opacity</div>
@@ -1256,6 +1266,90 @@ if(typeof MACHINE_SHAPES!=='undefined'){
     var opt=document.createElement('option');opt.value=v.key;opt.textContent=v.naam;pfShape.appendChild(opt);
   });
 }
+var pfColorStalen=document.getElementById('pf-color-stalen');
+var pfBgColorStalen=document.getElementById('pf-bgcolor-stalen');
+
+// ── PLATTEGROND-KLEUREN ──────────────────────────────────────────
+// Op de plattegrond is kleur geen smaak maar betekenis: amber is een
+// houtbewerkingsmachine, groen een werkbank, bruin opslag. Dit zijn exact de
+// kleuren die de objecten in de zijbalk al gebruiken -- niets herzien, alleen
+// vastgelegd, zodat er geen twintigste tint bij verzonnen kan worden die
+// nergens voor staat. Komt er een nieuw objecttype met een eigen kleur bij in
+// de zijbalk, dan hoort die kleur hier ook in de lijst.
+var PLATTEGROND_KLEUREN=[
+  {hex:'#E09A2F',naam:'Amber',       uitleg:'Houtbewerkingsmachines, overheaddeur, opslagzone'},
+  {hex:'#d07828',naam:'Roest',       uitleg:'Metaalbewerking'},
+  {hex:'#80a0d0',naam:'Staalblauw',  uitleg:'Digitale machines (3D printer, Shaper)'},
+  {hex:'#607080',naam:'Leigrijs',    uitleg:'Installaties: afzuiging, perslucht, compressor'},
+  {hex:'#70b080',naam:'Groen',       uitleg:'Werkbanken'},
+  {hex:'#7090a0',naam:'Grijsblauw',  uitleg:'Bureau'},
+  {hex:'#a08060',naam:'Bruin',       uitleg:'Opslag, stellingen, karren'},
+  {hex:'#50b478',naam:'Unitgroen',   uitleg:'Huurunits'},
+  {hex:'#6e96dc',naam:'Kantoorblauw',uitleg:'Kantoor'},
+  {hex:'#78a0dc',naam:'Toiletblauw', uitleg:'Toilet'},
+  {hex:'#64b4dc',naam:'Entreeblauw', uitleg:'Entree'},
+  {hex:'#8cc88c',naam:'Keukengroen', uitleg:'Keuken'},
+  {hex:'#b48c50',naam:'Trapbruin',   uitleg:'Trap als ruimte'},
+  {hex:'#a08c78',naam:'Taupe',       uitleg:'Berging'},
+  {hex:'#c8b48c',naam:'Zand',        uitleg:'Overloop'},
+  {hex:'#9070c0',naam:'Paars',       uitleg:'Trap als object'},
+  {hex:'#b464dc',naam:'Lila',        uitleg:'Vloer / entresol'},
+  {hex:'#b0c0d0',naam:'Lichtgrijs',  uitleg:'Deuren'},
+  {hex:'#ffffff',naam:'Wit',         uitleg:'Muur, vide'},
+  {hex:'#4a4438',naam:'Muurvulling', uitleg:'Massieve vulling van een muur'},
+  {hex:'#1e1b17',naam:'Donker',      uitleg:'Geen eigen achtergrond'}
+];
+
+// Bouwt de stalenrij voor een verborgen kleurveld. De rij zet de waarde en
+// vuurt hetzelfde input-event als het oude kleurvakje, zodat applyProp
+// ongewijzigd blijft werken.
+function pfBouwStalen(input,houder){
+  var stalen=PLATTEGROND_KLEUREN.map(function(k){
+    var b=document.createElement('button');b.type='button';b.className='pf-swatch';
+    b.style.background=k.hex;b.title=k.naam+' — '+k.uitleg;
+    b.onclick=function(){
+      input.value=k.hex;
+      input.dispatchEvent(new Event('input',{bubbles:true}));
+      pfToonStalen(input,houder);
+    };
+    houder.appendChild(b);
+    return b;
+  });
+  // Een kleur uit een oudere tekening die niet in de lijst staat mag niet stil
+  // verdwijnen: dan lijkt er geen kleur gekozen terwijl het object wel afwijkt.
+  var vreemd=document.createElement('button');vreemd.type='button';
+  vreemd.className='pf-swatch pf-swatch-vreemd';vreemd.style.display='none';
+  vreemd.disabled=true;
+  houder.appendChild(vreemd);
+  houder._stalen=stalen;houder._vreemd=vreemd;
+}
+
+function pfToonStalen(input,houder){
+  if(!houder._stalen)return;
+  var huidig=(input.value||'').toLowerCase();
+  var bekend=false;
+  houder._stalen.forEach(function(b,i){
+    var actief=PLATTEGROND_KLEUREN[i].hex.toLowerCase()===huidig;
+    if(actief)bekend=true;
+    b.classList.toggle('on',actief);
+  });
+  var v=houder._vreemd;
+  v.style.display=bekend?'none':'';
+  if(!bekend){
+    v.style.background=input.value;
+    v.classList.add('on');
+    v.title='Deze kleur ('+input.value+') hoort niet bij een objecttype. Kies hiernaast een kleur die wel iets betekent.';
+  }
+}
+
+// Pas hier bouwen: PLATTEGROND_KLEUREN staat hierboven en is een var, dus
+// eerder in het bestand zou de lijst nog leeg zijn.
+pfBouwStalen(pfColor,pfColorStalen);
+pfBouwStalen(pfBgColor,pfBgColorStalen);
+// Ook een zelfgemaakt object krijgt een kleur uit de lijst; anders lekt de
+// vrije keuze via de achterdeur alsnog de tekening in.
+var addCStalen=document.getElementById('addC-stalen'),addC=document.getElementById('addC');
+pfBouwStalen(addC,addCStalen);pfToonStalen(addC,addCStalen);
 
 function selectObj(d){if(sel)sel.classList.remove('sel');sel=d;d.classList.add('sel');populateProps(d);}
 function hideProps(){propsForm.style.display='none';propsEmpty.style.display='';}
@@ -1280,6 +1374,7 @@ function populateProps(d){
   // vóór de vier-standen-knop lopen die uiteen, en dan liegt het paneel.
   pfRot.value=huidigeHoek(d).toString();pfColor.value=hexFromAny(d.dataset.c);
   pfBgColor.value=hexFromAny(d.dataset.bg);pfBgOpacity.value=opacityFromBg(d.dataset.bg);
+  pfToonStalen(pfColor,pfColorStalen);pfToonStalen(pfBgColor,pfBgColorStalen);
   document.getElementById('pf-bgopacity-val').textContent=pfBgOpacity.value+'%';
   document.getElementById('pf-status-wrap').style.display=(d.dataset.type==='huurunit')?'':'none';
   pfShape.value=d.dataset.shape||'';
@@ -1347,7 +1442,7 @@ document.addEventListener('keydown',function(e){
 document.getElementById('addBtn').addEventListener('click',function(){
   var n=document.getElementById('addN').value.trim(),b=parseInt(document.getElementById('addB').value),dd=parseInt(document.getElementById('addD').value);
   if(!n||!b||!dd)return;
-  var col=document.getElementById('addC').value||'#c0a070';
+  var col=document.getElementById('addC').value||'#a08060';
   var r=parseInt(col.substr(1,2),16),g=parseInt(col.substr(3,2),16),bl=parseInt(col.substr(5,2),16);
   var bg='rgba('+r+','+g+','+bl+',.13)';
   var wpx=Math.max(3,Math.round(b*10*S)),hpx=Math.max(3,Math.round(dd*10*S));
