@@ -641,6 +641,15 @@
     cursor: pointer;
   }
   .fp-zoom button:active { background: var(--amber); color: var(--bg); }
+  body.fp-open .fp-canvas { position: relative; }
+  /* Draait de bezoeker zijn telefoon toch, dan is er nauwelijks hoogte: elke
+     pixel die de knoppenbalk niet pakt, gaat naar de tekening. */
+  @media (orientation: landscape) and (max-height: 520px) {
+    body.fp-open .floorplan-block { padding: 4px 6px 0; }
+    body.fp-open .fp-tabs { margin-bottom: 4px; }
+    .fp-zoom button { min-height: 38px; }
+    body.fp-open .fp-zoom { padding: 4px 0 calc(4px + env(safe-area-inset-bottom, 0px)); }
+  }
   #fp-uit, #fp-in { flex: 0 0 56px; font-size: 20px; letter-spacing: 0; }
   #fp-sluit { background: var(--amber); color: var(--bg); border-color: var(--amber); }
   .pl { position: absolute; user-select: none; z-index: 10; }
@@ -2569,16 +2578,49 @@ window._initFloorplan=function(){
       cv.scrollLeft=(cv.scrollWidth-cv.clientWidth)/2;
       cv.scrollTop=(cv.scrollHeight-cv.clientHeight)/2;
     }
+    // Echt volledig scherm vragen: dat haalt de adresbalk en de systeembalk
+    // weg en levert op een telefoon zo'n 80px extra hoogte -- en hoogte is
+    // hier precies wat telt.
+    //
+    // BEWUST GEEN stand op liggend zetten. Dat klinkt logisch bij een brede
+    // tekening, maar de meting zegt het omgekeerde: de tekening is 1007x476
+    // en je leest hem door opzij te slepen, dus de beperkende maat is de
+    // hoogte. Rechtop is dat 717px, liggend 285px. Labels komen daarmee op
+    // 15,1px rechtop tegen 5,1px liggend -- drie keer slechter. Draaien mag
+    // natuurlijk, maar we sturen er niet op aan.
+    function vraagVolledigScherm(el){
+      var f=el.requestFullscreen||el.webkitRequestFullscreen;
+      if(!f)return Promise.reject();
+      try{ return Promise.resolve(f.call(el)); }catch(e){ return Promise.reject(e); }
+    }
     function openGroot(){
       document.body.classList.add('fp-open');
       gebruikerZoom=1;
       herteken();
+      vraagVolledigScherm(blok)
+        .then(function(){ setTimeout(herteken,120); })
+        .catch(function(){ /* Zonder volledig scherm werkt de weergave ook. */ });
     }
     function sluitGroot(){
       document.body.classList.remove('fp-open');
       gebruikerZoom=1;
+      if(document.fullscreenElement||document.webkitFullscreenElement){
+        try{ (document.exitFullscreen||document.webkitExitFullscreen).call(document); }catch(e){}
+      }
       herteken();
     }
+    // Sluit de bezoeker het volledige scherm met een systeemgebaar of Escape,
+    // dan moet onze eigen stand mee terug -- anders blijft de pagina in een
+    // halve weergave hangen.
+    ['fullscreenchange','webkitfullscreenchange'].forEach(function(ev){
+      document.addEventListener(ev,function(){
+        var uit=!document.fullscreenElement&&!document.webkitFullscreenElement;
+        if(uit&&document.body.classList.contains('fp-open'))sluitGroot();
+      });
+    });
+    window.addEventListener('orientationchange',function(){
+      if(document.body.classList.contains('fp-open'))setTimeout(herteken,200);
+    });
     open.onclick=openGroot;
     if(sluit)sluit.onclick=sluitGroot;
     if(uit)uit.onclick=function(){zetZoom(gebruikerZoom/1.5);};

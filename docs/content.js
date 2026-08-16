@@ -199,6 +199,10 @@ const CONTENT = {
     "offerTitle": {
       "color": "#F5B040",
       "size": 105
+    },
+    "sectionLabels": {
+      "size": 200,
+      "bold": true
     }
   }
 };
