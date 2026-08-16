@@ -769,6 +769,14 @@ function driveKies(onGekozen){
         callback:function(resp){
           if(resp&&resp.access_token){driveToken=resp.access_token;driveOpenPicker(onGekozen);}
           else{toast('Geen toegang tot Drive gekregen','err');}
+        },
+        // Zonder dit blijft het stil als het inlogvenster niet opengaat — precies
+        // wat een popupblokkering doet. Nu zie je waarom er niets gebeurt.
+        error_callback:function(err){
+          var type=err&&err.type;
+          if(type==='popup_failed_to_open')toast('Het Google-inlogvenster werd geblokkeerd. Sta popups toe voor werkplaats3b.nl.','err');
+          else if(type==='popup_closed')toast('Inloggen bij Google afgebroken','err');
+          else toast('Google-login mislukt'+(type?' ('+type+')':''),'err');
         }
       });
     }
