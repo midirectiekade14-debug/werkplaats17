@@ -208,7 +208,7 @@ const CONTENT = {
       "size": 130
     },
     "contactLines": {
-      "color": "#F5B040",
+      "color": "#F0EAE0",
       "size": 130
     }
   }
