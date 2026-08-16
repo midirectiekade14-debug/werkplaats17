@@ -347,6 +347,11 @@ textarea.ce-input{min-height:60px;resize:vertical}
 .pm-grid.strip .pm-slot.has-photo::after{content:"";position:absolute;left:0;right:0;height:var(--pm-strip-fade,0%);pointer-events:none;z-index:1}
 .pm-grid.strip .pm-slot.has-photo::before{top:0;background:linear-gradient(to bottom,var(--bg) 0%,rgba(22,20,18,0) 100%)}
 .pm-grid.strip .pm-slot.has-photo::after{bottom:0;background:linear-gradient(to top,var(--bg) 0%,rgba(22,20,18,0) 100%)}
+/* Idem voor de grote foto bovenaan, met zijn eigen schuif. */
+.pm-grid.hero .pm-slot.has-photo::before,
+.pm-grid.hero .pm-slot.has-photo::after{content:"";position:absolute;left:0;right:0;height:var(--pm-hero-fade,0%);pointer-events:none;z-index:1}
+.pm-grid.hero .pm-slot.has-photo::before{top:0;background:linear-gradient(to bottom,var(--bg) 0%,rgba(22,20,18,0) 100%)}
+.pm-grid.hero .pm-slot.has-photo::after{bottom:0;background:linear-gradient(to top,var(--bg) 0%,rgba(22,20,18,0) 100%)}
 .pm-slot:hover .pm-overlay{display:flex}
 .pm-slot .pm-icon{color:var(--muted);font-size:24px}
 .pm-slot .pm-label{font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:6px}
@@ -658,6 +663,13 @@ textarea.ce-input{min-height:60px;resize:vertical}
 <div class="pm-wrap">
   <div class="pm-section">
     <h3>Hero afbeelding</h3>
+    <div class="pm-fmt">
+      <div class="pm-fmt-groep">
+        <span>Vervaging boven &amp; onder <b id="pm-hero-fade-waarde">uit</b></span>
+        <input type="range" id="pm-hero-fade" min="0" max="40" step="1" value="0" class="pm-schuif">
+      </div>
+      <p class="pm-fmt-uitleg">De grote foto bovenaan de pagina. Bovenin loopt hij weg in de kop erboven, onderin in de balk eronder. Staat los van de vervaging van de fotostrip.</p>
+    </div>
     <div class="pm-grid hero">
       <div class="pm-slot" data-slot="hero" onclick="pmPick('hero')">
         <span class="pm-icon">📷</span>
@@ -2359,7 +2371,7 @@ window.ceReset=function(){
 // ╚════════════════════════════════════════════╝
 var pmInitialized=false;
 var PM_FORMAAT_STANDAARD={ratio:'4/3',perBeeld:3,autoplay:0,vervaging:0};
-var pmPhotos={hero:null,strip:[null,null,null],pos:{},stripFormaat:Object.assign({},PM_FORMAAT_STANDAARD)};
+var pmPhotos={hero:null,strip:[null,null,null],pos:{},stripFormaat:Object.assign({},PM_FORMAAT_STANDAARD),heroFormaat:{vervaging:0}};
 var pmPendingUploads={};
 var pmLocalCache={};
 
@@ -2417,10 +2429,20 @@ function pmBindFormaat(){
     pmRenderFormaat();
     document.getElementById('pm-status').textContent='Vervaging aangepast — nog niet gepubliceerd';
   });
+  var heroSchuif=document.getElementById('pm-hero-fade');
+  if(heroSchuif)heroSchuif.addEventListener('input',function(){
+    pmHeroFormaat().vervaging=Number(heroSchuif.value);
+    pmRenderFormaat();
+    document.getElementById('pm-status').textContent='Vervaging grote foto aangepast — nog niet gepubliceerd';
+  });
 }
 function pmFormaat(){
   if(!pmPhotos.stripFormaat)pmPhotos.stripFormaat=Object.assign({},PM_FORMAAT_STANDAARD);
   return pmPhotos.stripFormaat;
+}
+function pmHeroFormaat(){
+  if(!pmPhotos.heroFormaat)pmPhotos.heroFormaat={vervaging:0};
+  return pmPhotos.heroFormaat;
 }
 function pmRenderFormaat(){
   var f=pmFormaat();
@@ -2440,6 +2462,14 @@ function pmRenderFormaat(){
   if(schuif&&String(schuif.value)!==String(f.vervaging||0))schuif.value=f.vervaging||0;
   var waarde=document.getElementById('pm-fmt-fade-waarde');
   if(waarde)waarde.textContent=f.vervaging?f.vervaging+'%':'uit';
+
+  var hv=pmHeroFormaat().vervaging||0;
+  var heroGrid=document.querySelector('.pm-grid.hero');
+  if(heroGrid)heroGrid.style.setProperty('--pm-hero-fade',hv+'%');
+  var heroSchuif=document.getElementById('pm-hero-fade');
+  if(heroSchuif&&String(heroSchuif.value)!==String(hv))heroSchuif.value=hv;
+  var heroWaarde=document.getElementById('pm-hero-fade-waarde');
+  if(heroWaarde)heroWaarde.textContent=hv?hv+'%':'uit';
 }
 
 // ╔════════════════════════════════════════════╗
@@ -2597,6 +2627,8 @@ function pmNormaliseer(o){
     autoplay:Math.max(0,Math.min(30,parseFloat(f.autoplay)||0)),
     vervaging:Math.max(0,Math.min(40,parseFloat(f.vervaging)||0))
   };
+  var h=(o.heroFormaat&&typeof o.heroFormaat==='object'&&!Array.isArray(o.heroFormaat))?o.heroFormaat:{};
+  o.heroFormaat={vervaging:Math.max(0,Math.min(40,parseFloat(h.vervaging)||0))};
   return o;
 }
 
@@ -2969,6 +3001,7 @@ function pmGenerateJS(){
   var uit={hero:pmPhotos.hero,strip:stripUit};
   if(Object.keys(pos).length)uit.pos=pos;
   uit.stripFormaat=pmFormaat();
+  uit.heroFormaat=pmHeroFormaat();
   return '// Werkplaats3b — Foto referenties\n// Laatst gewijzigd: '+new Date().toISOString()+'\n// Gegenereerd via admin.html\n\nconst PHOTOS = '+JSON.stringify(uit,null,2)+';\n';
 }
 

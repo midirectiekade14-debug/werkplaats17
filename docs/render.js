@@ -72,8 +72,8 @@
   // stylesheet houdt dezelfde waarden als terugval aan, dus een photos.js zonder
   // deze sleutel laat de rij er precies zo uitzien als voordat dit bestond.
   //
-  // perBeeld is hoeveel foto's er op een breed scherm naast elkaar staan; de
-  // 1px-naadjes tussen de vakjes moeten van de breedte af, vandaar de aftrek.
+  // perBeeld is hoeveel foto's er op een breed scherm naast elkaar staan. Er zit
+  // geen tussenruimte tussen de vakjes, dus de breedte is een schone deling.
   // Op een telefoon telt perBeeld niet mee -- daar is één foto per keer het
   // enige dat leesbaar is, alleen wordt een staande foto smaller gehouden
   // omdat hij anders langer wordt dan het scherm hoog is.
@@ -84,7 +84,7 @@
     var delen = ratio.split('/');
     var staand = parseFloat(delen[0]) / parseFloat(delen[1]) < 1;
     baan.style.setProperty('--strip-ratio', ratio);
-    baan.style.setProperty('--strip-basis', 'calc((100% - ' + (per - 1) + 'px) / ' + per + ')');
+    baan.style.setProperty('--strip-basis', 'calc(100% / ' + per + ')');
     baan.style.setProperty('--strip-basis-mob', staand ? '62%' : '88%');
     // Seconden in de admin, milliseconden voor de timer in index.html.
     var auto = Math.max(0, parseFloat(o.autoplay) || 0);
@@ -282,9 +282,15 @@
       img.style.display = 'block';
       return img;
     }
-    if (PHOTOS.hero) {
-      var heroWrap = document.querySelector('.hero-image');
-      if (heroWrap) replaceChildren(heroWrap, imgFor(PHOTOS.hero, 'Werkplaats3b', 'hero'));
+    // De vervaging van de grote foto staat los van die van de rij: het zijn
+    // twee verschillende plekken op de pagina en de ene mag zachter dan de
+    // andere. Buiten het if-blok hieronder, want hij hoort ook te werken als er
+    // (nog) geen foto in staat en de getekende hal in beeld is.
+    var heroWrap = document.querySelector('.hero-image');
+    if (heroWrap) {
+      var hf = (PHOTOS.heroFormaat && typeof PHOTOS.heroFormaat === 'object') ? PHOTOS.heroFormaat : {};
+      heroWrap.style.setProperty('--hero-fade', Math.max(0, Math.min(50, parseFloat(hf.vervaging) || 0)) + '%');
+      if (PHOTOS.hero) replaceChildren(heroWrap, imgFor(PHOTOS.hero, 'Werkplaats3b', 'hero'));
     }
     if (Array.isArray(PHOTOS.strip)) {
       // De pagina heeft drie vakjes met een getekende placeholder erin. Zijn er

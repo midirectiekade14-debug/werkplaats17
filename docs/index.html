@@ -207,13 +207,34 @@
     background: var(--surface);
     position: relative;
     overflow: hidden;
-    border-bottom: 1px solid var(--line);
     animation: fadeUp 0.8s 0.05s ease both;
   }
   .hero-image svg {
     width: 100%;
     height: 100%;
     display: block;
+  }
+  /* Dezelfde vervaging als bij de fotorij, met een eigen schuif in het
+     admin-paneel. Bovenaan loopt de foto weg in de kop erboven, onderaan in de
+     balk eronder. Op 0% is er niets te zien en staat er weer precies wat er
+     hiervoor stond. Zie de toelichting bij .ps-viewport. */
+  .hero-image::before,
+  .hero-image::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: var(--hero-fade, 0%);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .hero-image::before {
+    top: 0;
+    background: linear-gradient(to bottom, var(--bg) 0%, rgba(22, 20, 18, 0) 100%);
+  }
+  .hero-image::after {
+    bottom: 0;
+    background: linear-gradient(to top, var(--bg) 0%, rgba(22, 20, 18, 0) 100%);
   }
 
   /* ── LOCATION ── */
@@ -293,12 +314,13 @@
      ouder admin-tabblad photos.js zonder die instelling, dan staat er weer
      precies wat er vóór deze regels stond. */
   .photo-slider { position: relative; }
+  /* Geen naden en geen randen: de foto's sluiten op elkaar aan en de rij loopt
+     zonder lijn over in de pagina. Stond er eerder wel (1px in --line rondom en
+     tussen de vakjes), maar dat tekende een raster over de beelden heen. Let op
+     bij wijzigen: de breedte per vakje en de schuifstap in de slider rekenen nu
+     zonder tussenruimte -- zet je de gap terug, dan moeten die twee mee. */
   .photo-strip {
     display: flex;
-    gap: 1px;
-    background: var(--line);
-    border-top: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
@@ -307,7 +329,7 @@
   }
   .photo-strip::-webkit-scrollbar { display: none; }
   .photo-placeholder {
-    flex: 0 0 var(--strip-basis, calc((100% - 2px) / 3));
+    flex: 0 0 var(--strip-basis, calc(100% / 3));
     scroll-snap-align: start;
     aspect-ratio: var(--strip-ratio, 4 / 3);
     background: var(--surface);
@@ -2219,10 +2241,11 @@ window._initPhotoSlider=function(){
   if(!slides.length)return;
 
   function stap(){
-    // Eén slide plus de tussenruimte; los uitrekenen want de breedte hangt
-    // van het breekpunt af (drie naast elkaar, of 88% op een telefoon).
+    // De breedte van één slide; los uitrekenen want die hangt van het breekpunt
+    // af (drie naast elkaar, of bijna het hele scherm op een telefoon). Er zit
+    // geen tussenruimte meer tussen de vakjes, dus er hoeft niets bij.
     var r=slides[0].getBoundingClientRect();
-    return r.width+1;
+    return r.width;
   }
   function schuifbaar(){ return strip.scrollWidth-strip.clientWidth>2; }
   function actief(){
