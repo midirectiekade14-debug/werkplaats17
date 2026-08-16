@@ -275,4 +275,70 @@
     replaceChildren(copy, document.createTextNode(C.copyright + ' · '));
     if (adminLink) copy.appendChild(adminLink);
   }
+
+  // ── TEKSTOPMAAK ────────────────────────────────────────────────
+  // Kleur en tekstgrootte per tekstsoort, ingesteld in het admin-paneel en
+  // opgeslagen in CONTENT.styles. Staat er niets, dan gebeurt hier niets en
+  // blijft de stylesheet alleen de baas — precies zoals vóór deze sectie.
+  //
+  // De sleutels hieronder zijn dezelfde als in CE_SCHEMA (admin.html); daar
+  // kiest de beheerder ze, hier weten we welke elementen erbij horen.
+  var STYLE_TARGETS = {
+    eyebrow:        'header .eyebrow',
+    tagline:        'header .tagline',
+    locationText:   '.location-bar span',
+    introText:      '.intro p',
+    accessItems:    '.access-detail .access-item',
+    offerTitle:     '.offer-grid .offer-card h3',
+    offerText:      '.offer-grid .offer-card p',
+    machines:       '.machines-block .machine-tag',
+    pricingLabel:   '.pricing-block .pricing-row .label',
+    pricingPrice:   '.pricing-block .pricing-row .price',
+    pricingNote:    '.pricing-note',
+    targetAudience: '.for-who .criteria-list li',
+    notForText:     '.for-who .not-for',
+    aboutLabel:     '#wij',
+    aboutLead:      '.about-block .about-lead',
+    teamName:       '.about-people .person h3',
+    teamRole:       '.about-people .person .role',
+    teamText:       '.about-people .person p',
+    aboutNote:      '.about-block .about-note',
+    ctaHeading:     '.cta-block h2',
+    contactLines:   '.cta-info .cta-line span',
+    photoLabels:    '.photo-strip .ph-label',
+    hashtags:       'footer .hashtags',
+    copyright:      'footer .copy'
+  };
+
+  function applyStyles() {
+    var st = C.styles;
+    if (!st) return;
+    Object.keys(STYLE_TARGETS).forEach(function (key) {
+      var regels = st[key];
+      var els = document.querySelectorAll(STYLE_TARGETS[key]);
+      for (var i = 0; i < els.length; i++) {
+        var el = els[i];
+        el.style.color = (regels && regels.color) ? regels.color : '';
+        // De grootte is een factor op wat de stylesheet zegt, niet een vaste
+        // pixelmaat: de site heeft mediaqueries op de tekstschaal, en die
+        // moeten blijven werken. Eerst onze eigen inline-waarde weghalen,
+        // anders meten we onze vorige uitkomst in plaats van de basis.
+        el.style.fontSize = '';
+        if (regels && regels.size && regels.size !== 100) {
+          var basis = parseFloat(window.getComputedStyle(el).fontSize);
+          if (basis) el.style.fontSize = (basis * regels.size / 100).toFixed(2) + 'px';
+        }
+      }
+    });
+  }
+
+  applyStyles();
+
+  // Bij een andere vensterbreedte gelden andere basisgroottes, dus dan moet
+  // de factor opnieuw gerekend worden.
+  var styleTimer = null;
+  window.addEventListener('resize', function () {
+    clearTimeout(styleTimer);
+    styleTimer = setTimeout(applyStyles, 150);
+  });
 })();
