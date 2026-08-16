@@ -214,6 +214,7 @@ body{background:var(--bg);color:var(--cream);font-family:'Courier New',monospace
 .ce-field:last-child{margin-bottom:0}
 .ce-label{font-size:7px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;display:flex;align-items:center;gap:6px}
 .ce-label .ce-tag{font-size:6px;padding:1px 4px;background:var(--border);color:var(--muted);letter-spacing:.05em}
+.ce-hint{font-size:8px;color:var(--muted);line-height:1.6;margin:-2px 0 6px}
 .ce-input{width:100%;padding:6px 10px;font-size:10px;font-family:inherit;background:var(--bg);border:1px solid var(--border);color:var(--cream);outline:none;line-height:1.5}
 .ce-input:focus{border-color:var(--amber)}
 textarea.ce-input{min-height:60px;resize:vertical}
@@ -1547,7 +1548,7 @@ var CE_SCHEMA=[
     {key:'notForText',label:'Niet voor',type:'html',style:'notForText'},
   ]},
   {id:'wij',title:'Wie zijn wij',fields:[
-    {key:'aboutLabel',label:'Sectiekop',type:'text',style:'aboutLabel'},
+    {key:'aboutLabel',label:'Sectiekop',type:'text'},
     {key:'aboutNavLabel',label:'Label in de menubalk (kort houden — vijf links moeten op een telefoon passen)',type:'text'},
     {key:'aboutLead',label:'Intro tekst',type:'html',style:'aboutLead'},
     {key:'team',label:'Personen (foto / naam / rol / zin — foto en zin mogen leeg)',type:'array-person',
@@ -1567,6 +1568,23 @@ var CE_SCHEMA=[
     {key:'photoLabels',label:'Fotostrip labels',type:'array-text',style:'photoLabels'},
     {key:'hashtags',label:'Hashtags',type:'html',style:'hashtags'},
     {key:'copyright',label:'Copyright',type:'text',style:'copyright'},
+  ]},
+  // De teksten hieronder staan vast in index.html en lopen dus niet via deze
+  // editor. Hun opmaak hoort wel bij te stellen te zijn: het zijn de koppen,
+  // het menu en de knoppen die een bezoeker als eerste ziet.
+  {id:'vaste-opmaak',title:'Opmaak van vaste onderdelen',fields:[
+    {key:'_vaste',type:'styleonly',
+     label:'Kleur en grootte van onderdelen waarvan de tekst vastligt',
+     hint:'De tekst zelf verandert hier niet — daarvoor moet de pagina zelf aangepast worden.',
+     styles:[
+       {key:'sectionLabels', label:'Sectiekoppen (De werkplaats, Machines & gereedschap, …)'},
+       {key:'siteTitle',     label:'Grote titel bovenaan'},
+       {key:'navLinks',      label:'Menu bovenaan'},
+       {key:'brandName',     label:'Naam in de menubalk en de footer'},
+       {key:'pricingSub',    label:'Toelichting onder een prijs'},
+       {key:'floorplanText', label:'Plattegrond: verdiepingsknoppen, legenda en hint'},
+       {key:'buttons',       label:'Knoppen (Mail ons, WhatsApp)'}
+     ]},
   ]},
 ];
 
@@ -1830,7 +1848,12 @@ function ceStijlBalk(defs){
 function ceRenderField(f){
   var wrap=document.createElement('div');wrap.className='ce-field';
   var val=ceData[f.key];
-  if(f.type==='text'){
+  if(f.type==='styleonly'){
+    // Alleen een label; de opmaakbalk komt er onderaan deze functie bij. Geen
+    // invoerveld, want de tekst van deze onderdelen staat in index.html.
+    var _lb=document.createElement('div');_lb.className='ce-label';_lb.textContent=f.label;wrap.appendChild(_lb);
+    if(f.hint){var _ht=document.createElement('div');_ht.className='ce-hint';_ht.textContent=f.hint;wrap.appendChild(_ht);}
+  }else if(f.type==='text'){
     var _lb=document.createElement('div');_lb.className='ce-label';_lb.textContent=f.label;wrap.appendChild(_lb);
     var inp=document.createElement('input');inp.className='ce-input';inp.type='text';inp.value=val||'';inp.dataset.key=f.key;
     inp.oninput=function(){ceData[f.key]=this.value;};
@@ -2029,7 +2052,9 @@ function ceRenderField(f){
   var stijlDefs=f.styles||(f.style?[{key:f.style,label:''}]:null);
   if(stijlDefs){
     var balk=ceStijlBalk(stijlDefs);
-    if(stijlDefs.some(function(def){return ceData.styles&&ceData.styles[def.key];}))balk.classList.add('on');
+    // Bij een styleonly-veld is de balk de hele inhoud; dichtgeklapt zie je
+    // alleen een label zonder iets eronder.
+    if(f.type==='styleonly'||stijlDefs.some(function(def){return ceData.styles&&ceData.styles[def.key];}))balk.classList.add('on');
     var lb=wrap.querySelector('.ce-label');
     var knop=document.createElement('button');knop.type='button';knop.className='ce-style-btn';knop.textContent='Aa opmaak';
     knop.onclick=function(){balk.classList.toggle('on');};

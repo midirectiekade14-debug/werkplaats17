@@ -304,9 +304,8 @@
     pricingNote:    '.pricing-note',
     targetAudience: '.for-who .criteria-list li',
     notForText:     '.for-who .not-for',
-    aboutLabel:     '#wij',
     aboutLead:      '.about-block .about-lead',
-    teamName:       '.about-people .person h3',
+    teamName:       '.about-people .person h3, .about-people .person .initial',
     teamRole:       '.about-people .person .role',
     teamText:       '.about-people .person p',
     aboutNote:      '.about-block .about-note',
@@ -314,7 +313,17 @@
     contactLines:   '.cta-info .cta-line span',
     photoLabels:    '.photo-strip .ph-label',
     hashtags:       'footer .hashtags',
-    copyright:      'footer .copy'
+    copyright:      'footer .copy',
+    // Onderdelen waarvan de TEKST in index.html staat en dus niet via de
+    // content-editor loopt. De opmaak hoort wel bij te stellen te zijn: het
+    // gaat om koppen en knoppen die de bezoeker als eerste ziet.
+    sectionLabels:  '.section-label',
+    siteTitle:      'header h1',
+    navLinks:       '.nav-links a',
+    brandName:      '.nav-brand, footer .brand',
+    pricingSub:     '.pricing-block .pricing-row .sub',
+    floorplanText:  '.fp-tab, .legend-item, #fp-hint',
+    buttons:        '.btn-primary, .btn-secondary'
   };
 
   function applyStyles() {
@@ -340,6 +349,10 @@
   }
 
   applyStyles();
+
+  // Onderdelen die pas later ontstaan (de legenda onder de plattegrond) halen
+  // hun opmaak hiermee alsnog op.
+  window.applyContentStyles = applyStyles;
 
   // Bij een andere vensterbreedte gelden andere basisgroottes, dus dan moet
   // de factor opnieuw gerekend worden.

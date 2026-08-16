@@ -546,7 +546,10 @@
   }
   .pricing-row .price small {
     font-family: 'DM Mono', monospace;
-    font-size: var(--fs-small);
+    /* Relatief aan de prijs, niet absoluut: anders blijft "/mnd" op zijn
+       oude maat staan zodra de prijs via de content-editor groter wordt.
+       0.32em komt uit op dezelfde px als var(--fs-small) bij 100%. */
+    font-size: 0.32em;
     color: var(--muted);
     margin-left: 4px;
     letter-spacing: 0.1em;
@@ -2082,6 +2085,11 @@ window._initFloorplan=function(){
       item.appendChild(txt);
       legend.appendChild(item);
     });
+    // De legenda ontstaat pas hier, ná de opmaakronde van render.js. Zonder
+    // deze herhaling houdt hij zijn standaardkleur terwijl de rest van de
+    // plattegrondteksten wel meegaat -- en ging hij er alsnog goed uitzien
+    // zodra je het venster een keer versleepte, wat het spoor vertroebelt.
+    if(typeof window.applyContentStyles==='function')window.applyContentStyles();
   }
 
   function renderFloor(f){
