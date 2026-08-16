@@ -559,6 +559,90 @@
     color: var(--muted);
   }
   .fp-hint.on { display: block; }
+
+  /* ── PLATTEGROND SCHERMVULLEND ──
+     Op een telefoon past de plattegrond alleen in de breedte door hem zo ver
+     terug te schalen dat de labels op ~7px uitkomen. Onleesbaar, en er is
+     geen opmaaktruc die dat oplost: 48 objecten op 375px is simpelweg te
+     veel. Daarom een aparte weergave die het hele scherm pakt, met echte
+     zoomknoppen en slepen in beide richtingen. Op een breed scherm is dit
+     niet nodig -- daar past hij gewoon. */
+  /* Ook op een breed scherm nodig: de canvas is daar 418px hoog voor 48
+     objecten, wat de labels op 6,1px zet -- kleiner nog dan op een telefoon.
+     Passen en leesbaar zijn twee verschillende dingen. */
+  .fp-groot-knop {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 11px 22px;
+    min-height: 44px;
+    font-family: inherit;
+    font-size: var(--fs-micro);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--amber);
+    cursor: pointer;
+  }
+  .fp-groot-knop:hover { border-color: var(--amber); }
+  .fp-zoom { display: none; }
+  @media (max-width: 900px) {
+    .fp-groot-knop { display: block; width: 100%; }
+  }
+
+  body.fp-open { overflow: hidden; }
+  body.fp-open .floorplan-block {
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    margin: 0;
+    padding: 8px 8px 0;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+  }
+  body.fp-open .fp-canvas {
+    flex: 1;
+    height: auto;
+    /* Slepen in beide richtingen: bij ingezoomd valt de plattegrond aan alle
+       kanten buiten het scherm. */
+    overflow: auto;
+    touch-action: pan-x pan-y;
+    overscroll-behavior: contain;
+  }
+  body.fp-open .fp-groot-knop,
+  body.fp-open .floorplan-legend,
+  body.fp-open .fp-hint { display: none; }
+  /* De menubalk staat op z-index 100 en zou dus over de plattegrond heen
+     vallen; de contactbalk zou de zoomknoppen overlappen. In deze weergave
+     is de plattegrond het enige dat telt. */
+  body.fp-open .sticky-nav,
+  body.fp-open .mob-cta { display: none; }
+  body.fp-open .fp-zoom {
+    display: flex;
+    gap: 6px;
+    padding: 8px 0 calc(8px + env(safe-area-inset-bottom, 0px));
+    /* Op een breed scherm zou een balk van vier knoppen over 1280px een rare
+       strook worden; hem centreren houdt het een bedieningspaneel. */
+    max-width: 520px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .fp-zoom button {
+    flex: 1;
+    min-height: 46px;
+    font-family: inherit;
+    font-size: var(--fs-micro);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: var(--surface2);
+    border: 1px solid var(--line);
+    color: var(--cream);
+    cursor: pointer;
+  }
+  .fp-zoom button:active { background: var(--amber); color: var(--bg); }
+  #fp-uit, #fp-in { flex: 0 0 56px; font-size: 20px; letter-spacing: 0; }
+  #fp-sluit { background: var(--amber); color: var(--bg); border-color: var(--amber); }
   .pl { position: absolute; user-select: none; z-index: 10; }
   .pl.room-pl { z-index: 5; }
   .rm { width: 100%; height: 100%; border: 1px solid; display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; overflow: hidden; padding: 4px 5px; }
@@ -1830,6 +1914,13 @@
     </div>
     <p class="fp-hint" id="fp-hint">← Sleep de plattegrond opzij →</p>
     <div class="fp-canvas" id="cv"><div id="fp-stage"><div id="fp"></div></div></div>
+    <div class="fp-zoom" id="fp-zoom">
+      <button type="button" id="fp-uit" aria-label="Uitzoomen">−</button>
+      <button type="button" id="fp-passend">Passend</button>
+      <button type="button" id="fp-in" aria-label="Inzoomen">+</button>
+      <button type="button" id="fp-sluit">Sluiten</button>
+    </div>
+    <button type="button" class="fp-groot-knop" id="fp-groot">Bekijk groot</button>
     <div class="floorplan-legend" id="fp-legend"></div>
   </div>
 
@@ -2345,6 +2436,10 @@ window._initFloorplan=function(){
     return ox==='auto'||ox==='scroll';
   }
 
+  // Vermenigvuldiger bovenop de passende schaal; alleen in gebruik binnen de
+  // schermvullende weergave.
+  var gebruikerZoom=1;
+
   function fitToContent(){
     var els=fp.querySelectorAll('.pl');
     if(!els.length) return;
@@ -2360,6 +2455,9 @@ window._initFloorplan=function(){
     var scaleX=vw/bw, scaleY=vh/bh;
     var zoom=magSlepen()?Math.min(scaleY,2):Math.min(scaleX,scaleY,2);
     zoom=Math.max(zoom,0.3);
+    // De schermvullende weergave zet hier een eigen vermenigvuldiger overheen.
+    // Buiten die weergave staat hij op 1 en verandert er niets.
+    zoom=zoom*gebruikerZoom;
     var sw=bw*zoom, sh=bh*zoom;
 
     // De stage draagt de geschaalde maat, zodat de canvas weet hoe ver hij
@@ -2444,6 +2542,52 @@ window._initFloorplan=function(){
   }
 
   window.fpShow=function(f){renderFloor(f);};
+
+  // ── Schermvullende weergave ──
+  // De plattegrond zelf blijft op zijn plek in de pagina staan; alleen zijn
+  // omhulsel wordt schermvullend. Zo hoeft er niets gekopieerd of opnieuw
+  // opgebouwd te worden en blijft de gekozen verdieping staan.
+  (function(){
+    var blok=document.querySelector('.floorplan-block');
+    var open=document.getElementById('fp-groot');
+    var sluit=document.getElementById('fp-sluit');
+    var uit=document.getElementById('fp-uit');
+    var in_=document.getElementById('fp-in');
+    var passend=document.getElementById('fp-passend');
+    if(!blok||!open)return;
+
+    function herteken(){
+      // De canvas verandert hier van maat zonder dat het venster dat doet; de
+      // ResizeObserver vangt dat op, maar pas na zijn eigen vertraging. Direct
+      // aanroepen scheelt een zichtbare sprong.
+      fitToContent();
+    }
+    function zetZoom(v){
+      gebruikerZoom=Math.min(6,Math.max(1,v));
+      herteken();
+      // Na inzoomen naar het midden kijken in plaats van naar de linkerbovenhoek.
+      cv.scrollLeft=(cv.scrollWidth-cv.clientWidth)/2;
+      cv.scrollTop=(cv.scrollHeight-cv.clientHeight)/2;
+    }
+    function openGroot(){
+      document.body.classList.add('fp-open');
+      gebruikerZoom=1;
+      herteken();
+    }
+    function sluitGroot(){
+      document.body.classList.remove('fp-open');
+      gebruikerZoom=1;
+      herteken();
+    }
+    open.onclick=openGroot;
+    if(sluit)sluit.onclick=sluitGroot;
+    if(uit)uit.onclick=function(){zetZoom(gebruikerZoom/1.5);};
+    if(in_)in_.onclick=function(){zetZoom(gebruikerZoom*1.5);};
+    if(passend)passend.onclick=function(){zetZoom(1);};
+    document.addEventListener('keydown',function(e){
+      if(e.key==='Escape'&&document.body.classList.contains('fp-open'))sluitGroot();
+    });
+  })();
 
   // Kantelen, in- of uitzoomen, of een adresbalk die weg schuift: de
   // objecten blijven staan, alleen de schaal klopt niet meer. Zonder deze
