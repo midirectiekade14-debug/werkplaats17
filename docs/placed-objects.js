@@ -1,5 +1,5 @@
 // Werkplaats3b -- Geplaatste objecten
-// Laatst gewijzigd: 2026-08-11T18:55:16.010Z
+// Laatst gewijzigd: 2026-08-16T13:42:56.462Z
 // Gegenereerd via admin.html
 
 const PLACED_OBJECTS = [
@@ -58,20 +58,6 @@ const PLACED_OBJECTS = [
     "rot": "270",
     "status": "",
     "room": ""
-  },
-  {
-    "floor": 0,
-    "x": 435,
-    "y": 531,
-    "w": 120,
-    "h": 131,
-    "l": "Kantoor",
-    "c": "#6e96dc",
-    "bg": "rgba(110,150,220,0.30)",
-    "type": "",
-    "rot": "0",
-    "status": "",
-    "room": "1"
   },
   {
     "floor": 0,
@@ -853,6 +839,20 @@ const PLACED_OBJECTS = [
     "c": "#607080",
     "bg": "rgba(96,112,128,.15)",
     "type": "",
+    "rot": "0",
+    "status": "",
+    "room": ""
+  },
+  {
+    "floor": 0,
+    "x": 435,
+    "y": 531,
+    "w": 120,
+    "h": 132,
+    "l": "Atelier/Werkruimte ",
+    "c": "#50b478",
+    "bg": "rgba(80,180,120,0.10)",
+    "type": "huurunit",
     "rot": "0",
     "status": "",
     "room": ""
