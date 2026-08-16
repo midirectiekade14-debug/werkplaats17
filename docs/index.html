@@ -427,13 +427,21 @@
   .mob-cta { display: none; }
 
   /* ── SECTION LABELS ── */
+  /* Dubbele grootte en vet is de gekozen huisstijl voor sectiekoppen, dus staat
+     dat hier en niet als instelling in content.js. Daar stond het eerder wel, en
+     dat ging drie keer mis op één avond: een admin-tabblad dat nog uit een oudere
+     versie werkt, publiceert die sleutel eruit. Wat in de stylesheet staat kan
+     geen enkele publicatie wissen. De regel in de admin blijft werken en rekent
+     nu vanaf deze grootte: 100% = wat je hier ziet.
+     Op de telefoon niet verdubbelen -- render.js laat de groottefactor daar met
+     opzet los, anders duwen de koppen de rest van het scherm weg. */
   .section-label {
     padding: 32px 40px 16px;
-    font-size: var(--fs-body);
+    font-size: calc(var(--fs-body) * 2);
     letter-spacing: 0.3em;
     text-transform: uppercase;
     color: var(--amber);
-    font-weight: 500;
+    font-weight: 700;
   }
 
   /* ── OFFER GRID ── */
@@ -1203,7 +1211,8 @@
     header { padding: 40px 24px 32px; }
     .location-bar { margin: 20px 24px 0; }
     .intro { padding: 32px 24px 28px; }
-    .section-label { padding: 28px 24px 14px; }
+    /* Wel vet, niet verdubbeld -- zie de toelichting bij .section-label. */
+    .section-label { padding: 28px 24px 14px; font-size: var(--fs-body); }
     .machines-block { padding: 0 24px; }
     .pricing-block { padding: 0 24px; }
     .pricing-note { padding: 10px 24px 0; }
