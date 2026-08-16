@@ -255,6 +255,9 @@ textarea.ce-input{min-height:60px;resize:vertical}
 .ce-swatch-vreemd::after{content:'!';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:bold;color:var(--red);text-shadow:0 0 3px var(--bg),0 0 3px var(--bg)}
 .ce-style-size{width:54px;padding:3px 5px;font-size:9px;font-family:inherit;background:var(--bg);border:1px solid var(--border);color:var(--cream);outline:none}
 .ce-style-size:focus{border-color:var(--amber)}
+.ce-style-vet{width:24px;padding:3px 0;font-size:11px;font-weight:700;font-family:Georgia,serif;background:var(--bg);border:1px solid var(--border);color:var(--muted);cursor:pointer;line-height:1}
+.ce-style-vet:hover{border-color:var(--amber)}
+.ce-style-vet.on{background:var(--amber);border-color:var(--amber);color:var(--bg)}
 .ce-style-rst{padding:3px 8px;font-size:7px;font-family:inherit;letter-spacing:.08em;text-transform:uppercase;background:var(--surface2);border:1px solid var(--border);color:var(--muted);cursor:pointer}
 .ce-style-rst:hover{border-color:var(--amber);color:var(--amber)}
 
@@ -1781,6 +1784,8 @@ function ceStijlBalk(defs){
     kl.appendChild(vreemd);
     var gr=document.createElement('input');gr.type='number';gr.className='ce-style-size';
     gr.min='60';gr.max='200';gr.step='5';gr.title='Grootte in % van de standaard';
+    var vet=document.createElement('button');vet.type='button';vet.className='ce-style-vet';
+    vet.textContent='B';vet.title='Vet';
     var rst=document.createElement('button');rst.type='button';rst.className='ce-style-rst';rst.textContent='Herstel alles';
 
     function toon(){
@@ -1809,6 +1814,8 @@ function ceStijlBalk(defs){
       demo.style.color=s.color||'#F0EAE0';
       demo.title=s.color?('Kleur: '+s.color):'Zonder eigen kleur bepaalt de site deze zelf';
       demo.style.fontSize=Math.round(12*((s.size||100)/100))+'px';
+      demo.style.fontWeight=s.bold?'700':'';
+      vet.classList.toggle('on',!!s.bold);
     }
     // Niets meer ingesteld? Dan hoort de sleutel ook uit content.js te
     // verdwijnen -- een achtergebleven lege `styles:{}` suggereert opmaak
@@ -1833,13 +1840,20 @@ function ceStijlBalk(defs){
       v=Math.min(200,Math.max(60,v));
       schrijf('size',v===100?null:v);
     };
+    // Uit betekent: de site bepaalt het gewicht zelf. Daarom geen `false`
+    // wegschrijven maar de sleutel verwijderen -- anders staat er opmaak in
+    // content.js die niets doet.
+    vet.onclick=function(){
+      var s=(ceData.styles&&ceData.styles[def.key])||{};
+      schrijf('bold',s.bold?null:true);
+    };
     rst.onclick=function(){if(ceData.styles)delete ceData.styles[def.key];ruimOp();toon();};
     toon();
 
     var l1=document.createElement('span');l1.className='ce-style-lbl';l1.textContent='Kleur';
     var l2=document.createElement('span');l2.className='ce-style-lbl';l2.textContent='Grootte %';
     rij.appendChild(demo);rij.appendChild(l1);rij.appendChild(kl);
-    rij.appendChild(l2);rij.appendChild(gr);rij.appendChild(rst);
+    rij.appendChild(l2);rij.appendChild(gr);rij.appendChild(vet);rij.appendChild(rst);
     balk.appendChild(rij);
   });
   return balk;

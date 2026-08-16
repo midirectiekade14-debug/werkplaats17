@@ -335,6 +335,10 @@
       for (var i = 0; i < els.length; i++) {
         var el = els[i];
         el.style.color = (regels && regels.color) ? regels.color : '';
+        // Leeg laten = de stylesheet beslist. Sommige onderdelen staan al op
+        // 500 of 600; die horen hun eigen gewicht te houden zolang "vet" uit
+        // staat, in plaats van naar 400 teruggezet te worden.
+        el.style.fontWeight = (regels && regels.bold) ? '700' : '';
         // De grootte is een factor op wat de stylesheet zegt, niet een vaste
         // pixelmaat: de site heeft mediaqueries op de tekstschaal, en die
         // moeten blijven werken. Eerst onze eigen inline-waarde weghalen,
@@ -353,6 +357,13 @@
   // Onderdelen die pas later ontstaan (de legenda onder de plattegrond) halen
   // hun opmaak hiermee alsnog op.
   window.applyContentStyles = applyStyles;
+
+  // Laadt de pagina terwijl het venster nog van maat verandert (een preview-
+  // paneel dat openklapt, een browser die zijn vorige afmeting herstelt), dan
+  // is de gemeten basis die van een ander breekpunt en staat de factor op een
+  // verkeerd getal vast -- zonder dat er ooit een resize langskomt om het te
+  // herstellen. Bij `load` ligt de opmaak vast, dus daar één keer overdoen.
+  window.addEventListener('load', applyStyles);
 
   // Bij een andere vensterbreedte gelden andere basisgroottes, dus dan moet
   // de factor opnieuw gerekend worden.

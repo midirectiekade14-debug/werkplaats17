@@ -210,6 +210,10 @@ const CONTENT = {
     "contactLines": {
       "color": "#F0EAE0",
       "size": 130
+    },
+    "sectionLabels": {
+      "size": 200,
+      "bold": true
     }
   }
 };
