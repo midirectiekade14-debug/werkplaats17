@@ -319,7 +319,7 @@ textarea.ce-input{min-height:60px;resize:vertical}
 /* De strip-slots tonen de verhouding die de bezoeker straks ziet -- dan is de
    formaatkeuze hierboven meteen zichtbaar in plaats van een abstract getal. */
 .pm-grid.strip .pm-slot{aspect-ratio:var(--pm-strip-ratio,4/3)}
-.pm-slot .pm-nr{position:absolute;top:6px;left:6px;z-index:2;font-size:7px;letter-spacing:.1em;padding:2px 6px;background:rgba(0,0,0,.6);color:var(--cream);pointer-events:none}
+.pm-slot .pm-nr{position:absolute;top:6px;left:6px;z-index:3;font-size:7px;letter-spacing:.1em;padding:2px 6px;background:rgba(0,0,0,.6);color:var(--cream);pointer-events:none}
 .pm-add{border-style:dashed;color:var(--muted)}
 .pm-add:hover{border-color:var(--amber);color:var(--amber)}
 /* ── Formaat van de fotostrip ── */
@@ -329,10 +329,24 @@ textarea.ce-input{min-height:60px;resize:vertical}
 .pm-fmt-knoppen{display:flex;gap:6px;flex-wrap:wrap}
 .pm-fmt-knoppen .hbtn.aan{background:var(--amber);color:var(--bg);border-color:var(--amber);font-weight:bold}
 .pm-fmt-uitleg{font-size:8px;color:var(--muted);line-height:1.6;flex:1 1 200px;min-width:180px}
+.pm-fmt-groep>span b{color:var(--amber);font-weight:normal;letter-spacing:.06em}
+/* De schuif in dezelfde stijl als de knoppen ernaast; de baan is de lijnkleur,
+   de greep amber -- zo leest het als één balk in plaats van een browserknopje. */
+.pm-schuif{-webkit-appearance:none;appearance:none;width:190px;height:3px;background:var(--border);outline:none;cursor:pointer;margin:9px 0}
+.pm-schuif::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:13px;height:13px;background:var(--amber);border:none;cursor:pointer}
+.pm-schuif::-moz-range-thumb{width:13px;height:13px;background:var(--amber);border:none;cursor:pointer}
 .pm-slot:hover{border-color:var(--amber)}
 .pm-slot.has-photo{border-style:solid}
 .pm-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.pm-slot .pm-overlay{position:absolute;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;padding:8px}
+.pm-slot .pm-overlay{position:absolute;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;padding:8px;z-index:2}
+/* Voorbeeld van de vervaging, zodat de schuif hierboven niet blind bediend
+   wordt. Op de site loopt het verloop over de hele rij; hier ligt het per vakje,
+   maar omdat het verloop alleen van boven naar beneden verandert en de vakjes
+   even hoog zijn, is het beeld hetzelfde -- op de tussenruimte na. */
+.pm-grid.strip .pm-slot.has-photo::before,
+.pm-grid.strip .pm-slot.has-photo::after{content:"";position:absolute;left:0;right:0;height:var(--pm-strip-fade,0%);pointer-events:none;z-index:1}
+.pm-grid.strip .pm-slot.has-photo::before{top:0;background:linear-gradient(to bottom,var(--bg) 0%,rgba(22,20,18,0) 100%)}
+.pm-grid.strip .pm-slot.has-photo::after{bottom:0;background:linear-gradient(to top,var(--bg) 0%,rgba(22,20,18,0) 100%)}
 .pm-slot:hover .pm-overlay{display:flex}
 .pm-slot .pm-icon{color:var(--muted);font-size:24px}
 .pm-slot .pm-label{font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:6px}
@@ -680,6 +694,10 @@ textarea.ce-input{min-height:60px;resize:vertical}
           <button class="hbtn" type="button" data-auto="5">Rustig</button>
           <button class="hbtn" type="button" data-auto="8">Traag</button>
         </div>
+      </div>
+      <div class="pm-fmt-groep">
+        <span>Vervaging boven &amp; onder <b id="pm-fmt-fade-waarde">uit</b></span>
+        <input type="range" id="pm-fmt-fade" min="0" max="40" step="1" value="0" class="pm-schuif">
       </div>
       <p class="pm-fmt-uitleg">Geldt voor de hele rij op de site. "Naast elkaar" telt alleen op een breed scherm — op een telefoon zie je er altijd één per keer, met de volgende half in beeld. Doorschuiven stopt zodra de bezoeker zelf veegt of met de muis op de foto's staat.</p>
     </div>
@@ -1703,7 +1721,6 @@ var CE_SCHEMA=[
   {id:'social',title:'Instagram & Footer',fields:[
     {key:'instagramHandle',label:'Instagram handle',type:'text'},
     {key:'instagramUrl',label:'Instagram URL',type:'text'},
-    {key:'photoLabels',label:'Fotostrip labels',type:'array-text',style:'photoLabels'},
     {key:'hashtags',label:'Hashtags',type:'html',style:'hashtags'},
     {key:'copyright',label:'Copyright',type:'text',style:'copyright'},
   ]},
@@ -2341,7 +2358,7 @@ window.ceReset=function(){
 // ║  FOTO MANAGER                              ║
 // ╚════════════════════════════════════════════╝
 var pmInitialized=false;
-var PM_FORMAAT_STANDAARD={ratio:'4/3',perBeeld:3,autoplay:0};
+var PM_FORMAAT_STANDAARD={ratio:'4/3',perBeeld:3,autoplay:0,vervaging:0};
 var pmPhotos={hero:null,strip:[null,null,null],pos:{},stripFormaat:Object.assign({},PM_FORMAAT_STANDAARD)};
 var pmPendingUploads={};
 var pmLocalCache={};
@@ -2392,6 +2409,14 @@ function pmBindFormaat(){
       document.getElementById('pm-status').textContent='Formaat aangepast — nog niet gepubliceerd';
     });
   });
+  // De vervaging is een schuif en geen rijtje knoppen: de goede stand ligt
+  // ergens tussen "net zichtbaar" en "te veel" en die vind je met slepen.
+  var schuif=document.getElementById('pm-fmt-fade');
+  if(schuif)schuif.addEventListener('input',function(){
+    pmFormaat().vervaging=Number(schuif.value);
+    pmRenderFormaat();
+    document.getElementById('pm-status').textContent='Vervaging aangepast — nog niet gepubliceerd';
+  });
 }
 function pmFormaat(){
   if(!pmPhotos.stripFormaat)pmPhotos.stripFormaat=Object.assign({},PM_FORMAAT_STANDAARD);
@@ -2407,7 +2432,14 @@ function pmRenderFormaat(){
     });
   });
   var grid=document.getElementById('pm-strip-grid');
-  if(grid)grid.style.setProperty('--pm-strip-ratio',f.ratio);
+  if(grid){
+    grid.style.setProperty('--pm-strip-ratio',f.ratio);
+    grid.style.setProperty('--pm-strip-fade',(f.vervaging||0)+'%');
+  }
+  var schuif=document.getElementById('pm-fmt-fade');
+  if(schuif&&String(schuif.value)!==String(f.vervaging||0))schuif.value=f.vervaging||0;
+  var waarde=document.getElementById('pm-fmt-fade-waarde');
+  if(waarde)waarde.textContent=f.vervaging?f.vervaging+'%':'uit';
 }
 
 // ╔════════════════════════════════════════════╗
@@ -2562,7 +2594,8 @@ function pmNormaliseer(o){
   o.stripFormaat={
     ratio:/^\d+(\.\d+)?\s*\/\s*\d+(\.\d+)?$/.test(f.ratio)?f.ratio:PM_FORMAAT_STANDAARD.ratio,
     perBeeld:Math.max(1,Math.min(6,parseInt(f.perBeeld,10)||PM_FORMAAT_STANDAARD.perBeeld)),
-    autoplay:Math.max(0,Math.min(30,parseFloat(f.autoplay)||0))
+    autoplay:Math.max(0,Math.min(30,parseFloat(f.autoplay)||0)),
+    vervaging:Math.max(0,Math.min(40,parseFloat(f.vervaging)||0))
   };
   return o;
 }

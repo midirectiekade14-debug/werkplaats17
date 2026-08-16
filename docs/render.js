@@ -67,21 +67,10 @@
     });
   }
 
-  // Photo labels. Als functie, want de fotosectie verderop kan extra vakjes
-  // aanmaken; die hebben hun bijschrift dan nog niet gehad.
-  function zetFotoBijschriften() {
-    if (!Array.isArray(C.photoLabels)) return;
-    var phLabels = document.querySelectorAll('.photo-strip .ph-label');
-    C.photoLabels.forEach(function (txt, i) {
-      if (phLabels[i]) phLabels[i].textContent = txt;
-    });
-  }
-  zetFotoBijschriften();
-
   // De maatvoering van de fotorij, ingesteld in het admin-paneel en opgeslagen
-  // in photos.js als {ratio:"4/3", perBeeld:3, autoplay:0}. De stylesheet houdt
-  // dezelfde waarden als terugval aan, dus een photos.js zonder deze sleutel
-  // laat de rij er precies zo uitzien als voordat dit bestond.
+  // in photos.js als {ratio:"4/3", perBeeld:3, autoplay:0, vervaging:0}. De
+  // stylesheet houdt dezelfde waarden als terugval aan, dus een photos.js zonder
+  // deze sleutel laat de rij er precies zo uitzien als voordat dit bestond.
   //
   // perBeeld is hoeveel foto's er op een breed scherm naast elkaar staan; de
   // 1px-naadjes tussen de vakjes moeten van de breedte af, vandaar de aftrek.
@@ -101,6 +90,12 @@
     var auto = Math.max(0, parseFloat(o.autoplay) || 0);
     if (auto) baan.dataset.autoplay = Math.round(auto * 1000);
     else delete baan.dataset.autoplay;
+    // De vervaging hoort bij de rij als geheel en niet bij een los vakje, dus
+    // hij gaat op de laag eromheen. Een percentage van de striphoogte, zodat
+    // hij bij elk formaat dezelfde verhouding houdt.
+    var laag = baan.parentNode && baan.parentNode.classList.contains('ps-viewport') ? baan.parentNode : baan;
+    var fade = Math.max(0, Math.min(50, parseFloat(o.vervaging) || 0));
+    laag.style.setProperty('--strip-fade', fade + '%');
   }
 
   // Offers
@@ -303,9 +298,6 @@
         for (var n = vakjes.length; n < PHOTOS.strip.length; n++) {
           var extra = document.createElement('div');
           extra.className = 'photo-placeholder';
-          var bijschrift = document.createElement('span');
-          bijschrift.className = 'ph-label';
-          extra.appendChild(bijschrift);
           baan.appendChild(extra);
         }
         // Minder foto's dan vakjes: de overtollige weg. Alleen als er ECHT
@@ -321,12 +313,9 @@
       var strip = document.querySelectorAll('.photo-strip .photo-placeholder');
       PHOTOS.strip.forEach(function (p, i) {
         if (!p || !strip[i]) return;
-        var label = strip[i].querySelector('.ph-label');
         replaceChildren(strip[i], imgFor(p, 'Sfeerbeeld ' + (i + 1), 'strip-' + i));
-        if (label) strip[i].appendChild(label);
         strip[i].classList.add('has-photo');
       });
-      zetFotoBijschriften();
     }
   }
 
@@ -366,7 +355,6 @@
     aboutNote:      '.about-block .about-note',
     ctaHeading:     '.cta-block h2',
     contactLines:   '.cta-info .cta-line span',
-    photoLabels:    '.photo-strip .ph-label',
     hashtags:       'footer .hashtags',
     copyright:      'footer .copy',
     // Onderdelen waarvan de TEKST in index.html staat en dus niet via de
