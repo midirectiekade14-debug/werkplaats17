@@ -139,7 +139,8 @@ const CONTENT = {
     {
       "name": "Matthijs",
       "role": "Meubelmaker",
-      "text": ""
+      "text": "",
+      "photo": "photos/team-1-matthijs.jpg"
     },
     {
       "name": "Wesley",
