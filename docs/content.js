@@ -184,11 +184,11 @@ const CONTENT = {
     },
     "pricingLabel": {
       "size": 130,
-      "color": "#F5B040"
+      "color": "#F0EAE0"
     },
     "pricingPrice": {
       "size": 130,
-      "color": "#F0EAE0"
+      "color": "#F5B040"
     },
     "pricingNote": {
       "color": "#F0EAE0"
