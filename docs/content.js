@@ -127,7 +127,7 @@ const CONTENT = {
   "notForText": "<strong>KvK-inschrijving en verzekering verplicht.</strong> Werkplaats3b is uitsluitend voor professionele gebruikers. Particulieren en hobbyisten kunnen hier niet terecht.",
   "aboutLabel": "Wie zijn wij",
   "aboutNavLabel": "Over ons",
-  "aboutLead": "Werkplaats3b is opgezet door Matthijs, Harm en Wesley. We huren het pand samen en verhuren de plekken die we niet zelf gebruiken.",
+  "aboutLead": "Werkplaats3b is opgezet door Matthijs, Harm en Wesley. <br>We huren het pand samen en verhuren de plekken die we niet zelf gebruiken.",
   "team": [
     {
       "name": "Harm",
