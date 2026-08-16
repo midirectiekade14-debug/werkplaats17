@@ -202,6 +202,14 @@ const CONTENT = {
     },
     "photoLabels": {
       "color": "#E09A2F"
+    },
+    "ctaHeading": {
+      "color": "#F5B040",
+      "size": 130
+    },
+    "contactLines": {
+      "color": "#F5B040",
+      "size": 130
     }
   }
 };
