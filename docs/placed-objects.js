@@ -1,21 +1,22 @@
 // Werkplaats3b -- Geplaatste objecten
-// Laatst gewijzigd: 2026-08-16T13:42:56.462Z
+// Laatst gewijzigd: 2026-08-16T15:36:14.630Z
 // Gegenereerd via admin.html
 
 const PLACED_OBJECTS = [
   {
     "floor": 0,
-    "x": 336,
+    "x": 333,
     "y": 531,
     "w": 885,
     "h": 396,
     "l": "Machinale",
     "c": "#e09a2f",
-    "bg": "rgba(224,154,47,0.13)",
+    "bg": "rgba(224,154,47,0.08)",
     "type": "",
     "rot": "0",
     "status": "",
-    "room": "1"
+    "room": "1",
+    "shape": ""
   },
   {
     "floor": 0,
@@ -29,7 +30,8 @@ const PLACED_OBJECTS = [
     "type": "",
     "rot": "0",
     "status": "",
-    "room": "1"
+    "room": "1",
+    "shape": ""
   },
   {
     "floor": 0,
@@ -43,7 +45,8 @@ const PLACED_OBJECTS = [
     "type": "overhead",
     "rot": "90",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 0,
@@ -57,7 +60,8 @@ const PLACED_OBJECTS = [
     "type": "door",
     "rot": "270",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 0,
@@ -71,7 +75,8 @@ const PLACED_OBJECTS = [
     "type": "",
     "rot": "0",
     "status": "",
-    "room": "1"
+    "room": "1",
+    "shape": ""
   },
   {
     "floor": 0,
@@ -85,7 +90,8 @@ const PLACED_OBJECTS = [
     "type": "",
     "rot": "0",
     "status": "",
-    "room": "1"
+    "room": "1",
+    "shape": ""
   },
   {
     "floor": 0,
@@ -99,7 +105,8 @@ const PLACED_OBJECTS = [
     "type": "",
     "rot": "0",
     "status": "",
-    "room": "1"
+    "room": "1",
+    "shape": ""
   },
   {
     "floor": 0,
@@ -113,7 +120,8 @@ const PLACED_OBJECTS = [
     "type": "",
     "rot": "0",
     "status": "",
-    "room": "1"
+    "room": "1",
+    "shape": ""
   },
   {
     "floor": 0,
@@ -127,7 +135,8 @@ const PLACED_OBJECTS = [
     "type": "",
     "rot": "0",
     "status": "",
-    "room": "1"
+    "room": "1",
+    "shape": ""
   },
   {
     "floor": 0,
@@ -141,7 +150,8 @@ const PLACED_OBJECTS = [
     "type": "",
     "rot": "0",
     "status": "",
-    "room": "1"
+    "room": "1",
+    "shape": ""
   },
   {
     "floor": 2,
@@ -155,7 +165,8 @@ const PLACED_OBJECTS = [
     "type": "",
     "rot": "0",
     "status": "",
-    "room": "1"
+    "room": "1",
+    "shape": ""
   },
   {
     "floor": 2,
@@ -169,7 +180,8 @@ const PLACED_OBJECTS = [
     "type": "werkplek",
     "rot": "0",
     "status": "",
-    "room": "1"
+    "room": "1",
+    "shape": ""
   },
   {
     "floor": 2,
@@ -183,7 +195,8 @@ const PLACED_OBJECTS = [
     "type": "",
     "rot": "0",
     "status": "",
-    "room": "1"
+    "room": "1",
+    "shape": ""
   },
   {
     "floor": 2,
@@ -197,7 +210,8 @@ const PLACED_OBJECTS = [
     "type": "",
     "rot": "0",
     "status": "",
-    "room": "1"
+    "room": "1",
+    "shape": ""
   },
   {
     "floor": 2,
@@ -211,7 +225,8 @@ const PLACED_OBJECTS = [
     "type": "",
     "rot": "0",
     "status": "",
-    "room": "1"
+    "room": "1",
+    "shape": ""
   },
   {
     "floor": 2,
@@ -225,7 +240,8 @@ const PLACED_OBJECTS = [
     "type": "",
     "rot": "0",
     "status": "",
-    "room": "1"
+    "room": "1",
+    "shape": ""
   },
   {
     "floor": 2,
@@ -239,7 +255,8 @@ const PLACED_OBJECTS = [
     "type": "",
     "rot": "0",
     "status": "",
-    "room": "1"
+    "room": "1",
+    "shape": ""
   },
   {
     "floor": 2,
@@ -253,7 +270,8 @@ const PLACED_OBJECTS = [
     "type": "",
     "rot": "0",
     "status": "",
-    "room": "1"
+    "room": "1",
+    "shape": ""
   },
   {
     "floor": 1,
@@ -267,7 +285,8 @@ const PLACED_OBJECTS = [
     "type": "",
     "rot": "0",
     "status": "",
-    "room": "1"
+    "room": "1",
+    "shape": ""
   },
   {
     "floor": 1,
@@ -281,21 +300,23 @@ const PLACED_OBJECTS = [
     "type": "",
     "rot": "0",
     "status": "",
-    "room": "1"
+    "room": "1",
+    "shape": ""
   },
   {
     "floor": 1,
     "x": 69,
-    "y": 225,
+    "y": 228,
     "w": 600,
-    "h": 263,
-    "l": "",
+    "h": 262,
+    "l": "Trap",
     "c": "#b464dc",
     "bg": "rgba(180,100,220,0.30)",
     "type": "",
     "rot": "0",
     "status": "",
-    "room": "1"
+    "room": "1",
+    "shape": ""
   },
   {
     "floor": 1,
@@ -303,13 +324,14 @@ const PLACED_OBJECTS = [
     "y": 228,
     "w": 132,
     "h": 36,
-    "l": "Trap",
+    "l": "",
     "c": "#b48c50",
     "bg": "rgba(180,140,80,0.30)",
     "type": "",
     "rot": "0",
     "status": "",
-    "room": "1"
+    "room": "1",
+    "shape": ""
   },
   {
     "floor": 1,
@@ -323,7 +345,8 @@ const PLACED_OBJECTS = [
     "type": "",
     "rot": "0",
     "status": "",
-    "room": "1"
+    "room": "1",
+    "shape": ""
   },
   {
     "floor": 0,
@@ -337,7 +360,8 @@ const PLACED_OBJECTS = [
     "type": "",
     "rot": "0",
     "status": "",
-    "room": "1"
+    "room": "1",
+    "shape": ""
   },
   {
     "floor": 1,
@@ -351,7 +375,8 @@ const PLACED_OBJECTS = [
     "type": "",
     "rot": "0",
     "status": "",
-    "room": "1"
+    "room": "1",
+    "shape": ""
   },
   {
     "floor": 0,
@@ -365,7 +390,8 @@ const PLACED_OBJECTS = [
     "type": "door",
     "rot": "180",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 0,
@@ -379,7 +405,8 @@ const PLACED_OBJECTS = [
     "type": "door",
     "rot": "270",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 0,
@@ -393,7 +420,8 @@ const PLACED_OBJECTS = [
     "type": "door",
     "rot": "270",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 0,
@@ -407,7 +435,8 @@ const PLACED_OBJECTS = [
     "type": "door",
     "rot": "270",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 0,
@@ -421,7 +450,8 @@ const PLACED_OBJECTS = [
     "type": "door",
     "rot": "270",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 0,
@@ -435,7 +465,8 @@ const PLACED_OBJECTS = [
     "type": "door",
     "rot": "0",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 0,
@@ -449,7 +480,8 @@ const PLACED_OBJECTS = [
     "type": "door",
     "rot": "0",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 0,
@@ -463,7 +495,8 @@ const PLACED_OBJECTS = [
     "type": "door",
     "rot": "270",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 2,
@@ -477,7 +510,8 @@ const PLACED_OBJECTS = [
     "type": "door",
     "rot": "270",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 2,
@@ -491,7 +525,8 @@ const PLACED_OBJECTS = [
     "type": "door",
     "rot": "180",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 2,
@@ -505,7 +540,8 @@ const PLACED_OBJECTS = [
     "type": "door",
     "rot": "180",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 2,
@@ -519,7 +555,8 @@ const PLACED_OBJECTS = [
     "type": "door",
     "rot": "180",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 0,
@@ -533,7 +570,8 @@ const PLACED_OBJECTS = [
     "type": "door",
     "rot": "0",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 0,
@@ -547,11 +585,12 @@ const PLACED_OBJECTS = [
     "type": "door",
     "rot": "0",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 0,
-    "x": 336,
+    "x": 339,
     "y": 729,
     "w": 81,
     "h": 141,
@@ -561,7 +600,8 @@ const PLACED_OBJECTS = [
     "type": "",
     "rot": "0",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 0,
@@ -575,7 +615,8 @@ const PLACED_OBJECTS = [
     "type": "",
     "rot": "0",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 0,
@@ -589,21 +630,23 @@ const PLACED_OBJECTS = [
     "type": "",
     "rot": "0",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 0,
-    "x": 921,
-    "y": 840,
-    "w": 126,
-    "h": 87,
+    "x": 1005,
+    "y": 861,
+    "w": 48,
+    "h": 66,
     "l": "Platenrekken",
     "c": "#a08060",
     "bg": "rgba(160,128,96,0.15)",
     "type": "",
     "rot": "0",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 1,
@@ -617,7 +660,8 @@ const PLACED_OBJECTS = [
     "type": "huurunit",
     "rot": "0",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 1,
@@ -631,7 +675,8 @@ const PLACED_OBJECTS = [
     "type": "huurunit",
     "rot": "0",
     "status": "beschikbaar",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 1,
@@ -645,7 +690,8 @@ const PLACED_OBJECTS = [
     "type": "huurunit",
     "rot": "0",
     "status": "beschikbaar",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 0,
@@ -659,7 +705,8 @@ const PLACED_OBJECTS = [
     "type": "",
     "rot": "0",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 1,
@@ -673,7 +720,8 @@ const PLACED_OBJECTS = [
     "type": "opslag",
     "rot": "0",
     "status": "",
-    "room": "1"
+    "room": "1",
+    "shape": ""
   },
   {
     "floor": 1,
@@ -687,7 +735,8 @@ const PLACED_OBJECTS = [
     "type": "opslag",
     "rot": "0",
     "status": "",
-    "room": "1"
+    "room": "1",
+    "shape": ""
   },
   {
     "floor": 1,
@@ -701,7 +750,8 @@ const PLACED_OBJECTS = [
     "type": "",
     "rot": "0",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 1,
@@ -715,7 +765,8 @@ const PLACED_OBJECTS = [
     "type": "",
     "rot": "0",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 1,
@@ -729,7 +780,8 @@ const PLACED_OBJECTS = [
     "type": "",
     "rot": "0",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 1,
@@ -743,7 +795,8 @@ const PLACED_OBJECTS = [
     "type": "",
     "rot": "0",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 1,
@@ -757,7 +810,8 @@ const PLACED_OBJECTS = [
     "type": "opslag",
     "rot": "0",
     "status": "",
-    "room": "1"
+    "room": "1",
+    "shape": ""
   },
   {
     "floor": 1,
@@ -771,7 +825,8 @@ const PLACED_OBJECTS = [
     "type": "huurunit",
     "rot": "0",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 1,
@@ -785,7 +840,8 @@ const PLACED_OBJECTS = [
     "type": "",
     "rot": "0",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 1,
@@ -799,7 +855,8 @@ const PLACED_OBJECTS = [
     "type": "",
     "rot": "0",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 1,
@@ -813,7 +870,8 @@ const PLACED_OBJECTS = [
     "type": "",
     "rot": "0",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 1,
@@ -827,7 +885,8 @@ const PLACED_OBJECTS = [
     "type": "",
     "rot": "0",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 0,
@@ -841,7 +900,8 @@ const PLACED_OBJECTS = [
     "type": "",
     "rot": "0",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
   },
   {
     "floor": 0,
@@ -855,6 +915,82 @@ const PLACED_OBJECTS = [
     "type": "huurunit",
     "rot": "0",
     "status": "",
-    "room": ""
+    "room": "",
+    "shape": ""
+  },
+  {
+    "floor": 1,
+    "x": 585,
+    "y": 228,
+    "w": 129,
+    "h": 36,
+    "l": "Trap",
+    "c": "#9070c0",
+    "bg": "rgba(144,112,192,0.15)",
+    "type": "",
+    "rot": "0",
+    "status": "",
+    "room": "",
+    "shape": ""
+  },
+  {
+    "floor": 0,
+    "x": 933,
+    "y": 861,
+    "w": 48,
+    "h": 66,
+    "l": "Platenrekken",
+    "c": "#a08060",
+    "bg": "rgba(160,128,96,0.15)",
+    "type": "",
+    "rot": "0",
+    "status": "",
+    "room": "",
+    "shape": ""
+  },
+  {
+    "floor": 0,
+    "x": 969,
+    "y": 861,
+    "w": 48,
+    "h": 66,
+    "l": "Platenrekken",
+    "c": "#a08060",
+    "bg": "rgba(160,128,96,0.15)",
+    "type": "",
+    "rot": "0",
+    "status": "",
+    "room": "",
+    "shape": ""
+  },
+  {
+    "floor": 0,
+    "x": 885,
+    "y": 744,
+    "w": 75,
+    "h": 18,
+    "l": "Platenkar 250x60",
+    "c": "#a08060",
+    "bg": "rgba(160,128,96,.15)",
+    "type": "",
+    "rot": "0",
+    "status": "",
+    "room": "",
+    "shape": ""
+  },
+  {
+    "floor": 0,
+    "x": 597,
+    "y": 594,
+    "w": 42,
+    "h": 54,
+    "l": "Bureau met stoel",
+    "c": "#7090a0",
+    "bg": "rgba(112,144,160,.13)",
+    "type": "",
+    "rot": "0",
+    "status": "",
+    "room": "",
+    "shape": ""
   }
 ];
