@@ -203,6 +203,10 @@ const CONTENT = {
     },
     "teamRole": {
       "color": "#F0EAE0"
+    },
+    "sectionLabels": {
+      "size": 200,
+      "bold": true
     }
   }
 };

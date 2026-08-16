@@ -1655,6 +1655,7 @@ async function ceLoadFromGitHub(){
   try{
     var res=await fetchPublishedContent();
     ceData=res.data;
+    ceOnthoudGeladenSleutels(ceData);
     ceBuild();
     shaCache[CONTENT_PATH]=res.sha;
     contentLoaded=true;
@@ -1705,6 +1706,51 @@ async function reloadContent(){
   }
 }
 document.getElementById('btn-reload-content').addEventListener('click',reloadContent);
+
+// ── ANTI-WIS ──
+// Een admin-tabblad haalt content.js één keer op bij openen en werkt daarna uit
+// het geheugen. Staat het tabblad een half uur open terwijl er intussen via git
+// iets aan content.js verandert, dan schrijft "Opslaan & Publiceer" die
+// verandering weg -- zonder waarschuwing, want de SHA-grendel in publishFile
+// valt open zodra shaCache leeg is (dat gebeurt o.a. na een eerdere botsing).
+// Dat kostte de instelling `sectionLabels` twee keer op één avond.
+//
+// Daarom: vlak vóór publiceren de gepubliceerde versie opnieuw lezen en alles
+// terugzetten wat er ná het laden van dit tabblad bij is gekomen.
+//
+// De toets is met opzet "zag dit tabblad die sleutel bij het laden?" en niet
+// "kent dit tabblad die sleutel?". Een verouderd tabblad kent sectionLabels
+// helemaal niet, maar een actueel tabblad kent hem wél en had hem alleen nog
+// niet ingevuld -- allebei moeten ze hem laten staan. Andersom: een sleutel die
+// het tabblad bij het laden wél zag en nu niet meer heeft, is door Harm gewist
+// met de herstelknop. Die respecteren we.
+var ceGeladenVelden=null,ceGeladenStijlen=null;
+function ceOnthoudGeladenSleutels(data){
+  ceGeladenVelden={};ceGeladenStijlen={};
+  Object.keys(data||{}).forEach(function(k){ceGeladenVelden[k]=true;});
+  Object.keys((data&&data.styles)||{}).forEach(function(k){ceGeladenStijlen[k]=true;});
+}
+async function ceHerstelNieuwereSleutels(){
+  var hersteld=[];
+  var res=await fetchPublishedContent();
+  var remote=res.data||{};
+  // Nooit raden: zonder betrouwbare momentopname van het laden doen we niets.
+  if(ceGeladenVelden){
+    Object.keys(remote).forEach(function(k){
+      if(k==='styles'||ceGeladenVelden[k]||(k in ceData))return;
+      ceData[k]=remote[k];hersteld.push(k);
+    });
+    var rs=remote.styles||{};
+    Object.keys(rs).forEach(function(k){
+      if(ceGeladenStijlen[k])return;
+      if(!ceData.styles)ceData.styles={};
+      if(!ceData.styles[k]){ceData.styles[k]=rs[k];hersteld.push('styles.'+k);}
+    });
+  }
+  // De verse SHA hoort bij de versie die we nu net gelezen hebben.
+  shaCache[CONTENT_PATH]=res.sha;
+  return hersteld;
+}
 
 function ceBuild(){
   var form=document.getElementById('ce-form');
@@ -2126,6 +2172,16 @@ window.ceSave=async function(){
       delete ceTeamPending[wachtenden[n]];
     }
     if(wachtenden.length)ceBuild();
+    // Vlak vóór het genereren: haal terug wat dit tabblad niet kent, zodat een
+    // lang openstaande pagina geen instellingen wist die er intussen bij kwamen.
+    try{
+      var hersteld=await ceHerstelNieuwereSleutels();
+      if(hersteld.length)toast('Behouden uit de gepubliceerde versie: '+hersteld.join(', '));
+    }catch(eh){
+      console.warn('[ceSave] kon gepubliceerde versie niet nalezen:',eh);
+      toast('Publiceren gestopt: de gepubliceerde versie kon niet nagelezen worden ('+(eh.message||eh)+'). Herlaad de pagina.','err');
+      return;
+    }
     var js=ceGenerateJS();
     console.log('[ceSave] bytes:',js.length);
     var ok=await publishFile('docs/content.js',js,'Content bijgewerkt via admin ('+new Date().toLocaleString('nl-NL')+')',btn);
