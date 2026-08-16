@@ -72,7 +72,7 @@ const CONTENT = {
       "highlight": true
     },
     {
-      "name": "Alle handgereedschappen",
+      "name": "Allerlei handgereedschap (als je die nog niet hebt)",
       "highlight": true
     },
     {
