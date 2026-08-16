@@ -1,5 +1,5 @@
 // Werkplaats3b — Foto referenties
-// Laatst gewijzigd: 2026-08-16T19:59:46.196Z
+// Laatst gewijzigd: 2026-08-16T20:05:40.671Z
 // Gegenereerd via admin.html
 
 const PHOTOS = {
@@ -13,7 +13,8 @@ const PHOTOS = {
     "photos/strip5.jpg",
     "photos/strip4.jpg",
     "photos/strip6.jpg",
-    "photos/strip8.jpg"
+    "photos/strip8.jpg",
+    "photos/strip9.jpg"
   ],
   "pos": {
     "strip-0": "50% 66.8%",
