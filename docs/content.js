@@ -147,7 +147,7 @@ const CONTENT = {
       "photo": "photos/team-2-wesley.jpg"
     }
   ],
-  "aboutNote": "<strong>Je huurt bij de mensen die er zelf werken.</strong> Geen beheerder op afstand: wie je aan de telefoon krijgt over een machine, een levering of je contract, staat hier zelf in de hal.",
+  "aboutNote": "<strong>Korte lijnen:</strong> Korte lijnen: wij zijn er iedere dag en staan naast je aan de werkbank.",
   "ctaHeading": "Interesse?<br>Kom <em>kijken.</em>",
   "email": "info@werkplaats3b.nl",
   "whatsappNumber": "31681689278",
