@@ -166,6 +166,9 @@
           foto.src = p.photo + (p.photo.indexOf('?') === -1 ? '?t=' + Date.now() : '');
           foto.alt = p.name;
           foto.loading = 'lazy';
+          // Leeg laten wint hier van "midden" zetten: dan blijft de CSS-regel
+          // center 30% gelden, die het hoofd net iets hoger in beeld houdt.
+          if (p.pos) foto.style.objectPosition = p.pos;
           fig.appendChild(foto);
           card.appendChild(fig);
         } else {
@@ -241,7 +244,10 @@
 
   // Photos — hero + strip. photos.js definieert PHOTOS = {hero, strip:[..]}
   if (typeof PHOTOS !== 'undefined' && PHOTOS) {
-    function imgFor(path, alt) {
+    // PHOTOS.pos houdt per slot de uitsnede vast ("50% 30%"). Alleen
+    // afwijkingen staan erin; een slot dat ontbreekt valt terug op het midden.
+    var POS = PHOTOS.pos || {};
+    function imgFor(path, alt, slotId) {
       var img = document.createElement('img');
       img.src = path + (path.indexOf('?') === -1 ? '?t=' + Date.now() : '');
       img.alt = alt || '';
@@ -249,19 +255,20 @@
       img.style.width = '100%';
       img.style.height = '100%';
       img.style.objectFit = 'cover';
+      img.style.objectPosition = POS[slotId] || '50% 50%';
       img.style.display = 'block';
       return img;
     }
     if (PHOTOS.hero) {
       var heroWrap = document.querySelector('.hero-image');
-      if (heroWrap) replaceChildren(heroWrap, imgFor(PHOTOS.hero, 'Werkplaats3b'));
+      if (heroWrap) replaceChildren(heroWrap, imgFor(PHOTOS.hero, 'Werkplaats3b', 'hero'));
     }
     if (Array.isArray(PHOTOS.strip)) {
       var strip = document.querySelectorAll('.photo-strip .photo-placeholder');
       PHOTOS.strip.forEach(function (p, i) {
         if (!p || !strip[i]) return;
         var label = strip[i].querySelector('.ph-label');
-        replaceChildren(strip[i], imgFor(p, 'Sfeerbeeld ' + (i + 1)));
+        replaceChildren(strip[i], imgFor(p, 'Sfeerbeeld ' + (i + 1), 'strip-' + i));
         if (label) strip[i].appendChild(label);
         strip[i].classList.add('has-photo');
       });

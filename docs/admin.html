@@ -264,7 +264,8 @@ textarea.ce-input{min-height:60px;resize:vertical}
 .ce-person-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .ce-person-photo-plus{color:var(--muted);font-size:18px;line-height:1}
 .ce-person-photo-hint{font-size:7px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:2px}
-.ce-person-photo-rm{position:absolute;top:2px;right:2px;width:16px;height:16px;border:none;background:var(--red);color:#fff;font-size:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;padding:0}
+.ce-person-photo-rm{position:absolute;top:2px;right:2px;width:16px;height:16px;border:none;background:var(--red);color:#fff;font-size:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;padding:0;z-index:2}
+.ce-person-photo-crop{position:absolute;bottom:2px;right:2px;width:16px;height:16px;border:none;background:var(--amber);color:var(--bg);font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;padding:0;z-index:2}
 .ce-check{display:flex;align-items:center;gap:6px}
 .ce-check input[type=checkbox]{accent-color:var(--amber);width:14px;height:14px}
 
@@ -298,6 +299,27 @@ textarea.ce-input{min-height:60px;resize:vertical}
 .pm-overlay-btn{padding:4px 10px;font-size:8px;font-family:inherit;letter-spacing:.08em;text-transform:uppercase;border:1px solid;cursor:pointer}
 .pm-overlay-btn.change{background:var(--amber);color:var(--bg);border-color:var(--amber)}
 .pm-overlay-btn.remove{background:transparent;color:var(--red);border-color:var(--red)}
+.pm-overlay-btn.crop{background:transparent;color:var(--cream);border-color:var(--cream)}
+/* ── Uitsnede-editor ──────────────────────────────────────────────────
+   Het voorbeeldkader krijgt de verhouding van de ECHTE plek op de site
+   (hero 3:1, strip en portret 4:3), niet die van het admin-slot (16:9).
+   Anders sleep je hier iets moois wat op de site anders uitvalt. */
+.uz-bg{position:fixed;inset:0;background:rgba(0,0,0,.82);display:none;align-items:center;justify-content:center;z-index:200;padding:20px}
+.uz-bg.show{display:flex}
+.uz{background:var(--surface);border:1px solid var(--border);padding:20px;width:100%;max-width:760px}
+.uz h2{font-size:13px;letter-spacing:.15em;margin-bottom:6px;color:var(--amber);text-transform:uppercase}
+.uz p.uz-hint{font-size:10px;color:var(--muted);margin-bottom:14px;line-height:1.6}
+.uz-kader{position:relative;overflow:hidden;background:var(--bg);border:1px solid var(--border);cursor:grab;touch-action:none;user-select:none;margin:0 auto}
+.uz-kader.sleept{cursor:grabbing}
+.uz-kader img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.uz-kader::after{content:'';position:absolute;inset:0;pointer-events:none;background:
+  linear-gradient(to right,transparent 33.33%,rgba(255,255,255,.18) 33.33%,rgba(255,255,255,.18) calc(33.33% + 1px),transparent calc(33.33% + 1px),transparent 66.66%,rgba(255,255,255,.18) 66.66%,rgba(255,255,255,.18) calc(66.66% + 1px),transparent calc(66.66% + 1px)),
+  linear-gradient(to bottom,transparent 33.33%,rgba(255,255,255,.18) 33.33%,rgba(255,255,255,.18) calc(33.33% + 1px),transparent calc(33.33% + 1px),transparent 66.66%,rgba(255,255,255,.18) 66.66%,rgba(255,255,255,.18) calc(66.66% + 1px),transparent calc(66.66% + 1px));
+  opacity:0;transition:opacity .2s}
+.uz-kader:hover::after,.uz-kader.sleept::after{opacity:1}
+.uz-meta{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:10px;font-size:9px;color:var(--muted);letter-spacing:.06em}
+.uz-vast{color:var(--red)}
+.uz-btns{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
 .pm-save-bar{position:sticky;bottom:0;background:var(--surface);border-top:1px solid var(--border);padding:10px 14px;display:flex;gap:8px;justify-content:flex-end;align-items:center}
 .pm-save-bar .pm-status{font-size:8px;color:var(--muted);margin-right:auto}
 .pm-progress{font-size:8px;color:var(--amber);margin-right:8px}
@@ -606,6 +628,24 @@ textarea.ce-input{min-height:60px;resize:vertical}
 </div>
 
 </div><!-- /editor -->
+
+<!-- UITSNEDE-EDITOR: welk deel van de foto in beeld komt -->
+<div class="uz-bg" id="uz-modal">
+  <div class="uz">
+    <h2 id="uz-titel">Uitsnede</h2>
+    <p class="uz-hint">Sleep de foto naar het deel dat in beeld moet. Het kader hieronder heeft dezelfde verhouding als de plek op de site.</p>
+    <div class="uz-kader" id="uz-kader"><img id="uz-img" alt="voorbeeld"></div>
+    <div class="uz-meta">
+      <span id="uz-waarde">horizontaal 50% · verticaal 50%</span>
+      <span id="uz-vast" class="uz-vast"></span>
+    </div>
+    <div class="uz-btns">
+      <button class="hbtn" id="uz-midden">Midden</button>
+      <button class="hbtn" id="uz-annuleer">Annuleer</button>
+      <button class="hbtn hbtn-pub" id="uz-ok">Gebruik deze uitsnede</button>
+    </div>
+  </div>
+</div>
 
 <!-- TOKEN SETUP MODAL (eenmalig) -->
 <div class="modal-bg" id="token-modal">
@@ -1398,6 +1438,8 @@ function ceZetPortret(dataUrlIn,index,herteken){
     canvas.getContext('2d').drawImage(img,0,0,w,h);
     var dataUrl=canvas.toDataURL('image/jpeg',0.82);
     ceTeamPending[index]={b64:dataUrl.split(',')[1],dataUrl:dataUrl};
+    // Nieuwe foto, oude uitsnede vervalt (zie pmProcessDataUrl).
+    if(ceData.team&&ceData.team[index])delete ceData.team[index].pos;
     document.getElementById('ce-status').textContent='Foto klaar — druk op Opslaan & Publiceer';
     if(herteken)herteken();
   };
@@ -1788,10 +1830,23 @@ function ceRenderField(f){
           var img=document.createElement('img');
           img.src=pending?pending.dataUrl:(ceTeamCache[item.photo]||'https://raw.githubusercontent.com/'+GH_REPO+'/master/docs/'+item.photo+'?t='+Date.now());
           img.alt=item.name||'portret';
+          // Zonder eigen pos geldt op de site de CSS-regel center 30%; die
+          // spiegelen we hier zodat het slotje toont wat de bezoeker ziet.
+          img.style.objectPosition=item.pos||'50% 30%';
           slot.appendChild(img);
           var del=document.createElement('button');del.className='ce-person-photo-rm';del.type='button';del.textContent='✕';del.title='Foto weghalen';
-          del.onclick=function(e){e.stopPropagation();delete ceTeamPending[i];ceData[f.key][i].photo='';renderPersons();};
+          del.onclick=function(e){e.stopPropagation();delete ceTeamPending[i];ceData[f.key][i].photo='';delete ceData[f.key][i].pos;renderPersons();};
           slot.appendChild(del);
+          var crop=document.createElement('button');crop.className='ce-person-photo-crop';crop.type='button';crop.textContent='⤢';crop.title='Uitsnede bijstellen';
+          crop.onclick=function(e){
+            e.stopPropagation();
+            openUitsnede({
+              src:img.src,ratio:4/3,titel:'Uitsnede — portret '+(item.name||(i+1)),
+              pos:item.pos,standaard:'50% 30%',
+              onOk:function(waarde){ceData[f.key][i].pos=waarde;renderPersons();}
+            });
+          };
+          slot.appendChild(crop);
         }else{
           var plus=document.createElement('span');plus.className='ce-person-photo-plus';plus.textContent='+';slot.appendChild(plus);
           var hint=document.createElement('span');hint.className='ce-person-photo-hint';hint.textContent='Foto';slot.appendChild(hint);
@@ -1958,7 +2013,7 @@ window.ceReset=function(){
 // ║  FOTO MANAGER                              ║
 // ╚════════════════════════════════════════════╝
 var pmInitialized=false;
-var pmPhotos={hero:null,strip:[null,null,null]};
+var pmPhotos={hero:null,strip:[null,null,null],pos:{}};
 var pmPendingUploads={};
 var pmLocalCache={};
 
@@ -1976,6 +2031,119 @@ function pmInit(){
     });
   });
 }
+
+// ╔════════════════════════════════════════════╗
+// ║  UITSNEDE-EDITOR                           ║
+// ╚════════════════════════════════════════════╝
+// Eén editor voor alle foto's op de site: hero, de drie sfeerbeelden en de
+// portretten. De site toont ze allemaal met object-fit:cover, dus er valt
+// altijd een rand weg -- deze editor bepaalt WELKE rand dat is.
+//
+// Het rekenwerk zit in de overhang: bij cover wordt de foto opgeschaald tot
+// hij het kader vult, en het deel dat buiten het kader valt is de speling.
+// object-position 0% legt die speling helemaal rechts/onder, 100% helemaal
+// links/boven. Is de speling in een as nul (foto en kader even breed of even
+// hoog), dan valt er in die richting niets te schuiven -- dat melden we in
+// plaats van een slepende foto die niet beweegt.
+var uzState=null;
+
+function uzOntleed(pos){
+  var m=String(pos||'').match(/(-?[\d.]+)%\s+(-?[\d.]+)%/);
+  return m?{x:parseFloat(m[1]),y:parseFloat(m[2])}:{x:50,y:50};
+}
+function uzToon(){
+  var img=document.getElementById('uz-img');
+  img.style.objectPosition=uzState.x.toFixed(1)+'% '+uzState.y.toFixed(1)+'%';
+  document.getElementById('uz-waarde').textContent=
+    'horizontaal '+Math.round(uzState.x)+'% · verticaal '+Math.round(uzState.y)+'%';
+}
+function uzMeet(){
+  var kader=document.getElementById('uz-kader'),img=document.getElementById('uz-img');
+  var cw=kader.clientWidth,ch=kader.clientHeight;
+  var iw=img.naturalWidth,ih=img.naturalHeight;
+  if(!iw||!ih||!cw||!ch){uzState.ovX=0;uzState.ovY=0;}
+  else{
+    var s=Math.max(cw/iw,ch/ih);
+    uzState.ovX=Math.max(0,iw*s-cw);
+    uzState.ovY=Math.max(0,ih*s-ch);
+  }
+  var vast=[];
+  if(uzState.ovX<1)vast.push('horizontaal');
+  if(uzState.ovY<1)vast.push('verticaal');
+  document.getElementById('uz-vast').textContent=
+    vast.length===2?'Deze foto past precies in het kader — er valt niets te verschuiven'
+    :vast.length===1?('Alleen '+(vast[0]==='horizontaal'?'verticaal':'horizontaal')+' te verschuiven')
+    :'';
+}
+
+// ratio = breedte/hoogte van de ECHTE plek op de site
+function openUitsnede(opties){
+  var bg=document.getElementById('uz-modal'),kader=document.getElementById('uz-kader'),img=document.getElementById('uz-img');
+  var start=uzOntleed(opties.pos||opties.standaard||'50% 50%');
+  uzState={x:start.x,y:start.y,ovX:0,ovY:0,onOk:opties.onOk};
+  document.getElementById('uz-titel').textContent=opties.titel||'Uitsnede';
+  var maxW=Math.min(700,window.innerWidth-80),maxH=window.innerHeight*0.5;
+  var w=maxW,h=w/opties.ratio;
+  if(h>maxH){h=maxH;w=h*opties.ratio;}
+  kader.style.width=Math.round(w)+'px';kader.style.height=Math.round(h)+'px';
+  img.onload=function(){uzMeet();uzToon();};
+  img.onerror=function(){document.getElementById('uz-vast').textContent='De foto kon niet geladen worden';};
+  img.src=opties.src;
+  uzToon();
+  if(img.complete&&img.naturalWidth){uzMeet();uzToon();}
+  bg.classList.add('show');
+}
+function sluitUitsnede(){
+  document.getElementById('uz-modal').classList.remove('show');
+  document.getElementById('uz-img').removeAttribute('src');
+  uzState=null;
+}
+
+(function uzBind(){
+  var kader=document.getElementById('uz-kader');
+  var sleep=null;
+  kader.addEventListener('pointerdown',function(e){
+    if(!uzState)return;
+    sleep={px:e.clientX,py:e.clientY,id:e.pointerId};
+    kader.classList.add('sleept');
+    // Capture is een extraatje (doorslepen buiten het kader); als de browser
+    // hem weigert mag dat het slepen niet blokkeren.
+    try{kader.setPointerCapture(e.pointerId);}catch(_){}
+    e.preventDefault();
+  });
+  kader.addEventListener('pointermove',function(e){
+    if(!sleep||!uzState)return;
+    var dx=e.clientX-sleep.px,dy=e.clientY-sleep.py;
+    sleep.px=e.clientX;sleep.py=e.clientY;
+    // De foto meeslepen betekent de uitsnede de ANDERE kant op schuiven.
+    if(uzState.ovX>=1)uzState.x=Math.max(0,Math.min(100,uzState.x-dx/uzState.ovX*100));
+    if(uzState.ovY>=1)uzState.y=Math.max(0,Math.min(100,uzState.y-dy/uzState.ovY*100));
+    uzToon();
+  });
+  function stop(e){
+    if(!sleep)return;
+    var id=sleep.id;sleep=null;kader.classList.remove('sleept');
+    try{if(kader.hasPointerCapture&&kader.hasPointerCapture(id))kader.releasePointerCapture(id);}catch(_){}
+  }
+  kader.addEventListener('pointerup',stop);
+  kader.addEventListener('pointercancel',stop);
+  document.getElementById('uz-midden').addEventListener('click',function(){
+    if(!uzState)return;uzState.x=50;uzState.y=50;uzToon();
+  });
+  document.getElementById('uz-annuleer').addEventListener('click',sluitUitsnede);
+  document.getElementById('uz-modal').addEventListener('mousedown',function(e){
+    if(e.target===this)sluitUitsnede();
+  });
+  document.getElementById('uz-ok').addEventListener('click',function(){
+    if(!uzState)return;
+    var fn=uzState.onOk,w=uzState.x.toFixed(1).replace(/\.0$/,'')+'% '+uzState.y.toFixed(1).replace(/\.0$/,'')+'%';
+    sluitUitsnede();
+    if(fn)fn(w);
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'&&uzState)sluitUitsnede();
+  });
+})();
 
 // ── Publiceer-grendel foto's ─────────────────────────────────────────
 // Zelfde regel als planLoaded/contentLoaded. Let op het verschil met content:
@@ -2006,8 +2174,39 @@ function pmNormaliseer(o){
   if(!o||typeof o!=='object'||Array.isArray(o))throw new Error(PHOTOS_PATH+' leverde geen fotolijst op');
   if(!Array.isArray(o.strip))o.strip=[null,null,null];
   if(!('hero'in o))o.hero=null;
+  // pos is later toegevoegd; een photos.js van vóór die tijd mist het veld en
+  // hoort gewoon te werken (alles valt dan terug op het midden).
+  if(!o.pos||typeof o.pos!=='object'||Array.isArray(o.pos))o.pos={};
   return o;
 }
+
+// De verhouding van de plek op de site, niet die van het admin-slot.
+var PM_RATIO={hero:3/1,'strip-0':4/3,'strip-1':4/3,'strip-2':4/3};
+var PM_TITEL={hero:'Uitsnede — grote foto bovenaan','strip-0':'Uitsnede — sfeerbeeld 1','strip-1':'Uitsnede — sfeerbeeld 2','strip-2':'Uitsnede — sfeerbeeld 3'};
+
+function pmBron(slotId){
+  var pending=pmPendingUploads[slotId];
+  if(pending)return pending.dataUrl;
+  var pad=slotId==='hero'?pmPhotos.hero:pmPhotos.strip[parseInt(slotId.split('-')[1])];
+  if(!pad)return '';
+  if(pmLocalCache[pad])return pmLocalCache[pad];
+  return 'https://raw.githubusercontent.com/'+GH_REPO+'/master/docs/'+pad+'?t='+Date.now();
+}
+
+window.pmUitsnede=function(slotId){
+  var src=pmBron(slotId);
+  if(!src){toast('Er staat nog geen foto in dit vak','err');return;}
+  openUitsnede({
+    src:src,ratio:PM_RATIO[slotId]||4/3,titel:PM_TITEL[slotId]||'Uitsnede',
+    pos:pmPhotos.pos[slotId],
+    onOk:function(waarde){
+      if(waarde==='50% 50%')delete pmPhotos.pos[slotId];
+      else pmPhotos.pos[slotId]=waarde;
+      pmRenderSlots();
+      document.getElementById('pm-status').textContent='Uitsnede aangepast — nog niet gepubliceerd';
+    }
+  });
+};
 
 async function fetchPublishedPhotos(){
   var gh=await getGHConfig();
@@ -2050,7 +2249,7 @@ async function pmLoadFromGitHub(){
       pmPhotos=pmNormaliseer(JSON.parse(JSON.stringify(PHOTOS)));
       bron='Je ziet nu de <em>meegeleverde kopie van de site</em> ('+pmAantal(pmPhotos)+' foto\'s, kan verouderd zijn).';
     }else{
-      pmPhotos={hero:null,strip:[null,null,null]};
+      pmPhotos={hero:null,strip:[null,null,null],pos:{}};
       bron='Er is geen kopie om te tonen — de slots zijn leeg.';
     }
     pmRenderSlots();
@@ -2096,9 +2295,13 @@ function pmRenderSlot(slot,photoPath,slotId){
   if(!slot)return;
   while(slot.firstChild)slot.removeChild(slot.firstChild);
   var pending=pmPendingUploads[slotId];
-  function _ov(s,sid){var o=document.createElement('div');o.className='pm-overlay';var c=document.createElement('button');c.className='pm-overlay-btn change';c.textContent='Wijzig';c.onclick=function(e){e.stopPropagation();pmPick(sid);};var r=document.createElement('button');r.className='pm-overlay-btn remove';r.textContent='Verwijder';r.onclick=function(e){e.stopPropagation();pmRemove(sid);};o.appendChild(c);o.appendChild(r);s.appendChild(o);}
-  if(pending){slot.classList.add('has-photo');var img=document.createElement('img');img.src=pending.dataUrl;img.alt='preview';slot.appendChild(img);_ov(slot,slotId);}
-  else if(photoPath){var url;if(pmLocalCache[photoPath]){url=pmLocalCache[photoPath];}else{var repo=GH_REPO;url='https://raw.githubusercontent.com/'+repo+'/master/docs/'+photoPath+'?t='+Date.now();}slot.classList.add('has-photo');var img=document.createElement('img');img.src=url;img.alt='foto';slot.appendChild(img);_ov(slot,slotId);}
+  function _ov(s,sid){var o=document.createElement('div');o.className='pm-overlay';var c=document.createElement('button');c.className='pm-overlay-btn change';c.textContent='Wijzig';c.onclick=function(e){e.stopPropagation();pmPick(sid);};var u=document.createElement('button');u.className='pm-overlay-btn crop';u.textContent='Uitsnede';u.onclick=function(e){e.stopPropagation();pmUitsnede(sid);};var r=document.createElement('button');r.className='pm-overlay-btn remove';r.textContent='Verwijder';r.onclick=function(e){e.stopPropagation();pmRemove(sid);};o.appendChild(c);o.appendChild(u);o.appendChild(r);s.appendChild(o);}
+  // Het admin-slot is 16:9 en de plek op de site niet; de preview toont hier
+  // dus wel de gekozen uitsnede, maar het is geen 1-op-1 voorbeeld. Daarvoor
+  // is de uitsnede-editor, die het kader op de echte verhouding zet.
+  function _pos(img){var p=pmPhotos.pos&&pmPhotos.pos[slotId];if(p)img.style.objectPosition=p;}
+  if(pending){slot.classList.add('has-photo');var img=document.createElement('img');img.src=pending.dataUrl;img.alt='preview';_pos(img);slot.appendChild(img);_ov(slot,slotId);}
+  else if(photoPath){var url;if(pmLocalCache[photoPath]){url=pmLocalCache[photoPath];}else{var repo=GH_REPO;url='https://raw.githubusercontent.com/'+repo+'/master/docs/'+photoPath+'?t='+Date.now();}slot.classList.add('has-photo');var img=document.createElement('img');img.src=url;img.alt='foto';_pos(img);slot.appendChild(img);_ov(slot,slotId);}
   else{slot.classList.remove('has-photo');var ic=document.createElement('span');ic.className='pm-icon';ic.textContent='+';var lb=document.createElement('span');lb.className='pm-label';lb.textContent='Klik of sleep een foto';slot.appendChild(ic);slot.appendChild(lb);}
 }
 
@@ -2116,6 +2319,7 @@ window.pmPick=function(slotId,evt){
 
 window.pmRemove=function(slotId){
   delete pmPendingUploads[slotId];
+  if(pmPhotos.pos)delete pmPhotos.pos[slotId];
   if(slotId==='hero')pmPhotos.hero=null;
   else{var idx=parseInt(slotId.split('-')[1]);pmPhotos.strip[idx]=null;}
   pmRenderSlots();
@@ -2141,6 +2345,9 @@ function pmProcessDataUrl(slotId,dataUrlIn){
     var dataUrl=canvas.toDataURL('image/jpeg',0.82);
     var b64=dataUrl.split(',')[1];
     pmPendingUploads[slotId]={b64:b64,dataUrl:dataUrl,filename:slotId.replace('strip-','strip')+'.jpg'};
+    // Andere foto, dus de oude uitsnede slaat nergens meer op: terug naar het
+    // midden. Wie een specifiek deel wil, zet dat opnieuw via "Uitsnede".
+    if(pmPhotos.pos)delete pmPhotos.pos[slotId];
     pmRenderSlots();
     document.getElementById('pm-status').textContent='Foto klaar voor upload';
   };
@@ -2202,7 +2409,18 @@ window.pmSave=async function(){
 };
 
 function pmGenerateJS(){
-  return '// Werkplaats3b — Foto referenties\n// Laatst gewijzigd: '+new Date().toISOString()+'\n// Gegenereerd via admin.html\n\nconst PHOTOS = '+JSON.stringify(pmPhotos,null,2)+';\n';
+  // Alleen afwijkingen bewaren. Een uitsnede voor een leeg vak, of een die
+  // toch op het midden staat, hoort niet in photos.js -- anders groeit het
+  // bestand vol met regels die niets doen.
+  var uit={hero:pmPhotos.hero,strip:pmPhotos.strip},pos={};
+  Object.keys(pmPhotos.pos||{}).forEach(function(k){
+    var w=pmPhotos.pos[k];
+    if(!w||w==='50% 50%')return;
+    var heeftFoto=k==='hero'?!!pmPhotos.hero:!!pmPhotos.strip[parseInt(k.split('-')[1])];
+    if(heeftFoto)pos[k]=w;
+  });
+  if(Object.keys(pos).length)uit.pos=pos;
+  return '// Werkplaats3b — Foto referenties\n// Laatst gewijzigd: '+new Date().toISOString()+'\n// Gegenereerd via admin.html\n\nconst PHOTOS = '+JSON.stringify(uit,null,2)+';\n';
 }
 
 // ╔════════════════════════════════════════════╗
