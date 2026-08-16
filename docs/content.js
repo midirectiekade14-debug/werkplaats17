@@ -127,13 +127,14 @@ const CONTENT = {
   "notForText": "<strong>KvK-inschrijving en verzekering verplicht.</strong> Werkplaats3b is uitsluitend voor professionele gebruikers. Particulieren en hobbyisten kunnen hier niet terecht.",
   "aboutLabel": "Wie zijn wij",
   "aboutNavLabel": "Over ons",
-  "aboutLead": "Werkplaats3b is opgezet door drie zelfstandige makers die hier zelf werken. We huren het pand samen en verhuren de plekken die we niet zelf gebruiken. <strong>De verhuurder staat naast je aan de zaag.</strong>",
+  "aboutLead": "Werkplaats3b is opgezet door Matthijs, Harm en Wesley. We huren het pand samen en verhuren de plekken die we niet zelf gebruiken. <strong>De verhuurder staat naast je aan de zaag.</strong>",
   "team": [
     {
       "name": "Harm",
-      "role": "Meubelmaker ",
+      "role": "Meubelmaker, 47 jaar en al 22 jaar druk met mooie projecten. ",
       "text": "",
-      "photo": "photos/team-0-harm.jpg"
+      "photo": "photos/team-0-harm.jpg",
+      "pos": "50% 11.9%"
     },
     {
       "name": "Matthijs",
@@ -144,7 +145,8 @@ const CONTENT = {
       "name": "Wesley",
       "role": "Meubelmaker",
       "text": "",
-      "photo": "photos/team-2-wesley.jpg"
+      "photo": "photos/team-2-wesley.jpg",
+      "pos": "50% 7.8%"
     }
   ],
   "aboutNote": "<strong>Korte lijnen:</strong> Korte lijnen: wij zijn er iedere dag en staan naast je aan de werkbank.",
