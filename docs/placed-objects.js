@@ -1,5 +1,5 @@
 // Werkplaats3b -- Geplaatste objecten
-// Laatst gewijzigd: 2026-08-17T11:05:43.013Z
+// Laatst gewijzigd: 2026-08-17T11:06:39.300Z
 // Gegenereerd via admin.html
 
 const PLACED_OBJECTS = [
@@ -35,8 +35,8 @@ const PLACED_OBJECTS = [
   },
   {
     "floor": 0,
-    "x": 1158,
-    "y": 735,
+    "x": 1150,
+    "y": 745,
     "w": 120,
     "h": 24,
     "l": "Overheaddeur",
