@@ -1,5 +1,5 @@
 // Werkplaats3b -- Geplaatste objecten
-// Laatst gewijzigd: 2026-08-17T10:20:13.390Z
+// Laatst gewijzigd: 2026-08-17T10:27:53.925Z
 // Gegenereerd via admin.html
 
 const PLACED_OBJECTS = [
@@ -1235,15 +1235,15 @@ const PLACED_OBJECTS = [
   },
   {
     "floor": 0,
-    "x": 495,
-    "y": 531,
-    "w": 54,
-    "h": 42,
+    "x": 513,
+    "y": 582,
+    "w": 42,
+    "h": 54,
     "l": "Bureau met stoel",
     "c": "#8cc88c",
     "bg": "rgba(112,144,160,0.13)",
     "type": "",
-    "rot": "0",
+    "rot": "270",
     "status": "",
     "room": "",
     "shape": ""
@@ -1306,6 +1306,36 @@ const PLACED_OBJECTS = [
     "rot": "0",
     "status": "",
     "room": "1",
+    "shape": ""
+  },
+  {
+    "floor": 0,
+    "x": 483,
+    "y": 528,
+    "w": 60,
+    "h": 36,
+    "l": "Shapertool met Benchpilot",
+    "c": "#80a0d0",
+    "bg": "rgba(128,160,208,.13)",
+    "type": "",
+    "rot": "0",
+    "status": "",
+    "room": "",
+    "shape": ""
+  },
+  {
+    "floor": 0,
+    "x": 684,
+    "y": 531,
+    "w": 36,
+    "h": 24,
+    "l": "3D printer",
+    "c": "#80a0d0",
+    "bg": "rgba(128,160,208,.13)",
+    "type": "",
+    "rot": "180",
+    "status": "",
+    "room": "",
     "shape": ""
   }
 ];
