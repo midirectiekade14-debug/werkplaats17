@@ -218,6 +218,33 @@
            '<line class="d" x1="50" y1="78" x2="65" y2="66"/>'                 // stoelpoten
     },
 
+    // Tafel met 6 stoelen: het blad in het midden, drie stoelen aan elke
+    // lange zijde.
+    vergadertafel: {
+      naam: 'Tafel met 6 stoelen',
+      svg: '<rect class="b" x="18" y="26" width="64" height="48"/>' +          // tafelblad
+           '<circle class="b" cx="29" cy="13" r="9"/>' +                       // stoel
+           '<circle class="b" cx="50" cy="13" r="9"/>' +
+           '<circle class="b" cx="71" cy="13" r="9"/>' +
+           '<circle class="b" cx="29" cy="87" r="9"/>' +
+           '<circle class="b" cx="50" cy="87" r="9"/>' +
+           '<circle class="b" cx="71" cy="87" r="9"/>'                         // zes stoelen
+    },
+
+    // Tafelvoetbal: het blad met de middenlijn, vier dwarsstaven en de
+    // ronde doelopeningen aan de korte zijden.
+    tafelvoetbal: {
+      naam: 'Tafelvoetbal',
+      svg: '<rect class="b" x="2" y="16" width="96" height="68"/>' +           // tafelblad
+           '<line class="d" x1="50" y1="16" x2="50" y2="84"/>' +               // middenlijn
+           '<line class="s" x1="14" y1="20" x2="14" y2="80"/>' +               // staaf
+           '<line class="s" x1="30" y1="20" x2="30" y2="80"/>' +
+           '<line class="s" x1="70" y1="20" x2="70" y2="80"/>' +
+           '<line class="s" x1="86" y1="20" x2="86" y2="80"/>' +               // staven
+           '<path class="d" d="M2 38 A14 14 0 0 1 2 62"/>' +                   // doel links
+           '<path class="d" d="M98 38 A14 14 0 0 0 98 62"/>'                   // doel rechts
+    },
+
     // Staanderrij met draagarmen die aan weerszijden uitsteken — vandaar de
     // kamvorm.
     draagarmstelling: {
@@ -351,6 +378,8 @@
     [/compressor|perslucht/, 'compressor'],
     [/werkbank|montagetafel|assemblagetafel/, 'werkbank'],
     [/bureau/, 'bureau'],
+    [/vergadertafel|lunchtafel|eettafel|tafel.*stoel/, 'vergadertafel'],
+    [/tafelvoetbal|voetbaltafel|foosball/, 'tafelvoetbal'],
     [/draagarm/, 'draagarmstelling'],
     [/palletstelling|legbordstelling/, 'palletstelling'],
     [/handpallettruck|palletwagen|pompwagen|steekwagen/, 'palletwagen'],
