@@ -1,5 +1,5 @@
 // Werkplaats3b -- Geplaatste objecten
-// Laatst gewijzigd: 2026-08-17T10:09:41.122Z
+// Laatst gewijzigd: 2026-08-17T10:20:13.390Z
 // Gegenereerd via admin.html
 
 const PLACED_OBJECTS = [
@@ -351,8 +351,8 @@ const PLACED_OBJECTS = [
   {
     "floor": 0,
     "x": 1215,
-    "y": 855,
-    "w": 30,
+    "y": 864,
+    "w": 29,
     "h": 24,
     "l": "",
     "c": "#b0c0d0",
@@ -365,7 +365,7 @@ const PLACED_OBJECTS = [
   },
   {
     "floor": 0,
-    "x": 720,
+    "x": 718,
     "y": 633,
     "w": 30,
     "h": 24,
@@ -410,9 +410,9 @@ const PLACED_OBJECTS = [
   },
   {
     "floor": 0,
-    "x": 1134,
+    "x": 1137,
     "y": 867,
-    "w": 30,
+    "w": 27,
     "h": 24,
     "l": "",
     "c": "#b0c0d0",
@@ -1276,6 +1276,36 @@ const PLACED_OBJECTS = [
     "rot": "270",
     "status": "",
     "room": "",
+    "shape": ""
+  },
+  {
+    "floor": 0,
+    "x": 885,
+    "y": 768,
+    "w": 75,
+    "h": 18,
+    "l": "Platenkar 250x60",
+    "c": "#a08060",
+    "bg": "rgba(160,128,96,.15)",
+    "type": "",
+    "rot": "0",
+    "status": "",
+    "room": "",
+    "shape": ""
+  },
+  {
+    "floor": 0,
+    "x": 1056,
+    "y": 840,
+    "w": 63,
+    "h": 21,
+    "l": "Meterkast",
+    "c": "#8cc88c",
+    "bg": "rgba(140,200,140,0.13)",
+    "type": "",
+    "rot": "0",
+    "status": "",
+    "room": "1",
     "shape": ""
   }
 ];
