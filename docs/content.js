@@ -8,10 +8,10 @@ const CONTENT = {
   "siteTitle": "Werkplaats3b — Professionele werkruimte Rotterdam - Den Haag",
   "metaDescription": "Multifunctionele bedrijfsruimte voor vakmensen en kleine studio's. 850 m² met kantoren, ateliers, afgesloten werkruimtes en machinale. Oud Camp 3b, Maasland.",
   "ogDescription": "Multifunctionele bedrijfsruimte voor vakmensen en kleine studio's. Op 20 minuten afstand van Rotterdam-Delft-Den Haag. Naast A20, Maasland.",
-  "eyebrow": "Nog 3 units - Per 1 september",
+  "eyebrow": "Nog 3 units - Per 21 september",
   "tagline": "Multifunctionele bedrijfsruimte voor professionele makers",
   "locationText": "Oud Camp 3b · Maasland · Naast A20 · 15-20 minuten van Den Haag / Rotterdam / Delft",
-  "introText": "Werkplaats3b is een <strong>multifunctionele bedrijfsruimte van 850 m²</strong> voor zelfstandige vakmensen en kleine studio's. <br>Hier werken professionele en ambitieuze makers samen onder 1 dak aan aan mooie projecten. Hier kommen kennis, kunde en ambitie samen en gaan we voor kwaliteit! <br><br>Herken jij je hierin en heb je ruimte nodig voor je ambities en projecten? Dan wordt het tijd voor een kennismaking. <br><br>Is dit wat je zoekt dan krijg je een contract wat per kwartaal opzegbaar is, betaal je 2 maanden huur als borg en kun je meteen aan de gang. <br>",
+  "introText": "Werkplaats3b is een <strong>multifunctionele bedrijfsruimte van 850 m²</strong> voor zelfstandige vakmensen en kleine studio's. <br>Hier werken professionele en ambitieuze makers samen onder 1 dak aan mooie projecten. Hier komen kennis, kunde en ambitie samen en gaan we voor kwaliteit! <br><br>Herken jij je hierin en heb je ruimte nodig voor je ambities en projecten? Dan wordt het tijd voor een kennismaking. <br><br>Is dit wat je zoekt dan krijg je een contract wat per kwartaal opzegbaar is, betaal je 2 maanden huur als borg en kun je meteen aan de gang. <br>",
   "accessItems": [
     "850 m² · Machinale 300m² · Assemblageruimte 300m² · Ateliers met airco en werkplekken 185 m²",
     "24/7 toegang"
@@ -149,7 +149,7 @@ const CONTENT = {
     {
       "name": "Wesley",
       "role": "Meubelmaker",
-      "text": "23 jaar. Timmerde op z'n 3e al zijn eigen speelgoed in elkaar. Na de opleiding meteen als ondernemer aan de slag gegaan en sindsdien veel klanten blij gemaakt met maatmeunilar",
+      "text": "23 jaar. Timmerde op z'n 3e al zijn eigen speelgoed in elkaar. Na de opleiding meteen als ondernemer aan de slag gegaan en sindsdien veel klanten blij gemaakt met maatmeubilair.",
       "photo": "photos/team-2-wesley.jpg",
       "pos": "50% 7.8%"
     }
