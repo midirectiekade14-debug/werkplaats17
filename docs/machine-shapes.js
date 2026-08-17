@@ -255,11 +255,39 @@
            '<rect class="f" x="73" y="80" width="13" height="8"/>'
     },
 
+    // Palletwagen (pompwagen): handbediend, dus geen tegenwicht-cabine —
+    // alleen de twee dunne vorktanden met een lastwiel aan de neus, en aan
+    // het andere eind het pomphuis met de dissel om te sturen en te pompen.
+    palletwagen: {
+      naam: 'Palletwagen (pompwagen)',
+      svg: '<rect class="f" x="2" y="26" width="72" height="8"/>' +            // vorktand links
+           '<rect class="f" x="2" y="66" width="72" height="8"/>' +            // vorktand rechts
+           '<circle class="d" cx="10" cy="30" r="3"/>' +                       // lastwiel links
+           '<circle class="d" cx="10" cy="70" r="3"/>' +                       // lastwiel rechts
+           '<rect class="b" x="74" y="34" width="16" height="32"/>' +          // pomphuis
+           '<line class="s" x1="90" y1="50" x2="99" y2="50"/>'                 // dissel
+    },
+
     pallettruck: {
       naam: 'Pallettruck / heftruck',
       svg: '<rect class="b" x="72" y="28" width="26" height="44"/>' +          // body
            '<rect class="b" x="2" y="24" width="70" height="13"/>' +           // vorken
            '<rect class="b" x="2" y="63" width="70" height="13"/>'
+    },
+
+    // Reachtruck: compacte cabine/tegenwicht achter, twee smalle sluitbalken
+    // met een wiel aan de neus die onder de pallet door lopen, en de
+    // uitschuifbare reachvork ertussen. De mastlijn staat vóór de cabine,
+    // waar de vork bij het heffen doorheen schuift.
+    reachtruck: {
+      naam: 'Reachtruck',
+      svg: '<rect class="b" x="74" y="18" width="24" height="64"/>' +          // cabine/tegenwicht
+           '<rect class="b" x="6" y="24" width="70" height="11"/>' +           // sluitbalk links
+           '<rect class="b" x="6" y="65" width="70" height="11"/>' +           // sluitbalk rechts
+           '<circle class="f" cx="14" cy="29" r="5"/>' +                       // wiel links
+           '<circle class="f" cx="14" cy="70" r="5"/>' +                       // wiel rechts
+           '<rect class="f" x="2" y="42" width="72" height="16"/>' +           // reachvork
+           '<line class="s" x1="70" y1="14" x2="70" y2="86"/>'                 // mast
     },
 
     trap: {
@@ -325,8 +353,10 @@
     [/bureau/, 'bureau'],
     [/draagarm/, 'draagarmstelling'],
     [/palletstelling|legbordstelling/, 'palletstelling'],
+    [/handpallettruck|palletwagen|pompwagen|steekwagen/, 'palletwagen'],
+    [/reachtruck|smalgangtruck/, 'reachtruck'],
     [/platenkar|kar|wagen|trolley/, 'kar'],
-    [/pallettruck|heftruck|stapelaar|palletwagen/, 'pallettruck'],
+    [/pallettruck|heftruck|stapelaar/, 'pallettruck'],
     [/stelling|rek|kast|opslag|magazijn/, 'stelling'],
     [/trap/, 'trap'],
     [/zaag|zaagtafel|cirkelzaag/, 'zaagtafel']
