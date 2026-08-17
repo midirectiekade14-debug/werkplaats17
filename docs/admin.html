@@ -471,16 +471,24 @@ textarea.ce-input{min-height:60px;resize:vertical}
     <div class="item" draggable="true" data-w="36" data-h="24" data-l="Shapertool met Benchpilot" data-c="#80a0d0" data-bg="rgba(128,160,208,.13)"><div class="sw" style="background:#80a0d0"></div>Shapertool + Benchpilot</div>
     <div class="item" draggable="true" data-w="72" data-h="39" data-l="Afzuiging" data-c="#607080" data-bg="rgba(96,112,128,.15)"><div class="sw" style="background:#607080"></div>Afzuiging</div>
     <div class="item" draggable="true" data-w="15" data-h="15" data-l="Perslucht" data-c="#607080" data-bg="rgba(96,112,128,.15)"><div class="sw" style="background:#607080"></div>Perslucht</div>
+    <div class="item" draggable="true" data-w="21" data-h="17" data-l="Kolomboormachine" data-c="#E09A2F" data-bg="rgba(224,154,47,.13)"><div class="sw" style="background:#E09A2F"></div>Kolomboormachine</div>
+    <div class="item" draggable="true" data-w="27" data-h="18" data-l="Schuurmachine" data-c="#E09A2F" data-bg="rgba(224,154,47,.13)"><div class="sw" style="background:#E09A2F"></div>Schuurmachine</div>
     <div class="cat">Werkplekken</div>
     <div class="item" draggable="true" data-w="72" data-h="24" data-l="Werkbank 2.4m" data-c="#70b080" data-bg="rgba(112,176,128,.13)"><div class="sw" style="background:#70b080"></div>Werkbank 2.4m</div>
     <div class="item" draggable="true" data-w="48" data-h="24" data-l="Werkbank 1.6m" data-c="#70b080" data-bg="rgba(112,176,128,.13)"><div class="sw" style="background:#70b080"></div>Werkbank 1.6m</div>
     <div class="item" draggable="true" data-w="54" data-h="42" data-l="Bureau met stoel" data-c="#7090a0" data-bg="rgba(112,144,160,.13)"><div class="sw" style="background:#7090a0"></div>Bureau met stoel</div>
+    <div class="cat">Pauzeruimte</div>
+    <div class="item" draggable="true" data-w="60" data-h="48" data-l="Tafel met 6 stoelen" data-c="#c8905a" data-bg="rgba(200,144,90,.15)"><div class="sw" style="background:#c8905a"></div>Tafel met 6 stoelen</div>
+    <div class="item" draggable="true" data-w="42" data-h="22" data-l="Tafelvoetbal" data-c="#c8905a" data-bg="rgba(200,144,90,.15)"><div class="sw" style="background:#c8905a"></div>Tafelvoetbal</div>
     <div class="cat">Opslag</div>
     <div class="item" draggable="true" data-w="75" data-h="63" data-l="Draagarmstelling 250x210" data-c="#a08060" data-bg="rgba(160,128,96,.15)"><div class="sw" style="background:#a08060"></div>Draagarmstelling 250x210</div>
     <div class="item" draggable="true" data-w="105" data-h="36" data-l="Palletstelling 3.5x1.2" data-c="#a08060" data-bg="rgba(160,128,96,.15)"><div class="sw" style="background:#a08060"></div>Palletstelling 3.5x1.2</div>
     <div class="item" draggable="true" data-w="24" data-h="24" data-l="Opslag" data-c="#a08060" data-bg="rgba(160,128,96,.15)"><div class="sw" style="background:#a08060"></div>Opslag</div>
     <div class="item" draggable="true" data-w="24" data-h="30" data-l="Kar 80x100" data-c="#a08060" data-bg="rgba(160,128,96,.15)"><div class="sw" style="background:#a08060"></div>Kar 80x100</div>
     <div class="item" draggable="true" data-w="75" data-h="18" data-l="Platenkar 250x60" data-c="#a08060" data-bg="rgba(160,128,96,.15)"><div class="sw" style="background:#a08060"></div>Platenkar 250x60</div>
+    <div class="item" draggable="true" data-w="51" data-h="23" data-l="Pallettruck / heftruck" data-c="#a08060" data-bg="rgba(160,128,96,.15)"><div class="sw" style="background:#a08060"></div>Pallettruck / heftruck</div>
+    <div class="item" draggable="true" data-w="47" data-h="20" data-l="Palletwagen (pompwagen)" data-c="#a08060" data-bg="rgba(160,128,96,.15)"><div class="sw" style="background:#a08060"></div>Palletwagen (pompwagen)</div>
+    <div class="item" draggable="true" data-w="84" data-h="39" data-l="Reachtruck" data-c="#a08060" data-bg="rgba(160,128,96,.15)"><div class="sw" style="background:#a08060"></div>Reachtruck</div>
     <div class="cat">Infra</div>
     <div class="item" draggable="true" data-w="101" data-h="12" data-l="Overheaddeur 3.35m" data-type="overhead" data-c="#E09A2F" data-bg="rgba(224,154,47,.15)"><div class="sw" style="background:#E09A2F"></div>Overheaddeur 3.35m</div>
     <div class="item" draggable="true" data-w="27" data-h="12" data-l="Toegangsdeur" data-type="door" data-c="#b0c0d0" data-bg="rgba(176,192,208,.1)"><div class="sw" style="background:#b0c0d0"></div>Toegangsdeur</div>
@@ -1355,6 +1363,7 @@ var PLATTEGROND_KLEUREN=[
   {hex:'#7090a0',naam:'Grijsblauw',  uitleg:'Bureau'},
   {hex:'#a08060',naam:'Bruin',       uitleg:'Opslag, stellingen, karren'},
   {hex:'#50b478',naam:'Unitgroen',   uitleg:'Huurunits'},
+  {hex:'#c8905a',naam:'Terracotta',  uitleg:'Pauzeruimte (tafel, tafelvoetbal)'},
   {hex:'#6e96dc',naam:'Kantoorblauw',uitleg:'Kantoor'},
   {hex:'#78a0dc',naam:'Toiletblauw', uitleg:'Toilet'},
   {hex:'#64b4dc',naam:'Entreeblauw', uitleg:'Entree'},
