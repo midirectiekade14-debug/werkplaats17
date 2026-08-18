@@ -9,7 +9,7 @@ const INSTAGRAM_FEED = [
   {
     "src": "photos/instagram/p05.webp",
     "alt": "Twee makers aan het werk in de werkplaats, met de tekst Ruimte voor vakmensen",
-    "caption": "Wordt dit jouw nieuwe werkplek?\n\nPer 21 september kun je terecht in Maasland: 850 m² onder één dak, met 300 m² machinale, 300 m² assemblageruimte en 24/7 toegang. Je huurt een eigen werkruimte van 25 m² met opslag op de entresol — past je project er niet in, dan bouw je verder op de flexspace ervoor.\n\nDe inrichting is in volle gang. Nog 3 units vrij. Kijk op werkplaats3b.nl en plan een rondleiding.\n\n#werkplaats3b #meubelmaker #interieurbouw #vakmanschap #maasland #westland #zzp #houtbewerking #atelier #bedrijfsruimte",
+    "caption": "Wordt dit jouw nieuwe werkplek?\n\nPer 21 september kun je terecht in Maasland: 850 m² werkruimte onder één dak, met 300 m² machinale, assemblageruimte en 24/7 toegang. Je huurt een eigen werkruimte van 25 m² met opslag op je entresol en platenrek — past je project er niet in, dan bouw je verder op de flexspace ervoor.\n\nDe inrichting is in volle gang. Nog 3 units vrij. Kijk op werkplaats3b.nl en plan een rondleiding.\n\n#werkplaats3b #meubelmaker #interieurbouw #vakmanschap #maasland #westland #zzp #houtbewerking #atelier #bedrijfsruimte",
     "datum": "2026-08-18"
   },
   {
