@@ -14,7 +14,7 @@ const INSTAGRAM_FEED = [
   },
   {
     "src": "photos/instagram/p07.webp",
-    "alt": "Twee vakmensen werken samen aan een machine in een lichte werkplaatshal. Tekst: Uit je schuur gegroeid?",
+    "alt": "Twee vakmensen aan een machine in een hoge werkplaatshal, met een rek vol hout op de achtergrond. Tekst: Uit je schuur gegroeid?",
     "caption": "Uit je schuur gegroeid?\n\nDat is het punt waarop bijna iedereen in dit vak een keer komt. Je past er niet meer in, maar een eigen bedrijfspand huren is nog te groot en te duur.\n\nWij bieden de stap ertussenin: een eigen unit van 25 m² met opslag op de entresol, een machinehal van 300 m² ernaast, en een handvol collega's die weten waar je het over hebt.\n\nEr zijn er nog 3 vrij. Vanaf 21 september. werkplaats3b.nl\n\n#werkplaats3b #meubelmaker #interieurbouw #vakmanschap #maasland #westland #zzp #houtbewerking #atelier #bedrijfsruimte",
     "datum": "2026-08-20"
   },
