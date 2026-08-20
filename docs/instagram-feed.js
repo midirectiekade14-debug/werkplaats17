@@ -7,6 +7,12 @@
 
 const INSTAGRAM_FEED = [
   {
+    "src": "photos/instagram/p06.webp",
+    "alt": "Donkere Instagram-post. In grote witte letters 'Hoe zaag jij nu je platen?', waarbij het woord 'platen' oranje is. Daaronder in kleinere letters: 'Met de invalcirkelzaag? In een te krappe ruimte tussen andermans troep.' Linksboven staat 'Stel jezelf de vraag', rechtsboven het logo WP3B.",
+    "caption": "Word je die veel te volle werkplek zat?\n\nWij hebben de oplossing: een eigen unit van 25 m² met flexspace in een hal met 300 m² machinale, waar je gewoon je gang kunt gaan. Maasland, naast de A20.\n\nNog 3 units vrij per 21 september. werkplaats3b.nl\n\n#werkplaats3b #meubelmaker #interieurbouw #vakmanschap #maasland #westland #zzp #houtbewerking #atelier #bedrijfsruimte",
+    "datum": "2026-08-20"
+  },
+  {
     "src": "photos/instagram/p05.webp",
     "alt": "Twee makers aan het werk in de werkplaats, met de tekst Ruimte voor vakmensen",
     "caption": "Wordt dit jouw nieuwe werkplek?\n\nPer 21 september kun je terecht in Maasland: 850 m² werkruimte onder één dak, met 300 m² machinale, assemblageruimte en 24/7 toegang. Je huurt een eigen werkruimte van 25 m² met opslag op je entresol en platenrek — past je project er niet in, dan bouw je verder op de flexspace ervoor.\n\nDe inrichting is in volle gang. Nog 3 units vrij. Kijk op werkplaats3b.nl en plan een rondleiding.\n\n#werkplaats3b #meubelmaker #interieurbouw #vakmanschap #maasland #westland #zzp #houtbewerking #atelier #bedrijfsruimte",
