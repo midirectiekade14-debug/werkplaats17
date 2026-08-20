@@ -7,6 +7,18 @@
 
 const INSTAGRAM_FEED = [
   {
+    "src": "photos/instagram/p08.webp",
+    "alt": "Donkere poster met de tekst: Ook wij begonnen in een garagebox. Wij bieden je de ruimte.",
+    "caption": "Wij weten waar je vandaan komt. Ook wij begonnen klein. Maar als je groeit wil je meer ruimte en betere machines. Wij bieden allebei om de volgende stap mogelijk te maken.\n\nNog 3 units vrij per 21 september. werkplaats3b.nl\n\n#werkplaats3b #meubelmaker #interieurbouw #vakmanschap #maasland #westland #zzp #houtbewerking #atelier #bedrijfsruimte",
+    "datum": "2026-08-20"
+  },
+  {
+    "src": "photos/instagram/p07.webp",
+    "alt": "Twee vakmensen werken samen aan een machine in een lichte werkplaatshal. Tekst: Uit je schuur gegroeid?",
+    "caption": "Uit je schuur gegroeid?\n\nDat is het punt waarop bijna iedereen in dit vak een keer komt. Je past er niet meer in, maar een eigen bedrijfspand huren is nog te groot en te duur.\n\nWij bieden de stap ertussenin: een eigen unit van 25 m² met opslag op de entresol, een machinehal van 300 m² ernaast, en een handvol collega's die weten waar je het over hebt.\n\nEr zijn er nog 3 vrij. Vanaf 21 september. werkplaats3b.nl\n\n#werkplaats3b #meubelmaker #interieurbouw #vakmanschap #maasland #westland #zzp #houtbewerking #atelier #bedrijfsruimte",
+    "datum": "2026-08-20"
+  },
+  {
     "src": "photos/instagram/p06.webp",
     "alt": "Donkere Instagram-post. In grote witte letters 'Hoe zaag jij nu je platen?', waarbij het woord 'platen' oranje is. Daaronder in kleinere letters: 'Met de invalcirkelzaag? In een te krappe ruimte tussen andermans troep.' Linksboven staat 'Stel jezelf de vraag', rechtsboven het logo WP3B.",
     "caption": "Word je die veel te volle werkplek zat?\n\nWij hebben de oplossing: een eigen unit van 25 m² met flexspace in een hal met 300 m² machinale, waar je gewoon je gang kunt gaan. Maasland, naast de A20.\n\nNog 3 units vrij per 21 september. werkplaats3b.nl\n\n#werkplaats3b #meubelmaker #interieurbouw #vakmanschap #maasland #westland #zzp #houtbewerking #atelier #bedrijfsruimte",
