@@ -8,12 +8,12 @@ const CONTENT = {
   "siteTitle": "Werkplaats3b — Professionele werkruimte Rotterdam - Den Haag",
   "metaDescription": "Multifunctionele bedrijfsruimte voor vakmensen en kleine studio's. 850 m² met kantoren, ateliers, afgesloten werkruimtes en machinale. Oud Camp 3b, Maasland.",
   "ogDescription": "Multifunctionele bedrijfsruimte voor vakmensen en kleine studio's. Op 20 minuten afstand van Rotterdam-Delft-Den Haag. Naast A20, Maasland.",
-  "eyebrow": "Nog 3 units - Per 21 september",
+  "eyebrow": "Drie werkplekken vrij · per 21 september",
   "tagline": "Multifunctionele bedrijfsruimte voor professionele makers",
   "locationText": "Oud Camp 3b · Maasland · Naast A20 · 15-20 minuten van Den Haag / Rotterdam / Delft",
-  "introText": "Werkplaats3b is een <strong>multifunctionele bedrijfsruimte van 850 m²</strong> voor zelfstandige vakmensen en kleine studio's. <br>Hier werken professionele en ambitieuze makers samen onder 1 dak aan mooie projecten. Hier komen kennis, kunde en ambitie samen en gaan we voor kwaliteit! <br><br>Herken jij je hierin en heb je ruimte nodig voor je ambities en projecten? Dan wordt het tijd voor een kennismaking. <br><br>Is dit wat je zoekt dan krijg je een contract wat per kwartaal opzegbaar is, betaal je 2 maanden huur als borg en kun je meteen aan de gang. <br>",
+  "introText": "Werkplaats3b is een <strong>multifunctionele bedrijfsruimte van 850 m²</strong> voor zelfstandige vakmensen en kleine studio's. <br>Hier werken professionele en ambitieuze makers samen aan mooie projecten: 300 m² machinale, 300 m² assemblageruimte en een eigen werkplek van 25 m² per bedrijf. <br><br>Heb je meer ruimte en betere machines nodig dan je nu hebt? Kom langs, dan weet je of het past. <br><br>Is dit wat je zoekt, dan krijg je een contract dat per kwartaal opzegbaar is, betaal je 2 maanden huur als borg en kun je meteen aan de gang. <br>",
   "accessItems": [
-    "850 m² · Machinale 300m² · Assemblageruimte 300m² · Ateliers met airco en werkplekken 185 m²",
+    "850 m² · Machinale 300 m² · Assemblageruimte 300 m² · Ateliers met airco en werkplekken 185 m²",
     "24/7 toegang"
   ],
   "offers": [
@@ -22,8 +22,8 @@ const CONTENT = {
       "text": "300 m² op de begane grond."
     },
     {
-      "title": "Verhuurbare werkruimtes 25m2 met opslag op entresol en platenrek.",
-      "text": "We hebben kant en klare <strong>werkplekken</strong> voor meubelmakers en interieurbouwers van 25m2 inclusief stroompunten, perslucht en verlichting. Past je project niet in je ruimte bouw je verder op de flexspace voor je unit."
+      "title": "Verhuurbare werkruimtes van 25 m² met opslag op entresol en platenrek.",
+      "text": "We hebben kant en klare <strong>werkplekken</strong> voor meubelmakers en interieurbouwers van 25 m² inclusief stroompunten, perslucht en verlichting. Past je project niet in je ruimte bouw je verder op de flexspace voor je unit."
     },
     {
       "title": "Kantoren, ateliers en ontvangstruimte",
@@ -72,7 +72,7 @@ const CONTENT = {
       "highlight": true
     },
     {
-      "name": "Allerlei handgereedschap (als je die nog niet hebt)",
+      "name": "Handgereedschap (als je dat nog niet hebt)",
       "highlight": true
     },
     {
@@ -84,7 +84,7 @@ const CONTENT = {
       "highlight": true
     },
     {
-      "name": "en nog veel meer!",
+      "name": "en nog veel meer",
       "highlight": false
     }
   ],
@@ -92,35 +92,35 @@ const CONTENT = {
     {
       "label": "Werkplek 1e verdieping",
       "sub": "25 m² + opslagruimte + werkbank + machinetoegang",
-      "price": "€945",
+      "price": "€ 945",
       "unit": "/mnd"
     },
     {
       "label": "Werkruimte/Atelier begane grond",
       "sub": "Eigen afsluitbare ruimte",
-      "price": "€450",
+      "price": "€ 450",
       "unit": "/mnd"
     },
     {
       "label": "Werkruimte/Atelier 2e verdieping",
       "sub": "Grote afsluitbare ruimte met eigen opgang",
-      "price": "€650",
+      "price": "€ 650",
       "unit": "/mnd"
     },
     {
       "label": "Opslagruimte",
       "sub": "Begane grond of 1e verdieping · flexibel in te delen",
-      "price": "Vanaf €75",
+      "price": "Vanaf € 75",
       "unit": "/mnd"
     },
     {
       "label": "Servicekosten",
-      "sub": "Energie, schoonmaak en afvalcontainers inbegrepen · unit 25m2 €120 · werkruimte/atelier €95",
-      "price": "Vanaf €95",
+      "sub": "Energie, schoonmaak en afvalcontainers inbegrepen · werkplek 25 m² € 120 · werkruimte/atelier € 95",
+      "price": "€ 95 / € 120",
       "unit": "/mnd"
     }
   ],
-  "pricingNote": "Alle prijzen excl. BTW en servicekosten. Een werkplek op de 1e verdieping komt daarmee op 1.065,- per maand. De units van 25m2 zijn uitbreidbaar met (tijdelijke) opslagmogelijkheden en vaste werkplek in kantoor. Lijkt het je wat? Neem dan contact op voor een rondleiding en beschikbare units.",
+  "pricingNote": "Alle bedragen zijn huur per maand, exclusief btw en exclusief servicekosten. Een werkplek op de 1e verdieping komt daarmee op € 945 + € 120 = € 1.065 per maand; daar zitten energie, schoonmaak en afvalcontainers in. De werkplekken van 25 m² zijn uitbreidbaar met opslag en een vaste bureauplek. Plan een rondleiding voor de actuele beschikbaarheid.",
   "targetAudience": [
     "Zelfstandig meubelmaker of restaurateur",
     "Interieurontwerper die zelf prototypes bouwt",
@@ -131,7 +131,7 @@ const CONTENT = {
   "notForText": "<strong>KvK-inschrijving en verzekering verplicht.</strong> Werkplaats3b is uitsluitend voor professionele gebruikers. Particulieren en hobbyisten kunnen hier niet terecht.",
   "aboutLabel": "Wie zijn wij",
   "aboutNavLabel": "Over ons",
-  "aboutLead": "Werkplaats3b is opgezet door Matthijs, Harm en Wesley. We huren het pand samen en verhuren de plekken die we niet zelf gebruiken. Eerder huurde Matthijs en Wesley een unit bij Harm maar deze nieuwe plek geven we met zijn drieën vorm. Hoe wij gestart zijn? Vanuit een garagebox natuurlijk. ",
+  "aboutLead": "Werkplaats3b is opgezet door Matthijs, Harm en Wesley. We huren het pand samen en verhuren de plekken die we niet zelf gebruiken. Eerder huurden Matthijs en Wesley een unit bij Harm; deze nieuwe plek geven we met z'n drieën vorm. Hoe wij gestart zijn? Vanuit een garagebox natuurlijk. ",
   "team": [
     {
       "name": "Harm",
@@ -161,8 +161,8 @@ const CONTENT = {
   "whatsappText": "Hey, ik heb interesse in een werkplek bij Werkplaats3b.",
   "contactLines": [
     "Oud Camp 3b, Maasland (naast A20)",
-    "Beperkt aantal plekken beschikbaar",
-    "Bezichtiging op afspraak"
+    "Drie werkplekken vrij · stand 20 augustus",
+    "Plan een rondleiding"
   ],
   "instagramHandle": "@werkplaats3b",
   "instagramUrl": "https://instagram.com/werkplaats3b",
