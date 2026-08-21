@@ -1267,6 +1267,13 @@
     font-size: var(--fs-small);
     color: var(--muted);
   }
+  .teken-teller {
+    display: block;
+    margin-top: 4px;
+    font-size: var(--fs-small);
+    color: var(--muted);
+    text-align: right;
+  }
   /* Honeypot: buiten beeld voor mensen (niet display:none -- dat lezen
      sommige bots juist als signaal om het veld te negeren), wel aanwezig
      voor formulier-bots die elk veld invullen. */
@@ -2392,7 +2399,8 @@
           </div>
           <div class="form-field form-field-wide">
             <label for="rl-bericht">Waar werk je aan?</label>
-            <textarea id="rl-bericht" name="bericht" rows="4" maxlength="2000"></textarea>
+            <textarea id="rl-bericht" name="bericht" rows="4" maxlength="700" aria-describedby="rl-bericht-teller"></textarea>
+            <span class="teken-teller" id="rl-bericht-teller" aria-live="polite">0/700 tekens</span>
           </div>
 
           <!-- Honeypot: onzichtbaar voor mensen (CSS + tabindex -1 + aria-hidden),
@@ -3160,6 +3168,23 @@ window._initFloorplan=function(){
     VELDEN[naam].input.addEventListener('blur', function () { valideerVeld(naam); });
   });
 
+  // Levende tekenteller onder "Waar werk je aan?" -- de maxlength op het
+  // veld zelf (zie markup) is zo gekozen dat zelfs het toegestane maximum,
+  // samen met een realistische advertentieklik (utm + gclid), ruim onder
+  // MAILTO_MAX_LENGTE blijft (zie bouwMailtoUrl hieronder). De teller leest
+  // maxLength van het element zelf -- één bron, geen los getal dat uit de
+  // pas kan gaan lopen met het attribuut.
+  var berichtVeld = form.querySelector('[name="bericht"]');
+  var berichtTeller = document.getElementById('rl-bericht-teller');
+  function werkBerichtTellerBij() {
+    if (!berichtVeld || !berichtTeller) return;
+    berichtTeller.textContent = berichtVeld.value.length + '/' + berichtVeld.maxLength + ' tekens';
+  }
+  if (berichtVeld) {
+    werkBerichtTellerBij();
+    berichtVeld.addEventListener('input', werkBerichtTellerBij);
+  }
+
   // ── Herkomst uit w3b (adblocker-safe: alles leeg als w3b ontbreekt). ──
   function pad2(n) { return (n < 10 ? '0' : '') + n; }
   // ISO-achtig maar in lokale tijd (Europe/Amsterdam voor vrijwel elke
@@ -3224,7 +3249,7 @@ window._initFloorplan=function(){
   // parameter dit blokje -- en daarmee de hele mailto-URL -- onnodig groot
   // maken (zie MAILTO_MAX_LENGTE bij bouwMailtoUrl voor de grens op de
   // hele URL).
-  var INKORT_MAX = 150;
+  var INKORT_MAX = 80;
   function inkorten(tekst) {
     return (tekst.length > INKORT_MAX) ? tekst.slice(0, INKORT_MAX) + '…' : tekst;
   }
@@ -3251,6 +3276,14 @@ window._initFloorplan=function(){
   // gooit daarbij meestal geen synchrone exception (de try/catch bij het
   // aanroepen vangt dat dus niet op). Boven deze veilige marge vertrouwen
   // we de mailto niet meer (zie het gebruik in de submit-handler).
+  //
+  // LET OP bij het wijzigen van deze grens, de maxlength op #rl-bericht
+  // (markup) of INKORT_MAX hierboven: dit zijn geen onafhankelijke getallen.
+  // Doorgemeten (Node, tegen deze functies): maxlength=700 + INKORT_MAX=80
+  // + een realistische advertentieklik (utm_source/utm_medium/utm_campaign
+  // + een gclid van ~90 tekens) + een bericht op exact het toegestane
+  // maximum geeft een URL van ~1520 tekens -- ruim (~280) onder deze
+  // grens. Verhoog de maxlength nooit zonder deze som opnieuw te maken.
   var MAILTO_MAX_LENGTE = 1800;
   function bouwMailtoUrl(data) {
     var onderwerp = 'Rondleiding aanvragen — ' + data.bedrijf;
