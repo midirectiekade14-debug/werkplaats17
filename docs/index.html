@@ -2355,30 +2355,48 @@
     <div class="rondleiding-form-wrap" id="rondleiding-form-wrap">
       <h3 class="form-heading">Vraag een rondleiding aan</h3>
       <form id="rondleiding-form" novalidate>
+        <!-- maxlength op elk veld dat in de mail belandt. Zonder harde
+             bovengrens per veld is de lengte van de mailto-URL niet te
+             garanderen; de worstcase-som staat bij VELD_BUDGET in het
+             script onderaan de pagina. Elke grens is ruim gekozen:
+             naam 70 -- "Johanna Wilhelmina van der Meer-Oosterhuis" meet 42
+               tekens, dus ook een dubbele achternaam met tussenvoegsels past.
+             bedrijf 140 -- een handelsnaam van 109 tekens is niet exotisch;
+               140 laat daar nog 31 tekens boven.
+             kvk 12 -- een KvK-nummer heeft acht cijfers; 12 laat punten of
+               spaties ertussen toe ("12.34.56.78" meet 11).
+             email 100 -- een zakelijk adres in de vorm
+               voornaam.achternaam@lange-handelsnaam.nl blijft ruim onder de 60.
+             telefoon 24 -- "+31 (0)6 81 68 92 78" meet 20 tekens, inclusief
+               landnummer, haakjes en spaties.
+             bericht 700 -- een echte aanvraag van een meubelmaker meet zo'n
+               700 tekens; het bindende maximum is BERICHT_BUDGET (gecodeerde
+               tekens) in het script, want tekens kosten in een URL niet
+               allemaal evenveel. -->
         <div class="form-grid">
           <div class="form-field">
             <label for="rl-naam">Naam*</label>
-            <input type="text" id="rl-naam" name="naam" required autocomplete="name" aria-describedby="rl-err-naam">
+            <input type="text" id="rl-naam" name="naam" required maxlength="70" autocomplete="name" aria-describedby="rl-err-naam">
             <span class="field-error" id="rl-err-naam" aria-live="polite"></span>
           </div>
           <div class="form-field">
             <label for="rl-bedrijf">Bedrijf*</label>
-            <input type="text" id="rl-bedrijf" name="bedrijf" required autocomplete="organization" aria-describedby="rl-err-bedrijf">
+            <input type="text" id="rl-bedrijf" name="bedrijf" required maxlength="140" autocomplete="organization" aria-describedby="rl-err-bedrijf">
             <span class="field-error" id="rl-err-bedrijf" aria-live="polite"></span>
           </div>
           <div class="form-field">
             <label for="rl-kvk">KvK-nummer*</label>
-            <input type="text" id="rl-kvk" name="kvk" required inputmode="numeric" autocomplete="off" aria-describedby="rl-err-kvk">
+            <input type="text" id="rl-kvk" name="kvk" required maxlength="12" inputmode="numeric" autocomplete="off" aria-describedby="rl-err-kvk">
             <span class="field-error" id="rl-err-kvk" aria-live="polite"></span>
           </div>
           <div class="form-field">
             <label for="rl-email">E-mailadres*</label>
-            <input type="email" id="rl-email" name="email" required autocomplete="email" aria-describedby="rl-err-email">
+            <input type="email" id="rl-email" name="email" required maxlength="100" autocomplete="email" aria-describedby="rl-err-email">
             <span class="field-error" id="rl-err-email" aria-live="polite"></span>
           </div>
           <div class="form-field">
             <label for="rl-telefoon">Telefoon*</label>
-            <input type="tel" id="rl-telefoon" name="telefoon" required autocomplete="tel" aria-describedby="rl-err-telefoon">
+            <input type="tel" id="rl-telefoon" name="telefoon" required maxlength="24" autocomplete="tel" aria-describedby="rl-err-telefoon">
             <span class="field-error" id="rl-err-telefoon" aria-live="polite"></span>
           </div>
           <div class="form-field">
@@ -2399,7 +2417,7 @@
           </div>
           <div class="form-field form-field-wide">
             <label for="rl-bericht">Waar werk je aan?</label>
-            <textarea id="rl-bericht" name="bericht" rows="4" maxlength="850" aria-describedby="rl-bericht-teller rl-bericht-plakmelding"></textarea>
+            <textarea id="rl-bericht" name="bericht" rows="4" maxlength="700" aria-describedby="rl-bericht-teller rl-bericht-plakmelding"></textarea>
             <!-- Geen aria-live op de teller: die leest bij elke toetsaanslag het
                  getal voor en onderbreekt zo het typen. De aria-describedby
                  hierboven kondigt hem bij focus aan, dat volstaat. Het getal zelf
@@ -2426,6 +2444,7 @@
           <input type="hidden" name="utm_content">
           <input type="hidden" name="gclid">
           <input type="hidden" name="fbclid">
+          <input type="hidden" name="msclkid">
           <input type="hidden" name="referrer">
           <input type="hidden" name="landing">
           <input type="hidden" name="eerste_bezoek">
@@ -3174,19 +3193,122 @@ window._initFloorplan=function(){
     VELDEN[naam].input.addEventListener('blur', function () { valideerVeld(naam); });
   });
 
+  // ── Lengtebudget van de mailto-URL (FORM_ENDPOINT leeg) ──
+  // mailto: gaat via het besturingssysteem naar de mailclient. Op Windows
+  // loopt dat via de ShellExecute-koppeling, die stil afkapt rond de 2083
+  // tekens -- de oude Internet Explorer-grens, in de praktijk nog steeds de
+  // krapste schakel in de keten. Een mislukte scheme-navigatie gooit meestal
+  // geen synchrone exception, dus dat afkappen merk je niet: de mail vertrekt
+  // half. Boven deze veilige marge vertrouwen we de mailto niet meer.
+  var MAILTO_MAX_LENGTE = 1800;
+
+  // Een mailto-URL wordt URL-gecodeerd, en dan kost niet elk teken evenveel:
+  // een letter 1, een spatie 3 (%20), een é 6 (%C3%A9), een euroteken 9
+  // (%E2%82%AC). Een grens in tekens zegt dus niets over de lengte van de
+  // URL. Gemeten factoren (gecodeerde lengte gedeeld door tekens) op echt
+  // Nederlands proza, in Node tegen deze functies, 21-08-2026:
+  //   kaal proza, geen accenten             1,3465
+  //   met bedragen, m² en leestekens        1,4959
+  //   naam met accenten                     1,5281
+  //   zwaar geaccentueerd, veel leestekens  1,8531
+  //   prijzenbrief vol € en accenten        2,3474
+  //   alleen eurotekens                     9,0000
+  // Daarom draagt elk veld dat in de mail terechtkomt een eigen budget in
+  // GECODEERDE tekens. De korte velden worden daarop gekapt bij het bouwen
+  // van de mail (kapOpBudget in bouwMailtoUrl); het bericht wordt niet gekapt
+  // maar al bij het intypen begrensd (bewaakBerichtBudget hieronder). Daardoor
+  // is de bovengrens van de URL een eigenschap van deze code, en niet van een
+  // voorbeeldbericht: hij houdt ook bij factor 9 stand.
+  //
+  // WORSTCASE-SOM, alle budgetten tegelijk vol, ná de degradatieladder:
+  //   vast skelet: mailto:-kop 36, onderwerp 'Rondleiding: ' 17,
+  //   '&body=' 6, de zes labels 68, 'Bericht:' 10, tien regeleindes 30,
+  //   de regel die het weggelaten herkomstblok vervangt 59        226
+  //   naam 120 + bedrijf 160 + KvK 12 + e-mail 110 + telefoon 24
+  //   + ruimte 30 + startdatum 12                                 468
+  //   bericht                                                    1100
+  //                                                              ----
+  //                                                              1794
+  // Dat is 6 onder MAILTO_MAX_LENGTE en 289 onder de shell-grens van ~2083.
+  // Wijzig je een label, een budget of een regel in bouwMailtoUrl, reken deze
+  // som dan opnieuw door -- hij is met de functies hieronder in Node na te
+  // rekenen.
+  var VELD_BUDGET = {
+    naam: 120, bedrijf: 160, kvk: 12, email: 110, telefoon: 24,
+    ruimte: 30, ingangsdatum: 12,
+    // utm-kanaalregel; die valt bij ruimtegebrek als eerste weg.
+    kanaal: 150
+  };
+  var BERICHT_BUDGET = 1100;
+
+  function gecodeerdeLengte(tekst) {
+    return encodeURIComponent(String(tekst == null ? '' : tekst)).length;
+  }
+  // Kapt een waarde op een budget in GECODEERDE tekens. Het beletselteken
+  // kost zelf 9 gecodeerde tekens en gaat van het budget af, zodat de
+  // uitkomst nooit boven het budget uitkomt. Een surrogaatpaar (emoji) wordt
+  // niet doormidden geknipt -- een halve emoji codeert naar een vervangteken
+  // en kost dan méér dan hij opleverde.
+  function kapOpBudget(tekst, budget, staart) {
+    tekst = String(tekst == null ? '' : tekst);
+    staart = staart || '';
+    if (gecodeerdeLengte(tekst) <= budget) return tekst;
+    // Elk teken kost gecodeerd minstens 1, dus verder dan budget tekens
+    // hoeft de lus hieronder niet te kijken. Dat houdt hem kort, ook bij
+    // een opgeblazen utm-parameter uit de querystring.
+    if (tekst.length > budget) tekst = tekst.slice(0, budget);
+    var ruimte = budget - gecodeerdeLengte(staart);
+    var eind = tekst.length;
+    while (eind > 0) {
+      var code = tekst.charCodeAt(eind - 1);
+      if (code >= 0xD800 && code <= 0xDBFF) { eind--; continue; }
+      if (gecodeerdeLengte(tekst.slice(0, eind)) <= ruimte) return tekst.slice(0, eind) + staart;
+      eind--;
+    }
+    return '';
+  }
+
   // Levende tekenteller onder "Waar werk je aan?". De teller leest maxLength
   // van het element zelf -- één bron, geen los getal in de markup dat uit de
   // pas kan lopen met het attribuut. Waarom er überhaupt een maximum op dit
-  // veld staat, en hoe hoog het mag zijn: zie de som bij MAILTO_MAX_LENGTE.
+  // veld staat: zie de worstcase-som bij VELD_BUDGET hierboven.
   var berichtVeld = form.querySelector('[name="bericht"]');
   var berichtTeller = document.getElementById('rl-bericht-teller');
   var berichtPlakmelding = document.getElementById('rl-bericht-plakmelding');
+  var berichtInCompositie = false;   // IME bezig (Chinees, Japans, Koreaans)
+  var budgetmeldingGezet = false;
   function werkBerichtTellerBij() {
     if (!berichtVeld || !berichtTeller) return;
     berichtTeller.textContent = berichtVeld.value.length + '/' + berichtVeld.maxLength + ' tekens';
   }
   function toonPlakmelding(tekst) {
     if (berichtPlakmelding) berichtPlakmelding.textContent = tekst;
+  }
+  // Tweede grens naast maxlength, en de enige die de mailto-URL werkelijk
+  // begrenst: het bericht mag na URL-codering niet meer dan BERICHT_BUDGET
+  // tekens kosten. Voor gewoon Nederlands proza bijt maxlength eerst (700
+  // tekens gewoon proza meten gecodeerd 948); pas bij tekst die duurder is
+  // dan factor 1,571 bijt dit budget. Wat er afvalt zegt de melding erbij --
+  // stil afkappen doen we niet. Zonder deze grens zou een bericht vol
+  // eurotekens de mail alsnog onverzendbaar maken; mét deze grens kan dat
+  // niet meer, en is de "te lang"-melding alleen nog langs een omweg te
+  // bereiken.
+  function bewaakBerichtBudget() {
+    if (!berichtVeld || berichtInCompositie) return;
+    var waarde = berichtVeld.value;
+    if (gecodeerdeLengte(waarde) <= BERICHT_BUDGET) return;
+    var gekapt = kapOpBudget(waarde, BERICHT_BUDGET, '');
+    var weggevallen = waarde.length - gekapt.length;
+    var positie = berichtVeld.selectionStart;
+    berichtVeld.value = gekapt;
+    try {
+      var nieuw = Math.min(positie, gekapt.length);
+      berichtVeld.setSelectionRange(nieuw, nieuw);
+    } catch (fout) {}   // oudere browsers zonder setSelectionRange op textarea
+    budgetmeldingGezet = true;
+    toonPlakmelding(weggevallen === 1
+      ? 'Eén teken paste er niet bij: tekens als € en é kosten in een e-mail meer ruimte dan gewone letters.'
+      : weggevallen + ' tekens pasten er niet bij: tekens als € en é kosten in een e-mail meer ruimte dan gewone letters.');
   }
   // Plakt iemand meer tekst dan er past, dan kapt de browser dat stil af --
   // de teller op het maximum zien staan is geen melding. We voorspellen niets
@@ -3205,7 +3327,10 @@ window._initFloorplan=function(){
     if (!aangeboden) return;
     var lengteVoor = berichtVeld.value.length;
     var selectie = Math.abs((berichtVeld.selectionEnd || 0) - (berichtVeld.selectionStart || 0));
+    budgetmeldingGezet = false;
     setTimeout(function () {
+      // Sloeg het budget toe, dan staat daar de specifiekere melding al.
+      if (budgetmeldingGezet) return;
       var geplaatst = berichtVeld.value.length - (lengteVoor - selectie);
       var weggevallen = aangeboden.length - geplaatst;
       if (weggevallen <= 0) return;
@@ -3216,9 +3341,16 @@ window._initFloorplan=function(){
   }
   if (berichtVeld) {
     werkBerichtTellerBij();
-    berichtVeld.addEventListener('input', function () {
+    berichtVeld.addEventListener('compositionstart', function () { berichtInCompositie = true; });
+    berichtVeld.addEventListener('compositionend', function () {
+      berichtInCompositie = false;
+      bewaakBerichtBudget();
       werkBerichtTellerBij();
-      toonPlakmelding('');  // nieuwe invoer maakt de vorige plakmelding oud
+    });
+    berichtVeld.addEventListener('input', function () {
+      toonPlakmelding('');       // nieuwe invoer maakt de vorige melding oud
+      bewaakBerichtBudget();     // kan er meteen een nieuwe voor in de plaats zetten
+      werkBerichtTellerBij();
     });
     berichtVeld.addEventListener('paste', bewaakPlakken);
   }
@@ -3264,6 +3396,7 @@ window._initFloorplan=function(){
       utm_content: bron.utm_content || '',
       gclid: bron.gclid || '',
       fbclid: bron.fbclid || '',
+      msclkid: bron.msclkid || '',
       referrer: bron.referrer || '',
       landing: bron.landing || '',
       // Definitie staat bij isEersteBezoekOoit() hierboven vastgelegd.
@@ -3278,36 +3411,36 @@ window._initFloorplan=function(){
   }
 
   // ── Mailto-fallback (FORM_ENDPOINT leeg). ──
-  // Compact herkomstblokje onderaan de mail -- geen dump van alle twaalf
+  // Compact herkomstblokje onderaan de mail -- geen dump van alle dertien
   // verborgen velden, maar genoeg om in een oogopslag het kanaal te zien.
   // Lege onderdelen (geen utm-data, geen advertentieklik) vallen gewoon weg.
   //
-  // De click-ids zelf (gclid/fbclid) staan hier bewust NIET meer in. Ze
+  // De click-ids zelf (gclid/fbclid/msclkid) staan hier bewust NIET in. Ze
   // kosten in de URL ruim honderd tekens en zijn in een mail waardeloos:
   // afgekapt is een click-id onbruikbaar, en de enige echte toepassing
-  // (offline-conversie-import in Google Ads) eist de exacte, volledige
-  // waarde. Die blijft ongekapt in de verborgen formuliervelden staan en
-  // gaat mee zodra FORM_ENDPOINT gevuld is; in de mail volstaat de
-  // constatering dát er een advertentieklik aan voorafging.
+  // (offline-conversie-import bij het advertentieplatform) eist de exacte,
+  // volledige waarde. Die blijft ongekapt in de verborgen formuliervelden
+  // staan en gaat mee zodra FORM_ENDPOINT gevuld is; in de mail volstaat de
+  // constatering dát er een advertentieklik was en van welk platform. Alle
+  // drie de platforms worden hier gelijk behandeld: het token nooit, het
+  // platform altijd.
   //
-  // Daarmee is het utm-kanaalblok ("bron / medium / campagne") de enige
-  // overgebleven klant van inkorten(). Die waarden komen ongevalideerd en
-  // ongelimiteerd uit de querystring (analytics.js), dus zonder afkap kan
-  // één opgeblazen parameter de hele mailto-URL opblazen. De grens ligt op
-  // die regel: een volledig uitgeschreven kanaalregel meet in de praktijk
-  // 25-75 tekens (Google Ads laat campagnenamen tot 128 tekens toe), dus
-  // 120 raakt geen echt kanaal en bindt een opgeblazen querystring op 129
-  // tekens. Lager afkappen loont nauwelijks en kost informatie: het
-  // beletselteken kost na URL-encoding zelf al 9 tekens (%E2%80%A6).
-  var INKORT_MAX = 120;
-  function inkorten(tekst) {
-    return (tekst.length > INKORT_MAX) ? tekst.slice(0, INKORT_MAX) + '…' : tekst;
+  // Of er werkelijk herkomst was om weg te laten. 'Eerste bezoek' telt hier
+  // niet mee: dat komt uit localStorage en is geen herkomst, maar een
+  // eigenschap van de browser.
+  function heeftHerkomstGegevens(data) {
+    return !!(data.utm_source || data.utm_medium || data.utm_campaign ||
+      data.gclid || data.fbclid || data.msclkid);
   }
   function bouwHerkomstRegels(data) {
     var kanaal = [data.utm_source, data.utm_medium, data.utm_campaign]
       .filter(function (v) { return v; }).join(' / ');
     var regels = [];
-    if (kanaal) regels.push('Herkomst: ' + inkorten(kanaal));
+    // De utm-waarden komen ongevalideerd en ongelimiteerd uit de querystring
+    // (analytics.js), dus zonder budget kan één opgeblazen parameter de hele
+    // mailto-URL opblazen. 150 gecodeerde tekens is ruim: een volledig
+    // uitgeschreven kanaalregel meet in de praktijk 25-75 tekens.
+    if (kanaal) regels.push('Herkomst: ' + kapOpBudget(kanaal, VELD_BUDGET.kanaal, '…'));
     // Alleen het feit van de klik en het platform, niet het token: zonder
     // utm-velden (bijv. een kale ?gclid=... zonder utm_*) verschijnt de
     // Herkomst-regel niet, en is dit het enige dat nog zegt via welk
@@ -3315,74 +3448,80 @@ window._initFloorplan=function(){
     var platforms = [];
     if (data.gclid) platforms.push('Google Ads');
     if (data.fbclid) platforms.push('Meta');
+    if (data.msclkid) platforms.push('Microsoft Ads');
     if (platforms.length) regels.push('Advertentieklik: ' + platforms.join(', '));
     regels.push('Eerste bezoek: ' + (data.eerste_bezoek === 'ja' ? 'ja' : 'nee'));
     return regels;
   }
-  // mailto: gaat via het besturingssysteem naar de mailclient. Op Windows
-  // loopt dat via de ShellExecute-koppeling, die stil afkapt rond de 2083
-  // tekens -- de oude Internet Explorer-grens, in de praktijk nog steeds
-  // de krapste schakel in de keten. Met een vrij "bericht"-veld en
-  // ongelimiteerde utm/gclid-waarden in de querystring kan de opgebouwde
-  // URL die grens ongemerkt overschrijden; een mislukte scheme-navigatie
-  // gooit daarbij meestal geen synchrone exception (de try/catch bij het
-  // aanroepen vangt dat dus niet op). Boven deze veilige marge vertrouwen
-  // we de mailto niet meer (zie het gebruik in de submit-handler).
-  //
-  // LET OP bij het wijzigen van deze grens, de maxlength op #rl-bericht
-  // (markup) of INKORT_MAX hierboven: dit zijn geen onafhankelijke getallen.
-  // Doorgemeten in Node tegen precies deze functies (21-08-2026), met een
-  // realistisch Nederlands bericht op exact de maxlength van #rl-bericht:
-  //   maxlength=850, INKORT_MAX=120
-  //   - zwaar plausibel (bedrijfsnaam 67, e-mailadres 52, utm google/cpc,
-  //     campagnenaam 56, gclid 120): 1828 tekens mét herkomstblok, dus laat
-  //     de ladder dat blok vallen -> 1750 verstuurd. 50 onder deze grens en
-  //     333 onder de shell-grens van ~2083.
-  //   - midden (utm google/cpc/najaar2026, gclid 88): 1674, marge 126.
-  //   - organisch (geen enkele parameter): 1584, marge 216.
-  // Plafonds bij deze opbouw: het zware scenario past tot een bericht van
-  // 888 tekens, een abnormaal zwaar geval (bedrijfsnaam 90, campagnenaam
-  // 210, gclid én fbclid) tot 859. 850 ligt onder allebei, dus geen enkel
-  // doorgerekend geval loopt tegen de "te lang"-melding aan.
-  // Een bericht van 1200 tekens past hier fysiek niet: dat geeft in het
-  // zware scenario 2240 tekens zelfs zónder herkomstblok, ruim boven de
-  // ~2083 die Windows doorlaat. Reken deze som opnieuw door bij elke
-  // wijziging van maxlength, INKORT_MAX of de regels in bouwMailtoUrl.
-  var MAILTO_MAX_LENGTE = 1800;
-  // Eén regel in plaats van het hele herkomstblok, als dat blok de enige
-  // reden is dat de mail niet past (zie kiesMailtoUrl hieronder).
-  var HERKOMST_WEGGELATEN = 'Herkomst: niet meegestuurd — staat in de webstatistieken.';
+  // Eén regel in plaats van het hele herkomstblok. Hij belooft niets wat we
+  // niet waar kunnen maken: GA4, de Meta-pixel en Google Ads staan in
+  // analytics.js alle drie leeg, dus deze herkomst staat nergens anders --
+  // niet in een statistiekpakket, en 'Eerste bezoek' al helemaal niet, want
+  // dat komt uit localStorage. Wat hij wel eerlijk kan zeggen, staat er.
+  var HERKOMST_WEGGELATEN = 'Herkomst weggelaten: mail was anders te lang.';
+  // De prijs achter de ruimtenaam hoeft niet mee in de mail: de locatie is al
+  // uniek en de prijs staat in onze eigen prijslijst. De volledige
+  // keuzewaarde gaat wél ongekapt mee in de POST zodra FORM_ENDPOINT gevuld
+  // is, en in het track-event. Staat er geen streepje in (bijv. "Weet ik nog
+  // niet"), dan blijft de waarde ongemoeid.
+  function korteRuimte(waarde) {
+    var tekst = String(waarde == null ? '' : waarde);
+    var streep = tekst.indexOf(' — ');
+    return streep > 0 ? tekst.slice(0, streep) : tekst;
+  }
   function bouwMailtoUrl(data, metHerkomst) {
     // De bedrijfsnaam staat alleen in het onderwerp: daar is hij nodig om de
     // mail in de inbox te herkennen. Een tweede keer in de body liet elk
-    // teken bedrijfsnaam dubbel meetellen in de URL-lengte.
-    var onderwerp = 'Rondleiding aanvragen — ' + data.bedrijf;
+    // teken bedrijfsnaam dubbel meetellen in de URL-lengte. Kapt hij op zijn
+    // budget, dan blijft het KvK-nummer in de body over -- daarmee is het
+    // bedrijf sluitend te identificeren.
+    var onderwerp = 'Rondleiding: ' + kapOpBudget(data.bedrijf, VELD_BUDGET.bedrijf, '…');
+    // Korte labels: elke label-spatie en elke dubbele punt kost gecodeerd 3
+    // tekens, en die ruimte gaat liever naar het bericht.
     var regels = [
-      'Naam: ' + data.naam,
-      'KvK-nummer: ' + data.kvk,
-      'E-mailadres: ' + data.email,
-      'Telefoon: ' + data.telefoon,
-      'Gewenste ruimte: ' + data.ruimte
+      'Naam: ' + kapOpBudget(data.naam, VELD_BUDGET.naam, '…'),
+      'KvK: ' + kapOpBudget(data.kvk, VELD_BUDGET.kvk, '…'),
+      'E-mail: ' + kapOpBudget(data.email, VELD_BUDGET.email, '…'),
+      'Tel: ' + kapOpBudget(data.telefoon, VELD_BUDGET.telefoon, '…'),
+      'Ruimte: ' + kapOpBudget(korteRuimte(data.ruimte), VELD_BUDGET.ruimte, '…')
     ];
-    if (data.ingangsdatum) regels.push('Gewenste ingangsdatum: ' + data.ingangsdatum);
+    if (data.ingangsdatum) {
+      regels.push('Startdatum: ' + kapOpBudget(data.ingangsdatum, VELD_BUDGET.ingangsdatum, '…'));
+    }
+    // Het bericht wordt hier NIET gekapt: dat zijn de eigen woorden van de
+    // bezoeker en die bestaan nergens anders. Het is al begrensd bij het
+    // intypen (BERICHT_BUDGET); komt er langs een omweg tóch meer binnen, dan
+    // vangt kiesMailtoUrl dat op en gaat er niets half de deur uit.
     if (data.bericht) regels.push('', 'Bericht:', data.bericht);
-    regels.push('');
-    regels = regels.concat(metHerkomst ? bouwHerkomstRegels(data) : [HERKOMST_WEGGELATEN]);
+    var extra = metHerkomst
+      ? bouwHerkomstRegels(data)
+      : (heeftHerkomstGegevens(data) ? [HERKOMST_WEGGELATEN] : []);
+    if (extra.length) regels = regels.concat([''], extra);
     return 'mailto:info@werkplaats3b.nl?subject=' + encodeURIComponent(onderwerp) +
       '&body=' + encodeURIComponent(regels.join('\n'));
   }
-  // Degradatieladder in plaats van een harde muur. Wat de bezoeker zelf
-  // typte bestaat nergens anders en blijft dus altijd heel; de
-  // herkomstgegevens staan óók in de webstatistieken en zijn daarmee het
-  // enige dat we mogen opofferen. Pas als de mail zónder herkomstblok nog
-  // steeds niet past, is er werkelijk niets te versturen (teLang).
+  // Degradatieladder in plaats van een harde muur. Wat de bezoeker zelf typte
+  // bestaat nergens anders en blijft dus altijd heel; het herkomstblok is het
+  // enige dat we mogen opofferen.
+  //
+  // Weglaten helpt alleen als het ook echt korter uitpakt, en dat is niet
+  // vanzelfsprekend: bij organisch verkeer is er geen blok om te laten
+  // vallen, en een klein blok kan minder kosten dan de regel die ervoor in de
+  // plaats komt. Daarom wordt hier gemeten in plaats van aangenomen: de
+  // kortste van de twee varianten wint. Past ook de kortste niet, dan is er
+  // werkelijk niets te versturen (teLang) en zegt het formulier dat.
   function kiesMailtoUrl(data) {
-    var url = bouwMailtoUrl(data, true);
-    if (url.length <= MAILTO_MAX_LENGTE) {
-      return { url: url, herkomstWeggelaten: false, teLang: false };
+    var met = bouwMailtoUrl(data, true);
+    if (met.length <= MAILTO_MAX_LENGTE) {
+      return { url: met, herkomstWeggelaten: false, teLang: false };
     }
-    url = bouwMailtoUrl(data, false);
-    return { url: url, herkomstWeggelaten: true, teLang: url.length > MAILTO_MAX_LENGTE };
+    var zonder = bouwMailtoUrl(data, false);
+    if (zonder.length >= met.length) {
+      // Weglaten maakt het niet korter: dan houden we de herkomst er gewoon
+      // bij -- kwijtraken zonder winst is puur verlies.
+      return { url: met, herkomstWeggelaten: false, teLang: true };
+    }
+    return { url: zonder, herkomstWeggelaten: true, teLang: zonder.length > MAILTO_MAX_LENGTE };
   }
 
   function verzamelData() {
