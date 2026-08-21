@@ -25,6 +25,7 @@
     --line: #2e2920;
     --fs-body: 0.6875rem;
     --fs-h2: 2.625rem;
+    --fs-brand: 18px;  /* logo-merkteken, geen onderdeel van de --fs-*-schaal */
   }
 
   body {
@@ -44,7 +45,7 @@
   /* Logo-blok, letterlijk hetzelfde als footer .brand in index.html. */
   .brand {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 18px;
+    font-size: var(--fs-brand);
     letter-spacing: 2px;
     color: var(--muted);
     margin-bottom: 40px;

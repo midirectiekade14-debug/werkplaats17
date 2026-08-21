@@ -3173,6 +3173,23 @@ window._initFloorplan=function(){
       'T' + pad2(d.getHours()) + ':' + pad2(d.getMinutes()) + ':' + pad2(d.getSeconds()) +
       teken + pad2(Math.floor(abs / 60)) + ':' + pad2(abs % 60);
   }
+  // Betekenis van dit veld (de backend leest het, dus vastgelegd): 'ja' als
+  // dit bezoek de allereerste keer ooit is dat deze browser analytics.js
+  // laadde -- ongeacht of de URL een utm/gclid/fbclid/msclkid-parameter
+  // droeg. w3b.herkomst().last wordt in analytics.js namelijk alleen
+  // geschreven als de URL zo'n parameter had (heeftHerkomstVelden()); een
+  // vergelijking met .last zou een organisch of direct eerste bezoek dus
+  // altijd als 'nee' labelen -- terwijl het aantoonbaar wel de eerste keer
+  // is (cold mail, Instagram, iemand die het adres intypt). .first.ts wordt
+  // wel op ieder eerste bezoek gezet (initHerkomst()), vlak voordat dit
+  // script draait -- valt die timestamp dus zo goed als samen met het laden
+  // van deze pagina (GELADEN_OP), dan is dit die eerste keer.
+  function isEersteBezoekOoit(h) {
+    if (!h || !h.first || !h.first.ts) return 'nee';
+    var eersteTs = Date.parse(h.first.ts);
+    if (isNaN(eersteTs)) return 'nee';
+    return Math.abs(GELADEN_OP - eersteTs) < 10000 ? 'ja' : 'nee';
+  }
   function vulHerkomstVelden() {
     var h = (window.w3b && typeof w3b.herkomst === 'function') ? w3b.herkomst() : null;
     var bron = (h && h.last) || (h && h.first) || {};
@@ -3189,7 +3206,7 @@ window._initFloorplan=function(){
       // 'ja' alleen als de laatst geregistreerde aanraking dezelfde is als
       // ooit de allereerste -- dit bezoek is dan de eerste keer dat deze
       // bezoeker via een gemeten link (utm/gclid/fbclid) binnenkwam.
-      eerste_bezoek: (h && h.first && h.last && h.first.ts === h.last.ts) ? 'ja' : 'nee',
+      eerste_bezoek: isEersteBezoekOoit(h),
       pagina: window.location.pathname,
       tijdstip: tijdstipLokaal()
     };
@@ -3200,6 +3217,19 @@ window._initFloorplan=function(){
   }
 
   // ── Mailto-fallback (FORM_ENDPOINT leeg). ──
+  // Compact herkomstblokje onderaan de mail -- geen dump van alle twaalf
+  // verborgen velden, maar genoeg om in een oogopslag het kanaal te zien.
+  // Lege onderdelen (geen utm-data, geen click-id) vallen gewoon weg.
+  function bouwHerkomstRegels(data) {
+    var kanaal = [data.utm_source, data.utm_medium, data.utm_campaign]
+      .filter(function (v) { return v; }).join(' / ');
+    var regels = [];
+    if (kanaal) regels.push('Herkomst: ' + kanaal);
+    var clickId = data.gclid || data.fbclid;
+    if (clickId) regels.push('Click-ID: ' + clickId);
+    regels.push('Eerste bezoek: ' + (data.eerste_bezoek === 'ja' ? 'ja' : 'nee'));
+    return regels;
+  }
   function bouwMailtoUrl(data) {
     var onderwerp = 'Rondleiding aanvragen — ' + data.bedrijf;
     var regels = [
@@ -3212,6 +3242,8 @@ window._initFloorplan=function(){
     ];
     if (data.ingangsdatum) regels.push('Gewenste ingangsdatum: ' + data.ingangsdatum);
     if (data.bericht) regels.push('', 'Bericht:', data.bericht);
+    regels.push('');
+    regels = regels.concat(bouwHerkomstRegels(data));
     return 'mailto:info@werkplaats3b.nl?subject=' + encodeURIComponent(onderwerp) +
       '&body=' + encodeURIComponent(regels.join('\n'));
   }
