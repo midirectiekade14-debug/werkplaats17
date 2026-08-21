@@ -557,6 +557,47 @@
   }
   .consent-btn-secondary:hover { border-color: var(--amber); color: var(--amber); }
 
+  /* ── PRIVACYSIGNAAL-MELDING (R8) ──
+     Vervangt de vroegere window.alert() bij een actief GPC/DNT-signaal.
+     Zelfde vaste-balkbehandeling als de toestemmingsbalk hierboven, maar dit
+     is een losse melding (geen keuze te maken) die vanzelf verdwijnt of met
+     het kruisje weg kan. */
+  .privacy-melding {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 150;
+    background: var(--surface2);
+    border-top: 1px solid var(--line);
+    padding: 16px 40px;
+  }
+  .privacy-melding-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .privacy-melding-tekst {
+    font-size: var(--fs-body);
+    line-height: 1.6;
+    color: var(--cream);
+  }
+  .privacy-melding-sluit {
+    background: none;
+    border: 1px solid var(--line);
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: var(--fs-body);
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .privacy-melding-sluit:hover { border-color: var(--amber); color: var(--amber); }
+  .privacy-melding-sluit:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+
   /* ── SECTION LABELS ── */
   /* Staat hier en niet als instelling in content.js. Daar stond het eerder wel, en
      dat ging drie keer mis op één avond: een admin-tabblad dat nog uit een oudere
@@ -1158,6 +1199,97 @@
   }
   .cta-line a:hover { border-color: var(--amber); }
 
+  /* ── AANVRAAGFORMULIER (rondleiding) ──
+     Zit in dezelfde .cta-block, onder de mailto/WhatsApp-knoppen -- die
+     blijven staan voor wie liever direct schrijft. Dit is het meetbare pad. */
+  .rondleiding-form-wrap {
+    margin-top: 32px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+  }
+  .form-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: var(--fs-h3);
+    letter-spacing: 1px;
+    color: var(--cream);
+    margin-bottom: 20px;
+  }
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px 20px;
+    margin-bottom: 20px;
+  }
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .form-field-wide { grid-column: 1 / -1; }
+  .form-field label {
+    font-size: var(--fs-small);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .form-field input,
+  .form-field select,
+  .form-field textarea {
+    font-family: 'DM Mono', monospace;
+    font-size: var(--fs-body);
+    color: var(--cream);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    padding: 10px 12px;
+    min-height: 44px;
+    transition: border-color 0.2s;
+  }
+  .form-field textarea { min-height: auto; resize: vertical; line-height: 1.6; }
+  .form-field input:hover,
+  .form-field select:hover,
+  .form-field textarea:hover { border-color: var(--muted); }
+  .form-field input[aria-invalid="true"],
+  .form-field select[aria-invalid="true"],
+  .form-field textarea[aria-invalid="true"] { border-color: var(--amber-light); }
+  .field-error {
+    font-size: var(--fs-small);
+    color: var(--amber-light);
+  }
+  .form-status {
+    font-size: var(--fs-body);
+    color: var(--amber-light);
+    margin-bottom: 14px;
+  }
+  .form-status:empty { display: none; }
+  .form-status a { color: var(--amber-light); }
+  .form-note {
+    margin-top: 14px;
+    font-size: var(--fs-small);
+    color: var(--muted);
+  }
+  /* Honeypot: buiten beeld voor mensen (niet display:none -- dat lezen
+     sommige bots juist als signaal om het veld te negeren), wel aanwezig
+     voor formulier-bots die elk veld invullen. */
+  .hp-veld {
+    position: absolute;
+    left: -9999px;
+  }
+  .rondleiding-form-wrap input:focus-visible,
+  .rondleiding-form-wrap select:focus-visible,
+  .rondleiding-form-wrap textarea:focus-visible,
+  .rondleiding-form-wrap button:focus-visible {
+    outline: 2px solid var(--amber);
+    outline-offset: 2px;
+  }
+  .btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  .btn-primary:disabled:hover {
+    background: var(--amber);
+    transform: none;
+  }
+
   /* ── INSTAGRAM ── */
   .insta-section {
     margin: 0 40px;
@@ -1346,6 +1478,7 @@
     .about-block { margin: 0 24px; }
     .about-people { grid-template-columns: 1fr; }
     .cta-block { padding: 32px 24px 0; }
+    .form-grid { grid-template-columns: 1fr; }
     .insta-section { margin: 0 24px; }
     footer { margin: 0 24px; }
     .floorplan-block { padding: 0 24px; padding-bottom: 36px; }
@@ -1419,6 +1552,10 @@
     .consent-banner-inner { flex-direction: column; align-items: stretch; gap: 12px; }
     .consent-actions { flex-direction: column; }
     .consent-btn { text-align: center; }
+
+    /* Privacysignaal-melding: zelfde stapeling op smal scherm. */
+    .privacy-melding { padding: 14px 24px; }
+    .privacy-melding-inner { flex-direction: column; align-items: stretch; gap: 10px; }
 
     /* Zolang de toestemmingsbalk open staat schuift de contactbalk erboven
        weg -- anders overlappen twee vaste balken onderaan het scherm. De
@@ -2204,6 +2341,95 @@
       <div class="cta-line"><div class="dot"></div><span>Drie werkplekken vrij · stand 20 augustus</span></div>
       <div class="cta-line"><div class="dot"></div><span>Rondleiding op afspraak — <a href="mailto:info@werkplaats3b.nl">info@werkplaats3b.nl</a></span></div>
     </div>
+
+    <!-- Aanvraagformulier (taak 2): het meetbare pad naast mailto/WhatsApp
+         hierboven. FORM_ENDPOINT leeg -> mailto-fallback (zie script
+         onderaan de pagina); ingevuld -> POST naar de Apps Script-webapp. -->
+    <div class="rondleiding-form-wrap" id="rondleiding-form-wrap">
+      <h3 class="form-heading">Vraag een rondleiding aan</h3>
+      <form id="rondleiding-form" novalidate>
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="rl-naam">Naam*</label>
+            <input type="text" id="rl-naam" name="naam" required autocomplete="name" aria-describedby="rl-err-naam">
+            <span class="field-error" id="rl-err-naam" aria-live="polite"></span>
+          </div>
+          <div class="form-field">
+            <label for="rl-bedrijf">Bedrijf*</label>
+            <input type="text" id="rl-bedrijf" name="bedrijf" required autocomplete="organization" aria-describedby="rl-err-bedrijf">
+            <span class="field-error" id="rl-err-bedrijf" aria-live="polite"></span>
+          </div>
+          <div class="form-field">
+            <label for="rl-kvk">KvK-nummer*</label>
+            <input type="text" id="rl-kvk" name="kvk" required inputmode="numeric" autocomplete="off" aria-describedby="rl-err-kvk">
+            <span class="field-error" id="rl-err-kvk" aria-live="polite"></span>
+          </div>
+          <div class="form-field">
+            <label for="rl-email">E-mailadres*</label>
+            <input type="email" id="rl-email" name="email" required autocomplete="email" aria-describedby="rl-err-email">
+            <span class="field-error" id="rl-err-email" aria-live="polite"></span>
+          </div>
+          <div class="form-field">
+            <label for="rl-telefoon">Telefoon*</label>
+            <input type="tel" id="rl-telefoon" name="telefoon" required autocomplete="tel" aria-describedby="rl-err-telefoon">
+            <span class="field-error" id="rl-err-telefoon" aria-live="polite"></span>
+          </div>
+          <div class="form-field">
+            <label for="rl-ruimte">Gewenste ruimte*</label>
+            <select id="rl-ruimte" name="ruimte" required aria-describedby="rl-err-ruimte">
+              <option value="" disabled selected>Kies een ruimte</option>
+              <option value="Werkplek 1e verdieping — € 1.065/mnd">Werkplek 1e verdieping — € 1.065/mnd</option>
+              <option value="Atelier begane grond — € 545/mnd">Atelier begane grond — € 545/mnd</option>
+              <option value="Atelier 2e verdieping — € 745/mnd">Atelier 2e verdieping — € 745/mnd</option>
+              <option value="Opslag — vanaf € 75/mnd">Opslag — vanaf € 75/mnd</option>
+              <option value="Weet ik nog niet">Weet ik nog niet</option>
+            </select>
+            <span class="field-error" id="rl-err-ruimte" aria-live="polite"></span>
+          </div>
+          <div class="form-field">
+            <label for="rl-ingangsdatum">Gewenste ingangsdatum</label>
+            <input type="month" id="rl-ingangsdatum" name="ingangsdatum" autocomplete="off">
+          </div>
+          <div class="form-field form-field-wide">
+            <label for="rl-bericht">Waar werk je aan?</label>
+            <textarea id="rl-bericht" name="bericht" rows="4"></textarea>
+          </div>
+
+          <!-- Honeypot: onzichtbaar voor mensen (CSS + tabindex -1 + aria-hidden),
+               gevuld -> stille afwijzing die zich als succes voordoet. -->
+          <div class="hp-veld" aria-hidden="true">
+            <label for="rl-website">Laat dit veld leeg</label>
+            <input type="text" id="rl-website" name="website" tabindex="-1" autocomplete="off">
+          </div>
+
+          <!-- Verborgen herkomstvelden, gevuld bij verzenden uit w3b.herkomst()
+               (zie script onderaan de pagina). Blijven leeg als w3b ontbreekt
+               (adblocker) -- dat mag de verzending niet tegenhouden. -->
+          <input type="hidden" name="utm_source">
+          <input type="hidden" name="utm_medium">
+          <input type="hidden" name="utm_campaign">
+          <input type="hidden" name="utm_term">
+          <input type="hidden" name="utm_content">
+          <input type="hidden" name="gclid">
+          <input type="hidden" name="fbclid">
+          <input type="hidden" name="referrer">
+          <input type="hidden" name="landing">
+          <input type="hidden" name="eerste_bezoek">
+          <input type="hidden" name="pagina">
+          <input type="hidden" name="tijdstip">
+        </div>
+
+        <p class="form-status" id="rl-status" role="status" aria-live="polite"></p>
+        <button type="submit" class="btn-primary" id="rl-submit">Versturen</button>
+      </form>
+      <p class="form-note">Alleen voor bedrijven met een KvK-inschrijving. We nemen binnen twee werkdagen contact op.</p>
+    </div>
+    <noscript>
+      <style>#rondleiding-form-wrap { display: none; }</style>
+      <p class="form-note">Dit formulier heeft JavaScript nodig. Neem contact op via
+        <a href="mailto:info@werkplaats3b.nl">info@werkplaats3b.nl</a> of
+        <a href="https://wa.me/31681689278">WhatsApp</a>.</p>
+    </noscript>
   </div>
 
   <!-- INSTAGRAM -->
@@ -2864,6 +3090,209 @@ window._initFloorplan=function(){
 };
 </script>
 
+<script>
+// ── AANVRAAGFORMULIER (rondleiding aanvragen, taak 2) ──
+// Validatie, spamafweer en verzending. Werkt volledig zonder w3b (adblocker
+// kan analytics.js blokkeren) -- de herkomstvelden blijven dan leeg, dat mag
+// de verzending niet tegenhouden.
+(function () {
+  var form = document.getElementById('rondleiding-form');
+  if (!form) return;
+
+  // Leeg opgeleverd: elke verzending gaat dan via de mailto-fallback
+  // hieronder, tot de Apps Script-webapp (taak 3) hier ingevuld wordt.
+  var FORM_ENDPOINT = '';  // vul hier de URL van de Apps Script-webapp in
+
+  var GELADEN_OP = Date.now();  // tijdslot-spamafweer: verzenden binnen 3s = bot
+
+  var VELDEN = {
+    naam: { input: document.getElementById('rl-naam') },
+    bedrijf: { input: document.getElementById('rl-bedrijf') },
+    kvk: { input: document.getElementById('rl-kvk') },
+    email: { input: document.getElementById('rl-email') },
+    telefoon: { input: document.getElementById('rl-telefoon') },
+    ruimte: { input: document.getElementById('rl-ruimte') }
+  };
+  Object.keys(VELDEN).forEach(function (naam) {
+    VELDEN[naam].fout = document.getElementById('rl-err-' + naam);
+  });
+  var status = document.getElementById('rl-status');
+  var knop = document.getElementById('rl-submit');
+
+  // ── Validatie per veld: gewone taal, geen technisch jargon. ──
+  function kvkCijfers() { return VELDEN.kvk.input.value.replace(/[\s.]/g, ''); }
+  function telefoonCijfers() { return VELDEN.telefoon.input.value.replace(/[\s+\-()]/g, ''); }
+  var VALIDATORS = {
+    naam: function () { return VELDEN.naam.input.value.trim() ? '' : 'Vul je naam in.'; },
+    bedrijf: function () { return VELDEN.bedrijf.input.value.trim() ? '' : 'Vul je bedrijfsnaam in.'; },
+    kvk: function () { return /^[0-9]{8}$/.test(kvkCijfers()) ? '' : 'Een KvK-nummer heeft acht cijfers.'; },
+    email: function () {
+      var v = VELDEN.email.input.value.trim();
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ? '' : 'Vul een geldig e-mailadres in.';
+    },
+    telefoon: function () { return /^[0-9]{9,}$/.test(telefoonCijfers()) ? '' : 'Een telefoonnummer heeft minimaal 9 cijfers.'; },
+    ruimte: function () { return VELDEN.ruimte.input.value ? '' : 'Kies een ruimte.'; }
+  };
+
+  function toonVeldFout(naam, tekst) {
+    var veld = VELDEN[naam];
+    veld.input.setAttribute('aria-invalid', tekst ? 'true' : 'false');
+    if (veld.fout) veld.fout.textContent = tekst;
+  }
+  function valideerVeld(naam) {
+    var tekst = VALIDATORS[naam]();
+    toonVeldFout(naam, tekst);
+    return !tekst;
+  }
+  function valideerAlles() {
+    var eersteOngeldig = null;
+    var geldig = true;
+    Object.keys(VALIDATORS).forEach(function (naam) {
+      if (!valideerVeld(naam)) {
+        geldig = false;
+        if (!eersteOngeldig) eersteOngeldig = VELDEN[naam].input;
+      }
+    });
+    return { geldig: geldig, eersteOngeldig: eersteOngeldig };
+  }
+  // Bij blur per veld, opnieuw bij verzenden (valideerAlles hierboven).
+  Object.keys(VALIDATORS).forEach(function (naam) {
+    VELDEN[naam].input.addEventListener('blur', function () { valideerVeld(naam); });
+  });
+
+  // ── Herkomst uit w3b (adblocker-safe: alles leeg als w3b ontbreekt). ──
+  function pad2(n) { return (n < 10 ? '0' : '') + n; }
+  // ISO-achtig maar in lokale tijd (Europe/Amsterdam voor vrijwel elke
+  // bezoeker) i.p.v. Date#toISOString(), die altijd UTC teruggeeft.
+  function tijdstipLokaal() {
+    var d = new Date();
+    var offset = -d.getTimezoneOffset();
+    var teken = offset >= 0 ? '+' : '-';
+    var abs = Math.abs(offset);
+    return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()) +
+      'T' + pad2(d.getHours()) + ':' + pad2(d.getMinutes()) + ':' + pad2(d.getSeconds()) +
+      teken + pad2(Math.floor(abs / 60)) + ':' + pad2(abs % 60);
+  }
+  function vulHerkomstVelden() {
+    var h = (window.w3b && typeof w3b.herkomst === 'function') ? w3b.herkomst() : null;
+    var bron = (h && h.last) || (h && h.first) || {};
+    var waarden = {
+      utm_source: bron.utm_source || '',
+      utm_medium: bron.utm_medium || '',
+      utm_campaign: bron.utm_campaign || '',
+      utm_term: bron.utm_term || '',
+      utm_content: bron.utm_content || '',
+      gclid: bron.gclid || '',
+      fbclid: bron.fbclid || '',
+      referrer: bron.referrer || '',
+      landing: bron.landing || '',
+      // 'ja' alleen als de laatst geregistreerde aanraking dezelfde is als
+      // ooit de allereerste -- dit bezoek is dan de eerste keer dat deze
+      // bezoeker via een gemeten link (utm/gclid/fbclid) binnenkwam.
+      eerste_bezoek: (h && h.first && h.last && h.first.ts === h.last.ts) ? 'ja' : 'nee',
+      pagina: window.location.pathname,
+      tijdstip: tijdstipLokaal()
+    };
+    Object.keys(waarden).forEach(function (naam) {
+      var veld = form.querySelector('[name="' + naam + '"]');
+      if (veld) veld.value = waarden[naam];
+    });
+  }
+
+  // ── Mailto-fallback (FORM_ENDPOINT leeg). ──
+  function bouwMailtoUrl(data) {
+    var onderwerp = 'Rondleiding aanvragen — ' + data.bedrijf;
+    var regels = [
+      'Naam: ' + data.naam,
+      'Bedrijf: ' + data.bedrijf,
+      'KvK-nummer: ' + data.kvk,
+      'E-mailadres: ' + data.email,
+      'Telefoon: ' + data.telefoon,
+      'Gewenste ruimte: ' + data.ruimte
+    ];
+    if (data.ingangsdatum) regels.push('Gewenste ingangsdatum: ' + data.ingangsdatum);
+    if (data.bericht) regels.push('', 'Bericht:', data.bericht);
+    return 'mailto:info@werkplaats3b.nl?subject=' + encodeURIComponent(onderwerp) +
+      '&body=' + encodeURIComponent(regels.join('\n'));
+  }
+
+  function verzamelData() {
+    var data = {};
+    var els = form.querySelectorAll('input[name], select[name], textarea[name]');
+    [].forEach.call(els, function (el) { data[el.name] = el.value; });
+    // Genormaliseerd (alleen cijfers) i.p.v. wat de bezoeker precies typte --
+    // scheelt spaties/punten/haakjes in de backend en in de mail.
+    data.kvk = kvkCijfers();
+    data.telefoon = telefoonCijfers();
+    return data;
+  }
+
+  function toonStatus(tekst) { if (status) status.textContent = tekst; }
+  function naarBedankt() { window.location.href = 'bedankt.html'; }
+  function meldFout() {
+    knop.disabled = false;
+    knop.textContent = 'Versturen';
+    if (status) {
+      status.textContent = 'Dat lukte niet. Mail ons rechtstreeks: ';
+      var a = document.createElement('a');
+      a.href = 'mailto:info@werkplaats3b.nl';
+      a.textContent = 'info@werkplaats3b.nl';
+      status.appendChild(a);
+    }
+  }
+  function meldSucces(data) {
+    if (window.w3b) {
+      try { w3b.track('aanvraag_verstuurd', { ruimte: data.ruimte, methode: 'formulier' }); } catch (e) {}
+    }
+    naarBedankt();
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    // Spamafweer: honeypot gevuld, of verzonden binnen 3s na laden -- doe
+    // alsof het gelukt is, verstuur niets (geen track-event: dat zou de
+    // conversiecijfers vervuilen met botverkeer).
+    var honeypot = form.querySelector('[name="website"]');
+    var teVroeg = (Date.now() - GELADEN_OP) < 3000;
+    if ((honeypot && honeypot.value) || teVroeg) {
+      naarBedankt();
+      return;
+    }
+
+    var resultaat = valideerAlles();
+    if (!resultaat.geldig) {
+      toonStatus('Los de gemarkeerde velden hieronder op.');
+      if (resultaat.eersteOngeldig) resultaat.eersteOngeldig.focus();
+      return;
+    }
+
+    toonStatus('');
+    knop.disabled = true;
+    knop.textContent = 'Versturen…';
+    vulHerkomstVelden();
+    var data = verzamelData();
+
+    if (FORM_ENDPOINT) {
+      // URLSearchParams i.p.v. JSON: dat zet de Content-Type op
+      // 'application/x-www-form-urlencoded', een CORS-safelisted waarde --
+      // geen preflight. Een JSON-body triggert wél een preflight, en dat is
+      // bij Apps Script-webapps de meest voorkomende oorzaak van een stille
+      // mislukking (de OPTIONS-preflight krijgt daar geen antwoord).
+      fetch(FORM_ENDPOINT, { method: 'POST', body: new URLSearchParams(data) })
+        .then(function (res) { if (res.ok) meldSucces(data); else meldFout(); })
+        .catch(meldFout);
+    } else {
+      try { window.location.href = bouwMailtoUrl(data); } catch (e) {}
+      // mailto navigeert de pagina zelf niet weg (opent de mailclient
+      // ernaast); de korte vertraging geeft die client de kans om open te
+      // gaan voordat we doorsturen naar de bedankpagina.
+      setTimeout(function () { meldSucces(data); }, 300);
+    }
+  });
+})();
+</script>
+
 <!-- Toestemmingsbalk (AVG). Standaard hidden; analytics.js toont hem als er
      nog geen keuze in localStorage staat en schrijft de keuze daar ook weg.
      Beide knoppen even prominent -- geen dark pattern. -->
@@ -2885,6 +3314,19 @@ window._initFloorplan=function(){
       <button type="button" class="consent-btn consent-btn-secondary" id="w3b-consent-weigeren">Weigeren</button>
       <button type="button" class="consent-btn consent-btn-primary" id="w3b-consent-accepteren">Accepteren</button>
     </div>
+  </div>
+</div>
+
+<!-- Privacysignaal-melding (R8). Vervangt de vroegere window.alert() bij een
+     actief GPC/DNT-signaal: verschijnt via analytics.js, verdwijnt na 6s
+     vanzelf of met het kruisje. -->
+<div class="privacy-melding" id="w3b-privacy-melding" role="status" aria-live="polite" hidden>
+  <div class="privacy-melding-inner">
+    <p class="privacy-melding-tekst">
+      Je browser laat al weten dat je niet gevolgd wilt worden (Global Privacy Control of Do
+      Not Track). Dat respecteren we — er valt hier niets in te stellen.
+    </p>
+    <button type="button" class="privacy-melding-sluit" id="w3b-privacy-melding-sluit" aria-label="Melding sluiten">✕</button>
   </div>
 </div>
 

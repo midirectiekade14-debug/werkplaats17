@@ -38,7 +38,8 @@
   var META_STANDAARD = {
     contact_mail: 'Contact',
     contact_whatsapp: 'Contact',
-    contact_telefoon: 'Contact'
+    contact_telefoon: 'Contact',
+    aanvraag_bevestigd: 'Lead' // bedankt.html, ná een echt verstuurde aanvraag
   };
 
   // ── TOESTEMMING (AVG) ──
@@ -132,6 +133,45 @@
         uitleg.hidden = !open;
         meer.setAttribute('aria-expanded', open ? 'true' : 'false');
       });
+      var privacySluit = document.getElementById('w3b-privacy-melding-sluit');
+      if (privacySluit) privacySluit.addEventListener('click', verbergPrivacyMelding);
+    } catch (e) {}
+  }
+
+  // ── Privacysignaal-melding (R8) ──
+  // Vervangt de vroegere window.alert(): een systeemdialoog is een stijlbreuk
+  // op deze site en treft precies de privacybewuste bezoekers het vaakst. De
+  // markup staat in index.html, zelfde vaste-balkbehandeling als de
+  // toestemmingsbalk hierboven, maar een eigen resize-koppeling: deze en de
+  // toestemmingsbalk verschijnen nooit tegelijk (toonBanner() weigert al
+  // zodra heeftPrivacySignaal() true is), maar delen daarom niet dezelfde
+  // afgesloten 'resizeGekoppeld'-vlag/element hierboven.
+  var privacyMeldingResizeGekoppeld = false;
+  var privacyMeldingTimer = null;
+  function toonPrivacyMelding() {
+    try {
+      var el = document.getElementById('w3b-privacy-melding');
+      if (!el) return;
+      el.hidden = false;
+      document.body.classList.add('w3b-banner-open');
+      bannerHoogteZetten(el);
+      if (!privacyMeldingResizeGekoppeld) {
+        privacyMeldingResizeGekoppeld = true;
+        window.addEventListener('resize', function () {
+          if (!el.hidden) bannerHoogteZetten(el);
+        });
+      }
+      if (privacyMeldingTimer) clearTimeout(privacyMeldingTimer);
+      privacyMeldingTimer = setTimeout(verbergPrivacyMelding, 6000);
+    } catch (e) {}
+  }
+  function verbergPrivacyMelding() {
+    try {
+      var el = document.getElementById('w3b-privacy-melding');
+      if (el) el.hidden = true;
+      document.body.classList.remove('w3b-banner-open');
+      document.documentElement.style.removeProperty('--w3b-banner-h');
+      if (privacyMeldingTimer) { clearTimeout(privacyMeldingTimer); privacyMeldingTimer = null; }
     } catch (e) {}
   }
 
@@ -141,9 +181,7 @@
   // Er is dan niets te kiezen -- de browser dwingt weigeren al af -- dus
   // zeggen we dat in plaats van net te doen alsof de klik niets deed.
   function meldPrivacySignaal() {
-    try {
-      window.alert('Je browser blokkeert meten al, via Global Privacy Control of Do Not Track. Er is hier niets te kiezen.');
-    } catch (e) {}
+    toonPrivacyMelding();
   }
 
   var CONSENT = {

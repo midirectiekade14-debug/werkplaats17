@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Aanvraag ontvangen — Werkplaats3b</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔧</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<!-- Zelfde meting als de rest van de site; werkt met alles leeg en blijft
+     werken als w3b ontbreekt (adblocker) -- zie het script onderaan. -->
+<script src="analytics.js" defer></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* Alleen de variabelen en regels die deze pagina nodig heeft -- geen
+     kopie van de 118 kB-stylesheet van index.html. */
+  :root {
+    --bg: #161412;
+    --amber: #E09A2F;
+    --amber-light: #F5B040;
+    --cream: #F0EAE0;
+    --muted: #7a7060;
+    --line: #2e2920;
+    --fs-body: 0.6875rem;
+    --fs-h2: 2.625rem;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--cream);
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 24px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Logo-blok, letterlijk hetzelfde als footer .brand in index.html. */
+  .brand {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 40px;
+  }
+  .brand span { color: var(--amber); }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: var(--fs-h2);
+    letter-spacing: 1px;
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+
+  p {
+    font-size: var(--fs-body);
+    line-height: 1.7;
+    color: var(--muted);
+    font-weight: 300;
+    max-width: 46ch;
+    margin-bottom: 28px;
+  }
+
+  a {
+    color: var(--cream);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    transition: border-color 0.2s;
+  }
+  a:hover { border-color: var(--amber); }
+  a:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
+
+  .terug {
+    font-size: var(--fs-body);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--amber);
+    border-bottom-color: var(--amber);
+  }
+</style>
+</head>
+<body>
+
+  <div class="brand">Werk<span>plaats</span>3b</div>
+
+  <h1>Aanvraag ontvangen.</h1>
+  <p>
+    We nemen binnen twee werkdagen contact op om een rondleiding in te plannen. Liever
+    meteen? Bel of app <a href="tel:+31681689278">+31 6 81689278</a>.
+  </p>
+  <a class="terug" href="index.html">Terug naar de homepage</a>
+
+<script>
+// Bevestigingsmoment: een bezoeker komt hier alleen ná een daadwerkelijk
+// verstuurde aanvraag, dus dit is het echte conversiemoment (Meta Lead +
+// Google Ads-conversie via de bestaande trackConversie()). w3b kan ontbreken
+// (adblocker heeft analytics.js geblokkeerd) -- dan gebeurt hier simpelweg
+// niets, de pagina blijft verder gewoon werken.
+document.addEventListener('DOMContentLoaded', function () {
+  if (!window.w3b) return;
+  try { w3b.trackConversie('aanvraag_bevestigd', {}); } catch (e) {}
+});
+</script>
+</body>
+</html>
