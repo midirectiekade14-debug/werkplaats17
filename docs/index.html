@@ -2399,8 +2399,14 @@
           </div>
           <div class="form-field form-field-wide">
             <label for="rl-bericht">Waar werk je aan?</label>
-            <textarea id="rl-bericht" name="bericht" rows="4" maxlength="700" aria-describedby="rl-bericht-teller"></textarea>
-            <span class="teken-teller" id="rl-bericht-teller" aria-live="polite">0/700 tekens</span>
+            <textarea id="rl-bericht" name="bericht" rows="4" maxlength="850" aria-describedby="rl-bericht-teller rl-bericht-plakmelding"></textarea>
+            <!-- Geen aria-live op de teller: die leest bij elke toetsaanslag het
+                 getal voor en onderbreekt zo het typen. De aria-describedby
+                 hierboven kondigt hem bij focus aan, dat volstaat. Het getal zelf
+                 komt uit maxLength (script onderaan de pagina), zodat er geen
+                 tweede getal in de markup uit de pas kan lopen. -->
+            <span class="teken-teller" id="rl-bericht-teller"></span>
+            <span class="field-error" id="rl-bericht-plakmelding" aria-live="polite"></span>
           </div>
 
           <!-- Honeypot: onzichtbaar voor mensen (CSS + tabindex -1 + aria-hidden),
@@ -3168,21 +3174,53 @@ window._initFloorplan=function(){
     VELDEN[naam].input.addEventListener('blur', function () { valideerVeld(naam); });
   });
 
-  // Levende tekenteller onder "Waar werk je aan?" -- de maxlength op het
-  // veld zelf (zie markup) is zo gekozen dat zelfs het toegestane maximum,
-  // samen met een realistische advertentieklik (utm + gclid), ruim onder
-  // MAILTO_MAX_LENGTE blijft (zie bouwMailtoUrl hieronder). De teller leest
-  // maxLength van het element zelf -- één bron, geen los getal dat uit de
-  // pas kan gaan lopen met het attribuut.
+  // Levende tekenteller onder "Waar werk je aan?". De teller leest maxLength
+  // van het element zelf -- één bron, geen los getal in de markup dat uit de
+  // pas kan lopen met het attribuut. Waarom er überhaupt een maximum op dit
+  // veld staat, en hoe hoog het mag zijn: zie de som bij MAILTO_MAX_LENGTE.
   var berichtVeld = form.querySelector('[name="bericht"]');
   var berichtTeller = document.getElementById('rl-bericht-teller');
+  var berichtPlakmelding = document.getElementById('rl-bericht-plakmelding');
   function werkBerichtTellerBij() {
     if (!berichtVeld || !berichtTeller) return;
     berichtTeller.textContent = berichtVeld.value.length + '/' + berichtVeld.maxLength + ' tekens';
   }
+  function toonPlakmelding(tekst) {
+    if (berichtPlakmelding) berichtPlakmelding.textContent = tekst;
+  }
+  // Plakt iemand meer tekst dan er past, dan kapt de browser dat stil af --
+  // de teller op het maximum zien staan is geen melding. We voorspellen niets
+  // maar meten: wat bood het klembord aan, en wat kwam er werkelijk in het
+  // veld terecht? Dat verschil is pas na de plakactie zichtbaar, vandaar de
+  // timeout van 0 ms.
+  function bewaakPlakken(e) {
+    if (!berichtVeld) return;
+    var aangeboden = '';
+    try {
+      var klembord = e.clipboardData || window.clipboardData;
+      // Windows-regeleindes tellen in een textarea als één teken; zonder deze
+      // normalisatie zou elke geplakte alinea als afgekapt gelden.
+      if (klembord) aangeboden = String(klembord.getData('text') || '').replace(/\r\n/g, '\n');
+    } catch (fout) { return; }  // klembord niet leesbaar: dan meten we niets
+    if (!aangeboden) return;
+    var lengteVoor = berichtVeld.value.length;
+    var selectie = Math.abs((berichtVeld.selectionEnd || 0) - (berichtVeld.selectionStart || 0));
+    setTimeout(function () {
+      var geplaatst = berichtVeld.value.length - (lengteVoor - selectie);
+      var weggevallen = aangeboden.length - geplaatst;
+      if (weggevallen <= 0) return;
+      toonPlakmelding(weggevallen === 1
+        ? 'Eén teken paste er niet bij en is niet geplakt (maximum ' + berichtVeld.maxLength + ' tekens).'
+        : weggevallen + ' tekens pasten er niet bij en zijn niet geplakt (maximum ' + berichtVeld.maxLength + ' tekens).');
+    }, 0);
+  }
   if (berichtVeld) {
     werkBerichtTellerBij();
-    berichtVeld.addEventListener('input', werkBerichtTellerBij);
+    berichtVeld.addEventListener('input', function () {
+      werkBerichtTellerBij();
+      toonPlakmelding('');  // nieuwe invoer maakt de vorige plakmelding oud
+    });
+    berichtVeld.addEventListener('paste', bewaakPlakken);
   }
 
   // ── Herkomst uit w3b (adblocker-safe: alles leeg als w3b ontbreekt). ──
@@ -3242,14 +3280,26 @@ window._initFloorplan=function(){
   // ── Mailto-fallback (FORM_ENDPOINT leeg). ──
   // Compact herkomstblokje onderaan de mail -- geen dump van alle twaalf
   // verborgen velden, maar genoeg om in een oogopslag het kanaal te zien.
-  // Lege onderdelen (geen utm-data, geen click-id) vallen gewoon weg.
-  // Iedere waarde wordt eerst afgekapt (inkorten()): utm_source/utm_medium/
-  // utm_campaign/gclid/fbclid komen ongevalideerd en ongelimiteerd uit de
-  // querystring (analytics.js), dus zonder afkap kan één opgeblazen
-  // parameter dit blokje -- en daarmee de hele mailto-URL -- onnodig groot
-  // maken (zie MAILTO_MAX_LENGTE bij bouwMailtoUrl voor de grens op de
-  // hele URL).
-  var INKORT_MAX = 80;
+  // Lege onderdelen (geen utm-data, geen advertentieklik) vallen gewoon weg.
+  //
+  // De click-ids zelf (gclid/fbclid) staan hier bewust NIET meer in. Ze
+  // kosten in de URL ruim honderd tekens en zijn in een mail waardeloos:
+  // afgekapt is een click-id onbruikbaar, en de enige echte toepassing
+  // (offline-conversie-import in Google Ads) eist de exacte, volledige
+  // waarde. Die blijft ongekapt in de verborgen formuliervelden staan en
+  // gaat mee zodra FORM_ENDPOINT gevuld is; in de mail volstaat de
+  // constatering dát er een advertentieklik aan voorafging.
+  //
+  // Daarmee is het utm-kanaalblok ("bron / medium / campagne") de enige
+  // overgebleven klant van inkorten(). Die waarden komen ongevalideerd en
+  // ongelimiteerd uit de querystring (analytics.js), dus zonder afkap kan
+  // één opgeblazen parameter de hele mailto-URL opblazen. De grens ligt op
+  // die regel: een volledig uitgeschreven kanaalregel meet in de praktijk
+  // 25-75 tekens (Google Ads laat campagnenamen tot 128 tekens toe), dus
+  // 120 raakt geen echt kanaal en bindt een opgeblazen querystring op 129
+  // tekens. Lager afkappen loont nauwelijks en kost informatie: het
+  // beletselteken kost na URL-encoding zelf al 9 tekens (%E2%80%A6).
+  var INKORT_MAX = 120;
   function inkorten(tekst) {
     return (tekst.length > INKORT_MAX) ? tekst.slice(0, INKORT_MAX) + '…' : tekst;
   }
@@ -3258,12 +3308,14 @@ window._initFloorplan=function(){
       .filter(function (v) { return v; }).join(' / ');
     var regels = [];
     if (kanaal) regels.push('Herkomst: ' + inkorten(kanaal));
-    // Apart gelabeld i.p.v. één generieke "Click-ID": zonder utm-velden
-    // (bijv. een kale ?gclid=... zonder utm_*) verschijnt de Herkomst-regel
-    // niet, en is dit label het enige dat nog zegt via welk platform de
-    // klik binnenkwam.
-    if (data.gclid) regels.push('Click-ID (Google): ' + inkorten(data.gclid));
-    if (data.fbclid) regels.push('Click-ID (Meta): ' + inkorten(data.fbclid));
+    // Alleen het feit van de klik en het platform, niet het token: zonder
+    // utm-velden (bijv. een kale ?gclid=... zonder utm_*) verschijnt de
+    // Herkomst-regel niet, en is dit het enige dat nog zegt via welk
+    // kanaal de aanvraag binnenkwam.
+    var platforms = [];
+    if (data.gclid) platforms.push('Google Ads');
+    if (data.fbclid) platforms.push('Meta');
+    if (platforms.length) regels.push('Advertentieklik: ' + platforms.join(', '));
     regels.push('Eerste bezoek: ' + (data.eerste_bezoek === 'ja' ? 'ja' : 'nee'));
     return regels;
   }
@@ -3279,17 +3331,34 @@ window._initFloorplan=function(){
   //
   // LET OP bij het wijzigen van deze grens, de maxlength op #rl-bericht
   // (markup) of INKORT_MAX hierboven: dit zijn geen onafhankelijke getallen.
-  // Doorgemeten (Node, tegen deze functies): maxlength=700 + INKORT_MAX=80
-  // + een realistische advertentieklik (utm_source/utm_medium/utm_campaign
-  // + een gclid van ~90 tekens) + een bericht op exact het toegestane
-  // maximum geeft een URL van ~1520 tekens -- ruim (~280) onder deze
-  // grens. Verhoog de maxlength nooit zonder deze som opnieuw te maken.
+  // Doorgemeten in Node tegen precies deze functies (21-08-2026), met een
+  // realistisch Nederlands bericht op exact de maxlength van #rl-bericht:
+  //   maxlength=850, INKORT_MAX=120
+  //   - zwaar plausibel (bedrijfsnaam 67, e-mailadres 52, utm google/cpc,
+  //     campagnenaam 56, gclid 120): 1828 tekens mét herkomstblok, dus laat
+  //     de ladder dat blok vallen -> 1750 verstuurd. 50 onder deze grens en
+  //     333 onder de shell-grens van ~2083.
+  //   - midden (utm google/cpc/najaar2026, gclid 88): 1674, marge 126.
+  //   - organisch (geen enkele parameter): 1584, marge 216.
+  // Plafonds bij deze opbouw: het zware scenario past tot een bericht van
+  // 888 tekens, een abnormaal zwaar geval (bedrijfsnaam 90, campagnenaam
+  // 210, gclid én fbclid) tot 859. 850 ligt onder allebei, dus geen enkel
+  // doorgerekend geval loopt tegen de "te lang"-melding aan.
+  // Een bericht van 1200 tekens past hier fysiek niet: dat geeft in het
+  // zware scenario 2240 tekens zelfs zónder herkomstblok, ruim boven de
+  // ~2083 die Windows doorlaat. Reken deze som opnieuw door bij elke
+  // wijziging van maxlength, INKORT_MAX of de regels in bouwMailtoUrl.
   var MAILTO_MAX_LENGTE = 1800;
-  function bouwMailtoUrl(data) {
+  // Eén regel in plaats van het hele herkomstblok, als dat blok de enige
+  // reden is dat de mail niet past (zie kiesMailtoUrl hieronder).
+  var HERKOMST_WEGGELATEN = 'Herkomst: niet meegestuurd — staat in de webstatistieken.';
+  function bouwMailtoUrl(data, metHerkomst) {
+    // De bedrijfsnaam staat alleen in het onderwerp: daar is hij nodig om de
+    // mail in de inbox te herkennen. Een tweede keer in de body liet elk
+    // teken bedrijfsnaam dubbel meetellen in de URL-lengte.
     var onderwerp = 'Rondleiding aanvragen — ' + data.bedrijf;
     var regels = [
       'Naam: ' + data.naam,
-      'Bedrijf: ' + data.bedrijf,
       'KvK-nummer: ' + data.kvk,
       'E-mailadres: ' + data.email,
       'Telefoon: ' + data.telefoon,
@@ -3298,9 +3367,22 @@ window._initFloorplan=function(){
     if (data.ingangsdatum) regels.push('Gewenste ingangsdatum: ' + data.ingangsdatum);
     if (data.bericht) regels.push('', 'Bericht:', data.bericht);
     regels.push('');
-    regels = regels.concat(bouwHerkomstRegels(data));
+    regels = regels.concat(metHerkomst ? bouwHerkomstRegels(data) : [HERKOMST_WEGGELATEN]);
     return 'mailto:info@werkplaats3b.nl?subject=' + encodeURIComponent(onderwerp) +
       '&body=' + encodeURIComponent(regels.join('\n'));
+  }
+  // Degradatieladder in plaats van een harde muur. Wat de bezoeker zelf
+  // typte bestaat nergens anders en blijft dus altijd heel; de
+  // herkomstgegevens staan óók in de webstatistieken en zijn daarmee het
+  // enige dat we mogen opofferen. Pas als de mail zónder herkomstblok nog
+  // steeds niet past, is er werkelijk niets te versturen (teLang).
+  function kiesMailtoUrl(data) {
+    var url = bouwMailtoUrl(data, true);
+    if (url.length <= MAILTO_MAX_LENGTE) {
+      return { url: url, herkomstWeggelaten: false, teLang: false };
+    }
+    url = bouwMailtoUrl(data, false);
+    return { url: url, herkomstWeggelaten: true, teLang: url.length > MAILTO_MAX_LENGTE };
   }
 
   function verzamelData() {
@@ -3385,12 +3467,12 @@ window._initFloorplan=function(){
         .then(function (res) { if (res.ok) meldSucces(data); else meldFout(); })
         .catch(meldFout);
     } else {
-      var mailtoUrl = bouwMailtoUrl(data);
-      if (mailtoUrl.length > MAILTO_MAX_LENGTE) {
+      var keuze = kiesMailtoUrl(data);
+      if (keuze.teLang) {
         meldMailtoTeGroot();
         return;
       }
-      try { window.location.href = mailtoUrl; } catch (e) {}
+      try { window.location.href = keuze.url; } catch (e) {}
       // mailto navigeert de pagina zelf niet weg (opent de mailclient
       // ernaast); de korte vertraging geeft die client de kans om open te
       // gaan voordat we doorsturen naar de bedankpagina.
