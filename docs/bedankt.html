@@ -85,6 +85,34 @@
     color: var(--amber);
     border-bottom-color: var(--amber);
   }
+
+  /* ── TELEFOON ──
+     Deze pagina had geen enkele mediaquery en hield dus de desktopschaal
+     aan: 11px tekst en tikdoelen van 15px hoog, terwijl elke conversie hier
+     landt en bij een advertentiecampagne overwegend mobiel. Dezelfde
+     tekstgroottes als index.html op ≤600px, en dezelfde ondergrens van 44px
+     voor wat je moet kunnen raken. */
+  @media (max-width: 600px) {
+    :root {
+      --fs-body: 0.875rem;   /* 14px, gelijk aan index.html */
+      --fs-h2:   2.25rem;    /* 36px, gelijk aan index.html */
+    }
+    /* Het tikvlak groeit naar 44px; de onderstreping komt van
+       text-decoration in plaats van de onderrand, zodat hij tegen de tekst
+       blijft staan in plaats van 15px eronder te hangen. inline-flex houdt
+       de link in de tekstregel, maar laat de regel wel meegroeien -- anders
+       overlappen de tikvlakken van opeenvolgende regels elkaar. */
+    p a, .terug {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      border-bottom: none;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+    p a { text-decoration-color: var(--line); }
+    .terug { padding: 0 8px; text-decoration-color: var(--amber); }
+  }
 </style>
 </head>
 <body>
@@ -99,15 +127,47 @@
   <a class="terug" href="index.html">Terug naar de homepage</a>
 
 <script>
-// Bevestigingsmoment: een bezoeker komt hier alleen ná een daadwerkelijk
-// verstuurde aanvraag, dus dit is het echte conversiemoment (Meta Lead +
-// Google Ads-conversie via de bestaande trackConversie()). w3b kan ontbreken
-// (adblocker heeft analytics.js geblokkeerd) -- dan gebeurt hier simpelweg
-// niets, de pagina blijft verder gewoon werken.
+// Bevestigingsmoment: hier gaat de conversie af (Meta Lead + Google
+// Ads-conversie via trackConversie()). Eén verstuurde aanvraag levert precies
+// één conversie op, en niets anders levert er een op.
+//
+// Deze pagina kan namelijk ook zonder aanvraag geladen worden: rechtstreeks
+// binnenkomen, F5, de terugknop, en het spampad (index.html stuurt een
+// gevulde honeypot of een verzending binnen 3 seconden bewust hierheen, zodat
+// de bot niets leert). Zonder rem telde elk van die gevallen als conversie en
+// optimaliseerden Google Ads en Meta op opgeblazen, deels door bots
+// veroorzaakte cijfers.
+//
+// De rem: index.html zet vlak vóór de doorstuur een vlag in sessionStorage --
+// alleen op het echte verzendpad, niet op het spampad. Deze pagina consumeert
+// die vlag: uitlezen én meteen wissen, ook als er niet geteld wordt. Daardoor
+// telt een herlading of een terugkeer op deze pagina nul. De vlag draagt het
+// tijdstip van verzenden; ouder dan vijf minuten telt niet meer, zodat een
+// vlag die door een afgebroken mailto-navigatie is blijven staan later geen
+// losse conversie kan veroorzaken.
+//
+// w3b kan ontbreken (adblocker heeft analytics.js geblokkeerd) -- dan gebeurt
+// er niets, de pagina blijft verder gewoon werken.
 document.addEventListener('DOMContentLoaded', function () {
+  var VLAG = 'w3b_aanvraag_ts';
+  var GELDIG_MS = 5 * 60 * 1000;
+  var ruw = null;
+  try {
+    ruw = window.sessionStorage.getItem(VLAG);
+    window.sessionStorage.removeItem(VLAG);
+  } catch (e) { return; }   // opslag afgeschermd: dan telt er niets
+  if (!ruw) return;
+  var ts = parseInt(ruw, 10);
+  if (!ts || (Date.now() - ts) > GELDIG_MS) return;
   if (!window.w3b) return;
   try { w3b.trackConversie('aanvraag_bevestigd', {}); } catch (e) {}
 });
 </script>
+
+<!-- Cloudflare Web Analytics: cookieloos, geen toestemming nodig, zelfde
+     beacon als index.html. Zonder deze regel was de bedankpagina onzichtbaar
+     voor iedereen die de toestemming weigert -- terwijl juist een cookieloze
+     telling van /bedankt.html tegenover die van / de conversieratio geeft. -->
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "fcc992a566f14f8f9cf56fef76e551c7"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>

@@ -32,8 +32,18 @@
   var LOG = [];                       // ring-buffer, max 50, altijd gevuld
   var GELADEN = { ga: false, meta: false };
   var ZES_MAANDEN_MS = 1000 * 60 * 60 * 24 * 182;
+  // Vervaltermijn van de opgeslagen herkomst. 90 dagen is het ruimste
+  // kliktermijnvenster dat de advertentieplatforms zelf hanteren (Google Ads
+  // standaard 30 dagen, maximaal 90; Meta 7 dagen na klik), dus daarbuiten
+  // bestaat er geen attributie meer om te bewaren -- een oudere klik zou een
+  // latere, organische aanvraag alleen maar verkeerd toeschrijven.
+  var HERKOMST_GELDIG_MS = 1000 * 60 * 60 * 24 * 90;
   var HERKOMST_VELDEN = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term',
     'utm_content', 'gclid', 'fbclid', 'msclkid'];
+  // Advertentie-identifiers. Deze drie worden nooit opgeslagen zodra er een
+  // privacysignaal staat of de toestemming geweigerd is: het zijn tokens die
+  // een klik aan een persoon koppelen, geen strikt noodzakelijke functie.
+  var CLICK_ID_VELDEN = ['gclid', 'fbclid', 'msclkid'];
   // Meta-standaardevents; wat hier niet in staat gaat via trackCustom.
   var META_STANDAARD = {
     contact_mail: 'Contact',
@@ -138,10 +148,11 @@
     } catch (e) {}
   }
 
-  // ── Privacysignaal-melding (R8) ──
-  // Vervangt de vroegere window.alert(): een systeemdialoog is een stijlbreuk
-  // op deze site en treft precies de privacybewuste bezoekers het vaakst. De
-  // markup staat in index.html, zelfde vaste-balkbehandeling als de
+  // ── Privacysignaal-melding ──
+  // Een balk in de eigen vormgeving in plaats van een systeemdialoog: zo'n
+  // dialoog is een stijlbreuk op deze site en treft precies de privacybewuste
+  // bezoekers het vaakst. De markup staat in index.html, zelfde
+  // vaste-balkbehandeling als de
   // toestemmingsbalk hierboven, maar een eigen resize-koppeling: deze en de
   // toestemmingsbalk verschijnen nooit tegelijk (toonBanner() weigert al
   // zodra heeftPrivacySignaal() true is), maar delen daarom niet dezelfde
@@ -189,21 +200,33 @@
       if (heeftPrivacySignaal()) { verbergBanner(); meldPrivacySignaal(); return; }
       schrijfKeuze('granted');
       verbergBanner();
+      // De herkomst opnieuw vastleggen: wie eerst weigerde had alleen een
+      // sessie-record zonder click-id's. Nu mag het volledige beeld wel.
+      initHerkomst();
       laadTags();
     },
     deny: function () {
       schrijfKeuze('denied');
       verbergBanner();
+      // Weigeren werkt meteen, niet pas bij de volgende paginalading: het
+      // localStorage-record verdwijnt en het sessie-record verliest zijn
+      // click-id's. initHerkomst() kent die tak al.
+      wisHerkomstOpslag();
+      initHerkomst();
     },
     status: function () { return consentStatus(); },
     // Voor de "Cookievoorkeur"-link in de footer: wist de keuze en toont de
     // balk meteen weer -- tenzij een privacysignaal actief is, dan blijft de
     // balk dicht en krijgt de bezoeker in plaats daarvan de melding hierboven.
+    // Intrekken moet net zo eenvoudig zijn als geven, en dus ook echt iets
+    // opruimen: de opgeslagen herkomst (inclusief click-id's) gaat mee weg.
     reset: function () {
       try {
         window.localStorage.removeItem('w3b_consent');
         window.localStorage.removeItem('w3b_consent_ts');
       } catch (e) {}
+      wisHerkomstOpslag();
+      initHerkomst();
       if (heeftPrivacySignaal()) { meldPrivacySignaal(); return; }
       toonBanner();
     }
@@ -223,10 +246,33 @@
       window.dataLayer = window.dataLayer || [];
       window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
       window.gtag('js', new Date());
-      // Alleen GA4 krijgt een config-call; Ads wordt uitsluitend gebruikt
-      // voor de aanvraag-conversie via send_to (trackConversie), niet voor
-      // een algemene remarketing-tag op elke pagina.
       if (CONFIG.ga4Id) window.gtag('config', CONFIG.ga4Id);
+      // Ook het Ads-ID krijgt een config-call. Achtergrond: eerder stond hier
+      // dat Ads uitsluitend via send_to in trackConversie() loopt en dus geen
+      // config nodig heeft. Bleek dat niet te kloppen, dan registreerde
+      // Google Ads nul conversies terwijl alles werkend oogde -- de duurste
+      // stille storing die deze trechter kan hebben.
+      //
+      // Wat op 22-08-2026 met testID's in een echte browser gemeten is:
+      //   - ZONDER deze regel vertrekt de conversie óók
+      //     (googleadservices.com/pagead/conversion/<id>/?...&label=<label>
+      //     &en=conversion). Client-side is send_to dus compleet.
+      //   - MET deze regel vertrekt diezelfde conversie, plus een page_view
+      //     en élk ander event naar google.com/ccm/collect?tid=AW-...
+      //     Dat is de algemene Ads-tag op elke pagina, precies wat hier eerder
+      //     bewust niet stond. Voor remarketing en enhanced conversions is dat
+      //     nuttig; het is geen gratis regel.
+      // Niet te meten viel of Google Ads een conversie ook aan de achterkant
+      // accepteert voor een ID dat nooit een config kreeg -- daarvoor is een
+      // echt account nodig. Daarom staat hij aan: de kosten zijn bekend, het
+      // risico van weglaten niet.
+      // TE TOETSEN VOOR DE EERSTE EURO ADVERTENTIEBUDGET: vul de echte ID's
+      // in, laad de site met Tag Assistant (tagassistant.google.com) en
+      // controleer dat de aanvraag-conversie precies één keer op het AW-ID
+      // binnenkomt -- niet nul keer en niet twee keer. Wil Harm géén
+      // page-level Ads-tag, dan kan deze ene regel weg zodra die toets laat
+      // zien dat de conversie ook zonder aankomt.
+      if (CONFIG.googleAdsId) window.gtag('config', CONFIG.googleAdsId);
       var s = document.createElement('script');
       s.async = true;
       s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(id);
@@ -311,10 +357,20 @@
 
   // ── Eerste-aanraking-herkomst ──
   // First-party gegevens die de bezoeker zelf meestuurt in de eigen URL of
-  // via document.referrer, en die alleen bij een aanvraag verzonden worden
-  // -- dat vraagt geen toestemming. First-touch (localStorage) wordt na de
-  // eerste keer nooit meer overschreven; last-touch (sessionStorage) wél,
-  // telkens als een bezoek een van deze velden meebrengt.
+  // via document.referrer. Voor utm-velden, referrer en landingspagina is dat
+  // geen toestemmingsplichtige opslag: het is wat de bezoeker zelf meebracht.
+  // Voor de click-id's (gclid/fbclid/msclkid) ligt dat anders -- dat zijn
+  // advertentie-identifiers -- dus die gaan alleen mee zolang er geen
+  // privacysignaal staat en de toestemming niet geweigerd is.
+  //
+  // Drie regels; de rest van deze sectie voert ze uit:
+  //   1. privacysignaal (GPC/DNT) of 'denied' -> niets in localStorage, en in
+  //      sessionStorage alleen wat er ná het wegstrepen van de click-id's
+  //      overblijft. Weg is dan ook echt weg (wisHerkomstOpslag).
+  //   2. anders: first-touch in localStorage, last-touch in sessionStorage --
+  //      last-touch alleen als dit bezoek zelf herkomst meebrengt.
+  //   3. het localStorage-record verloopt na HERKOMST_GELDIG_MS. Daarna
+  //      begint de attributie opnieuw bij het huidige bezoek.
   function refDomein() {
     try {
       if (!document.referrer) return '';
@@ -344,10 +400,57 @@
       return raw ? JSON.parse(raw) : null;
     } catch (e) { return null; }
   }
+  // Kopie zonder de advertentie-identifiers; de rest blijft ongemoeid.
+  function zonderClickIds(snap) {
+    var kaal = {};
+    if (!snap) return kaal;
+    Object.keys(snap).forEach(function (sleutel) {
+      if (CLICK_ID_VELDEN.indexOf(sleutel) === -1) kaal[sleutel] = snap[sleutel];
+    });
+    return kaal;
+  }
+  // Een record zonder leesbaar tijdstip telt als verlopen: dan weten we niet
+  // hoe oud de attributie is, en dat is hetzelfde als te oud.
+  function herkomstVerlopen(record) {
+    if (!record || !record.ts) return true;
+    var t = Date.parse(record.ts);
+    if (isNaN(t)) return true;
+    return (Date.now() - t) > HERKOMST_GELDIG_MS;
+  }
+  function wisHerkomstOpslag() {
+    try { window.localStorage.removeItem('w3b_herkomst'); } catch (e) {}
+    try { window.sessionStorage.removeItem('w3b_sessie'); } catch (e) {}
+  }
   function initHerkomst() {
     var snap = huidigeSnapshot();
+
+    // Regel 1: privacysignaal of geweigerde toestemming.
+    if (heeftPrivacySignaal() || consentStatus() === 'denied') {
+      try { window.localStorage.removeItem('w3b_herkomst'); } catch (e) {}
+      try {
+        var kaal = zonderClickIds(snap);
+        var bestaand = leesJSON(window.sessionStorage, 'w3b_sessie');
+        if (heeftHerkomstVelden(kaal)) {
+          window.sessionStorage.setItem('w3b_sessie', JSON.stringify(kaal));
+        } else if (bestaand) {
+          // Eerder in deze sessie opgeslagen toen de keuze nog openstond: dat
+          // record kan nog click-id's dragen. Opschonen in plaats van laten
+          // staan -- intrekken moet ook binnen het tabblad terugwerken.
+          window.sessionStorage.setItem('w3b_sessie', JSON.stringify(zonderClickIds(bestaand)));
+        }
+      } catch (e) {}
+      return;
+    }
+
+    // Regel 2 en 3: first-touch met vervaltermijn.
     try {
-      if (!window.localStorage.getItem('w3b_herkomst')) {
+      var eerste = leesJSON(window.localStorage, 'w3b_herkomst');
+      if (herkomstVerlopen(eerste)) {
+        // 'eerste_ts' overleeft het verlopen van de attributie. Het zegt
+        // alleen dát deze browser hier eerder was, niet via welke advertentie
+        // -- zonder dat veld zou een terugkerende bezoeker na 90 dagen
+        // opnieuw als "eerste bezoek" in de aanvraagmail belanden.
+        snap.eerste_ts = (eerste && (eerste.eerste_ts || eerste.ts)) || snap.ts;
         window.localStorage.setItem('w3b_herkomst', JSON.stringify(snap));
       }
     } catch (e) {}
@@ -358,8 +461,11 @@
     } catch (e) {}
   }
   function herkomst() {
+    // Tweede slot op de vervaltermijn: kon initHerkomst() niet schrijven
+    // (volle of afgeschermde opslag), dan staat er nog een oud record.
+    var eerste = leesJSON(window.localStorage, 'w3b_herkomst');
     return {
-      first: leesJSON(window.localStorage, 'w3b_herkomst'),
+      first: herkomstVerlopen(eerste) ? null : eerste,
       last: leesJSON(window.sessionStorage, 'w3b_sessie')
     };
   }
@@ -432,6 +538,12 @@
       try {
         var hoogte = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
         if (!hoogte) return;
+        // Past de hele pagina in het scherm, dan valt er niets te scrollen en
+        // liggen alle vier de markers meteen in beeld. Dat leverde vier
+        // scroll_diepte-events binnen enkele milliseconden na laden op -- op
+        // bedankt.html vier verzonnen gebeurtenissen per conversie. Een
+        // pagina die niet scrollbaar is, rapporteert geen scrolldiepte.
+        if ((hoogte - window.innerHeight) < 1) return;
         var gezien = {};
         var obs = new IntersectionObserver(function (entries) {
           entries.forEach(function (entry) {

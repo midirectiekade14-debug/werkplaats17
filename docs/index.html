@@ -538,7 +538,9 @@
     letter-spacing: 0.1em;
     text-transform: uppercase;
     padding: 10px 20px;
-    min-height: 40px;
+    /* 44px is elders in dit bestand de vastgestelde ondergrens voor een
+       tikdoel (.fp-tab, de formuliervelden); deze knoppen stonden op 40. */
+    min-height: 44px;
     border-radius: 0;
     appearance: none;
     -webkit-appearance: none;
@@ -557,8 +559,8 @@
   }
   .consent-btn-secondary:hover { border-color: var(--amber); color: var(--amber); }
 
-  /* ── PRIVACYSIGNAAL-MELDING (R8) ──
-     Vervangt de vroegere window.alert() bij een actief GPC/DNT-signaal.
+  /* ── PRIVACYSIGNAAL-MELDING ──
+     Verschijnt bij een actief GPC/DNT-signaal.
      Zelfde vaste-balkbehandeling als de toestemmingsbalk hierboven, maar dit
      is een losse melding (geen keuze te maken) die vanzelf verdwijnt of met
      het kruisje weg kan. */
@@ -589,8 +591,10 @@
     color: var(--muted);
     font-family: 'DM Mono', monospace;
     font-size: var(--fs-body);
-    width: 28px;
-    height: 28px;
+    /* Zelfde ondergrens van 44px als de knoppen hierboven: dit kruisje is de
+       enige manier om de melding zelf weg te klikken. */
+    width: 44px;
+    height: 44px;
     flex-shrink: 0;
     cursor: pointer;
     transition: all 0.2s;
@@ -1226,11 +1230,16 @@
     gap: 6px;
   }
   .form-field-wide { grid-column: 1 / -1; }
+  /* Niet var(--muted): dat meet 3,8:1 op de achtergrond en haalt de AA-eis
+     van 4,5:1 niet. #9d9484 is dezelfde contrastwaarde die verderop in dit
+     bestand al vier andere onderdelen repareert; hier staat hij buiten de
+     mediaquery, want het contrast is op een breed scherm even laag. Geldt
+     ook voor .form-note en .teken-teller hieronder. */
   .form-field label {
     font-size: var(--fs-small);
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: #9d9484;
   }
   .form-field input,
   .form-field select,
@@ -1265,13 +1274,13 @@
   .form-note {
     margin-top: 14px;
     font-size: var(--fs-small);
-    color: var(--muted);
+    color: #9d9484;
   }
   .teken-teller {
     display: block;
     margin-top: 4px;
     font-size: var(--fs-small);
-    color: var(--muted);
+    color: #9d9484;
     text-align: right;
   }
   /* Honeypot: buiten beeld voor mensen (niet display:none -- dat lezen
@@ -1557,6 +1566,13 @@
     /* Toestemmingsbalk: op smal scherm gestapeld in plaats van naast elkaar. */
     .consent-banner { padding: 14px 24px; }
     .consent-banner-inner { flex-direction: column; align-items: stretch; gap: 12px; }
+    /* In een kolom werkt flex-basis op de hóógte, niet op de breedte: de
+       420px uit de basisregel maakte van het tekstblok een blok van 420px
+       hoog terwijl de tekst er 134 nodig heeft. Samen met de knoppen en de
+       contactbalk vulde dat 604 van de 812px van een telefoonscherm -- de
+       eerste indruk van iedere bezoeker die via de advertentie binnenkomt.
+       'auto' laat de hoogte de inhoud volgen. */
+    .consent-tekst { flex-basis: auto; }
     .consent-actions { flex-direction: column; }
     .consent-btn { text-align: center; }
 
@@ -2349,7 +2365,7 @@
       <div class="cta-line"><div class="dot"></div><span>Rondleiding op afspraak — <a href="mailto:info@werkplaats3b.nl">info@werkplaats3b.nl</a></span></div>
     </div>
 
-    <!-- Aanvraagformulier (taak 2): het meetbare pad naast mailto/WhatsApp
+    <!-- Aanvraagformulier: het meetbare pad naast mailto/WhatsApp
          hierboven. FORM_ENDPOINT leeg -> mailto-fallback (zie script
          onderaan de pagina); ingevuld -> POST naar de Apps Script-webapp. -->
     <div class="rondleiding-form-wrap" id="rondleiding-form-wrap">
@@ -3124,7 +3140,7 @@ window._initFloorplan=function(){
 </script>
 
 <script>
-// ── AANVRAAGFORMULIER (rondleiding aanvragen, taak 2) ──
+// ── AANVRAAGFORMULIER (rondleiding aanvragen) ──
 // Validatie, spamafweer en verzending. Werkt volledig zonder w3b (adblocker
 // kan analytics.js blokkeren) -- de herkomstvelden blijven dan leeg, dat mag
 // de verzending niet tegenhouden.
@@ -3133,7 +3149,7 @@ window._initFloorplan=function(){
   if (!form) return;
 
   // Leeg opgeleverd: elke verzending gaat dan via de mailto-fallback
-  // hieronder, tot de Apps Script-webapp (taak 3) hier ingevuld wordt.
+  // hieronder, tot de URL van de Apps Script-webapp hier ingevuld wordt.
   var FORM_ENDPOINT = '';  // vul hier de URL van de Apps Script-webapp in
 
   var GELADEN_OP = Date.now();  // tijdslot-spamafweer: verzenden binnen 3s = bot
@@ -3154,7 +3170,19 @@ window._initFloorplan=function(){
 
   // ── Validatie per veld: gewone taal, geen technisch jargon. ──
   function kvkCijfers() { return VELDEN.kvk.input.value.replace(/[\s.]/g, ''); }
+  // Alleen de cijfers -- dat is wat de validatie hieronder wil tellen.
   function telefoonCijfers() { return VELDEN.telefoon.input.value.replace(/[\s+\-()]/g, ''); }
+  // Wat er in de mail en in de POST belandt: dezelfde opschoning, maar met
+  // behoud van een leidende +. "+31 6 12345678" werd anders "31612345678", en
+  // dat is dubbelzinnig voor wie moet terugbellen -- 31 kan een landcode zijn
+  // of het begin van een lokaal nummer. Kapt de landcode-plus op het budget
+  // van dit veld, dan valt hij samen met de rest weg; hij kost gecodeerd 3
+  // tekens (%2B) en het budget is een bovengrens, dus de worstcase-som
+  // hieronder verandert er niet door.
+  function telefoonGenormaliseerd() {
+    var ruw = VELDEN.telefoon.input.value.trim();
+    return (ruw.charAt(0) === '+' ? '+' : '') + telefoonCijfers();
+  }
   var VALIDATORS = {
     naam: function () { return VELDEN.naam.input.value.trim() ? '' : 'Vul je naam in.'; },
     bedrijf: function () { return VELDEN.bedrijf.input.value.trim() ? '' : 'Vul je bedrijfsnaam in.'; },
@@ -3230,6 +3258,15 @@ window._initFloorplan=function(){
   //                                                              ----
   //                                                              1794
   // Dat is 6 onder MAILTO_MAX_LENGTE en 289 onder de shell-grens van ~2083.
+  // Nagerekend 22-08-2026 tegen de functies hieronder (elk veld via
+  // kapOpBudget precies op zijn budget, het bericht op 1100 gecodeerde
+  // tekens): 1794, en de variant mét herkomstblok 1992 -- die laatste wordt
+  // door kiesMailtoUrl dus altijd afgewezen ten gunste van de kortere.
+  // Let op de premisse: 1794 hoort bij ALLE budgetten tegelijk vol. Een
+  // realistische maximale aanvraag (echt KvK-nummer van acht cijfers, een
+  // echt telefoonnummer, "2026-09" als startdatum, een ruimte uit de
+  // keuzelijst) meet 1768. Wie 1768 als worstcase noteert, geeft zichzelf 26
+  // tekens die er niet zijn.
   // Wijzig je een label, een budget of een regel in bouwMailtoUrl, reken deze
   // som dan opnieuw door -- hij is met de functies hieronder in Node na te
   // rekenen.
@@ -3375,13 +3412,22 @@ window._initFloorplan=function(){
   // geschreven als de URL zo'n parameter had (heeftHerkomstVelden()); een
   // vergelijking met .last zou een organisch of direct eerste bezoek dus
   // altijd als 'nee' labelen -- terwijl het aantoonbaar wel de eerste keer
-  // is (cold mail, Instagram, iemand die het adres intypt). .first.ts wordt
-  // wel op ieder eerste bezoek gezet (initHerkomst()), vlak voordat dit
-  // script draait -- valt die timestamp dus zo goed als samen met het laden
-  // van deze pagina (GELADEN_OP), dan is dit die eerste keer.
+  // is (cold mail, Instagram, iemand die het adres intypt). Dat tijdstip
+  // wordt op ieder eerste bezoek gezet (initHerkomst()), vlak voordat dit
+  // script draait -- valt het dus zo goed als samen met het laden van deze
+  // pagina (GELADEN_OP), dan is dit die eerste keer.
+  //
+  // Sinds de herkomst een vervaltermijn heeft (90 dagen, analytics.js) wordt
+  // het record daarna vervangen door een vers exemplaar. 'eerste_ts' reist
+  // daar ongewijzigd in mee en houdt dus vast wanneer deze browser hier voor
+  // het eerst was; alleen records van vóór die wijziging dragen hem niet, en
+  // die vallen terug op .ts. Bij een geweigerde toestemming of een
+  // privacysignaal bestaat er geen record en dus geen antwoord: dan 'nee'.
   function isEersteBezoekOoit(h) {
-    if (!h || !h.first || !h.first.ts) return 'nee';
-    var eersteTs = Date.parse(h.first.ts);
+    if (!h || !h.first) return 'nee';
+    var ruw = h.first.eerste_ts || h.first.ts;
+    if (!ruw) return 'nee';
+    var eersteTs = Date.parse(ruw);
     if (isNaN(eersteTs)) return 'nee';
     return Math.abs(GELADEN_OP - eersteTs) < 10000 ? 'ja' : 'nee';
   }
@@ -3531,12 +3577,25 @@ window._initFloorplan=function(){
     // Genormaliseerd (alleen cijfers) i.p.v. wat de bezoeker precies typte --
     // scheelt spaties/punten/haakjes in de backend en in de mail.
     data.kvk = kvkCijfers();
-    data.telefoon = telefoonCijfers();
+    data.telefoon = telefoonGenormaliseerd();
     return data;
   }
 
   function toonStatus(tekst) { if (status) status.textContent = tekst; }
   function naarBedankt() { window.location.href = 'bedankt.html'; }
+  // ── Conversievlag ──
+  // bedankt.html telt de conversie (Meta Lead + Google Ads) alleen als deze
+  // vlag er staat, en wist hem meteen na het lezen. Daardoor telt een
+  // rechtstreekse navigatie naar /bedankt.html nul, een herlading nul, de
+  // terugknop nul en het spampad hieronder nul -- terwijl de bot wél gewoon
+  // een bedankpagina te zien krijgt en dus niets leert over de afweer.
+  // sessionStorage en niet localStorage: de vlag hoort bij déze navigatie in
+  // dit tabblad. De waarde is het tijdstip; bedankt.html weigert een vlag die
+  // ouder is dan vijf minuten, voor het geval een mailto-navigatie de
+  // doorstuur alsnog afbreekt en de vlag blijft staan.
+  function markeerAanvraagVerstuurd() {
+    try { window.sessionStorage.setItem('w3b_aanvraag_ts', String(Date.now())); } catch (e) {}
+  }
   function meldFout() {
     knop.disabled = false;
     knop.textContent = 'Versturen';
@@ -3549,6 +3608,7 @@ window._initFloorplan=function(){
     }
   }
   function meldSucces(data) {
+    markeerAanvraagVerstuurd();
     if (window.w3b) {
       try { w3b.track('aanvraag_verstuurd', { ruimte: data.ruimte, methode: 'formulier' }); } catch (e) {}
     }
@@ -3574,8 +3634,11 @@ window._initFloorplan=function(){
     e.preventDefault();
 
     // Spamafweer: honeypot gevuld, of verzonden binnen 3s na laden -- doe
-    // alsof het gelukt is, verstuur niets (geen track-event: dat zou de
-    // conversiecijfers vervuilen met botverkeer).
+    // alsof het gelukt is, verstuur niets (geen track-event én geen
+    // conversievlag: dat zou de conversiecijfers vervuilen met botverkeer).
+    // De doorstuur zelf blijft staan: de bot hoort een bedankpagina te zien,
+    // anders leert hij dat de honeypot bestaat. bedankt.html telt zonder vlag
+    // niets, dus die pagina blijft voor de meting een lege huls.
     var honeypot = form.querySelector('[name="website"]');
     var teVroeg = (Date.now() - GELADEN_OP) < 3000;
     if ((honeypot && honeypot.value) || teVroeg) {
@@ -3585,7 +3648,7 @@ window._initFloorplan=function(){
 
     var resultaat = valideerAlles();
     if (!resultaat.geldig) {
-      toonStatus('Los de gemarkeerde velden hieronder op.');
+      toonStatus('Los de gemarkeerde velden hierboven op.');
       if (resultaat.eersteOngeldig) resultaat.eersteOngeldig.focus();
       return;
     }
@@ -3611,6 +3674,11 @@ window._initFloorplan=function(){
         meldMailtoTeGroot();
         return;
       }
+      // De vlag gaat vóór de scheme-aanroep, niet erna: window.location.href
+      // met een mailto: is een navigatie-opdracht, en of de pagina daarna nog
+      // draait beslist de browser. meldSucces() zet hem verderop nog eens --
+      // dezelfde sleutel overschrijven is onschadelijk.
+      markeerAanvraagVerstuurd();
       try { window.location.href = keuze.url; } catch (e) {}
       // mailto navigeert de pagina zelf niet weg (opent de mailclient
       // ernaast); de korte vertraging geeft die client de kans om open te
@@ -3645,9 +3713,8 @@ window._initFloorplan=function(){
   </div>
 </div>
 
-<!-- Privacysignaal-melding (R8). Vervangt de vroegere window.alert() bij een
-     actief GPC/DNT-signaal: verschijnt via analytics.js, verdwijnt na 6s
-     vanzelf of met het kruisje. -->
+<!-- Privacysignaal-melding bij een actief GPC/DNT-signaal: verschijnt via
+     analytics.js, verdwijnt na 6s vanzelf of met het kruisje. -->
 <div class="privacy-melding" id="w3b-privacy-melding" role="status" aria-live="polite" hidden>
   <div class="privacy-melding-inner">
     <p class="privacy-melding-tekst">
