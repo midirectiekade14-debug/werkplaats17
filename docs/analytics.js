@@ -91,6 +91,10 @@
   }
   var resizeGekoppeld = false;
   function toonBanner() {
+    // Hard grens: met een actief privacysignaal verschijnt de balk nooit,
+    // ongeacht wie toonBanner() aanroept (init(), reset(), of iets anders
+    // later). Dit is de enige plek die dat voor "tonen" hoeft te bewaken.
+    if (heeftPrivacySignaal()) return;
     try {
       var el = document.getElementById('w3b-consent');
       if (!el) return;
@@ -131,8 +135,20 @@
     } catch (e) {}
   }
 
+  // Zichtbare, eerlijke reactie in plaats van een stille no-op: een actief
+  // GPC/DNT-signaal wint altijd, ook van een expliciete grant()-aanroep
+  // (bijv. vanaf de console) of van de "Cookievoorkeur"-link in de footer.
+  // Er is dan niets te kiezen -- de browser dwingt weigeren al af -- dus
+  // zeggen we dat in plaats van net te doen alsof de klik niets deed.
+  function meldPrivacySignaal() {
+    try {
+      window.alert('Je browser blokkeert meten al, via Global Privacy Control of Do Not Track. Er is hier niets te kiezen.');
+    } catch (e) {}
+  }
+
   var CONSENT = {
     grant: function () {
+      if (heeftPrivacySignaal()) { verbergBanner(); meldPrivacySignaal(); return; }
       schrijfKeuze('granted');
       verbergBanner();
       laadTags();
@@ -143,12 +159,14 @@
     },
     status: function () { return consentStatus(); },
     // Voor de "Cookievoorkeur"-link in de footer: wist de keuze en toont de
-    // balk meteen weer.
+    // balk meteen weer -- tenzij een privacysignaal actief is, dan blijft de
+    // balk dicht en krijgt de bezoeker in plaats daarvan de melding hierboven.
     reset: function () {
       try {
         window.localStorage.removeItem('w3b_consent');
         window.localStorage.removeItem('w3b_consent_ts');
       } catch (e) {}
+      if (heeftPrivacySignaal()) { meldPrivacySignaal(); return; }
       toonBanner();
     }
   };
@@ -156,6 +174,10 @@
   // ── Tags laden (alleen ná toestemming, alleen als het ID gevuld is) ──
   function laadGoogle() {
     if (GELADEN.ga) return;
+    // Nogmaals bewaakt op het laadpunt zelf (niet alleen bij de aanroeper):
+    // zo blijft de garantie staan ook als laadGoogle() ooit ergens anders
+    // vandaan aangeroepen wordt.
+    if (heeftPrivacySignaal()) return;
     var heeftAds = CONFIG.googleAdsId && CONFIG.googleAdsLabel;
     var id = CONFIG.ga4Id || (heeftAds ? CONFIG.googleAdsId : '');
     if (!id) return;
@@ -176,6 +198,7 @@
   }
   function laadMeta() {
     if (GELADEN.meta || !CONFIG.metaPixelId) return;
+    if (heeftPrivacySignaal()) return;
     try {
       // Officiële Meta Pixel-basiscode.
       (function (f, b, e, v, n, t, s) {
