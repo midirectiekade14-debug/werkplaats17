@@ -15,6 +15,10 @@
 <meta property="og:locale" content="nl_NL">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<!-- Meting: interne event-laag + (na toestemming) GA4/Meta/Ads. Logica en
+     consent-opslag staan in analytics.js; werkt met alles leeg. De
+     Cloudflare-beacon onderaan de body is hier los van en blijft ongewijzigd. -->
+<script src="analytics.js" defer></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -473,6 +477,85 @@
      buiten dat breekpunt terug op display:block en staan er twee losse
      knoppen onder de voettekst. */
   .mob-cta { display: none; }
+
+  /* ── COOKIE-TOESTEMMING ──
+     Vaste balk onderaan het scherm. Standaard hidden (HTML-attribuut);
+     tonen, verbergen en de keuze wegschrijven doet analytics.js. */
+  .consent-banner {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 150;
+    background: var(--surface2);
+    border-top: 1px solid var(--line);
+    padding: 16px 40px;
+  }
+  .consent-banner-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .consent-tekst {
+    flex: 1 1 420px;
+    font-size: var(--fs-body);
+    line-height: 1.6;
+    color: var(--cream);
+  }
+  .consent-meer {
+    background: none;
+    border: none;
+    appearance: none;
+    -webkit-appearance: none;
+    padding: 0;
+    margin-left: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: var(--fs-body);
+    color: var(--amber);
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  .consent-uitleg {
+    flex-basis: 100%;
+    font-size: var(--fs-body);
+    line-height: 1.6;
+    color: var(--muted);
+    padding-top: 10px;
+    margin-top: 4px;
+    border-top: 1px solid var(--line);
+  }
+  .consent-actions {
+    display: flex;
+    gap: 10px;
+    flex: 0 0 auto;
+  }
+  .consent-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: var(--fs-body);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    min-height: 40px;
+    border-radius: 0;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+  }
+  .consent-btn-primary {
+    background: var(--amber);
+    color: var(--bg);
+    border: 1px solid var(--amber);
+  }
+  .consent-btn-primary:hover { background: var(--amber-light); border-color: var(--amber-light); }
+  .consent-btn-secondary {
+    background: transparent;
+    color: var(--cream);
+    border: 1px solid var(--line);
+  }
+  .consent-btn-secondary:hover { border-color: var(--amber); color: var(--amber); }
 
   /* ── SECTION LABELS ── */
   /* Staat hier en niet als instelling in content.js. Daar stond het eerder wel, en
@@ -1331,6 +1414,20 @@
     /* Anders valt de balk over de laatste regel van de voettekst. */
     body.heeft-mobcta { padding-bottom: 54px; }
 
+    /* Toestemmingsbalk: op smal scherm gestapeld in plaats van naast elkaar. */
+    .consent-banner { padding: 14px 24px; }
+    .consent-banner-inner { flex-direction: column; align-items: stretch; gap: 12px; }
+    .consent-actions { flex-direction: column; }
+    .consent-btn { text-align: center; }
+
+    /* Zolang de toestemmingsbalk open staat schuift de contactbalk erboven
+       weg -- anders overlappen twee vaste balken onderaan het scherm. De
+       hoogte (--w3b-banner-h) zet analytics.js zelf, naar de werkelijke
+       hoogte van de balk; 90px is alleen de terugval als dat niet lukt. */
+    body.w3b-banner-open .mob-cta.on {
+      transform: translateY(calc(-1 * var(--w3b-banner-h, 90px)));
+    }
+
     /* ── Leesbaarheid ──
        Deze drie stonden op --muted (3,8:1). Dat haalt de norm van 4,5 niet, en
        juist op een telefoon -- buiten, schuin licht -- valt dat om. */
@@ -2132,7 +2229,7 @@
         #bedrijfsruimte #meubelmaker<br>
         #vakman #werkruimte
       </div>
-      <div class="copy">© 2026 Werkplaats3b · <a href="admin.html" style="color:var(--line);text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--amber)'" onmouseout="this.style.color='var(--line)'">Admin</a></div>
+      <div class="copy">© 2026 Werkplaats3b · <a href="admin.html" style="color:var(--line);text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--amber)'" onmouseout="this.style.color='var(--line)'">Admin</a> · <a href="#" style="color:var(--line);text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--amber)'" onmouseout="this.style.color='var(--line)'" onclick="window.w3b&&w3b.consent.reset();return false;">Cookievoorkeur</a></div>
     </div>
   </footer>
 
@@ -2767,5 +2864,28 @@ window._initFloorplan=function(){
 };
 </script>
 
+<!-- Toestemmingsbalk (AVG). Standaard hidden; analytics.js toont hem als er
+     nog geen keuze in localStorage staat en schrijft de keuze daar ook weg.
+     Beide knoppen even prominent -- geen dark pattern. -->
+<div class="consent-banner" id="w3b-consent" role="dialog" aria-live="polite" aria-label="Cookies" hidden>
+  <div class="consent-banner-inner">
+    <p class="consent-tekst">
+      We meten hoe deze site gebruikt wordt. Zonder toestemming meten we alleen anoniem
+      bezoekersaantal; met toestemming ook via Google en Meta, zodat we onze advertenties
+      kunnen bijsturen.
+      <button type="button" class="consent-meer" id="w3b-consent-meer" aria-expanded="false" aria-controls="w3b-consent-uitleg">Meer uitleg</button>
+    </p>
+    <div class="consent-uitleg" id="w3b-consent-uitleg" hidden>
+      Cloudflare Web Analytics telt bezoekersaantallen zonder cookies en zonder toestemming;
+      dat blijft altijd aan. Kies je voor "Accepteren", dan laden we daarnaast Google
+      Analytics, de Meta-pixel en Google Ads-meting -- die plaatsen wel identifiers. Je kunt
+      je keuze altijd herzien via "Cookievoorkeur" onderaan de pagina.
+    </div>
+    <div class="consent-actions">
+      <button type="button" class="consent-btn consent-btn-secondary" id="w3b-consent-weigeren">Weigeren</button>
+      <button type="button" class="consent-btn consent-btn-primary" id="w3b-consent-accepteren">Accepteren</button>
+    </div>
+  </div>
+</div>
 
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "fcc992a566f14f8f9cf56fef76e551c7"}'></script><!-- End Cloudflare Web Analytics -->
