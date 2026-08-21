@@ -2392,7 +2392,7 @@
           </div>
           <div class="form-field form-field-wide">
             <label for="rl-bericht">Waar werk je aan?</label>
-            <textarea id="rl-bericht" name="bericht" rows="4"></textarea>
+            <textarea id="rl-bericht" name="bericht" rows="4" maxlength="2000"></textarea>
           </div>
 
           <!-- Honeypot: onzichtbaar voor mensen (CSS + tabindex -1 + aria-hidden),
@@ -3203,9 +3203,7 @@ window._initFloorplan=function(){
       fbclid: bron.fbclid || '',
       referrer: bron.referrer || '',
       landing: bron.landing || '',
-      // 'ja' alleen als de laatst geregistreerde aanraking dezelfde is als
-      // ooit de allereerste -- dit bezoek is dan de eerste keer dat deze
-      // bezoeker via een gemeten link (utm/gclid/fbclid) binnenkwam.
+      // Definitie staat bij isEersteBezoekOoit() hierboven vastgelegd.
       eerste_bezoek: isEersteBezoekOoit(h),
       pagina: window.location.pathname,
       tijdstip: tijdstipLokaal()
@@ -3220,16 +3218,40 @@ window._initFloorplan=function(){
   // Compact herkomstblokje onderaan de mail -- geen dump van alle twaalf
   // verborgen velden, maar genoeg om in een oogopslag het kanaal te zien.
   // Lege onderdelen (geen utm-data, geen click-id) vallen gewoon weg.
+  // Iedere waarde wordt eerst afgekapt (inkorten()): utm_source/utm_medium/
+  // utm_campaign/gclid/fbclid komen ongevalideerd en ongelimiteerd uit de
+  // querystring (analytics.js), dus zonder afkap kan één opgeblazen
+  // parameter dit blokje -- en daarmee de hele mailto-URL -- onnodig groot
+  // maken (zie MAILTO_MAX_LENGTE bij bouwMailtoUrl voor de grens op de
+  // hele URL).
+  var INKORT_MAX = 150;
+  function inkorten(tekst) {
+    return (tekst.length > INKORT_MAX) ? tekst.slice(0, INKORT_MAX) + '…' : tekst;
+  }
   function bouwHerkomstRegels(data) {
     var kanaal = [data.utm_source, data.utm_medium, data.utm_campaign]
       .filter(function (v) { return v; }).join(' / ');
     var regels = [];
-    if (kanaal) regels.push('Herkomst: ' + kanaal);
-    var clickId = data.gclid || data.fbclid;
-    if (clickId) regels.push('Click-ID: ' + clickId);
+    if (kanaal) regels.push('Herkomst: ' + inkorten(kanaal));
+    // Apart gelabeld i.p.v. één generieke "Click-ID": zonder utm-velden
+    // (bijv. een kale ?gclid=... zonder utm_*) verschijnt de Herkomst-regel
+    // niet, en is dit label het enige dat nog zegt via welk platform de
+    // klik binnenkwam.
+    if (data.gclid) regels.push('Click-ID (Google): ' + inkorten(data.gclid));
+    if (data.fbclid) regels.push('Click-ID (Meta): ' + inkorten(data.fbclid));
     regels.push('Eerste bezoek: ' + (data.eerste_bezoek === 'ja' ? 'ja' : 'nee'));
     return regels;
   }
+  // mailto: gaat via het besturingssysteem naar de mailclient. Op Windows
+  // loopt dat via de ShellExecute-koppeling, die stil afkapt rond de 2083
+  // tekens -- de oude Internet Explorer-grens, in de praktijk nog steeds
+  // de krapste schakel in de keten. Met een vrij "bericht"-veld en
+  // ongelimiteerde utm/gclid-waarden in de querystring kan de opgebouwde
+  // URL die grens ongemerkt overschrijden; een mislukte scheme-navigatie
+  // gooit daarbij meestal geen synchrone exception (de try/catch bij het
+  // aanroepen vangt dat dus niet op). Boven deze veilige marge vertrouwen
+  // we de mailto niet meer (zie het gebruik in de submit-handler).
+  var MAILTO_MAX_LENGTE = 1800;
   function bouwMailtoUrl(data) {
     var onderwerp = 'Rondleiding aanvragen — ' + data.bedrijf;
     var regels = [
@@ -3278,6 +3300,21 @@ window._initFloorplan=function(){
     }
     naarBedankt();
   }
+  // Eerlijke uitkomst voor een mailto die we niet meer vertrouwen (zie
+  // MAILTO_MAX_LENGTE): geen doorstuur naar bedankt.html, want er is
+  // aantoonbaar niets verstuurd -- de bezoeker krijgt dat ook te zien.
+  function meldMailtoTeGroot() {
+    knop.disabled = false;
+    knop.textContent = 'Versturen';
+    if (status) {
+      status.textContent = 'Je aanvraag is te lang om automatisch te versturen. Mail hem rechtstreeks naar ';
+      var a = document.createElement('a');
+      a.href = 'mailto:info@werkplaats3b.nl';
+      a.textContent = 'info@werkplaats3b.nl';
+      status.appendChild(a);
+      status.appendChild(document.createTextNode('.'));
+    }
+  }
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -3315,7 +3352,12 @@ window._initFloorplan=function(){
         .then(function (res) { if (res.ok) meldSucces(data); else meldFout(); })
         .catch(meldFout);
     } else {
-      try { window.location.href = bouwMailtoUrl(data); } catch (e) {}
+      var mailtoUrl = bouwMailtoUrl(data);
+      if (mailtoUrl.length > MAILTO_MAX_LENGTE) {
+        meldMailtoTeGroot();
+        return;
+      }
+      try { window.location.href = mailtoUrl; } catch (e) {}
       // mailto navigeert de pagina zelf niet weg (opent de mailclient
       // ernaast); de korte vertraging geeft die client de kans om open te
       // gaan voordat we doorsturen naar de bedankpagina.
