@@ -39,3 +39,12 @@ dist/
 # Stond untracked in deze PUBLIEKE repo, 2026-08-15 afgedekt. Geen site-content:
 # alles wat de site serveert staat in docs/. Wil je het toch publiceren -> regel weg.
 /elektraplan/
+
+# Werkaantekeningen van subagent-driven development: taakbriefs, interne
+# reviewrapporten, volledige diffs. Deze repo is PUBLIEK -- dat hoort er niet in.
+# Stond untracked, 2026-08-22 afgedekt.
+/.superpowers/
+
+# Git-worktrees van feature-branches. Een worktree is een complete tweede kopie
+# van de werkboom; committen zou de hele branch als losse bestanden publiceren.
+/.worktrees/

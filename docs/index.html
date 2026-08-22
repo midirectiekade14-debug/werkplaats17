@@ -1103,23 +1103,33 @@
   }
   .insta-tile:hover .insta-icon { color: var(--muted); }
   /* Gevulde tegel: de <a> vult de tegel volledig, zodat het hele vlak
-     klikbaar is en niet alleen de afbeelding. De tegels blijven vierkant
-     (aspect-ratio hierboven); slides zijn 1080x1080, dus object-fit: cover
-     snijdt niets weg. Bij een afwijkend formaat wint het midden. */
+     klikbaar is en niet alleen de afbeelding.
+
+     Geen eigen achtergrond onder een gevulde tegel. De posts zijn zelf al
+     donker (gemeten randkleur rgb(27,25,24)); --surface is rgb(30,27,23) en
+     dus net iets lichter. Dat verschil zie je als een randje zodra de post
+     niet exact vierkant is of nog aan het laden. De lege icoon-tegels houden
+     hun achtergrond wel -- zonder vlak is daar niets te zien. */
+  .insta-tile--gevuld,
+  .insta-tile--gevuld:hover { background: transparent; }
   .insta-tile > a {
     position: absolute;
     inset: 0;
     display: block;
     line-height: 0;
   }
+  /* contain, niet cover: de post moet passen, niet gesneden worden. Bij de
+     huidige 1080x1080-slides is er geen verschil, maar de postgenerator maakt
+     ook 9:16-beelden en die zou cover halveren -- kop eraf. Om diezelfde reden
+     staat er geen scale() op de hover: 3% inzoomen is 3% wegsnijden. */
   .insta-tile img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     display: block;
-    transition: opacity 0.3s, transform 0.4s;
+    transition: opacity 0.3s;
   }
-  .insta-tile:hover img { opacity: 0.82; transform: scale(1.03); }
+  .insta-tile:hover img { opacity: 0.82; }
   .insta-handle {
     margin-top: 14px;
     text-align: center;
@@ -1267,7 +1277,12 @@
     footer { margin: 0 24px; }
     .floorplan-block { padding: 0 24px; padding-bottom: 36px; }
     .offer-grid { grid-template-columns: 1fr; }
+    /* Twee kolommen: dan alle vier tegels tonen. Bij drie zichtbare tegels
+       blijft er een halve rij over -- een losse tegel naast een gat. Twee bij
+       twee vult het raster. De regel in @media 900px verbergt de vierde;
+       hier zetten we die terug op flex, de waarde uit .insta-tile. */
     .insta-grid { grid-template-columns: repeat(2, 1fr); }
+    .insta-grid > :nth-child(n+4) { display: flex; }
     .cta-actions { flex-direction: column; }
     .btn-primary, .btn-secondary { justify-content: center; }
     .access-detail { gap: 12px; }
@@ -2403,7 +2418,7 @@ window._renderInstagram=function(){
   grid.replaceChildren();
   posts.forEach(function(p){
     var tile=document.createElement('div');
-    tile.className='insta-tile';
+    tile.className='insta-tile insta-tile--gevuld';
 
     var link=document.createElement('a');
     link.href=profiel;
