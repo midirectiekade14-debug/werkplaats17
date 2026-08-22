@@ -143,7 +143,11 @@
     font-family: 'Bebas Neue', sans-serif;
     font-size: min(260px, 42vw);
     line-height: 1;
-    color: var(--surface2);
+    /* Was vrijwel gelijk aan --bg (contrast ~1,1:1) -- onbedoeld onzichtbaar
+       i.p.v. een subtiele achtergrond-wordmark. Amber op laag dekking geeft
+       ~1,9:1 contrast, herkenbaar als merkkleur zonder de kop te overstemmen. */
+    color: var(--amber);
+    opacity: 0.18;
     letter-spacing: -8px;
     pointer-events: none;
     user-select: none;
