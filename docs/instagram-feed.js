@@ -7,12 +7,6 @@
 
 const INSTAGRAM_FEED = [
   {
-    "src": "photos/instagram/p19.webp",
-    "alt": "Donkere post met de kop: Geen pingpong. Geen pitch. Wel afzuiging. Daaronder: perslucht door de hele hal, 24/7 toegang, een overheaddeur en een reachtruck voor als het te zwaar wordt.",
-    "caption": "Geen pingpongtafel. Geen pitchavond. Wel afzuiging.\r\n\r\nWat je hier wel vindt: perslucht en afzuiging door de hele hal, 24/7 toegang met je eigen sleutel, een overheaddeur waar een bestelbus doorheen kan, en een reachtruck voor als het zwaar wordt.\r\n\r\nEn een keuken, want koffie is geen lifestyle, dat is gereedschap.\r\n\r\nNog 3 units vrij per 21 september. werkplaats3b.nl\n\n#werkplaats3b #meubelmaker #interieurbouw #vakmanschap #maasland #westland #zzp #houtbewerking #atelier #bedrijfsruimte",
-    "datum": "2026-08-22"
-  },
-  {
     "src": "photos/instagram/p18.webp",
     "alt": "Foto van een werkplaats met daaroverheen de kop: Het gaat pas de deur uit als het af is. Daaronder: overheaddeur op de begane grond, laadmogelijkheid binnen, reachtruck in de hal en een aanhanger voor vervoer naar locatie.",
     "caption": "Het gaat pas de deur uit als het af is.\r\n\r\nIedereen die weleens een kast van twee meter tachtig heeft gebouwd in een ruimte met een normale deur, weet waar dit over gaat.\r\n\r\nOverheaddeur op de begane grond, reachtruck in de hal, en een gesloten en een open aanhanger die je kunt gebruiken. Laden is hier geen project op zich.\r\n\r\nNog 3 units vrij per 21 september. werkplaats3b.nl\n\n#werkplaats3b #meubelmaker #interieurbouw #vakmanschap #maasland #westland #zzp #houtbewerking #atelier #bedrijfsruimte",
