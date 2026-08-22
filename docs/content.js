@@ -11,7 +11,7 @@ const CONTENT = {
   "eyebrow": "Drie werkplekken vrij · per 21 september",
   "tagline": "Multifunctionele bedrijfsruimte voor professionele makers",
   "locationText": "Oud Camp 3b · Maasland · Naast A20 · 15-20 minuten van Den Haag / Rotterdam / Delft",
-  "introText": "Werkplaats3b is een <strong>multifunctionele bedrijfsruimte van 850 m²</strong> voor zelfstandige vakmensen en kleine studio's. <br>Hier werken professionele en ambitieuze makers samen aan mooie projecten: 300 m² machinale, 300 m² assemblageruimte en een eigen werkplek van 25 m² per bedrijf. <br><br>Heb je meer ruimte en betere machines nodig dan je nu hebt? Kom langs, dan weet je of het past. <br><br>Is dit wat je zoekt, dan krijg je een contract dat per kwartaal opzegbaar is, betaal je 2 maanden huur als borg en kun je meteen aan de gang. <br>",
+  "introText": "Werkplaats3B is een <strong>multifunctionele bedrijfsruimte van 850 m²</strong> voor zelfstandige vakmensen en kleine studio's. <br>Hier werken professionele en ambitieuze makers samen aan mooie projecten: 300 m² machinale, 300 m² assemblageruimte en een eigen werkplek van 25 m² per bedrijf. <br><br>Heb je meer ruimte en betere machines nodig dan je nu hebt? Kom langs, dan weet je of het past. <br><br>Is dit wat je zoekt, dan krijg je een contract dat per kwartaal opzegbaar is, betaal je 2 maanden huur als borg en kun je meteen aan de gang. <br>",
   "accessItems": [
     "850 m² · Machinale 300 m² · Assemblageruimte 300 m² · Ateliers met airco en werkplekken 185 m²",
     "24/7 toegang"
@@ -131,7 +131,7 @@ const CONTENT = {
   "notForText": "<strong>KvK-inschrijving en verzekering verplicht.</strong> Werkplaats3b is uitsluitend voor professionele gebruikers. Particulieren en hobbyisten kunnen hier niet terecht.",
   "aboutLabel": "Wie zijn wij",
   "aboutNavLabel": "Over ons",
-  "aboutLead": "Werkplaats3b is opgezet door Matthijs, Harm en Wesley. We huren het pand samen en verhuren de plekken die we niet zelf gebruiken. Eerder huurden Matthijs en Wesley een unit bij Harm; deze nieuwe plek geven we met z'n drieën vorm. Hoe wij gestart zijn? Vanuit een garagebox natuurlijk. ",
+  "aboutLead": "Werkplaats3B is opgezet door Matthijs, Harm en Wesley. We huren het pand samen en verhuren de plekken die we niet zelf gebruiken. Eerder huurden Matthijs en Wesley een unit bij Harm; deze nieuwe plek geven we met z'n drieën vorm. Hoe wij gestart zijn? Vanuit een garagebox natuurlijk. ",
   "team": [
     {
       "name": "Harm",
@@ -164,11 +164,11 @@ const CONTENT = {
     "Drie werkplekken vrij · stand 20 augustus",
     "Plan een rondleiding"
   ],
-  "instagramHandle": "@werkplaats3b",
+  "instagramHandle": "@werkplaats3B",
   "instagramUrl": "https://instagram.com/werkplaats3b",
   "photoLabels": [],
-  "hashtags": "#werkplaats3b #maasland<br>#bedrijfsruimte #meubelmaker<br>#vakman #werkruimte",
-  "copyright": "© 2026 Werkplaats3b",
+  "hashtags": "#werkplaats3B #maasland<br>#bedrijfsruimte #meubelmaker<br>#vakman #werkruimte",
+  "copyright": "© 2026 Werkplaats3B",
   "styles": {
     "aboutNote": {
       "color": "#F0EAE0",

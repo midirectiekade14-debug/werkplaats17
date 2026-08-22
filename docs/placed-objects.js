@@ -1,5 +1,5 @@
 // Werkplaats3b -- Geplaatste objecten
-// Laatst gewijzigd: 2026-08-20T11:27:37.532Z
+// Laatst gewijzigd: 2026-08-22T11:52:27.319Z
 // Gegenereerd via admin.html
 
 const PLACED_OBJECTS = [
@@ -237,21 +237,6 @@ const PLACED_OBJECTS = [
     "l": "",
     "c": "#b464dc",
     "bg": "rgba(180,100,220,0.30)",
-    "type": "",
-    "rot": "0",
-    "status": "",
-    "room": "1",
-    "shape": ""
-  },
-  {
-    "floor": 1,
-    "x": 585,
-    "y": 228,
-    "w": 132,
-    "h": 36,
-    "l": "",
-    "c": "#b48c50",
-    "bg": "rgba(180,140,80,0.30)",
     "type": "",
     "rot": "0",
     "status": "",
@@ -536,7 +521,7 @@ const PLACED_OBJECTS = [
     "h": 120,
     "l": "",
     "c": "#50b478",
-    "bg": "rgba(80,180,120,0.10)",
+    "bg": "rgba(80,180,120,0.32)",
     "type": "huurunit",
     "rot": "180",
     "status": "",
@@ -1376,7 +1361,7 @@ const PLACED_OBJECTS = [
     "h": 120,
     "l": "",
     "c": "#50b478",
-    "bg": "rgba(80,180,120,0.10)",
+    "bg": "rgba(80,180,120,0.34)",
     "type": "huurunit",
     "rot": "0",
     "status": "",
@@ -1391,7 +1376,7 @@ const PLACED_OBJECTS = [
     "h": 120,
     "l": "",
     "c": "#50b478",
-    "bg": "rgba(80,180,120,0.10)",
+    "bg": "rgba(80,180,120,0.32)",
     "type": "huurunit",
     "rot": "0",
     "status": "",
