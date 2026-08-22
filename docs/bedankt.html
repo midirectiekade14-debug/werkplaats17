@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Aanvraag ontvangen — Werkplaats3b</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔧</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<!-- Zelfde meting als de rest van de site; werkt met alles leeg en blijft
+     werken als w3b ontbreekt (adblocker) -- zie het script onderaan. -->
+<script src="analytics.js" defer></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* Alleen de variabelen en regels die deze pagina nodig heeft -- geen
+     kopie van de 118 kB-stylesheet van index.html. */
+  :root {
+    --bg: #161412;
+    --amber: #E09A2F;
+    --amber-light: #F5B040;
+    --cream: #F0EAE0;
+    --muted: #7a7060;
+    --line: #2e2920;
+    --fs-body: 0.6875rem;
+    --fs-h2: 2.625rem;
+    --fs-brand: 18px;  /* logo-merkteken, geen onderdeel van de --fs-*-schaal */
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--cream);
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 24px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Logo-blok, letterlijk hetzelfde als footer .brand in index.html. */
+  .brand {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: var(--fs-brand);
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 40px;
+  }
+  .brand span { color: var(--amber); }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: var(--fs-h2);
+    letter-spacing: 1px;
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+
+  p {
+    font-size: var(--fs-body);
+    line-height: 1.7;
+    color: var(--muted);
+    font-weight: 300;
+    max-width: 46ch;
+    margin-bottom: 28px;
+  }
+
+  a {
+    color: var(--cream);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    transition: border-color 0.2s;
+  }
+  a:hover { border-color: var(--amber); }
+  a:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
+
+  .terug {
+    font-size: var(--fs-body);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--amber);
+    border-bottom-color: var(--amber);
+  }
+
+  /* ── TELEFOON ──
+     Deze pagina had geen enkele mediaquery en hield dus de desktopschaal
+     aan: 11px tekst en tikdoelen van 15px hoog, terwijl elke conversie hier
+     landt en bij een advertentiecampagne overwegend mobiel. Dezelfde
+     tekstgroottes als index.html op ≤600px, en dezelfde ondergrens van 44px
+     voor wat je moet kunnen raken. */
+  @media (max-width: 600px) {
+    :root {
+      --fs-body: 0.875rem;   /* 14px, gelijk aan index.html */
+      --fs-h2:   2.25rem;    /* 36px, gelijk aan index.html */
+    }
+    /* Het tikvlak groeit naar 44px; de onderstreping komt van
+       text-decoration in plaats van de onderrand, zodat hij tegen de tekst
+       blijft staan in plaats van 15px eronder te hangen. inline-flex houdt
+       de link in de tekstregel, maar laat de regel wel meegroeien -- anders
+       overlappen de tikvlakken van opeenvolgende regels elkaar. */
+    p a, .terug {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      border-bottom: none;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+    p a { text-decoration-color: var(--line); }
+    .terug { padding: 0 8px; text-decoration-color: var(--amber); }
+  }
+</style>
+</head>
+<body>
+
+  <div class="brand">Werk<span>plaats</span>3b</div>
+
+  <h1>Aanvraag ontvangen.</h1>
+  <p>
+    We nemen binnen twee werkdagen contact op om een rondleiding in te plannen. Liever
+    meteen? Bel of app <a href="tel:+31681689278">+31 6 81689278</a>.
+  </p>
+  <a class="terug" href="index.html">Terug naar de homepage</a>
+
+<script>
+// Bevestigingsmoment: hier gaat de conversie af (Meta Lead + Google
+// Ads-conversie via trackConversie()). Eén verstuurde aanvraag levert precies
+// één conversie op, en niets anders levert er een op.
+//
+// Deze pagina kan namelijk ook zonder aanvraag geladen worden: rechtstreeks
+// binnenkomen, F5, de terugknop, en het spampad (index.html stuurt een
+// gevulde honeypot of een verzending binnen 3 seconden bewust hierheen, zodat
+// de bot niets leert). Zonder rem telde elk van die gevallen als conversie en
+// optimaliseerden Google Ads en Meta op opgeblazen, deels door bots
+// veroorzaakte cijfers.
+//
+// De rem: index.html zet vlak vóór de doorstuur een vlag in sessionStorage --
+// alleen op het echte verzendpad, niet op het spampad. Deze pagina consumeert
+// die vlag: uitlezen én meteen wissen, ook als er niet geteld wordt. Daardoor
+// telt een herlading of een terugkeer op deze pagina nul. De vlag draagt het
+// tijdstip van verzenden; ouder dan vijf minuten telt niet meer, zodat een
+// vlag die door een afgebroken mailto-navigatie is blijven staan later geen
+// losse conversie kan veroorzaken.
+//
+// w3b kan ontbreken (adblocker heeft analytics.js geblokkeerd) -- dan gebeurt
+// er niets, de pagina blijft verder gewoon werken.
+document.addEventListener('DOMContentLoaded', function () {
+  var VLAG = 'w3b_aanvraag_ts';
+  var GELDIG_MS = 5 * 60 * 1000;
+  var ruw = null;
+  try {
+    ruw = window.sessionStorage.getItem(VLAG);
+    window.sessionStorage.removeItem(VLAG);
+  } catch (e) { return; }   // opslag afgeschermd: dan telt er niets
+  if (!ruw) return;
+  var ts = parseInt(ruw, 10);
+  if (!ts || (Date.now() - ts) > GELDIG_MS) return;
+  if (!window.w3b) return;
+  try { w3b.trackConversie('aanvraag_bevestigd', {}); } catch (e) {}
+});
+</script>
+
+<!-- Cloudflare Web Analytics: cookieloos, geen toestemming nodig, zelfde
+     beacon als index.html. Zonder deze regel was de bedankpagina onzichtbaar
+     voor iedereen die de toestemming weigert -- terwijl juist een cookieloze
+     telling van /bedankt.html tegenover die van / de conversieratio geeft. -->
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "fcc992a566f14f8f9cf56fef76e551c7"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

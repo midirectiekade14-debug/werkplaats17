@@ -325,12 +325,20 @@
     }
   }
 
-  // Copyright (admin link behouden)
+  // Copyright: de tekst komt uit content.js, de links in dit element niet.
+  // Alle <a>'s die hier al staan (Admin, Cookievoorkeur) worden bewaard en in
+  // dezelfde volgorde teruggehangen, met hetzelfde scheidingsteken. Eerder
+  // werd hier alleen a[href="admin.html"] teruggehangen; daardoor verdween de
+  // Cookievoorkeur-link zodra deze renderronde liep -- en dat overkomt elke
+  // link die er later bij komt.
   var copy = document.querySelector('footer .copy');
   if (copy && C.copyright) {
-    var adminLink = copy.querySelector('a[href="admin.html"]');
-    replaceChildren(copy, document.createTextNode(C.copyright + ' · '));
-    if (adminLink) copy.appendChild(adminLink);
+    var copyLinks = [].slice.call(copy.querySelectorAll('a'));
+    replaceChildren(copy, document.createTextNode(C.copyright));
+    copyLinks.forEach(function (link) {
+      copy.appendChild(document.createTextNode(' · '));
+      copy.appendChild(link);
+    });
   }
 
   // ── TEKSTOPMAAK ────────────────────────────────────────────────
