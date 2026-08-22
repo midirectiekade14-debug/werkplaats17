@@ -101,11 +101,21 @@
     } catch (e) {}
   }
   var resizeGekoppeld = false;
+  // Is er uberhaupt iets om toestemming voor te vragen? Met alle ID's leeg
+  // laadt er geen enkele derde partij; de Cloudflare-beacon is cookieloos en
+  // valt hier buiten. Zonder deze vraag toont een site met lege CONFIG een
+  // balk voor tags die nooit komen -- toestemming vragen voor niets.
+  function heeftBestemmingen() {
+    return !!(CONFIG.ga4Id || CONFIG.metaPixelId ||
+              (CONFIG.googleAdsId && CONFIG.googleAdsLabel));
+  }
   function toonBanner() {
     // Hard grens: met een actief privacysignaal verschijnt de balk nooit,
     // ongeacht wie toonBanner() aanroept (init(), reset(), of iets anders
     // later). Dit is de enige plek die dat voor "tonen" hoeft te bewaken.
     if (heeftPrivacySignaal()) return;
+    // Tweede harde grens, zelfde plek: geen bestemmingen, geen vraag.
+    if (!heeftBestemmingen()) return;
     try {
       var el = document.getElementById('w3b-consent');
       if (!el) return;
@@ -424,8 +434,13 @@
   function initHerkomst() {
     var snap = huidigeSnapshot();
 
-    // Regel 1: privacysignaal of geweigerde toestemming.
-    if (heeftPrivacySignaal() || consentStatus() === 'denied') {
+    // Regel 1: privacysignaal, geweigerde toestemming, of een openstaande
+    // keuze terwijl de balk niet verschijnt (geen bestemmingen). Dat laatste
+    // geval mag geen sluiproute worden: wordt de vraag nooit gesteld, dan
+    // bewaren we ook geen klik-tokens. Er is dan toch geen campagne die ze
+    // kan gebruiken.
+    if (heeftPrivacySignaal() || consentStatus() === 'denied' ||
+        (consentStatus() === null && !heeftBestemmingen())) {
       try { window.localStorage.removeItem('w3b_herkomst'); } catch (e) {}
       try {
         var kaal = zonderClickIds(snap);
