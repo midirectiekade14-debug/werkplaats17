@@ -3264,9 +3264,9 @@ window._initFloorplan=function(){
   // door kiesMailtoUrl dus altijd afgewezen ten gunste van de kortere.
   // Let op de premisse: 1794 hoort bij ALLE budgetten tegelijk vol. Een
   // realistische maximale aanvraag (echt KvK-nummer van acht cijfers, een
-  // echt telefoonnummer, "2026-09" als startdatum, een ruimte uit de
-  // keuzelijst) meet 1768. Wie 1768 als worstcase noteert, geeft zichzelf 26
-  // tekens die er niet zijn.
+  // echt telefoonnummer mét leidende '+', "2026-09" als startdatum, een
+  // ruimte uit de keuzelijst) meet 1771. Wie dat getal als worstcase
+  // noteert, geeft zichzelf 23 tekens die er niet zijn.
   // Wijzig je een label, een budget of een regel in bouwMailtoUrl, reken deze
   // som dan opnieuw door -- hij is met de functies hieronder in Node na te
   // rekenen.
@@ -3703,8 +3703,9 @@ window._initFloorplan=function(){
     <div class="consent-uitleg" id="w3b-consent-uitleg" hidden>
       Cloudflare Web Analytics telt bezoekersaantallen zonder cookies en zonder toestemming;
       dat blijft altijd aan. Kies je voor "Accepteren", dan laden we daarnaast Google
-      Analytics, de Meta-pixel en Google Ads-meting -- die plaatsen wel identifiers. Je kunt
-      je keuze altijd herzien via "Cookievoorkeur" onderaan de pagina.
+      Analytics, de Meta-pixel en Google Ads -- die plaatsen wel identifiers, meten welke
+      advertentie je hierheen bracht en maken het mogelijk je later advertenties te tonen.
+      Je kunt je keuze altijd herzien via "Cookievoorkeur" onderaan de pagina.
     </div>
     <div class="consent-actions">
       <button type="button" class="consent-btn consent-btn-secondary" id="w3b-consent-weigeren">Weigeren</button>
