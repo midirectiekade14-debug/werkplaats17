@@ -7,6 +7,12 @@
 
 const INSTAGRAM_FEED = [
   {
+    "src": "photos/instagram/p09.webp",
+    "alt": "Donkere post met de kop 'Je rijdt naar binnen om te laden'. Vier punten: overheaddeur van 4 bij 5 meter op de begane grond, parkeren voor de deur, reachtruck aanwezig, gesloten en open aanhanger te gebruiken. Onderaan: Oud Camp 3b, Maasland, naast de A20.",
+    "caption": "Hoe krijg jij een plaat van 3 meter naar binnen?\n\nMet z'n tweeën om een hoek, langs een deurpost, en dan nog een trap op. Bij de meeste werkplekken begint de dag met tillen.\n\nBij ons rijd je naar binnen: overheaddeur van 4 bij 5 meter, parkeren voor de deur, reachtruck in de hal en een gesloten en open aanhanger die je mag gebruiken.\n\n3 vrij per 21 september — kom eerst kijken. werkplaats3b.nl\n\n#werkplaats3b #meubelmaker #interieurbouw #vakmanschap #maasland #westland #zzp #houtbewerking #atelier #bedrijfsruimte",
+    "datum": "2026-08-22"
+  },
+  {
     "src": "photos/instagram/p08.webp",
     "alt": "Donkere poster met de tekst: Ook wij begonnen in een garagebox. Wij bieden je de ruimte.",
     "caption": "Wij weten waar je vandaan komt. Ook wij begonnen klein. Maar als je groeit wil je meer ruimte en betere machines. Wij bieden allebei om de volgende stap mogelijk te maken.\n\nNog 3 units vrij per 21 september. werkplaats3b.nl\n\n#werkplaats3b #meubelmaker #interieurbouw #vakmanschap #maasland #westland #zzp #houtbewerking #atelier #bedrijfsruimte",
