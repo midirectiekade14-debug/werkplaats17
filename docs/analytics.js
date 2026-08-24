@@ -23,8 +23,8 @@
   var CONFIG = {
     ga4Id:            '',   // 'G-XXXXXXXXXX'
     metaPixelId:      '',   // '1234567890123456'
-    googleAdsId:      '',   // 'AW-XXXXXXXXX'
-    googleAdsLabel:   '',   // conversielabel voor de aanvraag
+    googleAdsId:      'AW-18405065655',        // conversieactie 'Aanvraag rondleiding', 24-08-2026
+    googleAdsLabel:   '1nNvCLzVhuccELeHnMhE',  // conversielabel voor de aanvraag
     debug:            false // true => events ook naar console
   };
 
