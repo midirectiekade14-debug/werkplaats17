@@ -3173,7 +3173,7 @@ window._initFloorplan=function(){
 
   // Leeg opgeleverd: elke verzending gaat dan via de mailto-fallback
   // hieronder, tot de URL van de Apps Script-webapp hier ingevuld wordt.
-  var FORM_ENDPOINT = '';  // vul hier de URL van de Apps Script-webapp in
+  var FORM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyYX2JPhUXISg6l1hT5FEoFh0ojAYDQ4vM1R8EJmq6Yol0VzwJnLQwHksn09GTWI9N8/exec';
 
   var GELADEN_OP = Date.now();  // tijdslot-spamafweer: verzenden binnen 3s = bot
 
@@ -3633,11 +3633,16 @@ window._initFloorplan=function(){
       window.sessionStorage.setItem('w3b_aanvraag_route', route + '|' + Date.now());
     } catch (e) {}
   }
-  function meldFout() {
+  // reden is de foutmelding die de backend zelf teruggaf (bijvoorbeeld "Een
+  // KvK-nummer heeft acht cijfers."). Die is in gewone taal geschreven en
+  // bruikbaarder dan de generieke regel, dus tonen we hem als hij er is.
+  function meldFout(reden) {
     knop.disabled = false;
     knop.textContent = 'Versturen';
     if (status) {
-      status.textContent = 'Dat lukte niet. Mail ons rechtstreeks: ';
+      status.textContent = (typeof reden === 'string' && reden)
+        ? reden + ' Lukt het niet? Mail ons rechtstreeks: '
+        : 'Dat lukte niet. Mail ons rechtstreeks: ';
       var a = document.createElement('a');
       a.href = 'mailto:info@werkplaats3b.nl';
       a.textContent = 'info@werkplaats3b.nl';
@@ -3645,9 +3650,9 @@ window._initFloorplan=function(){
     }
   }
   // bevestigd=true betekent: de aanvraag is aantoonbaar afgeleverd (de backend
-  // gaf 200). Alleen dan mag de conversievlag gezet worden. De mailto-route
-  // levert dat bewijs niet -- daar opent alleen de mailclient, en of de
-  // bezoeker daarna op Verzenden drukt zien wij nooit. Een conversie tellen op
+  // gaf {ok:true} terug). Alleen dan mag de conversievlag gezet worden. De
+  // mailto-route levert dat bewijs niet -- daar opent alleen de mailclient,
+  // en of de bezoeker daarna op Verzenden drukt zien wij nooit. Een conversie tellen op
   // "de mailclient ging open" maakt het cijfer stelselmatig te hoog, en juist
   // daarop gaat de biedstrategie later sturen.
   function meldSucces(data, bevestigd) {
@@ -3714,9 +3719,19 @@ window._initFloorplan=function(){
       // geen preflight. Een JSON-body triggert wél een preflight, en dat is
       // bij Apps Script-webapps de meest voorkomende oorzaak van een stille
       // mislukking (de OPTIONS-preflight krijgt daar geen antwoord).
+      //
+      // Let op: HTTP 200 is hier GEEN bewijs van een geslaagde aanvraag. De
+      // webapp beantwoordt ook een geweigerde inzending (validatiefout, interne
+      // fout) met status 200 en een body {ok:false, fout:'...'} -- res.ok staat
+      // dan alsnog op true. Het enige echte bewijs is die ok-vlag in de body,
+      // dus daar hangt zowel de bedankpagina als de conversietelling aan.
       fetch(FORM_ENDPOINT, { method: 'POST', body: new URLSearchParams(data) })
-        .then(function (res) { if (res.ok) meldSucces(data, true); else meldFout(); })
-        .catch(meldFout);
+        .then(function (res) { return res.json(); })
+        .then(function (body) {
+          if (body && body.ok) meldSucces(data, true);
+          else meldFout(body && body.fout);
+        })
+        .catch(function () { meldFout(); });
     } else {
       var keuze = kiesMailtoUrl(data);
       if (keuze.teLang) {
