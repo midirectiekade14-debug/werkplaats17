@@ -3619,6 +3619,20 @@ window._initFloorplan=function(){
   function markeerAanvraagVerstuurd() {
     try { window.sessionStorage.setItem('w3b_aanvraag_ts', String(Date.now())); } catch (e) {}
   }
+  // ── Route-vlag ──
+  // Los van de conversievlag hierboven, want hij dient iets anders: de
+  // bedankpagina moet de bezoeker de waarheid vertellen. Op de mailto-route is
+  // de aanvraag namelijk NIET ontvangen -- er staat alleen een voorgeschreven
+  // mail open in zijn mailclient, en drukt hij daar niet op Verzenden, dan
+  // komt er nooit iets binnen. Op een telefoon (waar op dit moment al het
+  // verkeer vandaan komt) is die stap makkelijk te missen. Zonder deze vlag
+  // leest hij "Aanvraag ontvangen" terwijl er niets onderweg is.
+  // Het spampad zet hem bewust niet: die krijgt de neutrale tekst te zien.
+  function markeerRoute(route) {
+    try {
+      window.sessionStorage.setItem('w3b_aanvraag_route', route + '|' + Date.now());
+    } catch (e) {}
+  }
   function meldFout() {
     knop.disabled = false;
     knop.textContent = 'Versturen';
@@ -3630,10 +3644,22 @@ window._initFloorplan=function(){
       status.appendChild(a);
     }
   }
-  function meldSucces(data) {
-    markeerAanvraagVerstuurd();
+  // bevestigd=true betekent: de aanvraag is aantoonbaar afgeleverd (de backend
+  // gaf 200). Alleen dan mag de conversievlag gezet worden. De mailto-route
+  // levert dat bewijs niet -- daar opent alleen de mailclient, en of de
+  // bezoeker daarna op Verzenden drukt zien wij nooit. Een conversie tellen op
+  // "de mailclient ging open" maakt het cijfer stelselmatig te hoog, en juist
+  // daarop gaat de biedstrategie later sturen.
+  function meldSucces(data, bevestigd) {
+    if (bevestigd) markeerAanvraagVerstuurd();
+    markeerRoute(bevestigd ? 'formulier' : 'mailto');
     if (window.w3b) {
-      try { w3b.track('aanvraag_verstuurd', { ruimte: data.ruimte, methode: 'formulier' }); } catch (e) {}
+      try {
+        w3b.track('aanvraag_verstuurd', {
+          ruimte: data.ruimte,
+          methode: bevestigd ? 'formulier' : 'mailto'
+        });
+      } catch (e) {}
     }
     naarBedankt();
   }
@@ -3689,7 +3715,7 @@ window._initFloorplan=function(){
       // bij Apps Script-webapps de meest voorkomende oorzaak van een stille
       // mislukking (de OPTIONS-preflight krijgt daar geen antwoord).
       fetch(FORM_ENDPOINT, { method: 'POST', body: new URLSearchParams(data) })
-        .then(function (res) { if (res.ok) meldSucces(data); else meldFout(); })
+        .then(function (res) { if (res.ok) meldSucces(data, true); else meldFout(); })
         .catch(meldFout);
     } else {
       var keuze = kiesMailtoUrl(data);
@@ -3697,16 +3723,15 @@ window._initFloorplan=function(){
         meldMailtoTeGroot();
         return;
       }
-      // De vlag gaat vóór de scheme-aanroep, niet erna: window.location.href
-      // met een mailto: is een navigatie-opdracht, en of de pagina daarna nog
-      // draait beslist de browser. meldSucces() zet hem verderop nog eens --
-      // dezelfde sleutel overschrijven is onschadelijk.
-      markeerAanvraagVerstuurd();
+      // Bewust geen conversievlag op dit pad: een mailto opent de mailclient,
+      // meer niet. Zolang FORM_ENDPOINT leeg is levert het formulier dus geen
+      // gemeten conversie op -- liever nul dan een verzonnen getal. Vul
+      // FORM_ENDPOINT en dit hele pad vervalt.
       try { window.location.href = keuze.url; } catch (e) {}
       // mailto navigeert de pagina zelf niet weg (opent de mailclient
       // ernaast); de korte vertraging geeft die client de kans om open te
       // gaan voordat we doorsturen naar de bedankpagina.
-      setTimeout(function () { meldSucces(data); }, 300);
+      setTimeout(function () { meldSucces(data, false); }, 300);
     }
   });
 })();

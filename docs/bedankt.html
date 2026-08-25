@@ -119,8 +119,8 @@
 
   <div class="brand">Werk<span>plaats</span>3b</div>
 
-  <h1>Aanvraag ontvangen.</h1>
-  <p>
+  <h1 id="kop">Aanvraag ontvangen.</h1>
+  <p id="uitleg">
     We nemen binnen twee werkdagen contact op om een rondleiding in te plannen. Liever
     meteen? Bel of app <a href="tel:+31681689278">+31 6 81689278</a>.
   </p>
@@ -161,6 +161,44 @@ document.addEventListener('DOMContentLoaded', function () {
   if (!ts || (Date.now() - ts) > GELDIG_MS) return;
   if (!window.w3b) return;
   try { w3b.trackConversie('aanvraag_bevestigd', {}); } catch (e) {}
+});
+
+// ── Eerlijke tekst per route ──
+// "Aanvraag ontvangen" klopt alleen als de backend hem echt heeft aangenomen.
+// Ging het via de mailto-noodgreep, dan staat de mail nog ONVERZONDEN open in
+// de mailclient van de bezoeker; dat moet hier staan, anders sluit hij zijn
+// mailapp in de veronderstelling dat hij klaar is. Zonder vlag (rechtstreeks
+// bezoek, herlading, spampad) blijft de neutrale tekst staan.
+document.addEventListener('DOMContentLoaded', function () {
+  var ruw = null;
+  try {
+    ruw = window.sessionStorage.getItem('w3b_aanvraag_route');
+    window.sessionStorage.removeItem('w3b_aanvraag_route');
+  } catch (e) { return; }
+  if (!ruw) return;
+  var delen = ruw.split('|');
+  var ts = parseInt(delen[1], 10);
+  if (!ts || (Date.now() - ts) > 5 * 60 * 1000) return;
+  if (delen[0] !== 'mailto') return;
+
+  var kop = document.getElementById('kop');
+  var uitleg = document.getElementById('uitleg');
+  if (kop) kop.textContent = 'Nog één stap.';
+  if (uitleg) {
+    uitleg.textContent = '';
+    var p1 = document.createElement('strong');
+    p1.textContent = 'Je mailprogramma staat open met je aanvraag erin. Druk daar op Verzenden — pas dan komt hij bij ons binnen.';
+    uitleg.appendChild(p1);
+    uitleg.appendChild(document.createElement('br'));
+    uitleg.appendChild(document.createElement('br'));
+    uitleg.appendChild(document.createTextNode('Lukt dat niet? Bel of app '));
+    var a = document.createElement('a');
+    a.href = 'tel:+31681689278';
+    a.textContent = '+31 6 81689278';
+    uitleg.appendChild(a);
+    uitleg.appendChild(document.createTextNode('.'));
+  }
+  document.title = 'Nog één stap — Werkplaats3b';
 });
 </script>
 
