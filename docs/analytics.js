@@ -23,8 +23,13 @@
   var CONFIG = {
     ga4Id:            '',   // 'G-XXXXXXXXXX'
     metaPixelId:      '',   // '1234567890123456'
-    googleAdsId:      'AW-18405065655',        // conversieactie 'Aanvraag rondleiding', 24-08-2026
-    googleAdsLabel:   '1nNvCLzVhuccELeHnMhE',  // conversielabel voor de aanvraag
+    // De conversieactie heet in Google Ads nog 'Aanvraag rondleiding'
+    // (aangemaakt 24-08-2026), maar er is sinds 28-08 geen aanvraagformulier
+    // meer. Hij gaat nu af op een contactklik -- zie CONTACT_CONVERSIES
+    // verderop. De naam in de Ads-interface klopt dus niet meer met wat hij
+    // meet; het ID en het label wel, en dat is wat telt.
+    googleAdsId:      'AW-18405065655',
+    googleAdsLabel:   '1nNvCLzVhuccELeHnMhE',
     debug:            false // true => events ook naar console
   };
 
@@ -49,7 +54,10 @@
     contact_mail: 'Contact',
     contact_whatsapp: 'Contact',
     contact_telefoon: 'Contact',
-    aanvraag_bevestigd: 'Lead' // bedankt.html, ná een echt verstuurde aanvraag
+    // Slapend sinds het formulier weg is: bedankt.html vuurt alleen op een
+    // sessievlag die index.html niet meer zet. Blijft staan omdat de pagina
+    // nog bestaat voor oude bladwijzers.
+    aanvraag_bevestigd: 'Lead'
   };
 
   // ── TOESTEMMING (AVG) ──
@@ -497,6 +505,17 @@
   function labelVan(a) {
     return (a.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 60);
   }
+  // Welke drie kliks als conversie tellen. Sinds het aanvraagformulier van de
+  // site is gehaald is dit de enige terugkoppeling naar Google Ads: een
+  // ondernemer belt, appt of mailt -- hij vult geen zes velden in.
+  //
+  // Lees het cijfer met dat in het achterhoofd: een klik op 'bellen' is een
+  // gekozen kanaal, geen gevoerd gesprek. Het loopt dus voor op de
+  // werkelijkheid. Bruikbaar om advertenties mee te sturen, niet om leads mee
+  // te tellen -- die tel je in de telefoon en de mailbox.
+  var CONTACT_CONVERSIES = { contact_mail: 1, contact_whatsapp: 1, contact_telefoon: 1 };
+  var CONTACT_GEMELD = {};
+
   function koppelKlikEvents() {
     document.addEventListener('click', function (e) {
       try {
@@ -510,7 +529,18 @@
         else if (href.indexOf('instagram.com') !== -1) naam = 'social_instagram';
         else if (/\.pdf$/i.test(href)) naam = 'download_pdf';
         if (!naam) return;
-        track(naam, { label: labelVan(a), plaats: plaatsVan(a), href: href });
+        var props = { label: labelVan(a), plaats: plaatsVan(a), href: href };
+
+        // Het gedrags-event gaat bij élke klik mee: twee keer op bellen tikken
+        // omdat er niet werd opgenomen is echt gedrag en hoort in de cijfers.
+        // De conversie gaat één keer per kanaal per bezoek -- anders koopt
+        // Ads zijn eigen herhaling terug als succes.
+        if (CONTACT_CONVERSIES[naam] && !CONTACT_GEMELD[naam]) {
+          CONTACT_GEMELD[naam] = true;
+          trackConversie(naam, props);
+        } else {
+          track(naam, props);
+        }
       } catch (e) {}
     });
   }

@@ -224,18 +224,42 @@
   // CTA heading
   setHTML('.cta-block h2', C.ctaHeading);
 
-  // Mail knop
-  var mailBtn = document.querySelector('.cta-actions a.btn-primary');
-  if (mailBtn && C.email) mailBtn.setAttribute('href', 'mailto:' + C.email);
+  // Contactknoppen: bellen, WhatsApp, mail.
+  //
+  // Geselecteerd op data-contact, niet op btn-primary/btn-secondary. Die
+  // klassen zeggen alleen iets over nadruk; koppelen op volgorde ging eerder
+  // mis toen bellen de primaire knop werd en de mailto-regel hem stil
+  // overschreef. Het kanaal staat nu in het attribuut, dus de selectie
+  // overleeft elke herschikking -- en bedient meteen ook de vaste balk
+  // onderaan een telefoonscherm, waar dezelfde drie kanalen staan.
+  var belKnoppen = document.querySelectorAll('a[data-contact="telefoon"]');
+  if (C.telefoonNummer) {
+    var telHref = 'tel:' + C.telefoonNummer.replace(/[^0-9+]/g, '');
+    Array.prototype.forEach.call(belKnoppen, function (a) {
+      a.setAttribute('href', telHref);
+      // Alleen het contactblok toont het nummer voluit; op de smalle balk
+      // staat 'Bellen' en past een nummer van elf cijfers simpelweg niet.
+      if (C.telefoonWeergave && !a.closest('.mob-cta')) {
+        var tekst = a.lastChild;
+        if (tekst && tekst.nodeType === 3) tekst.nodeValue = ' Bel ' + C.telefoonWeergave;
+      }
+    });
+  }
 
-  // WhatsApp knop
-  var waBtn = document.querySelector('.cta-actions a.btn-secondary');
-  if (waBtn && C.whatsappNumber) {
-    var waText = encodeURIComponent(C.whatsappText || '');
-    waBtn.setAttribute('href', 'https://wa.me/' + C.whatsappNumber + '?text=' + waText);
+  var waKnoppen = document.querySelectorAll('a[data-contact="whatsapp"]');
+  if (C.whatsappNumber) {
+    var waHref = 'https://wa.me/' + C.whatsappNumber + '?text=' + encodeURIComponent(C.whatsappText || '');
+    Array.prototype.forEach.call(waKnoppen, function (a) { a.setAttribute('href', waHref); });
+  }
+
+  var mailKnoppen = document.querySelectorAll('a[data-contact="mail"]');
+  if (C.email) {
+    Array.prototype.forEach.call(mailKnoppen, function (a) { a.setAttribute('href', 'mailto:' + C.email); });
   }
 
   // CTA info lines
+  // Het e-mailadres wordt hier niet meer achter een regel geplakt: het staat
+  // als eigen knop pal boven deze regels. Een tweede keer is ruis.
   if (Array.isArray(C.contactLines)) {
     var ctaLines = document.querySelectorAll('.cta-info .cta-line');
     C.contactLines.forEach(function (txt, i) {
@@ -243,15 +267,7 @@
       if (!line) return;
       var span = line.querySelector('span');
       if (!span) return;
-      if (/rondleiding/i.test(txt) && C.email) {
-        replaceChildren(span, document.createTextNode(txt + ' — '));
-        var a = document.createElement('a');
-        a.href = 'mailto:' + C.email;
-        a.textContent = C.email;
-        span.appendChild(a);
-      } else {
-        span.textContent = txt;
-      }
+      span.textContent = txt;
     });
   }
 

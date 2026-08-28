@@ -157,12 +157,14 @@ const CONTENT = {
   "aboutNote": "<strong>Korte lijnen:</strong> wij zijn er iedere dag en staan naast je aan de werkbank.",
   "ctaHeading": "Interesse?<br>Kom <em>kijken.</em>",
   "email": "info@werkplaats3b.nl",
+  "telefoonNummer": "+31681689278",
+  "telefoonWeergave": "06 81 68 92 78",
   "whatsappNumber": "31681689278",
   "whatsappText": "Hey, ik heb interesse in een werkplek bij Werkplaats3b.",
   "contactLines": [
     "Oud Camp 3b, Maasland (naast A20)",
     "Drie werkplekken vrij · stand 20 augustus",
-    "Plan een rondleiding"
+    "Rondleiding op afspraak — bel of app, dan plannen we het"
   ],
   "instagramHandle": "@werkplaats3B",
   "instagramUrl": "https://instagram.com/werkplaats3b",
